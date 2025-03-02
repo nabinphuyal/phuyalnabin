@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Nabin Phuyal">
+    <title>Nabin Phuyal's Personal Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        section {
+            padding: 20px;
+            margin: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        button {
+            background-color: #5C6BC0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #3949AB;
+        }
+
+        form input[type="text"], form input[type="email"] {
+            padding: 10px;
+            width: 100%;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+        }
+
+        form input[type="submit"] {
+            background-color: #5C6BC0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #3949AB;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Personal Website</h1>
+<p>Nepali Kanxo Nabin Phuyal</p>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <p>Hi, I'm Nabin Phuyal. Welcome to my personal website! Here you can learn more about me and get in touch with me.</p>
+        <button onclick="showAlert()">Click Me!</button>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <form id="contactForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+
+
+
+
+<footer style="display: flex; flex-direction: column; align-items: center; padding: 10px;">
+    <p style="margin: 0; font-size: 16px;">
+        &copy;  All rights reserved 2025 Nabin Phuyal
+    </p>
+    <p style="margin: 0; font-size: 10px; color: lightgreen;">
+        Website Design by
+        <span style="color: yellow;"> Brpmailo</span>
+    </p>
+</footer>
+
+
+
+
+
+    <script>
+        function showAlert() {
+            alert("Hello, thanks for visiting my website!");
+        }
+
+        // Form submission (just a placeholder for actual backend functionality)
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Form submitted successfully!");
+        });
+    </script>
+</body>
+</html>
