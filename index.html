@@ -6,149 +6,156 @@
     <meta name="author" content="Nabin Phuyal">
     <title>Nabin Phuyal</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
-
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
             text-align: center;
         }
-
-        header h1 {
-            margin: 0;
+        header {
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 20px 10px;
+            font-size: 22px;
         }
-
         nav ul {
-            list-style-type: none;
-            padding: 0;
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-top: 10px;
         }
-
         nav ul li {
-            display: inline;
-            margin-right: 20px;
+            margin: 0 15px;
         }
-
         nav ul li a {
             color: white;
             text-decoration: none;
+            font-size: 18px;
         }
-
         section {
+            max-width: 800px;
+            margin: 40px auto;
             padding: 20px;
-            margin: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+        .profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
         }
-
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile h1 {
+            font-size: 26px;
+            font-weight: bold;
+            font-family: 'Cursive', sans-serif;
+        }
         button {
-            background-color: #5C6BC0;
+            display: block;
+            margin: 15px auto;
+            background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
+            font-size: 16px;
+            transition: 0.3s;
         }
-
         button:hover {
-            background-color: #3949AB;
+            background-color: #388E3C;
         }
-
-        form input[type="text"], form input[type="email"] {
-            padding: 10px;
+        form input {
             width: 100%;
+            padding: 10px;
             margin: 5px 0;
             border: 1px solid #ccc;
+            border-radius: 5px;
         }
-
         form input[type="submit"] {
-            background-color: #5C6BC0;
+            background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
             border: none;
             cursor: pointer;
         }
-
         form input[type="submit"]:hover {
-            background-color: #3949AB;
+            background-color: #388E3C;
+        }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+        footer a {
+            color: yellow;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Welcome to My Personal Website</h1>
-<p>Nepali Kanxo Nabin Phuyal</p>
+        <p>Nepali Kanxo Nabin Phuyal</p>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="#about">Home</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <section id="about">
-        <h2>About Me</h2>
-        <p>Hi, I'm Nabin Phuyal. Welcome to my personal website! Here you can learn more about me and get in touch with me.</p>
+        <div class="profile">
+            <img src="p.jpg" alt="Nabin Phuyal">
+            <h1>Nabin Phuyal</h1>
+        </div>
+       
+ <h2>About Me</h2>
+        <p>Hi, I'm Nabin Phuyal. I am a Student of Korean Language. Welcome to my personal website! Here you can learn more about me and get in touch with me.</p>
         <button onclick="showAlert()">Click Me!</button>
     </section>
 
     <section id="contact">
         <h2>Contact Me</h2>
+        <p>📞 Phone: +977-9762509382</p>
+        <p>📧 Email: nabin@example.com</p>
         <form id="contactForm">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
+            <input type="text" id="name" name="name" required>
             
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            
+            <input type="email" id="email" name="email" required>
+        
             <input type="submit" value="Submit">
         </form>
     </section>
 
-
-
-
-
-<footer style="display: flex; flex-direction: column; align-items: center; padding: 10px;">
-    <p style="margin: 0; font-size: 16px;">
-        &copy;  All rights reserved 2025 Nabin Phuyal
-    </p>
-    <p style="margin: 0; font-size: 12px; color: lightgreen;">
-        Website Design by
-      <a href="https://baburamphuyal.com.np" target="_blank">
-    <span style="color: yellow;"> Brpmailo</span>
-</a>
-
-    </p>
-</footer>
-
-
-
-
+    <footer>
+        <p>&copy; 2025 Nabin Phuyal. All rights reserved.</p>
+        <p>Website Design by <a href="https://baburamphuyal.com.np" target="_blank">Brpmailo</a></p>
+    </footer>
 
     <script>
         function showAlert() {
             alert("Hello, thanks for visiting my website!");
         }
-
-        // Form submission (just a placeholder for actual backend functionality)
         document.getElementById("contactForm").addEventListener("submit", function(event) {
             event.preventDefault();
             alert("Form submitted successfully!");
