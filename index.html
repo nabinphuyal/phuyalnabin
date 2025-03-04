@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Nabin Phuyal">
     <title>Nabin Phuyal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
@@ -106,6 +107,21 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        .social-links a {
+            text-decoration: none;
+            color: #000;
+            transition: 0.3s;
+        }
+        .social-links a:hover {
+            color: blue; 
+        }
     </style>
 </head>
 <body>
@@ -127,24 +143,25 @@
         <h2>About Me</h2>
         <p>Hi, I'm Nabin Phuyal. I am a Student of Korean Language. Welcome to my personal website! Here you can learn more about me and get in touch with me.</p>
         <button onclick="showDetails()">Click Me!</button>
+
         <div id="extra-info" class="hidden">
             <h3>My Qualifications</h3>
             <p>Pluss 2 in Education</p>
+	  <p>Certify Advanced Computer Operator</p>
             <p>Certified in Korean Language</p>
-           
+        </div>
 
-
-
- <h3>Social Links</h3>
-            <p><a href="https://facebook.com" target="_blank">Facebook</a></p>
-            <p><a href="https://twitter.com" target="_blank">Twitter</a></p>
-            <p><a href="https://linkedin.com" target="_blank">LinkedIn</a></p>
-            <p><a href="http://www.youtube.com/@nabinvlogdream" target="_blank">YouTube</a></p>
+        <h3>Social Links</h3>
+        <div class="social-links">
+            <a href="http://www.youtube.com/@nabinvlogdream" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="http://www.tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
         </div>
     </section>
 
-
-
+    <!-- Contact section (fixed) -->
     <section id="contact">
         <h2>Contact Me</h2>
         <p>📞 Phone: +977-9762509382</p>
@@ -160,6 +177,7 @@
         </form>
     </section>
 
+    <!-- Footer (fixed) -->
     <footer>
         <p>&copy; 2025 Nabin Phuyal. All rights reserved.</p>
         <p>Website Design by🚀<a href="https://baburamphuyal.com.np" target="_blank">Brpmailo</a></p>
