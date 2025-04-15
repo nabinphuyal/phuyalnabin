@@ -1,327 +1,302 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Nabin Phuyal">
-    <title>Nabin Phuyal</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            text-align: center;
-        }
-        header {
-            background: linear-gradient(90deg, #4CAF50, #2E7D32);
-            color: white;
-            padding: 20px 10px;
-            font-size: 22px;
-        }
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            margin-top: 10px;
-        }
-        nav ul li {
-            margin: 0 15px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        section {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        .profile {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-        .profile img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .profile h1 {
-            font-size: 26px;
-            font-weight: bold;
-            font-family: 'Cursive', sans-serif;
-        }
-
-
-
-
-
-.speech {
-  font-size: 20px;
-  font-weight: bold;
-  color: green;
-  position: relative;
-  animation: slideInLeft 1s ease-out;
-}
-
-/* Animation keyframes */
-@keyframes slideInLeft {
-  from {
-    left: -100%;
-    opacity: 0;
-  }
-  to {
-    left: 0;
-    opacity: 1;
-  }
-}
-
-
-.d {
-  font-size: 25px;
-  font-weight: bold;
-  color: red;
-  position: relative;
-  animation: slideInRight 1s ease-out;
-}
-
-/* Animation keyframes */
-@keyframes slideInRight {
-  from {
-    right: -100%;
-    opacity: 0;
-  }
-  to {
-    right: 0;
-    opacity: 1;
-  }
-}
-
-
-
-
-
-.vanai   {
- font-size: 15px;
-  font-weight: bold;
-  color: yellow;
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Nabin Phuyal" />
+  <title>Nabin Phuyal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
     }
-.quote-section {
-  background: blue;
-  padding: 20px;
-  margin-top: 40px;
-  border-radius: 10px;
-  overflow: hidden; 
-  white-space: nowrap;
-  position: relative;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
 
-.vanai-text {
-  display: inline-block;
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-  padding-left: 100%;
-  animation: moveText 20s linear infinite;
-}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      text-align: center;
+    }
 
-@keyframes moveText {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
+    header {
+      background: linear-gradient(90deg, #4CAF50, #2E7D32);
+      color: white;
+      padding: 20px 10px;
+      font-size: 22px;
+    }
 
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin-top: 10px;
+    }
 
+    nav ul li {
+      margin: 0 15px;
+    }
 
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
 
-        button {
-            display: block;
-            margin: 15px auto;
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        button:hover {
-            background-color: #388E3C;
-        }
-        .hidden {
-            display: none;
-        }
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            width: 100%;
-            margin-top: 40px;
-        }
-        footer a {
-            color: yellow;
-            text-decoration: none;
-        }
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .contact-form input {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 24px;
-            margin-top: 10px;
-        }
-        .social-links a {
-            text-decoration: none;
-            color: #000;
-            transition: 0.3s;
-        }
-        .social-links a:hover {
-            color: blue; 
-        }
-    </style>
+    section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .profile img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile h1 {
+      font-size: 26px;
+      font-weight: bold;
+      font-family: 'Cursive', sans-serif;
+    }
+
+    .speech {
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      position: relative;
+      animation: slideInLeft 1s ease-out;
+    }
+
+    .d {
+      font-size: 25px;
+      font-weight: bold;
+      color: red;
+      position: relative;
+      animation: slideInRight 1s ease-out;
+    }
+
+    @keyframes slideInLeft {
+      from { left: -100%; opacity: 0; }
+      to { left: 0; opacity: 1; }
+    }
+
+    @keyframes slideInRight {
+      from { right: -100%; opacity: 0; }
+      to { right: 0; opacity: 1; }
+    }
+
+    .quote-section {
+      background: blue;
+      padding: 20px;
+      margin-top: 40px;
+      border-radius: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .vanai-text {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      padding-left: 100%;
+      animation: moveText 20s linear infinite;
+    }
+
+    @keyframes moveText {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    button {
+      display: block;
+      margin: 15px auto;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #388E3C;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      width: 100%;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: yellow;
+      text-decoration: none;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contact-form input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    .social-links a {
+      text-decoration: none;
+      color: #000;
+      transition: 0.3s;
+    }
+
+    .social-links a:hover {
+      color: blue;
+    }
+  </style>
 </head>
 
-
-
-
 <body>
-    <header>
-        <h1>Welcome to My Personal Website</h1>
-        <nav>
-            <ul>
-                <li><a href="#about">Home</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1>Welcome to My Personal Website</h1>
+    <nav>
+      <ul>
+        <li><a href="#about">Home</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
+  <section id="about">
+    <div class="profile">
+      <img src="b.jpeg" alt="Nabin Phuyal" />
+      <h1>Nabin Phuyal</h1>
+    </div>
 
+    <div class="speech"><p>Over take is interesting</p></div>
+    <div class="d"><p>DENGEROUS</p></div>
 
-
-
-    <section id="about">
-        <div class="profile">
-            <img src="b.jpeg" alt="Nabin Phuyal">
-            <h1>Nabin Phuyal</h1>
-        </div>
-
-
-
-
-
-<div class="speech">
-<p>Over take is interesting but<p/>
-</div>
-
-<div class="d">
-<p>DENGEROUS<p/>
-</div>
-
-
-
-<!--- Vanai section -->
-<section id="vanai" class="quote-section">
-  <h2><span style="color: yellow;">लेखकको भनाई</h2></span>
-  <p class="vanai-text">शिक्षक ज्ञानको समुन्द्र हुन् — कुरा त यो हो, तिमी के लिएर गएका हौ? गिलास कि ड्रम? 💭✍️ नबिन फुयल </p>
-</section>
-
-
-        <h2>About Me</h2>
-        <p>Hello and Welcome!, I'm Nabin Phuyal. this is my personal website! Here you can learn more about me and get in touch with me.</p>
-        <button onclick="showDetails()">Click Me!</button>
-
-        <div id="extra-info" class="hidden">
-<p> My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was bron on 2006-07-02AD(2063-03-18BS.) 
-
-I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2 (Higher Secondary Education).
-I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. My deep interest in Korean culture and communication has helped me build strong fluency in reading, writing, and speaking the language.
-Alongside my academic interests, I have also worked as a Computer Operator, gaining valuable experience in Microsoft Office tools (Word, Excel, PowerPoint), internet operations, and proficient typing in both English and Nepali.
-One of my biggest dreams is to become a successful YouTuber. I have already started my journey on YouTube, where I create content that reflects my creativity, interests, and personal expression. I am passionate about connecting with people through videos and building a community online.
-I am a hardworking, disciplined, and curious individual, always looking for new opportunities to grow and share my skills with the world.
-Thank you for visiting my profile!    </p>
-            <span style="color: red;"><h3>My Qualifications</h3></span>
-            <p>Pluss 2 in Education</p>
-	  <p>Certify Advanced Computer Operator</p>
-            <p>Certified in Korean Language</p>
-        </div>
-
-
-
-
-
-        <span style="color: orange;"><h3>Social Links</h3></span>
-        <div class="social-links">
-            <a href="http://www.youtube.com/@nabinvlogdream" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="http://www.tiktok.com/@nabinkanxophuyal?_t=ZS-8vrmF0xrpS&_r=1" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank"><i class="fab fa-facebook"></i></a>
-	  <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="https://instagram.com/nabin.phuyal30" target="_blank"><i class="fab fa-instagram"></i></a>
-        </div>         
+    <section id="vanai" class="quote-section">
+      <h2><span style="color: yellow;">लेखकको भनाई</span></h2>
+      <p class="vanai-text">शिक्षक ज्ञानको समुन्द्र हुन् — कुरा त यो हो, तिमी के लिएर गएका हौ? गिलास कि ड्रम? 💭✍️ नबिन फुयल</p>
     </section>
 
+    <h2>About Me</h2>
+    <p>Hello and Welcome!, I'm Nabin Phuyal. This is my personal website! Here you can learn more about me and get in touch with me.</p>
 
+    <button onclick="showEnglish()">Click Me!</button>
+    <button onclick="showNepali()">बारेमा</button>
 
+    <div id="english-info" class="hidden">
+      <p>My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS).
+        I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal.
+        I am a dedicated learner with a strong academic background, having successfully completed my +2 (Higher Secondary Education).
+        I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language.
+        My deep interest in Korean culture and communication has helped me build strong fluency in reading, writing, and speaking the language.
+        Alongside my academic interests, I have also worked as a Computer Operator, gaining valuable experience in Microsoft Office tools, internet operations, and proficient typing in both English and Nepali.
+        One of my biggest dreams is to become a successful YouTuber. I have already started my journey on YouTube, where I create content that reflects my creativity, interests, and personal expression.
+        I am passionate about connecting with people through videos and building a community online.
+        I am a hardworking, disciplined, and curious individual, always looking for new opportunities to grow and share my skills with the world.
+        Thank you for visiting my profile!
+      </p>
+      <h3 style="color: red;">My Qualifications</h3>
+      <p>Plus 2 in Education</p>
+      <p>Certify Advanced Computer Operator</p>
+      <p>Certified in Korean Language</p>
+    </div>
 
+    <div id="nepali-info" class="hidden">
+      <p><b><span style="color: blue;"><p><b><span style="color: blue;">नबिन फुयाल</span></b> मेरो नाम हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
 
+    <p>मैले उच्च माध्यमिक तह (+2) शिक्षामा पुरा गरिसकेको छु र म सधैं नयाँ कुरा सिक्न चाहने विद्यार्थी हुँ।</p>
+    <p>मलाई भाषा सिक्ने ठूलो रुचि छ। विशेषगरी कोरियन भाषा सिक्नमा म निकै अब्बल छु। कोरियन भाषामा लेख्न, बोल्न र पढ्नमा मेरो राम्रो पकड छ।</p>
+    <p>त्यसका साथै म कम्प्युटर अपरेटरको रूपमा पनि काम गरिसकेको छु। Microsoft Word, Excel, PowerPoint, इन्टरनेट अपरेशन, नेपाली र अंग्रेजीमा टाइप गर्नमा म दक्ष छु।</p>
+    <p>म YouTube मा सफल बन्न चाहन्छु। मैले युट्युब यात्रा सुरु गरिसकेको छु र त्यहाँ आफ्नो रुचि र प्रतिभा प्रस्तुत गर्दैछु।</p>
 
-    <!-- Contact section (fixed) -->
-    <section id="contact">
-        <h2>Contact Me</h2>
-        <p>📞 Phone: +977-9762509382</p>
-        <p>📧 Email: nabinkanxo5@gmail.com</p>
-        <form id="contactForm" class="contact-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        
-            <input type="submit" value="Submit">
-        </form>
-    </section>
+    <p>धन्यवाद मेरो प्रोफाइल हेर्दिनु भएकोमा ! अबको तपाइको दिन सुखमय रहोस ।</p></p>
+      <h3 style="color: red;">मेरो योग्यता</h3>
+      <p>शिक्षामा प्लस २</p>
+      <p>प्रमाणित कम्प्युटर अपरेटर</p>
+      <p>कोरियन भाषा दक्षता प्रमाणपत्र</p>
+    </div>
 
-    <!-- Footer (fixed) -->
-    <footer>
-        <p>&copy; 2025 Nabin Phuyal. All rights reserved.</p>
-        <p>Website Design by🚀<a href="https://baburamphuyal.com.np" target="_blank">Brpmailo</a></p>
-    </footer>
+    <span style="color: orange;"><h3>Social Links</h3></span>
+    <div class="social-links">
+      <a href="http://www.youtube.com/@nabinvlogdream" target="_blank"><i class="fab fa-youtube"></i></a>
+      <a href="http://www.tiktok.com/@nabinkanxophuyal?_t=ZS-8vrmF0xrpS&_r=1" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://instagram.com/phuyalnabin28" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank"><i class="fab fa-capcut"></i></a>
+    </div>
+  </section>
 
-    <script>
-        function showDetails() {
-            document.getElementById("extra-info").classList.toggle("hidden");
-        }
-    </script>
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <p>📞 Phone: +977-9762509382</p>
+    <p>📧 Email: nabinkanxo5@gmail.com</p>
+    <form id="contactForm" class="contact-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <input type="submit" value="Submit" />
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Nabin Phuyal. All rights reserved.</p>
+    <p>Website Design by 🚀 <a href="https://baburamphuyal.com.np" target="_blank">Brpmailo</a></p>
+  </footer>
+
+  <script>
+    function showEnglish() {
+      document.getElementById("english-info").classList.remove("hidden");
+      document.getElementById("nepali-info").classList.add("hidden");
+    }
+
+    function showNepali() {
+      document.getElementById("nepali-info").classList.remove("hidden");
+      document.getElementById("english-info").classList.add("hidden");
+    }
+  </script>
 </body>
 </html>
