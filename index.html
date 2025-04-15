@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -65,6 +65,94 @@
             font-weight: bold;
             font-family: 'Cursive', sans-serif;
         }
+
+
+
+
+
+.speech {
+  font-size: 20px;
+  font-weight: bold;
+  color: green;
+  position: relative;
+  animation: slideInLeft 1s ease-out;
+}
+
+/* Animation keyframes */
+@keyframes slideInLeft {
+  from {
+    left: -100%;
+    opacity: 0;
+  }
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+
+.d {
+  font-size: 25px;
+  font-weight: bold;
+  color: red;
+  position: relative;
+  animation: slideInRight 1s ease-out;
+}
+
+/* Animation keyframes */
+@keyframes slideInRight {
+  from {
+    right: -100%;
+    opacity: 0;
+  }
+  to {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+
+
+
+
+.vanai   {
+ font-size: 15px;
+  font-weight: bold;
+  color: yellow;
+
+    }
+.quote-section {
+  background: blue;
+  padding: 20px;
+  margin-top: 40px;
+  border-radius: 10px;
+  overflow: hidden; 
+  white-space: nowrap;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.vanai-text {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  padding-left: 100%;
+  animation: moveText 20s linear infinite;
+}
+
+@keyframes moveText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+
+
         button {
             display: block;
             margin: 15px auto;
@@ -124,6 +212,10 @@
         }
     </style>
 </head>
+
+
+
+
 <body>
     <header>
         <h1>Welcome to My Personal Website</h1>
@@ -135,31 +227,74 @@
         </nav>
     </header>
 
+
+
+
+
     <section id="about">
         <div class="profile">
             <img src="b.jpeg" alt="Nabin Phuyal">
             <h1>Nabin Phuyal</h1>
         </div>
+
+
+
+
+
+<div class="speech">
+<p>Over take is interesting but<p/>
+</div>
+
+<div class="d">
+<p>DENGEROUS<p/>
+</div>
+
+
+
+<!--- Vanai section -->
+<section id="vanai" class="quote-section">
+  <h2><span style="color: yellow;">लेखकको भनाई</h2></span>
+  <p class="vanai-text">शिक्षक ज्ञानको समुन्द्र हुन् — कुरा त यो हो, तिमी के लिएर गएका हौ? गिलास कि ड्रम? 💭✍️ नबिन फुयल </p>
+</section>
+
+
         <h2>About Me</h2>
-        <p>Hi, I'm Nabin Phuyal. I am a Student of Korean Language. Welcome to my personal website! Here you can learn more about me and get in touch with me.</p>
+        <p>Hello and Welcome!, I'm Nabin Phuyal. this is my personal website! Here you can learn more about me and get in touch with me.</p>
         <button onclick="showDetails()">Click Me!</button>
 
         <div id="extra-info" class="hidden">
-            <h3>My Qualifications</h3>
+<p> My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was bron on 2006-07-02AD(2063-03-18BS.) 
+
+I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2 (Higher Secondary Education).
+I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. My deep interest in Korean culture and communication has helped me build strong fluency in reading, writing, and speaking the language.
+Alongside my academic interests, I have also worked as a Computer Operator, gaining valuable experience in Microsoft Office tools (Word, Excel, PowerPoint), internet operations, and proficient typing in both English and Nepali.
+One of my biggest dreams is to become a successful YouTuber. I have already started my journey on YouTube, where I create content that reflects my creativity, interests, and personal expression. I am passionate about connecting with people through videos and building a community online.
+I am a hardworking, disciplined, and curious individual, always looking for new opportunities to grow and share my skills with the world.
+Thank you for visiting my profile!    </p>
+            <span style="color: red;"><h3>My Qualifications</h3></span>
             <p>Pluss 2 in Education</p>
 	  <p>Certify Advanced Computer Operator</p>
             <p>Certified in Korean Language</p>
         </div>
 
-        <h3>Social Links</h3>
+
+
+
+
+        <span style="color: orange;"><h3>Social Links</h3></span>
         <div class="social-links">
             <a href="http://www.youtube.com/@nabinvlogdream" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="http://www.tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
-            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
-        </div>
+            <a href="http://www.tiktok.com/@nabinkanxophuyal?_t=ZS-8vrmF0xrpS&_r=1" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank"><i class="fab fa-facebook"></i></a>
+	  <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://instagram.com/nabin.phuyal30" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>         
     </section>
+
+
+
+
+
 
     <!-- Contact section (fixed) -->
     <section id="contact">
