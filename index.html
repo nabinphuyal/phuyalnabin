@@ -52,18 +52,15 @@
     }
 
     .hero-text { max-width: 500px; text-align: left; }
-
-    .main-quote { 
-      font-size: 30px; font-weight: bold; margin-bottom: 20px; color: #1a237e;
-      animation: elegantReveal 1.8s ease-out forwards; 
-    }
-    
+    .main-quote { font-size: 30px; font-weight: bold; margin-bottom: 20px; color: #1a237e; animation: elegantReveal 1.8s ease-out forwards; }
     .speech { font-size: 20px; font-weight: bold; color: #2e7d32; animation: fadeInLeft 1s ease-out 0.5s both; }
     .s { font-size: 24px; font-weight: 800; color: #f9a825; padding: 10px 0; display: block; letter-spacing: 3px; animation: fadeInLeft 1s ease-out 0.8s both; } 
     .d { font-size: 28px; font-weight: bold; color: #d32f2f; animation: fadeInLeft 1s ease-out 1.1s both; }
 
     .nepal-flag {
-      width: 80px; height: auto; margin: 20px;
+      width: 100px; 
+      height: auto; 
+      margin: 20px;
       filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
       animation: wave 3s ease-in-out infinite, popIn 1s ease-out 1.4s both;
     }
@@ -84,8 +81,13 @@
     .social-links a { color: #555; transition: 0.4s; }
     .social-links a:hover { color: #ff69b4; transform: scale(1.2); }
 
-    /* Qualifications list spacing */
-    .qual-item { margin-bottom: 8px; display: block; }
+    .qual-item { margin-bottom: 8px; display: block; font-weight: 500; }
+
+    /* Contact Styling */
+    .contact-info { font-size: 18px; margin-top: 20px; text-align: left; display: inline-block; }
+    .contact-info p { margin: 12px 0; }
+    .location-link { color: #333; text-decoration: none; transition: 0.3s; }
+    .location-link:hover { color: #da1b76; text-decoration: underline; }
 
     footer { background: #1a1a1a; color: white; padding: 30px 0; margin-top: 60px; text-align: center; }
   </style>
@@ -105,7 +107,7 @@
     <div class="d">DANGEROUS</div>
   </div>
 
-  <img src="nepal" alt="nepal flag" class="nepal-flag">
+  <img src="nepal.png" alt="Nepal Flag" class="nepal-flag">
 
   <div class="hero-image-container">
     <img src="npp" alt="Nabin Phuyal" class="profile-pic">
@@ -121,7 +123,7 @@
   </div>
 
   <div id="english-info" class="hidden info-box">
-    <p>My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS). I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2 (Higher Secondary Education). I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. My deep interest in Korean culture and communication has helped me build strong fluency in reading, writing, and speaking the language. Alongside my academic interests, I have also worked as a Computer Operator, gaining valuable experience in Microsoft Office tools, internet operations, and proficient typing in both English and Nepali. One of my biggest dreams is to become a successful YouTuber. I have already started my journey on YouTube, where I create content that reflects my creativity, interests, and personal expression. I am passionate about connecting with people through videos and building a community online. I am a hardworking, disciplined, and curious individual, always looking for new opportunities to grow and share my skills with the world. Thank you for visiting my profile!</p>
+    <p>My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS). I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2. I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. I have also worked as a Computer Operator. My dream is to become a successful YouTuber. Thank you for visiting my profile!</p>
     <h3 style="color: red; margin-top: 20px;">My Qualifications</h3>
     <span class="qual-item">✅ Plus 2 in Education</span>
     <span class="qual-item">✅ Certified Advanced Computer Operator</span>
@@ -129,7 +131,7 @@
   </div>
 
   <div id="nepali-info" class="hidden info-box">
-    <p>मेरो नाम <b><span style="color: blue;"> नवीन फुयल </span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
+    <p>मेरो नाम <b><span style="color: blue;">नवीन फयल</span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
     <p>मैले उच्च माध्यमिक तह (+2) शिक्षामा पुरा गरिसकेको छु। मलाई भाषा सिक्ने ठूलो रुचि छ। विशेषगरी कोरियन भाषा सिक्नमा म निकै अब्बल छु।</p>
     <p>त्यसका साथै म कम्प्युटर अपरेटरको रूपमा पनि काम गरिसकेको छु। म YouTube मा सफल बन्न चाहन्छु। धन्यवाद मेरो प्रोफाइल हेर्दिनु भएकोमा!</p>
     <h3 style="color: red; margin-top: 20px;">मेरो योग्यता</h3>
@@ -148,7 +150,16 @@
   </div>
 </section>
 
-<footer><p>&copy; 2025 Nabin Phuyal. All rights reserved.</p><p>Website Design by 🚀 Nabin Phuyal</p></footer>
+<section id="contact">
+  <h2 style="color: #da1b76;">Contact Me</h2>
+  <div class="contact-info">
+    <p>📞 <b>Phone:</b> +977-9762509382</p>
+    <p>📧 <b>Email:</b> nabinkanxo5@gmail.com</p>
+    <p>📍 <b>Location:</b> <a href="https://www.facebook.com/share/r/1Bvb5yA2eG/" target="_blank" class="location-link">Bhojpur, Nepal</a></p>
+  </div>
+</section>
+
+<footer><p>&copy; 2025 Nabin Phuyal. All rights reserved.</p><p>Website Design by 🚀 Nabin Kanxo</p></footer>
 
 <script>
   function showEnglish() { document.getElementById("english-info").classList.remove("hidden"); document.getElementById("nepali-info").classList.add("hidden"); }
@@ -157,4 +168,3 @@
 
 </body>
 </html>
-
