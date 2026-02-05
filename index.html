@@ -46,7 +46,7 @@
     /* ================= SOFT SKY BLUE HERO SECTION ================= */
     .hero {
       min-height: 80vh;
-      background-color: #e3f2fd; /* SOFT SKY BLUE SHAPE */
+      background-color: #e3f2fd; 
       margin: 20px;
       border-radius: 30px;
       display: flex;
@@ -65,17 +65,43 @@
       font-weight: bold;
       margin-bottom: 20px;
       color: #1a237e;
-      animation: elegantReveal 1.8s ease-out;
+      animation: elegantReveal 1.8s ease-out forwards;
     }
 
+    /* ANIMATIONS */
     @keyframes elegantReveal {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .speech { font-size: 20px; font-weight: bold; color: #2e7d32; }
-    .s { font-size: 22px; font-weight: bold; color: #f9a825; padding: 5px 0; } 
-    .d { font-size: 26px; font-weight: bold; color: #d32f2f; }
+    @keyframes slideIn {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .speech { 
+      font-size: 20px; 
+      font-weight: bold; 
+      color: #2e7d32; 
+      animation: slideIn 1s ease-out forwards;
+    }
+
+    .s { 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: #f9a825; 
+      padding: 10px 0;
+      display: block;
+      animation: slideIn 1.3s ease-out forwards;
+      letter-spacing: 3px;
+    } 
+    
+    .d { 
+      font-size: 28px; 
+      font-weight: bold; 
+      color: #d32f2f; 
+      animation: slideIn 1.6s ease-out forwards;
+    }
 
     .hero-image-container {
       display: flex;
@@ -99,7 +125,7 @@
       letter-spacing: 2px;
     }
 
-    /* ================= ABOUT SECTION ================= */
+    /* ================= CONTENT SECTIONS ================= */
     section {
       max-width: 950px;
       margin: 40px auto;
@@ -130,7 +156,6 @@
       font-size: 16px;
       font-weight: 600;
       transition: 0.3s;
-      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
     }
 
     button:hover { background-color: #da1b76; transform: translateY(-3px); }
@@ -143,16 +168,10 @@
       gap: 30px;
       font-size: 35px;
       margin-top: 25px;
-      flex-wrap: wrap;
     }
 
-    .social-links a { color: #555; transition: 0.4s; text-decoration: none; }
+    .social-links a { color: #555; transition: 0.4s; }
     .social-links a:hover { color: #ff69b4; transform: scale(1.2); }
-
-    /* Color specifically for YouTube */
-    .fa-youtube:hover { color: #ff0000; }
-    /* Color specifically for TikTok */
-    .fa-tiktok:hover { color: #000000; }
 
     footer {
       background: #1a1a1a;
@@ -160,15 +179,6 @@
       padding: 30px 0;
       margin-top: 60px;
       text-align: center;
-    }
-    
-    ul.qual-list {
-      list-style-type: none;
-      margin-top: 10px;
-    }
-    ul.qual-list li::before {
-      content: "✅";
-      margin-right: 10px;
     }
   </style>
 </head>
@@ -203,8 +213,8 @@
 </div>
 
 <section id="about">
-  <h2 style="color: #da1b76; font-size: 28px;">About Me</h2>
-  <p style="font-size: 18px; color: #555;">Hello and Welcome!, I'm Nabin Phuyal. This is my personal website!</p>
+  <h2 style="color: #da1b76;">About Me</h2>
+  <p>Hello and Welcome!, I'm Nabin Phuyal. Welcome to my world!</p>
 
   <div style="margin-top: 20px;">
     <button onclick="showEnglish()">Read in English</button>
@@ -213,45 +223,35 @@
 
   <div id="english-info" class="hidden info-box">
     <p>My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS). I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2 (Higher Secondary Education). I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. My deep interest in Korean culture and communication has helped me build strong fluency in reading, writing, and speaking the language. Alongside my academic interests, I have also worked as a Computer Operator, gaining valuable experience in Microsoft Office tools, internet operations, and proficient typing in both English and Nepali. One of my biggest dreams is to become a successful YouTuber. I have already started my journey on YouTube, where I create content that reflects my creativity, interests, and personal expression. I am passionate about connecting with people through videos and building a community online. I am a hardworking, disciplined, and curious individual, always looking for new opportunities to grow and share my skills with the world. Thank you for visiting my profile!</p>
-
-    <h3 style="color: red; margin-top: 20px;">My Qualifications</h3>
-    <ul class="qual-list">
-        <li>Plus 2 in Education</li>
-        <li>Certified Advanced Computer Operator</li>
-        <li>Certified in Korean Language</li>
-    </ul>
+    <h3 style="color: red; margin-top: 15px;">My Qualifications</h3>
+    <p>✅ Plus 2 in Education</p>
+    <p>✅ Certified Advanced Computer Operator</p>
+    <p>✅ Certified in Korean Language</p>
   </div>
 
   <div id="nepali-info" class="hidden info-box">
     <p><b><span style="color: blue;">नबिन फुयाल</span></b> मेरो नाम हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो।</p>
-    <p>मैले उच्च माध्यमिक तह (+2) शिक्षामा पुरा गरिसकेको छु। मलाई भाषा सिक्ने ठूलो रुचि छ। विशेषगरी कोरियन भाषा सिक्नमा म निकै अब्बल छु।</p>
-    <p>त्यसका साथै म कम्प्युटर अपरेटरको रूपमा पनि काम गरिसकेको छु। म YouTube मा सफल बन्न चाहन्छु। मैले युट्युब यात्रा सुरु गरिसकेको छु र त्यहाँ आफ्नो रुचि र प्रतिभा प्रस्तुत गर्दैछु।</p>
-    <p>म एक मिहिनेती, अनुशासित र जिज्ञासु व्यक्तिको रूपमा नयाँ अवसरहरूको खोजीमा छु। धन्यवाद मेरो प्रोफाइल हेर्दिनु भएकोमा!</p>
-
-    <h3 style="color: red; margin-top: 20px;">मेरो योग्यता</h3>
-    <ul class="qual-list">
-        <li>शिक्षामा प्लस २</li>
-        <li>प्रमाणित कम्प्युटर अपरेटर</li>
-        <li>कोरियन भाषा दक्षता प्रमाणपत्र</li>
-    </ul>
+    <p>मैले उच्च माध्यमिक तह (+2) शिक्षा पुरा गरिसकेको छु। मलाई कोरियन भाषा र कम्प्युटरमा विशेष रुचि छ। म युट्युब मार्फत आफ्नो कला प्रस्तुत गर्न चाहन्छु।</p>
+    <h3 style="color: red; margin-top: 15px;">मेरो योग्यता</h3>
+    <p>✅ शिक्षामा प्लस २</p>
+    <p>✅ प्रमाणित कम्प्युटर अपरेटर</p>
+    <p>✅ कोरियन भाषा दक्षता प्रमाणपत्र</p>
   </div>
 
-  <h3 style="color: orange; margin-top: 40px; font-size: 24px;">Social Links</h3>
+  <h3 style="color: orange; margin-top: 40px;">Social Links</h3>
   <div class="social-links">
-    <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-    <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
-    <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-    <a href="https://instagram.com/phuyalnabin28" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank" title="CapCut"><i class="fa-solid fa-video"></i></a>
+    <a href="http://www.youtube.com/@nabinvlogdream" target="_blank"><i class="fab fa-youtube"></i></a>
+    <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank"><i class="fab fa-facebook"></i></a>
+    <a href="https://instagram.com/phuyalnabin28" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank"><i class="fa-solid fa-video"></i></a>
   </div>
 </section>
 
 <section id="contact">
   <h2 style="color: #da1b76;">Contact Me</h2>
-  <div style="font-size: 18px; margin-top: 15px;">
-    <p>📞 <b>Phone:</b> +977-9762509382</p>
-    <p>📧 <b>Email:</b> <a href="mailto:nabinkanxo5@gmail.com" style="text-decoration: none; color: blue;">nabinkanxo5@gmail.com</a></p>
-  </div>
+  <p>📞 Phone: +977-9762509382</p>
+  <p>📧 Email: nabinkanxo5@gmail.com</p>
 </section>
 
 <footer>
