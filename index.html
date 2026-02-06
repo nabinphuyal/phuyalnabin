@@ -1,4 +1,4 @@
-html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +12,7 @@ html
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8fbff; color: #333; line-height: 1.6; overflow-x: hidden; }
         
-        /* ========== 3-DOT MENU LEFT SIDE ========== */
+        /* ========== PROFESSIONAL 3-DOT MENU LEFT SIDE ========== */
         .dot-menu-container {
             position: fixed;
             top: 20px;
@@ -21,119 +21,236 @@ html
         }
         
         .three-dot-menu { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            background: linear-gradient(135deg, #ff69b4, #da1b76);
             color: white; 
-            padding: 12px 20px; 
-            border-radius: 30px; 
-            font-weight: bold; 
-            width: 120px; 
+            padding: 14px 22px; 
+            border-radius: 35px; 
+            font-weight: 600; 
+            width: 140px; 
             text-align: center; 
             cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
-            transition: 0.3s;
-            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
+            letter-spacing: 0.5px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         .three-dot-menu:hover { 
-            background: linear-gradient(90deg, #da1b76, #c71585); 
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #da1b76, #c71585); 
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(218, 27, 118, 0.5);
+        }
+        .three-dot-menu:active {
+            transform: translateY(-1px) scale(0.98);
         }
         
         .menu-options { 
             position: absolute;
             top: 100%;
             left: 0;
+            margin-top: 12px;
             display: none; 
             background: white; 
-            margin-top: 10px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15); 
+            border-radius: 16px; 
+            box-shadow: 0 12px 40px rgba(0,0,0,0.18); 
             overflow: hidden; 
-            width: 220px; 
+            width: 240px; 
             z-index: 1002;
+            border: 1px solid rgba(255, 105, 180, 0.15);
+            animation: slideDown 0.25s ease-out;
         }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .menu-options button { 
             width: 100%; 
-            padding: 14px; 
+            padding: 16px 20px; 
             border: none; 
             background: none; 
             cursor: pointer; 
-            border-bottom: 1px solid #f0f0f0; 
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
             text-align: left; 
             font-size: 14px; 
-            transition: 0.2s; 
+            transition: all 0.2s ease; 
             font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: #444;
+            font-weight: 500;
         }
         .menu-options button:hover { 
-            background: #f8f9fa; 
+            background: linear-gradient(to right, rgba(255, 105, 180, 0.1), rgba(218, 27, 118, 0.08)); 
             color: #ff69b4; 
+            padding-left: 24px;
+        }
+        .menu-options button:last-child {
+            border-bottom: none;
         }
         
-        /* Menu Forms */
+        /* Menu Forms - Professional Design */
         .menu-form-card { 
             background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15); 
-            width: 320px; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2); 
+            width: 380px; 
             position: fixed;
             top: 80px;
             left: 20px;
             z-index: 1003;
             display: none;
-            animation: nbnPop 0.4s ease-out;
+            animation: popInForm 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 105, 180, 0.2);
+        }
+        @keyframes popInForm {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .form-title {
+            color: #da1b76;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-title i {
+            font-size: 24px;
         }
         
         .input-box { 
-            margin: 8px 0; 
-            padding: 12px; 
+            margin: 10px 0; 
+            padding: 14px 18px; 
             width: 100%; 
-            border-radius: 8px; 
-            border: 1px solid #ddd; 
+            border-radius: 12px; 
+            border: 2px solid #e0e0e0; 
             box-sizing: border-box; 
             outline: none; 
             font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #fafafa;
         }
         .input-box:focus { 
             border-color: #ff69b4; 
-            box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.2);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.15);
+            transform: translateY(-2px);
         }
         
         .btn-main { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            background: linear-gradient(135deg, #ff69b4, #da1b76);
             color: white; 
             border: none; 
-            padding: 12px; 
+            padding: 15px; 
             width: 100%; 
-            border-radius: 8px; 
-            font-weight: bold; 
+            border-radius: 12px; 
+            font-weight: 600; 
             cursor: pointer; 
-            margin-top: 10px; 
+            margin-top: 15px; 
             font-family: 'Poppins', sans-serif;
-            transition: 0.3s;
+            font-size: 16px;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
         }
         .btn-main:hover { 
-            background: linear-gradient(90deg, #da1b76, #c71585);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #da1b76, #c71585);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(218, 27, 118, 0.4);
+        }
+        .btn-main:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-close {
+            background: #f0f0f0;
+            color: #666;
+            margin-top: 10px;
+        }
+        .btn-close:hover {
+            background: #e0e0e0;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .hidden { display: none !important; }
         
+        /* Chat AI Container */
+        .ai-chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 5px;
+        }
+        
+        .ai-message {
+            background: #f0f2f5;
+            padding: 12px 16px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #ff69b4, #da1b76);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            align-self: flex-end;
+            max-width: 90%;
+            margin-left: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         #chatResp { 
-            margin-top: 10px; 
-            padding: 12px; 
+            min-height: 80px; 
+            padding: 15px; 
             background: #f8f9fa; 
-            border-left: 4px solid #ff69b4; 
-            border-radius: 5px; 
-            font-size: 14px; 
-            line-height: 1.5; 
-            min-height: 40px; 
+            border-left: 5px solid #ff69b4; 
+            border-radius: 10px; 
+            font-size: 15px; 
+            line-height: 1.6; 
+            border: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        
+        #chatHistory {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+        
+        /* Add overlay for better focus */
+        .form-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1002;
+            display: none;
+            backdrop-filter: blur(3px);
         }
         
         /* Header section with Flying Flag and Symbol */
@@ -290,21 +407,32 @@ html
 </head>
 <body>
 
-<!-- ========== 3-DOT MENU LEFT SIDE ========== -->
+<!-- Form Overlay -->
+<div class="form-overlay" id="formOverlay" onclick="hideAllForms()"></div>
+
+<!-- ========== PROFESSIONAL 3-DOT MENU LEFT SIDE ========== -->
 <div class="dot-menu-container">
-    <div class="three-dot-menu" onclick="toggleMenu()">
-        <i class="fa-solid fa-ellipsis-vertical"></i> Menu
+    <div class="three-dot-menu" onclick="toggleMenu()" id="menuButton">
+        <i class="fa-solid fa-bars"></i> MENU
     </div>
     <div class="menu-options" id="menu-options">
-        <button onclick="showMenuSection('create-account')"><i class="fa-solid fa-user-plus"></i> Create New Account</button>
-        <button onclick="showMenuSection('login')"><i class="fa-solid fa-key"></i> Login with ID/Password</button>
-        <button onclick="showMenuSection('chat-ai')"><i class="fa-solid fa-robot"></i> Chat AI</button>
+        <button onclick="showMenuSection('create-account')">
+            <i class="fa-solid fa-user-plus"></i> Create New Account
+        </button>
+        <button onclick="showMenuSection('login')">
+            <i class="fa-solid fa-key"></i> Login
+        </button>
+        <button onclick="showMenuSection('chat-ai-menu')">
+            <i class="fa-solid fa-robot"></i> Chat AI Assistant
+        </button>
     </div>
 </div>
 
 <!-- Menu Forms -->
 <div id="create-account" class="menu-form-card">
-    <h3 style="margin-top:0; color: #da1b76;">Create Account</h3>
+    <div class="form-title">
+        <i class="fa-solid fa-user-plus"></i> Create Account
+    </div>
     <input type="text" id="fullName" placeholder="Full Name" class="input-box">
     <select id="country" class="input-box">
         <option value="">Select Country</option>
@@ -314,31 +442,65 @@ html
     <input type="text" id="phone" placeholder="98XXXXXXXX / 97XXXXXXXX" class="input-box">
     <input type="password" id="password" placeholder="Password" class="input-box">
     <button class="btn-main" onclick="createAccount()">Create Account</button>
-    <button class="btn-main" style="background:#666; margin-top:5px;" onclick="hideAllForms()">Close</button>
+    <button class="btn-main btn-close" onclick="hideAllForms()">Close</button>
 </div>
 
 <div id="login" class="menu-form-card">
-    <h3 style="color: #da1b76;">Login</h3>
+    <div class="form-title">
+        <i class="fa-solid fa-key"></i> Login
+    </div>
     <input type="text" id="loginPhone" placeholder="Phone Number" class="input-box">
     <input type="password" id="loginPassword" placeholder="Password" class="input-box">
     <button class="btn-main" onclick="loginUser()">Login</button>
-    <button class="btn-main" style="background:#666; margin-top:5px;" onclick="hideAllForms()">Close</button>
+    <button class="btn-main btn-close" onclick="hideAllForms()">Close</button>
 </div>
 
-<div id="chat-ai-menu" class="menu-form-card" style="width: 350px;">
-    <h3 style="color: #da1b76;">AI Assistant</h3>
-    <div id="chatResp">Hi! I am your AI. How can I help you today?</div>
-    <textarea id="chatInput" placeholder="Try saying 'Hello', 'Time', or '10 + 20'..." class="input-box" rows="2"></textarea>
-    <button class="btn-main" onclick="sendChat()">Send Message</button>
-    <button class="btn-main" style="background:#666; margin-top:5px;" onclick="hideAllForms()">Close</button>
+<!-- ENHANCED AI CHAT WITH AUTO-REPLY -->
+<div id="chat-ai-menu" class="menu-form-card" style="width: 400px;">
+    <div class="form-title">
+        <i class="fa-solid fa-robot"></i> Smart AI Assistant
+    </div>
+    
+    <div id="chatResp" style="min-height: 60px; background: linear-gradient(135deg, #f8f9fa, #eef2f7);">
+        <strong>🤖 Hello! I'm your AI Assistant.</strong><br>
+        Ask me anything: time, math, about Nepal, or Nabin!
+    </div>
+    
+    <div id="chatHistory" style="display: none;"></div>
+    
+    <div class="ai-chat-container" id="aiChatContainer">
+        <!-- Chat messages will appear here -->
+    </div>
+    
+    <textarea id="chatInput" placeholder="Type your message here... Try: Hello, What time is it?, 10+20, Tell me about Nepal, Who is Nabin?" class="input-box" rows="2"></textarea>
+    
+    <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button class="btn-main" onclick="sendChat()" style="flex: 3;">
+            <i class="fa-solid fa-paper-plane"></i> Send Message
+        </button>
+        <button class="btn-main" onclick="clearChat()" style="flex: 1; background: #666;">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+    
+    <button class="btn-main btn-close" onclick="hideAllForms()">Close</button>
 </div>
 
 <div id="after-login" class="menu-form-card">
-    <h3 id="welcomeMsg" style="color: #da1b76;">Welcome!</h3>
-    <button class="btn-main" style="background:#4caf50" onclick="showNotice()">Notice</button>
-    <button class="btn-main" style="background:#2196f3" onclick="showSMS()">Personal SMS</button>
-    <button class="btn-main" style="background:#666" onclick="logout()">Logout</button>
-    <div id="post-login-content" style="margin-top:15px; font-weight: bold; color: #333;"></div>
+    <div class="form-title">
+        <i class="fa-solid fa-user-check"></i> Welcome!
+    </div>
+    <h3 id="welcomeMsg" style="color: #333; margin-bottom: 20px;">User Account</h3>
+    <button class="btn-main" style="background: linear-gradient(135deg, #4caf50, #2e7d32);" onclick="showNotice()">
+        <i class="fa-solid fa-bell"></i> Notice
+    </button>
+    <button class="btn-main" style="background: linear-gradient(135deg, #2196f3, #0d47a1); margin-top: 10px;" onclick="showSMS()">
+        <i class="fa-solid fa-comment-sms"></i> Personal SMS
+    </button>
+    <button class="btn-main btn-close" style="margin-top: 10px;" onclick="logout()">
+        <i class="fa-solid fa-sign-out-alt"></i> Logout
+    </button>
+    <div id="post-login-content" style="margin-top:20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 14px; color: #555;"></div>
 </div>
 
 <!-- ========== ORIGINAL WEBSITE CODE ========== -->
@@ -528,23 +690,187 @@ html
         }, 800);
     }
 
-    // ========== 3-DOT MENU FUNCTIONS ==========
+    // ========== ENHANCED AI CHAT WITH AUTO-REPLY ==========
+    let chatHistory = [];
+    
+    // Intelligent AI Response System
+    function getAIResponse(userMessage) {
+        const msg = userMessage.toLowerCase().trim();
+        
+        // Greetings
+        if (msg.includes('hello') || msg.includes('hi') || msg.includes('namaste') || msg.includes('नमस्ते')) {
+            return "👋 Hello! Welcome to Nabin's website. How can I assist you today?";
+        }
+        
+        // Time related
+        if (msg.includes('time') || msg.includes('समय') || msg.includes('कति बज्यो')) {
+            const now = new Date();
+            return `⏰ Current time: ${now.toLocaleTimeString()}<br>📅 Date: ${now.toLocaleDateString()}`;
+        }
+        
+        // Math calculations
+        if (msg.match(/\d+[\+\-\*\/]\d+/)) {
+            try {
+                const result = eval(msg);
+                return `🧮 Calculation: ${msg} = <strong>${result}</strong>`;
+            } catch {
+                return "🧮 I can do math! Try something like: 10+20, 50-30, 6*7, or 100/5";
+            }
+        }
+        
+        // About Nepal
+        if (msg.includes('nepal') || msg.includes('नेपाल')) {
+            return "🇳🇵 <strong>Nepal - The Land of Himalayas</strong><br>• Capital: Kathmandu<br>• Population: ~30 million<br>• Famous for: Mount Everest, Gautam Buddha, Pashupatinath Temple<br>• Language: Nepali";
+        }
+        
+        // About Nabin
+        if (msg.includes('nabin') || msg.includes('नवीन') || msg.includes('phuyal') || msg.includes('फुयल')) {
+            return "👤 <strong>Nabin Phuyal</strong><br>• Web Developer & Student<br>• From Bhojpur, Nepal<br>• Skills: HTML, CSS, JavaScript<br>• Interests: Korean language, YouTube content creation<br>• Contact: 9762509382";
+        }
+        
+        // Website info
+        if (msg.includes('website') || msg.includes('site') || msg.includes('वेबसाइट')) {
+            return "🌐 This website is created by <strong>Nabin Phuyal</strong> using HTML, CSS, and JavaScript. It features responsive design, AI chatbot, user accounts, and more!";
+        }
+        
+        // Weather
+        if (msg.includes('weather') || msg.includes('मौसम')) {
+            return "🌤️ Currently in Nepal: Mild weather with occasional showers. Temperature: 20-25°C in Kathmandu valley.";
+        }
+        
+        // Contact info
+        if (msg.includes('contact') || msg.includes('phone') || msg.includes('सम्पर्क') || msg.includes('फोन')) {
+            return "📞 <strong>Contact Nabin:</strong><br>• Phone: +977-9762509382<br>• Email: nabinkanxo5@gmail.com<br>• Location: Bhojpur, Nepal";
+        }
+        
+        // YouTube/TikTok
+        if (msg.includes('youtube') || msg.includes('tiktok') || msg.includes('channel')) {
+            return "🎬 <strong>Nabin's Social Media:</strong><br>• YouTube: @nabinvlogdream<br>• TikTok: @nabinkanxophuyal<br>• Facebook: nabin.kanxo.phuyal<br>• Instagram: phuyalnabin28";
+        }
+        
+        // Help
+        if (msg.includes('help') || msg.includes('सहायता') || msg.includes('what can you do')) {
+            return "❓ <strong>I can help with:</strong><br>• Telling current time/date<br>• Math calculations<br>• Information about Nepal<br>• Details about Nabin Phuyal<br>• Website information<br>• Contact details<br>Try asking me anything!";
+        }
+        
+        // Thank you
+        if (msg.includes('thank') || msg.includes('thanks') || msg.includes('धन्यवाद')) {
+            return "🙏 You're welcome! Happy to help. Is there anything else you'd like to know?";
+        }
+        
+        // Default response for unknown queries
+        const randomResponses = [
+            "🤔 That's interesting! Could you tell me more?",
+            "💡 I'm still learning. Try asking about time, math, Nepal, or Nabin!",
+            "🎯 I understand you said: '" + userMessage + "'. Try one of these:<br>• What time is it?<br>• Calculate 15+25<br>• Tell me about Nepal<br>• Who is Nabin?",
+            "🌟 Great question! As an AI, I can help with time, calculations, and information about this website.",
+            "🔍 I'm here to help! Try asking specific questions for better answers."
+        ];
+        
+        return randomResponses[Math.floor(Math.random() * randomResponses.length)];
+    }
+    
+    // Enhanced Chat Function
+    function sendChat() {
+        const userInput = document.getElementById('chatInput');
+        const message = userInput.value.trim();
+        const chatContainer = document.getElementById('aiChatContainer');
+        
+        if (!message) return;
+        
+        // Add user message
+        const userMsgDiv = document.createElement('div');
+        userMsgDiv.className = 'user-message';
+        userMsgDiv.innerHTML = `<strong>You:</strong> ${message}`;
+        chatContainer.appendChild(userMsgDiv);
+        
+        // Add to history
+        chatHistory.push({ sender: 'user', message: message });
+        
+        // Clear input
+        userInput.value = '';
+        
+        // Show typing indicator
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'ai-message';
+        typingDiv.innerHTML = '<em>🤖 AI is typing...</em>';
+        typingDiv.id = 'typingIndicator';
+        chatContainer.appendChild(typingDiv);
+        
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // Get AI response after delay
+        setTimeout(() => {
+            // Remove typing indicator
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+            
+            // Get AI response
+            const aiResponse = getAIResponse(message);
+            
+            // Add AI message
+            const aiMsgDiv = document.createElement('div');
+            aiMsgDiv.className = 'ai-message';
+            aiMsgDiv.innerHTML = `<strong>🤖 AI:</strong> ${aiResponse}`;
+            chatContainer.appendChild(aiMsgDiv);
+            
+            // Add to history
+            chatHistory.push({ sender: 'ai', message: aiResponse });
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Update chat response preview
+            document.getElementById('chatResp').innerHTML = `<strong>Last response:</strong><br>${aiResponse.substring(0, 80)}${aiResponse.length > 80 ? '...' : ''}`;
+        }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+    }
+    
+    function clearChat() {
+        document.getElementById('aiChatContainer').innerHTML = '';
+        chatHistory = [];
+        document.getElementById('chatResp').innerHTML = '<strong>🤖 Hello! I\'m your AI Assistant.</strong><br>Ask me anything: time, math, about Nepal, or Nabin!';
+    }
+    
+    // Enter key support
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChat();
+        }
+    });
+
+    // ========== PROFESSIONAL 3-DOT MENU FUNCTIONS ==========
     let menuOpen = false;
     let accounts = []; 
     let currentUser = null;
 
     function toggleMenu() {
         menuOpen = !menuOpen;
-        document.getElementById('menu-options').style.display = menuOpen ? 'block' : 'none';
-        // Close all forms when menu is toggled
-        if (!menuOpen) hideAllForms();
+        const menuOptions = document.getElementById('menu-options');
+        menuOptions.style.display = menuOpen ? 'block' : 'none';
+        
+        // Button animation
+        const menuButton = document.getElementById('menuButton');
+        if (menuOpen) {
+            menuButton.style.transform = 'translateY(-3px) scale(1.03)';
+            menuButton.style.boxShadow = '0 10px 25px rgba(218, 27, 118, 0.5)';
+        } else {
+            menuButton.style.transform = 'translateY(0) scale(1)';
+            menuButton.style.boxShadow = '0 6px 20px rgba(255, 105, 180, 0.4)';
+        }
     }
 
     function showMenuSection(id) {
         hideAllForms();
         document.getElementById(id).style.display = 'block';
+        document.getElementById('formOverlay').style.display = 'block';
         document.getElementById('menu-options').style.display = 'none';
         menuOpen = false;
+        
+        // Update menu button
+        const menuButton = document.getElementById('menuButton');
+        menuButton.style.transform = 'translateY(0) scale(1)';
+        menuButton.style.boxShadow = '0 6px 20px rgba(255, 105, 180, 0.4)';
     }
 
     function hideAllForms() {
@@ -553,6 +879,7 @@ html
             const form = document.getElementById(id);
             if (form) form.style.display = 'none';
         });
+        document.getElementById('formOverlay').style.display = 'none';
     }
 
     function createAccount() {
@@ -562,25 +889,25 @@ html
         const password = document.getElementById('password').value;
 
         if(!fullName || !country || !phone || !password) {
-            alert('Please fill all fields');
+            alert('⚠️ Please fill all fields');
             return;
         }
 
         if(country === 'NP') {
             const isNepalValid = phone.startsWith('98') || phone.startsWith('97');
             if(!isNepalValid || phone.length !== 10) {
-                alert('Nepal number must start with 98 or 97 and be 10 digits.');
+                alert('❌ Nepal number must start with 98 or 97 and be 10 digits.');
                 return;
             }
         }
 
         if(accounts.find(acc => acc.phone === phone)){
-            alert('Account already exists');
+            alert('⚠️ Account already exists');
             return;
         }
 
         accounts.push({fullName, country, phone, password});
-        alert('Account Created Successfully!');
+        alert('✅ Account Created Successfully!');
         hideAllForms();
         showMenuSection('login');
     }
@@ -594,72 +921,82 @@ html
             currentUser = user;
             hideAllForms();
             document.getElementById('after-login').style.display = 'block';
-            document.getElementById('welcomeMsg').innerText = `Namaste, ${user.fullName}!`;
+            document.getElementById('formOverlay').style.display = 'block';
+            document.getElementById('welcomeMsg').innerText = `Welcome, ${user.fullName}!`;
             document.getElementById('post-login-content').innerHTML = '';
         } else {
-            alert('Invalid Credentials!');
+            alert('❌ Invalid Credentials!');
         }
     }
 
-    // Left Side Chat AI
-    function sendChat() {
-        const msg = document.getElementById('chatInput').value.trim().toLowerCase();
-        const respBox = document.getElementById('chatResp');
-        if(!msg) return;
-
-        respBox.innerText = "Thinking...";
-
-        setTimeout(() => {
-            let reply = "";
-            
-            if(msg.includes("hello") || msg.includes("hi")) {
-                reply = "Hello! Hope you are having a great day. How can I assist you?";
-            } else if(msg.includes("time")) {
-                reply = "Current time is: " + new Date().toLocaleTimeString();
-            } else if(msg.includes("who are you")) {
-                reply = "I am an Advanced Chat AI built to help you with this demo.";
-            } else if(msg.match(/[0-9][- + * /][0-9]/)) {
-                try {
-                    reply = "Result: " + eval(msg);
-                } catch {
-                    reply = "I can do simple math, but that one was tricky!";
-                }
-            } else if(msg.includes("nepal")) {
-                reply = "Nepal is a beautiful country! I support numbers starting with 98 and 97.";
-            } else {
-                reply = "That's interesting! Tell me more, or ask me about 'time' or 'math'.";
-            }
-
-            respBox.innerText = reply;
-            document.getElementById('chatInput').value = "";
-        }, 600);
-    }
-
     function showNotice() { 
-        document.getElementById('post-login-content').innerHTML = '📢 All systems operational. ✅'; 
+        document.getElementById('post-login-content').innerHTML = `
+            <strong>📢 Latest Notice:</strong><br>
+            <p style="margin-top: 8px;">✅ All systems operational.</p>
+            <p>✅ Welcome to Nabin's website.</p>
+            <p>✅ New features coming soon!</p>
+        `; 
     }
     
     function showSMS() { 
-        alert(`Sending private SMS to ${currentUser.phone}...`); 
+        if (currentUser) {
+            document.getElementById('post-login-content').innerHTML = `
+                <strong>📱 Personal SMS:</strong><br>
+                <p style="margin-top: 8px;">Sending SMS to: <strong>${currentUser.phone}</strong></p>
+                <p>📨 Message: "Hello from Nabin's Website!"</p>
+                <p style="color: #4caf50; margin-top: 10px;">✅ SMS sent successfully!</p>
+            `;
+        }
     }
     
     function logout() { 
         currentUser = null; 
         hideAllForms(); 
-        alert("Logged out!"); 
+        document.getElementById('post-login-content').innerHTML = `
+            <p style="color: #4caf50;">✅ Logged out successfully!</p>
+        `;
+        setTimeout(() => {
+            hideAllForms();
+        }, 1500);
     }
 
-    // Close forms when clicking outside
+    // Close menu when clicking outside
     document.addEventListener('click', function(event) {
         const menuContainer = document.querySelector('.dot-menu-container');
         const menuOptions = document.getElementById('menu-options');
-        const forms = document.querySelectorAll('.menu-form-card');
         
-        if (!menuContainer.contains(event.target) && !Array.from(forms).some(form => form.contains(event.target))) {
+        if (!menuContainer.contains(event.target)) {
             menuOptions.style.display = 'none';
+            menuOpen = false;
+            
+            // Reset button style
+            const menuButton = document.getElementById('menuButton');
+            menuButton.style.transform = 'translateY(0) scale(1)';
+            menuButton.style.boxShadow = '0 6px 20px rgba(255, 105, 180, 0.4)';
+        }
+    });
+
+    // Close forms with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            hideAllForms();
+            document.getElementById('menu-options').style.display = 'none';
             menuOpen = false;
         }
     });
+    
+    // Initial welcome message in AI chat
+    window.onload = function() {
+        setTimeout(() => {
+            const chatContainer = document.getElementById('aiChatContainer');
+            if (chatContainer) {
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.className = 'ai-message';
+                welcomeMsg.innerHTML = '<strong>🤖 AI:</strong> Hello! I\'m your AI assistant. Ask me about time, math, Nepal, or the website creator Nabin!';
+                chatContainer.appendChild(welcomeMsg);
+            }
+        }, 500);
+    };
 </script>
 
 </body>
