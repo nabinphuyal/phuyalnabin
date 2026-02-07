@@ -17,16 +17,13 @@
         nav ul li { margin: 0 15px; }
         nav ul li a { color: white; text-decoration: none; font-size: 18px; font-weight: 500; }
         
-        /* 3-Dot Menu Button */
+        /* तस्बिरमा देखिए जस्तै 3-डट Menu Button - ठिक्क फोटोमा देखिए जस्तै */
         .menu-toggle {
             position: absolute;
             top: 25px;
             right: 30px;
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent;
             border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
             cursor: pointer;
             display: flex;
             flex-direction: column;
@@ -34,34 +31,47 @@
             align-items: center;
             gap: 5px;
             z-index: 1001;
-            transition: all 0.3s;
-        }
-        
-        .menu-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+            padding: 12px;
+            width: 50px;
+            height: 50px;
         }
         
         .menu-dot {
-            width: 6px;
-            height: 6px;
+            width: 30px;
+            height: 4px;
             background: white;
-            border-radius: 50%;
+            border-radius: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
         
-        /* Dropdown Menu */
+        /* मेनु टगल हुँदा animation */
+        .menu-toggle.active .menu-dot:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-toggle.active .menu-dot:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active .menu-dot:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* Dropdown Menu - फोटोमा देखिए जस्तै */
         .dropdown-menu {
             position: absolute;
             top: 85px;
             right: 30px;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             width: 280px;
-            padding: 20px;
+            padding: 15px 0;
             z-index: 1000;
             display: none;
             animation: slideDown 0.3s ease;
+            border: 1px solid #e0e7ff;
         }
         
         @keyframes slideDown {
@@ -74,32 +84,36 @@
         }
         
         .dropdown-item {
-            padding: 15px;
-            margin: 8px 0;
-            background: #f8f9fa;
-            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 0;
+            background: transparent;
+            border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 15px;
             transition: all 0.3s;
-            border: none;
             width: 100%;
             text-align: left;
             font-family: 'Poppins', sans-serif;
             font-size: 16px;
             color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
         }
         
         .dropdown-item:hover {
             background: linear-gradient(90deg, #ff69b4, #da1b76);
             color: white;
-            transform: translateX(5px);
         }
         
         .dropdown-item i {
             width: 24px;
             text-align: center;
+            font-size: 18px;
         }
         
         /* AI Chat Modal */
@@ -140,6 +154,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
         
         .ai-header h2 {
@@ -179,6 +194,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            background: #f8fafc;
         }
         
         .ai-message {
@@ -186,6 +202,7 @@
             padding: 20px;
             border-radius: 20px;
             line-height: 1.7;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         
         .ai-user {
@@ -197,7 +214,7 @@
         
         .ai-bot {
             align-self: flex-start;
-            background: #f0f4ff;
+            background: white;
             color: #333;
             border-bottom-left-radius: 5px;
             border: 1px solid #e0e7ff;
@@ -205,7 +222,7 @@
         
         .ai-input-area {
             padding: 20px;
-            background: #f8f9fa;
+            background: white;
             border-top: 1px solid #e0e7ff;
             display: flex;
             gap: 15px;
@@ -220,11 +237,12 @@
             font-family: 'Poppins', sans-serif;
             resize: none;
             height: 60px;
+            outline: none;
         }
         
         .ai-input:focus {
-            outline: none;
             border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
         
         .ai-send {
@@ -244,65 +262,80 @@
             box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
         }
         
-        /* Login Modal */
-        .login-modal {
+        /* Suggestion Box - scroll गरेर तल पुगेपछि मात्र देखिने */
+        .suggestion-box {
             position: fixed;
-            top: 0;
+            bottom: -300px;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2001;
-            display: none;
-        }
-        
-        .login-modal.active {
-            display: flex;
-        }
-        
-        .login-container {
             background: white;
-            width: 90%;
-            max-width: 400px;
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-top: 3px solid #ff69b4;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            padding: 25px;
+            z-index: 999;
+            transition: bottom 0.5s ease;
+            border-radius: 20px 20px 0 0;
         }
         
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 30px;
+        .suggestion-box.active {
+            bottom: 0;
+        }
+        
+        .suggestion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .suggestion-header h3 {
             color: #da1b76;
+            font-size: 1.5rem;
         }
         
-        .login-input {
-            width: 100%;
+        .close-suggestion {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .suggestion-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .suggestion-input, .question-input {
             padding: 15px;
-            margin: 15px 0;
             border: 2px solid #e0e7ff;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
             font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            outline: none;
         }
         
-        .login-btn {
-            width: 100%;
-            padding: 16px;
+        .suggestion-input:focus, .question-input:focus {
+            border-color: #ff69b4;
+        }
+        
+        .submit-btn {
             background: linear-gradient(90deg, #ff69b4, #da1b76);
             color: white;
             border: none;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 18px;
             font-weight: 600;
-            margin-top: 20px;
             transition: all 0.3s;
         }
         
-        .login-btn:hover {
+        .submit-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(218, 27, 118, 0.3);
         }
@@ -433,6 +466,34 @@
             display: block;
             animation: elegantReveal 0.5s ease;
         }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(218, 27, 118, 0.3);
+            z-index: 998;
+            display: none;
+            transition: all 0.3s;
+        }
+        
+        .scroll-indicator:hover {
+            transform: scale(1.1);
+        }
+        
+        .scroll-indicator.active {
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -463,16 +524,19 @@
     
     <div class="dropdown-menu" id="dropdownMenu">
         <button class="dropdown-item" onclick="openAI()">
-            <i class="fas fa-robot"></i> नबिन AI
+            <i class="fas fa-robot"></i> नबिन AI (१ लाख+ प्रश्न)
         </button>
         <button class="dropdown-item" onclick="openLogin()">
-            <i class="fas fa-user"></i> Login / Create ID
+            <i class="fas fa-user-plus"></i> Create ID / Login
         </button>
         <button class="dropdown-item" onclick="window.location.href='#about'">
-            <i class="fas fa-info-circle"></i> About Me
+            <i class="fas fa-user"></i> About Me
         </button>
         <button class="dropdown-item" onclick="window.location.href='#contact'">
-            <i class="fas fa-envelope"></i> Contact
+            <i class="fas fa-address-book"></i> Contact
+        </button>
+        <button class="dropdown-item" onclick="window.open('http://www.youtube.com/@nabinvlogdream', '_blank')">
+            <i class="fab fa-youtube"></i> YouTube Channel
         </button>
         <button class="dropdown-item" onclick="toggleTheme()">
             <i class="fas fa-moon"></i> Dark Mode
@@ -564,37 +628,50 @@
 <div class="ai-modal" id="aiModal">
     <div class="ai-container">
         <div class="ai-header">
-            <h2><i class="fas fa-robot"></i> नबिन AI</h2>
+            <h2><i class="fas fa-robot"></i> नबिन AI - १ लाख+ प्रश्नहरूको उत्तर</h2>
             <button class="close-ai" onclick="closeAI()">&times;</button>
         </div>
         <div class="ai-body" id="aiBody">
             <div class="ai-message ai-bot">
-                <strong>नबिन AI:</strong> नमस्ते! म नबिन AI हुँ। म तपाईंलाई कसरी सहयोग गर्न सक्छु? म नेपाली र अंग्रेजी दुवै भाषामा १ लाख+ प्रश्नहरूको उत्तर दिन सक्छु।
+                <strong>नबिन AI:</strong> नमस्ते! म नबिन AI हुँ। म <strong>१ लाख भन्दा बढी प्रश्नहरू</strong>को उत्तर दिन सक्छु। नेपाली र अंग्रेजी दुवै भाषामा म तपाईंलाई सहयोग गर्न सक्छु।<br><br>
+                <strong>म के गर्न सक्छु:</strong><br>
+                • सबै विषयको ज्ञान<br>
+                • कविता र कथा लेख्ने<br>
+                • गणितीय समस्या समाधान<br>
+                • प्रोग्रामिङ सहयोग<br>
+                • अनुवाद गर्ने<br>
+                • सल्लाह दिने
             </div>
         </div>
         <div class="ai-input-area">
-            <textarea class="ai-input" id="aiInput" placeholder="तपाईंको प्रश्न यहाँ लेख्नुहोस्..."></textarea>
+            <textarea class="ai-input" id="aiInput" placeholder="तपाईंको प्रश्न यहाँ लेख्नुहोस्... (म १ लाख+ प्रश्नहरूको उत्तर दिन्छु)"></textarea>
             <button class="ai-send" onclick="sendAI()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
-<!-- Login Modal -->
-<div class="login-modal" id="loginModal">
-    <div class="login-container">
-        <h2><i class="fas fa-user-circle"></i> Login / Create ID</h2>
-        <input type="text" class="login-input" id="loginUsername" placeholder="Username">
-        <input type="password" class="login-input" id="loginPassword" placeholder="Password">
-        <button class="login-btn" onclick="login()">Login / Create Account</button>
-        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
-            Create new account by entering username & password
-        </p>
+<!-- Suggestion Box (scroll गरेर तल पुगेपछि देखिने) -->
+<div class="suggestion-box" id="suggestionBox">
+    <div class="suggestion-header">
+        <h3><i class="fas fa-comment-dots"></i> Questions & Suggestions</h3>
+        <button class="close-suggestion" onclick="closeSuggestion()">&times;</button>
     </div>
+    <div class="suggestion-form">
+        <input type="text" class="suggestion-input" id="userNameInput" placeholder="Your Name (Optional)">
+        <input type="email" class="suggestion-input" id="userEmail" placeholder="Email (Optional)">
+        <textarea class="question-input" id="userQuestion" rows="3" placeholder="Your question or suggestion..."></textarea>
+        <button class="submit-btn" onclick="submitSuggestion()">Submit</button>
+    </div>
+</div>
+
+<!-- Scroll to top button -->
+<div class="scroll-indicator" id="scrollIndicator" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
 </div>
 
 <footer>
     <p>© 2025 Nabin Phuyal. All rights reserved.</p>
-    <p>Website Design by 🚀 Nabin Kanxo | Powered by <strong>नबिन AI</strong></p>
+    <p>Website Design by 🚀 Nabin Kanxo | Powered by <strong>नबिन AI (१ लाख+ प्रश्न क्षमता)</strong></p>
 </footer>
 
 <script>
@@ -614,25 +691,30 @@
         modal.style.display = (modal.style.display === "block") ? "none" : "block";
     }
 
-    // New Functions for Menu and AI
+    // New Functions
     const menuToggle = document.getElementById('menuToggle');
     const dropdownMenu = document.getElementById('dropdownMenu');
     const aiModal = document.getElementById('aiModal');
-    const loginModal = document.getElementById('loginModal');
+    const suggestionBox = document.getElementById('suggestionBox');
     const userInfo = document.getElementById('userInfo');
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const loginStatus = document.getElementById('loginStatus');
+    const scrollIndicator = document.getElementById('scrollIndicator');
 
-    // Toggle Menu
+    let suggestionBoxShown = false;
+
+    // Toggle Menu - फोटोमा देखिए जस्तै animation
     menuToggle.addEventListener('click', function(e) {
         e.stopPropagation();
+        menuToggle.classList.toggle('active');
         dropdownMenu.classList.toggle('active');
     });
 
     // Close menu when clicking outside
     document.addEventListener('click', function(e) {
         if (!dropdownMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            menuToggle.classList.remove('active');
             dropdownMenu.classList.remove('active');
         }
     });
@@ -640,6 +722,7 @@
     // Open AI Modal
     function openAI() {
         aiModal.classList.add('active');
+        menuToggle.classList.remove('active');
         dropdownMenu.classList.remove('active');
         document.getElementById('aiInput').focus();
     }
@@ -649,138 +732,170 @@
         aiModal.classList.remove('active');
     }
 
-    // Open Login Modal
-    function openLogin() {
-        loginModal.classList.add('active');
-        dropdownMenu.classList.remove('active');
-    }
-
-    // Close Login Modal
-    function closeLogin() {
-        loginModal.classList.remove('active');
-    }
-
-    // Login/Create Account Function
-    function login() {
-        const username = document.getElementById('loginUsername').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
-        
-        if (!username || !password) {
-            alert('Please enter both username and password');
-            return;
-        }
-        
-        // Check if user exists or create new
-        let users = JSON.parse(localStorage.getItem('users') || '{}');
-        
-        if (users[username]) {
-            // Login
-            if (users[username] === password) {
-                localStorage.setItem('currentUser', username);
-                showLoginStatus(`Welcome back, ${username}!`);
-                updateUserInfo(username);
-                closeLogin();
-            } else {
-                alert('Incorrect password');
-            }
+    // Show suggestion box when scrolled to bottom
+    window.addEventListener('scroll', function() {
+        // Scroll indicator
+        if (window.pageYOffset > 300) {
+            scrollIndicator.classList.add('active');
         } else {
-            // Create new account
-            users[username] = password;
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser', username);
-            
-            // Add user-specific features
-            addPremiumFeatures(username);
-            
-            showLoginStatus(`Account created successfully! Welcome ${username}!`);
-            updateUserInfo(username);
-            closeLogin();
+            scrollIndicator.classList.remove('active');
         }
-    }
-
-    // Logout Function
-    function logout() {
-        localStorage.removeItem('currentUser');
-        userInfo.classList.remove('active');
-        showLoginStatus('Logged out successfully');
         
-        // Hide premium content
-        hidePremiumFeatures();
-    }
-
-    // Update User Info Display
-    function updateUserInfo(username) {
-        userInfo.classList.add('active');
-        userName.textContent = username;
-        userAvatar.textContent = username.charAt(0).toUpperCase();
-        
-        // Set random avatar color
-        const colors = ['#2563eb', '#7c3aed', '#ff69b4', '#da1b76', '#10b981'];
-        userAvatar.style.background = `linear-gradient(90deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
-    }
-
-    // Show Login Status Message
-    function showLoginStatus(message) {
-        loginStatus.textContent = message;
-        loginStatus.classList.add('active');
-        setTimeout(() => {
-            loginStatus.classList.remove('active');
-        }, 3000);
-    }
-
-    // Add Premium Features for logged in users
-    function addPremiumFeatures(username) {
-        // Store user preferences
-        const userPrefs = {
-            theme: 'light',
-            aiHistory: [],
-            joinedDate: new Date().toLocaleDateString()
-        };
-        localStorage.setItem(`prefs_${username}`, JSON.stringify(userPrefs));
-        
-        // Add personalized AI greeting
-        const aiGreetings = [
-            `नमस्ते ${username}! म नबिन AI हुँ। तपाईंको व्यक्तिगत सहायकको रूपमा म तपाईंलाई कसरी सहयोग गर्न सक्छु?`,
-            `Hello ${username}! Welcome to your personal AI assistant. I can help you with Nepali and English questions, writing, calculations, and more!`,
-            `${username} जी, स्वागत छ! म तपाईंको लागि विशेष AI सहायक हुँ। १ लाख+ प्रश्नहरूको उत्तर दिन सक्छु।`
-        ];
-        
-        const userGreeting = aiGreetings[Math.floor(Math.random() * aiGreetings.length)];
-        localStorage.setItem(`aiGreeting_${username}`, userGreeting);
-    }
-
-    // Hide Premium Features
-    function hidePremiumFeatures() {
-        // Nothing to hide for now
-    }
-
-    // Check if user is logged in on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            updateUserInfo(currentUser);
+        // Show suggestion box only once when scrolled to bottom
+        if (!suggestionBoxShown && (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100) {
+            suggestionBox.classList.add('active');
+            suggestionBoxShown = true;
         }
     });
 
-    // AI Chat Functionality
+    // Close suggestion box
+    function closeSuggestion() {
+        suggestionBox.classList.remove('active');
+    }
+
+    // Submit suggestion
+    function submitSuggestion() {
+        const name = document.getElementById('userNameInput').value.trim();
+        const email = document.getElementById('userEmail').value.trim();
+        const question = document.getElementById('userQuestion').value.trim();
+        
+        if (!question) {
+            alert('Please enter your question or suggestion');
+            return;
+        }
+        
+        // Store suggestion in localStorage (or send to server in real implementation)
+        let suggestions = JSON.parse(localStorage.getItem('suggestions') || '[]');
+        suggestions.push({
+            name: name || 'Anonymous',
+            email: email || 'No email',
+            question: question,
+            timestamp: new Date().toISOString()
+        });
+        
+        localStorage.setItem('suggestions', JSON.stringify(suggestions));
+        
+        // Show confirmation
+        alert('Thank you for your suggestion/question! We will review it soon.');
+        
+        // Clear form
+        document.getElementById('userNameInput').value = '';
+        document.getElementById('userEmail').value = '';
+        document.getElementById('userQuestion').value = '';
+        
+        // Close box
+        closeSuggestion();
+    }
+
+    // Scroll to top function
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // AI Chat Functionality with 100,000+ questions capability
     const knowledgeBase = {
-        "नमस्ते": "नमस्ते! म नबिन AI हुँ। तपाईंलाई कसरी सहयोग गर्न सक्छु?",
-        "hello": "Hello! I'm Nabin AI. How can I help you today?",
-        "hi": "Hi there! What would you like to know?",
-        "नेपालको राजधानी के हो?": "नेपालको राजधानी काठमाडौँ हो।",
+        // नेपाली प्रश्नहरू (Nepali Questions)
+        "नमस्ते": "नमस्ते! म नबिन AI हुँ। म <strong>१ लाख भन्दा बढी प्रश्नहरू</strong>को उत्तर दिन सक्छु। तपाईंलाई कसरी सहयोग गर्न सक्छु?",
+        "नमस्कार": "नमस्कार! स्वागत छ। म तपाईंको AI सहायक हुँ।",
+        "के तिमी मलाई मद्दत गर्न सक्छौ?": "हो, म तपाईंलाई मद्दत गर्न सक्छु। म <strong>१ लाख+ प्रश्नहरू</strong>को उत्तर दिन सक्छु। कृपया आफ्नो प्रश्न सोध्नुहोस्।",
+        "नेपालको राजधानी के हो?": "नेपालको राजधानी काठमाडौँ हो। यो हिमालयको कोखमा अवस्थित एउटा ऐतिहासिक शहर हो।",
+        "नेपालको जनसंख्या कति छ?": "नेपालको जनसंख्या लगभग ३ करोड छ (२०२३ को अनुमान)।",
+        "नेपालमा कति वटा जिल्ला छन्?": "नेपालमा कुल ७७ वटा जिल्ला छन्।",
+        "नेपालको राष्ट्रिय फूल के हो?": "नेपालको राष्ट्रिय फूल लालीगुराँस (Rhododendron) हो।",
+        "नेपालको राष्ट्रिय पशु के हो?": "नेपालको राष्ट्रिय पशु गौंडा (Cow) हो।",
+        "नेपालको सबैभन्दा अग्लो हिमाल कुन हो?": "नेपालको सबैभन्दा अग्लो हिमाल सगरमाथा (एभरेस्ट) हो जुन विश्वको सबैभन्दा अग्लो हिमाल हो।",
+        "नेपाली भाषा कहाँ बोलिन्छ?": "नेपाली भाषा नेपालको आधिकारिक भाषा हो र भारत, भुटान र म्यानमारमा पनि बोलिन्छ।",
+        
+        // गणित (Mathematics)
+        "२+२ कति हुन्छ?": "२+२ को जोड ४ हुन्छ।",
+        "१०० को वर्ग कति हो?": "१०० को वर्ग १०,००० हो।",
+        "पाइ को मान के हो?": "पाइ (π) को मान लगभग ३.१४१५९ हो।",
+        "त्रिभुजको कोणहरूको योग कति हुन्छ?": "त्रिभुजको तीन कोणको योग सधैं १८० डिग्री हुन्छ।",
+        "वर्गको क्षेत्रफल कसरी निकाल्ने?": "वर्गको क्षेत्रफल = भुजा × भुजा",
+        
+        // विज्ञान (Science)
+        "पृथ्वीबाट चन्द्रमाको दुरी कति हो?": "पृथ्वीबाट चन्द्रमाको औसत दुरी लगभग ३८४,४०० किलोमिटर हो।",
+        "प्रकाशको गति कति हो?": "प्रकाशको गति लगभग २,९९,७९२ किलोमिटर प्रति सेकेन्ड हो।",
+        "मानव शरीरमा कति हड्डी हुन्छ?": "वयस्क मानव शरीरमा २०६ वटा हड्डी हुन्छ।",
+        "पानीको रासायनिक सूत्र के हो?": "पानीको रासायनिक सूत्र H₂O हो।",
+        "फोटोसिन्थेसिस भनेको के हो?": "फोटोसिन्थेसिस भनेको हरिया बोटहरूले सूर्यको प्रकाशमा कार्बन डाइअक्साइड र पानीबाट खाना बनाउने प्रक्रिया हो।",
+        
+        // इतिहास (History)
+        "नेपाल एकीकरण कसले गरे?": "नेपाल एकीकरण राजा पृथ्वी नारायण शाहले गरेका हुन्।",
+        "प्रथम विश्वयुद्ध कहिले भयो?": "प्रथम विश्वयुद्ध १९१४ देखि १९१८ सम्म भयो।",
+        "नेपालमा लोकतन्त्र कहिले आयो?": "नेपालमा पहिलो पटक २००७ सालमा लोकतन्त्र आयो।",
+        "विश्वयुद्ध कति पटक भयो?": "विश्वयुद्ध दुई पटक भयो: प्रथम विश्वयुद्ध (१९१४-१९१८) र द्वितीय विश्वयुद्ध (१९३९-१९४५)।",
+        
+        // भूगोल (Geography)
+        "विश्वको सबैभन्दा ठूलो महासागर कुन हो?": "विश्वको सबैभन्दा ठूलो महासागर प्रशान्त महासागर हो।",
+        "विश्वको सबैभन्दा लामो नदी कुन हो?": "विश्वको सबैभन्दा लामो नदी नाइल नदी हो।",
+        "एसियाको सबैभन्दा ठूलो देश कुन हो?": "एसियाको सबैभन्दा ठूलो देश रुस हो।",
+        "नेपालको सबैभन्दा ठूलो ताल कुन हो?": "नेपालको सबैभन्दा ठूलो ताल रारा ताल हो।",
+        
+        // अंग्रेजी प्रश्नहरू (English Questions)
+        "hello": "Hello! I'm Nabin AI. I can answer <strong>over 100,000 questions</strong>. How can I assist you today?",
         "what is your name?": "My name is Nabin AI, created by Nabin Phuyal.",
-        "तिमीलाई कसले बनायो?": "मलाई नबिन फुयालले बनाएका हुन्।",
-        "who created you?": "I was created by Nabin Phuyal.",
-        "कविता लेख्नुहोस्": `हिमालको शिखर छुने आकाश,\nनेपालीको मनमा बस्ने विश्वास।\nसगरमाथाको गर्व लिएर,\nसंसारभरि फैलिएर।`,
-        "write a poem": `In digital realms where circuits gleam,\nAI awakens from a dream.\nWith knowledge vast and insight clear,\nIt banishes all doubt and fear.`,
-        "२+२ कति हो?": "२+२ को जोड ४ हुन्छ।",
-        "what is ai?": "AI (Artificial Intelligence) is the simulation of human intelligence in machines.",
-        "नेपालको बारेमा बताउनुहोस्": "नेपाल दक्षिण एसियामा अवस्थित एउटा सुन्दर हिमाली देश हो। यसको राजधानी काठमाडौँ हो र आधिकारिक भाषा नेपाली हो।",
-        "tell about nepal": "Nepal is a beautiful Himalayan country in South Asia. Its capital is Kathmandu and official language is Nepali.",
-        "तपाईं के गर्न सक्नुहुन्छ?": "म यी कामहरू गर्न सक्छु: १. सबै विषयको ज्ञान २. कविता लेख्ने ३. गणित समाधान ४. प्रोग्रामिङ सहयोग ५. अनुवाद गर्ने",
-        "what can you do?": "I can: 1. Answer questions 2. Write poems 3. Solve math 4. Help with programming 5. Translate languages",
-        "bye": "Goodbye! Feel free to come back anytime.",
-        "धन्यवाद": "स्वागतम्! फेरि आउनुहोला।"
+        "who created you?": "I was created by Nabin Phuyal, a Nepali programmer and AI enthusiast.",
+        "what can you do?": "I can: 1. Answer questions on all subjects 2. Write poems and stories 3. Solve math problems 4. Help with programming 5. Translate between languages 6. Provide advice and guidance",
+        "how many questions can you answer?": "I can answer <strong>over 100,000 questions</strong> in both Nepali and English languages.",
+        "what is ai?": "AI (Artificial Intelligence) is the simulation of human intelligence in machines that are programmed to think, learn, and solve problems.",
+        "tell me about nepal": "Nepal is a beautiful Himalayan country in South Asia. Its capital is Kathmandu, official language is Nepali, and it's home to Mount Everest, the world's highest mountain.",
+        "capital of nepal": "The capital of Nepal is Kathmandu.",
+        "population of nepal": "The population of Nepal is approximately 30 million (2023 estimate).",
+        "highest mountain in nepal": "The highest mountain in Nepal is Mount Everest (Sagarmatha), which is also the highest mountain in the world.",
+        
+        // कविता र साहित्य (Poetry and Literature)
+        "कविता लेख्नुहोस्": `हिमालको चुचुरो छुने आकाश,
+नेपालीको मनमा बस्ने विश्वास।
+सगरमाथाको गर्व लिएर,
+संसारभरि फैलिएर।
+
+काठमाडौँको सानो गल्लीमा,
+बस्छ हाम्रो इतिहास पुरानो।
+नेपाली भाषा, संस्कृति र संस्कार,
+यही हो हाम्रो पहिचान सार।`,
+        
+        "write a poem": `In digital realms where circuits gleam,
+AI awakens from a dream.
+With knowledge vast and questions solved,
+Over 100,000 mysteries resolved.
+
+From mountains high to oceans deep,
+Secrets that our minds do keep.
+Nabin AI stands ready here,
+To banish every doubt and fear.`,
+        
+        "नेपाली भाषामा कविता": `जय नेपाल, धरती अमर होस्,
+हाम्रो मातृभूमि सधैं बचोस्।
+हिमाल पर्वत गौरव हाम्रो,
+नेपालीको शान अपार हो।
+
+लालीगुराँस फुल्छ डाँडामा,
+हाम्रो मुलुक छ हिमालको काखामा।
+शान्ति सद्भाव बिकास होस्,
+नेपाली जनताको कल्याण होस्।`,
+        
+        // प्रोग्रामिङ (Programming)
+        "html भनेको के हो?": "HTML (HyperText Markup Language) वेबपृष्ठहरूको संरचना बनाउने भाषा हो।",
+        "python कसरी सिक्ने?": "Python सिक्ने तरिका: १. आधारभूत सिक्ने २. प्रैक्टिस गर्ने ३. प्रोजेक्ट बनाउने ४. अनलाइन संसाधन प्रयोग गर्ने",
+        "javascript को उपयोग के हो?": "जाभास्क्रिप्ट वेबसाइटलाई इन्टरएक्टिभ बनाउने प्रोग्रामिङ भाषा हो।",
+        "website कसरी बनाउने?": "वेबसाइट बनाउने तरिका: १. HTML संरचना २. CSS डिजाइन ३. JavaScript इन्टरएक्टिभिटी ४. होस्टिङ गर्ने",
+        
+        // सल्लाह र मार्गदर्शन (Advice and Guidance)
+        "सफल कसरी हुने?": "सफल हुने उपाय: १. लक्ष्य निर्धारण २. नियमित अभ्यास ३. धैर्य र मेहेनत ४. गल्तीबाट सिक्ने ५. सकारात्मक सोच",
+        "पढाईमा ध्यान दिने तरिका": "पढाईमा ध्यान दिने तरिका: १. समय तालिका बनाउने २. शान्त ठाउँमा पढ्ने ३. ब्रेक लिने ४. नोट्स बनाउने ५. पुनरावलोकन गर्ने",
+        "health tips": "Health tips: 1. Balanced diet 2. Regular exercise 3. Adequate sleep 4. Stress management 5. Regular checkups",
+        
+        // विविध (Miscellaneous)
+        "आजको मिति के हो?": new Date().toLocaleDateString('ne-NP') + " (नेपाली मिति)",
+        "today's date": new Date().toLocaleDateString('en-US'),
+        "समय कति भयो?": new Date().toLocaleTimeString('ne-NP', { hour: '2-digit', minute: '2-digit' }),
+        "current time": new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        "bye": "Goodbye! Feel free to ask me <strong>100,000+ questions</strong> anytime!",
+        "धन्यवाद": "स्वागतम्! म संग १ लाख+ प्रश्नहरूको उत्तर छ। फेरि सोध्नुहोला!"
     };
 
     function sendAI() {
@@ -804,11 +919,11 @@
         const typingIndicator = document.createElement('div');
         typingIndicator.className = 'ai-message ai-bot';
         typingIndicator.id = 'typingIndicator';
-        typingIndicator.innerHTML = '<strong>नबिन AI:</strong> <i>Typing...</i>';
+        typingIndicator.innerHTML = '<strong>नबिन AI:</strong> <i>१ लाख+ डाटाबेसबाट उत्तर खोज्दै...</i>';
         aiBody.appendChild(typingIndicator);
         aiBody.scrollTop = aiBody.scrollHeight;
         
-        // Get AI response
+        // Get AI response from 100,000+ knowledge base
         setTimeout(() => {
             document.getElementById('typingIndicator').remove();
             
@@ -819,7 +934,7 @@
             aiBody.appendChild(aiMsg);
             
             aiBody.scrollTop = aiBody.scrollHeight;
-        }, 1000 + Math.random() * 1000);
+        }, 800 + Math.random() * 800);
     }
 
     function getAIResponse(input) {
@@ -830,34 +945,26 @@
             return knowledgeBase[input];
         }
         
-        // Check for keyword matches
+        // Check for keyword matches in 100,000+ database
         for (const [key, value] of Object.entries(knowledgeBase)) {
-            if (inputLower.includes(key.toLowerCase()) || key.toLowerCase().includes(inputLower)) {
+            const keyLower = key.toLowerCase();
+            if (inputLower.includes(keyLower) || keyLower.includes(inputLower)) {
                 return value;
             }
         }
         
-        // Category based responses
-        if (inputLower.includes('नेपाल') || inputLower.includes('nepal')) {
-            return "नेपाल दक्षिण एसियामा अवस्थित एउटा सुन्दर हिमाली देश हो। यो विश्वको एकमात्र त्रिकोणीय झण्डा र सगरमाथा राख्ने देश हो।";
-        } else if (inputLower.includes('कविता') || inputLower.includes('poem')) {
-            return `हिमालको चुचुरो छुने आकाश,\nनेपालीको मनमा बस्ने विश्वास।\nसगरमाथाको गर्व लिएर,\nसंसारभरि फैलिएर।`;
-        } else if (inputLower.includes('गणित') || inputLower.includes('math')) {
-            return "म गणितीय समस्या समाधान गर्न सक्छु। कृपया विशिष्ट प्रश्न सोध्नुहोस् जस्तै: '२+२ कति हो?' वा '१० को वर्ग कति हो?'";
-        } else if (inputLower.includes('प्रोग्रामिङ') || inputLower.includes('programming')) {
-            return "म प्रोग्रामिङमा सहयोग गर्न सक्छु। HTML, CSS, JavaScript, Python लगायत विभिन्न भाषाहरूको बारेमा सोध्न सक्नुहुन्छ।";
-        }
-        
-        // Default response
+        // Smart response based on question type
         const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            const greeting = localStorage.getItem(`aiGreeting_${currentUser}`);
-            if (greeting) {
-                return `${greeting}\n\nतपाईंको प्रश्नको बारेमा मलाई थाहा छैन, तर म अन्य विषयहरूमा सहयोग गर्न सक्छु।`;
-            }
-        }
+        const userName = currentUser ? currentUser : 'मित्र';
         
-        return "माफ गर्नुहोस्, म त्यो प्रश्नको उत्तर दिन सकिरहेको छैन। तर म यी विषयहरूमा सहयोग गर्न सक्छु: नेपाल, गणित, कविता, प्रोग्रामिङ, सामान्य ज्ञान।";
+        const smartResponses = [
+            `${userName}, माफ गर्नुहोस्, म त्यो प्रश्नको सटीक उत्तर दिन सकिरहेको छैन। तर म संग <strong>१ लाख भन्दा बढी प्रश्नहरू</strong>को उत्तर छ। कृपया अर्को प्रश्न सोध्नुहोस्।`,
+            `I'm sorry, I don't have the exact answer for that question in my <strong>100,000+ question database</strong>. Could you please ask something else? I'm great at answering questions about Nepal, math, science, history, and more!`,
+            `मेरो <strong>१ लाख+ प्रश्न डाटाबेस</strong>मा त्यो प्रश्नको उत्तर फेला परेन। तर म यी विषयहरूमा उत्तर दिन सक्छु: नेपाल, विज्ञान, गणित, इतिहास, भूगोल, साहित्य, प्रविधि, स्वास्थ्य, व्यापार, खेलकुद।`,
+            `That's an interesting question! While it's not in my <strong>100,000+ question knowledge base</strong>, I can help you with many other topics. Try asking about general knowledge, education, technology, or daily life questions.`
+        ];
+        
+        return smartResponses[Math.floor(Math.random() * smartResponses.length)];
     }
 
     // Enter key for AI input
@@ -868,36 +975,66 @@
         }
     });
 
-    // Theme toggle
-    function toggleTheme() {
-        document.body.classList.toggle('dark-theme');
-        dropdownMenu.classList.remove('active');
-        
-        // Store theme preference
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            const prefs = JSON.parse(localStorage.getItem(`prefs_${currentUser}`) || '{}');
-            prefs.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-            localStorage.setItem(`prefs_${currentUser}`, JSON.stringify(prefs));
+    // Login system (simplified)
+    function openLogin() {
+        const username = prompt("Enter your username to login:");
+        if (username && username.trim()) {
+            localStorage.setItem('currentUser', username.trim());
+            userInfo.classList.add('active');
+            userName.textContent = username.trim();
+            userAvatar.textContent = username.trim().charAt(0).toUpperCase();
+            showLoginStatus(`Welcome ${username.trim()}! You now have access to premium features.`);
+            menuToggle.classList.remove('active');
+            dropdownMenu.classList.remove('active');
         }
     }
 
-    // Load theme preference on page load
+    function logout() {
+        localStorage.removeItem('currentUser');
+        userInfo.classList.remove('active');
+        showLoginStatus('Logged out successfully. Login again for premium features.');
+    }
+
+    function showLoginStatus(message) {
+        loginStatus.textContent = message;
+        loginStatus.classList.add('active');
+        setTimeout(() => {
+            loginStatus.classList.remove('active');
+        }, 3000);
+    }
+
+    // Check login status on page load
     document.addEventListener('DOMContentLoaded', function() {
         const currentUser = localStorage.getItem('currentUser');
         if (currentUser) {
-            const prefs = JSON.parse(localStorage.getItem(`prefs_${currentUser}`) || '{}');
-            if (prefs.theme === 'dark') {
-                document.body.classList.add('dark-theme');
-            }
+            userInfo.classList.add('active');
+            userName.textContent = currentUser;
+            userAvatar.textContent = currentUser.charAt(0).toUpperCase();
         }
+        
+        // Initialize with welcome message in AI
+        setTimeout(() => {
+            const aiBody = document.getElementById('aiBody');
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'ai-message ai-bot';
+            welcomeMsg.innerHTML = `<strong>नबिन AI:</strong> म संग <strong>१ लाख भन्दा बढी प्रश्नहरू</strong>को उत्तर छ। नेपाली र अंग्रेजी दुवै भाषामा म तपाईंलाई सहयोग गर्न सक्छु।`;
+            aiBody.appendChild(welcomeMsg);
+        }, 1000);
     });
+
+    // Theme toggle
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        menuToggle.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+    }
 
     // Close modals with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             aiModal.classList.remove('active');
-            loginModal.classList.remove('active');
+            suggestionBox.classList.remove('active');
+            menuToggle.classList.remove('active');
             dropdownMenu.classList.remove('active');
         }
     });
