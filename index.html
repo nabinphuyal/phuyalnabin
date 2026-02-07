@@ -10,307 +10,345 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8fbff; color: #333; line-height: 1.6; overflow-x: hidden; }
+        header { background: linear-gradient(90deg, #ff69b4, #da1b76); color: white; padding: 25px 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; }
         
-        /* ========== ADVANCED 3-DOT MENU ========== */
-        .advanced-menu {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
-        }
+        /* Navigation Styles */
+        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 10px; }
+        nav ul li { margin: 0 15px; }
+        nav ul li a { color: white; text-decoration: none; font-size: 18px; font-weight: 500; }
         
-        .menu-button { 
-            background: linear-gradient(135deg, #ff69b4, #da1b76);
-            color: white; 
-            padding: 14px 22px; 
-            border-radius: 35px; 
-            font-weight: 600; 
-            min-width: 140px; 
-            text-align: center; 
-            cursor: pointer; 
-            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
-            transition: all 0.3s ease;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            letter-spacing: 0.5px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .menu-button:hover { 
-            background: linear-gradient(135deg, #da1b76, #c71585); 
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 10px 25px rgba(218, 27, 118, 0.5);
-        }
-        
-        .menu-dropdown { 
+        /* 3-Dot Menu Button */
+        .menu-toggle {
             position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 12px;
-            display: none; 
-            background: white; 
-            border-radius: 16px; 
-            box-shadow: 0 12px 40px rgba(0,0,0,0.18); 
-            overflow: hidden; 
-            width: 250px; 
-            z-index: 1002;
-            border: 1px solid rgba(255, 105, 180, 0.15);
-            animation: slideDown 0.25s ease-out;
+            top: 25px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            z-index: 1001;
+            transition: all 0.3s;
         }
+        
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .menu-dot {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 85px;
+            right: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            width: 280px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .menu-item { 
-            width: 100%; 
-            padding: 16px 20px; 
-            border: none; 
-            background: none; 
-            cursor: pointer; 
-            border-bottom: 1px solid rgba(0,0,0,0.05); 
-            text-align: left; 
-            font-size: 14px; 
-            transition: all 0.2s ease; 
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #444;
-            font-weight: 500;
+        .dropdown-menu.active {
+            display: block;
         }
-        .menu-item:hover { 
-            background: linear-gradient(to right, rgba(255, 105, 180, 0.1), rgba(218, 27, 118, 0.08)); 
-            color: #ff69b4; 
-            padding-left: 24px;
-        }
-        .menu-item:last-child { border-bottom: none; }
         
-        .menu-badge {
-            background: #ff69b4;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
+        .dropdown-item {
+            padding: 15px;
+            margin: 8px 0;
+            background: #f8f9fa;
             border-radius: 10px;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        
-        /* Advanced Forms */
-        .advanced-form { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2); 
-            width: 380px; 
-            position: fixed;
-            top: 80px;
-            left: 20px;
-            z-index: 1003;
-            display: none;
-            animation: popInForm 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 105, 180, 0.2);
-        }
-        @keyframes popInForm {
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        
-        .form-header {
-            color: #da1b76;
-            margin-bottom: 20px;
-            font-size: 22px;
-            font-weight: 700;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-        .form-header i {
-            font-size: 24px;
-        }
-        
-        .form-input { 
-            margin: 10px 0; 
-            padding: 14px 18px; 
-            width: 100%; 
-            border-radius: 12px; 
-            border: 2px solid #e0e0e0; 
-            box-sizing: border-box; 
-            outline: none; 
-            font-family: 'Poppins', sans-serif;
-            font-size: 15px;
+            gap: 15px;
             transition: all 0.3s;
-            background: #fafafa;
-        }
-        .form-input:focus { 
-            border-color: #ff69b4; 
-            background: white;
-            box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .form-button { 
-            background: linear-gradient(135deg, #ff69b4, #da1b76);
-            color: white; 
-            border: none; 
-            padding: 15px; 
-            width: 100%; 
-            border-radius: 12px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            margin-top: 15px; 
+            border: none;
+            width: 100%;
+            text-align: left;
             font-family: 'Poppins', sans-serif;
             font-size: 16px;
-            transition: all 0.3s;
-            letter-spacing: 0.5px;
-        }
-        .form-button:hover { 
-            background: linear-gradient(135deg, #da1b76, #c71585);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(218, 27, 118, 0.4);
+            color: #333;
         }
         
-        .close-button { 
-            background: #f0f0f0;
-            color: #666; 
-            margin-top: 10px; 
-        }
-        .close-button:hover { 
-            background: #e0e0e0; 
-            color: #333; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        /* Chat Interface */
-        .chat-container {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            padding-right: 5px;
-        }
-        
-        .ai-message {
-            background: #f0f2f5;
-            padding: 12px 16px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            border: 1px solid #e0e0e0;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .user-message {
-            background: linear-gradient(135deg, #ff69b4, #da1b76);
+        .dropdown-item:hover {
+            background: linear-gradient(90deg, #ff69b4, #da1b76);
             color: white;
-            padding: 12px 16px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            align-self: flex-end;
-            max-width: 90%;
-            margin-left: auto;
-            animation: fadeIn 0.3s ease;
+            transform: translateX(5px);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .dropdown-item i {
+            width: 24px;
+            text-align: center;
         }
         
-        #aiResponse { 
-            min-height: 80px; 
-            padding: 15px; 
-            background: #f8f9fa; 
-            border-left: 5px solid #ff69b4; 
-            border-radius: 10px; 
-            font-size: 15px; 
-            line-height: 1.6; 
-            border: 1px solid #eee;
-            margin-bottom: 15px;
-        }
-        
-        /* Profile Info */
-        .profile-info {
-            background: linear-gradient(135deg, #f8f9fa, #eef2f7);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-            border: 2px solid #e0e0e0;
-        }
-        
-        .profile-field {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .profile-field:last-child {
-            border-bottom: none;
-        }
-        
-        /* Form Overlay */
-        .form-overlay {
+        /* AI Chat Modal */
+        .ai-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 1002;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
             display: none;
-            backdrop-filter: blur(3px);
         }
         
-        /* Header section with Flying Flag and Symbol */
-        header { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76); 
-            color: white; 
-            padding: 25px 10px; 
-            text-align: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            position: relative;
-            z-index: 1000;
-        }
-        .header-container { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 15px; 
+        .ai-modal.active {
+            display: flex;
         }
         
-        @keyframes flagFly {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(5deg); }
+        .ai-container {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            height: 85vh;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
         }
         
-        /* Flag Animation */
-        .flying-flag { 
-            width: 45px; 
-            height: auto; 
-            animation: flagFly 2s ease-in-out infinite; 
-        }
-
-        /* National Symbol - Static (No Animation) */
-        .national.simbol { 
-            width: 95px; 
-            height: auto; 
-            display: block;
+        .ai-header {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        /* Right flag flipped to face left */
-        .flipped-flag { transform: scaleX(-1); animation: flagFlyRight 2s ease-in-out infinite; }
-        @keyframes flagFlyRight {
-            0%, 100% { transform: scaleX(-1) translateY(0) rotate(0deg); }
-            50% { transform: scaleX(-1) translateY(-8px) rotate(-5deg); }
+        .ai-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8rem;
         }
-
-        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 10px; }
-        nav ul li { margin: 0 15px; }
-        nav ul li a { color: white; text-decoration: none; font-size: 18px; font-weight: 500; }
-
+        
+        .ai-header h2 i {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 50%;
+        }
+        
+        .close-ai {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .close-ai:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .ai-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .ai-message {
+            max-width: 80%;
+            padding: 20px;
+            border-radius: 20px;
+            line-height: 1.7;
+        }
+        
+        .ai-user {
+            align-self: flex-end;
+            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-bot {
+            align-self: flex-start;
+            background: #f0f4ff;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            border: 1px solid #e0e7ff;
+        }
+        
+        .ai-input-area {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e7ff;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .ai-input {
+            flex: 1;
+            padding: 18px;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            resize: none;
+            height: 60px;
+        }
+        
+        .ai-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        
+        .ai-send {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+        }
+        
+        .ai-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+        
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2001;
+            display: none;
+        }
+        
+        .login-modal.active {
+            display: flex;
+        }
+        
+        .login-container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #da1b76;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid #e0e7ff;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(218, 27, 118, 0.3);
+        }
+        
+        /* User Info */
+        .user-info {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+        
+        .user-info.active {
+            display: flex;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
         /* ================= ANIMATIONS ================= */
         @keyframes elegantReveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
@@ -322,13 +360,14 @@
         .hero-text { max-width: 500px; text-align: left; }
         .main-quote { font-size: 30px; font-weight: bold; margin-bottom: 20px; color: #1a237e; animation: elegantReveal 1.8s ease-out forwards; }
         
+        /* Overtake Wrapper for Single Line */
         .overtake-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
         
+        /* Keeping your original Styles and Animations */
         .speech { font-size: 18px; font-weight: bold; color: #2e7d32; animation: fadeInLeft 1s ease-out 0.5s both; }
         .s { font-size: 18px; font-weight: 800; color: #f9a825; letter-spacing: 1px; animation: fadeInLeft 1s ease-out 0.8s both; }
         .d { font-size: 18px; font-weight: bold; color: #d32f2f; animation: fadeInLeft 1s ease-out 1.1s both; }
 
-        /* NEPAL MAP Section */
         .flag-container { display: flex; flex-direction: column; align-items: center; }
         .nepal-flag { width: 100px; height: auto; margin-bottom: 5px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); animation: wave 3s ease-in-out infinite, popIn 1s ease-out 1.4s both; }
         
@@ -341,6 +380,7 @@
         .info-box { text-align: left; margin-top: 25px; padding: 25px; border-left: 6px solid #ff69b4; background: #fff9fc; border-radius: 0 15px 15px 0; }
         button { margin: 10px; background-color: #ff69b4; color: white; padding: 14px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
         button:hover { background-color: #da1b76; transform: translateY(-3px); }
+        .hidden { display: none; }
         .social-links { display: flex; justify-content: center; gap: 30px; font-size: 35px; margin-top: 25px; }
         .social-links a { color: #555; transition: 0.4s; }
         .social-links a:hover { color: #ff69b4; transform: scale(1.2); }
@@ -376,248 +416,71 @@
         .credit-text { font-size: 12px; color: #777; font-style: italic; margin-top: 5px; }
 
         footer { background: #1a1a1a; color: white; padding: 30px 0; margin-top: 60px; text-align: center; }
-
-        /* ================= CHAT AI CSS ================= */
-        #nbn-chat-btn {
-            position: fixed; bottom: 30px; right: 30px;
-            background: linear-gradient(90deg, #ff69b4, #da1b76);
-            color: white; padding: 15px 25px; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 5px 20px rgba(218, 27, 118, 0.4);
-            z-index: 1000; font-weight: 600; display: flex; align-items: center; gap: 10px;
-            transition: 0.3s; font-family: 'Poppins', sans-serif;
-        }
-        #nbn-chat-btn:hover { transform: scale(1.05); }
-
-        #nbn-chat-window {
-            position: fixed; bottom: 100px; right: 30px;
-            width: 350px; height: 500px; background: white;
-            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            display: none; flex-direction: column; z-index: 1000; overflow: hidden;
-            border: 1px solid #eee; animation: nbnPop 0.4s ease-out;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        @keyframes nbnPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        #nbn-chat-header { background: #da1b76; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        #nbn-chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #fdfdfd; display: flex; flex-direction: column; gap: 12px; }
         
-        .msg { padding: 10px 15px; border-radius: 18px; font-size: 14px; max-width: 85%; line-height: 1.5; position: relative; }
-        .user-msg { background: #ff69b4; color: white; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(255,105,180,0.3); }
-        .ai-msg { background: #f0f2f5; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
-
-        #trans-control { padding: 8px; background: #f8f8f8; text-align: center; border-top: 1px solid #eee; }
-        #trans-btn { background: white; color: #da1b76; padding: 5px 15px; font-size: 12px; border: 1px solid #da1b76; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: 600; }
-        #trans-btn:hover { background: #da1b76; color: white; }
-
-        #nbn-chat-footer { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
-        #nbn-input { flex: 1; border: 1px solid #ddd; padding: 10px 15px; border-radius: 25px; outline: none; font-size: 14px; }
-        #nbn-chat-footer button { background: #da1b76; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; transition: 0.2s; }
-        #nbn-chat-footer button:hover { background: #ff69b4; }
+        /* Login Status Message */
+        .login-status {
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 950px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
         
-        .hidden { display: none !important; }
+        .login-status.active {
+            display: block;
+            animation: elegantReveal 0.5s ease;
+        }
     </style>
 </head>
 <body>
 
-<!-- Form Overlay -->
-<div class="form-overlay" id="formOverlay" onclick="hideAllForms()"></div>
-
-<!-- ========== ADVANCED MENU ========== -->
-<div class="advanced-menu">
-    <div class="menu-button" onclick="toggleMenu()" id="menuBtn">
-        <i class="fa-solid fa-ellipsis-vertical"></i>
-        <span>ADVANCED MENU</span>
-    </div>
-    <div class="menu-dropdown" id="menuDropdown">
-        <button class="menu-item" onclick="showForm('createAccountForm')">
-            <span><i class="fa-solid fa-user-plus"></i> Create Account</span>
-            <span class="menu-badge">NEW</span>
-        </button>
-        <button class="menu-item" onclick="showForm('loginForm')">
-            <span><i class="fa-solid fa-fingerprint"></i> Secure Login</span>
-        </button>
-        <button class="menu-item" onclick="showForm('aiChatForm')">
-            <span><i class="fa-solid fa-brain"></i> Smart AI Assistant</span>
-            <span class="menu-badge">AI</span>
-        </button>
-        <button class="menu-item" onclick="showForm('profileForm')">
-            <span><i class="fa-solid fa-user-gear"></i> Profile Settings</span>
-        </button>
-        <div style="height: 1px; background: #eee; margin: 5px 0;"></div>
-        <button class="menu-item" onclick="showForm('helpForm')">
-            <span><i class="fa-solid fa-circle-question"></i> Help & Support</span>
-        </button>
-    </div>
-</div>
-
-<!-- Advanced Forms -->
-<div id="createAccountForm" class="advanced-form">
-    <div class="form-header">
-        <i class="fa-solid fa-user-plus"></i> Create New Account
-    </div>
-    <input type="text" id="advFullName" placeholder="Full Name" class="form-input">
-    <select id="advCountry" class="form-input">
-        <option value="">Select Country</option>
-        <option value="NP">Nepal (+977)</option>
-        <option value="IN">India (+91)</option>
-        <option value="US">USA (+1)</option>
-    </select>
-    <input type="text" id="advPhone" placeholder="Phone Number (98XXXXXXXX)" class="form-input">
-    <input type="email" id="advEmail" placeholder="Email Address" class="form-input">
-    <input type="password" id="advPassword" placeholder="Password (min. 6 characters)" class="form-input">
-    <input type="password" id="advConfirmPassword" placeholder="Confirm Password" class="form-input">
-    <div style="margin: 10px 0; font-size: 12px; color: #666;">
-        <input type="checkbox" id="advTerms" style="margin-right: 8px;">
-        <label for="advTerms">I agree to Terms & Conditions</label>
-    </div>
-    <button class="form-button" onclick="createAdvancedAccount()">Create Account</button>
-    <button class="form-button close-button" onclick="hideAllForms()">Cancel</button>
-</div>
-
-<div id="loginForm" class="advanced-form">
-    <div class="form-header">
-        <i class="fa-solid fa-fingerprint"></i> Secure Login
-    </div>
-    <input type="text" id="advLoginPhone" placeholder="Phone or Email" class="form-input">
-    <input type="password" id="advLoginPassword" placeholder="Password" class="form-input">
-    <div style="text-align: right; margin: 10px 0;">
-        <a href="#" onclick="showForm('forgotPasswordForm')" style="color: #ff69b4; font-size: 13px; text-decoration: none;">Forgot Password?</a>
-    </div>
-    <button class="form-button" onclick="advancedLogin()">Login to Account</button>
-    <div style="text-align: center; margin: 15px 0; color: #666; font-size: 14px;">OR</div>
-    <button class="form-button" style="background: #4285f4;" onclick="alert('Google Login Coming Soon!')">
-        <i class="fab fa-google"></i> Login with Google
-    </button>
-    <button class="form-button close-button" onclick="hideAllForms()">Cancel</button>
-</div>
-
-<div id="aiChatForm" class="advanced-form" style="width: 420px;">
-    <div class="form-header">
-        <i class="fa-solid fa-brain"></i> Smart AI Assistant
-    </div>
-    
-    <div id="aiResponse">
-        <strong>🤖 Hello! I'm your Advanced AI Assistant.</strong><br>
-        I can answer questions about: Time, Math, Nepal, Nabin, Weather, and more!
-    </div>
-    
-    <div class="chat-container" id="chatContainer">
-        <!-- Chat messages appear here -->
-    </div>
-    
-    <textarea id="aiChatInput" placeholder="Ask me anything! Try: What time is it? 25*4, Tell me about Nepal, Who is Nabin?" class="form-input" rows="3"></textarea>
-    
-    <div style="display: flex; gap: 10px; margin-top: 15px;">
-        <button class="form-button" onclick="sendAIMessage()" style="flex: 3;">
-            <i class="fa-solid fa-paper-plane"></i> Send Message
-        </button>
-        <button class="form-button" onclick="clearAIChat()" style="flex: 1; background: #666;">
-            <i class="fa-solid fa-trash"></i>
-        </button>
-    </div>
-    
-    <div style="margin-top: 15px; font-size: 12px; color: #666; text-align: center;">
-        <i class="fa-solid fa-lightbulb"></i> Tip: Try asking in English or Nepali
-    </div>
-    
-    <button class="form-button close-button" onclick="hideAllForms()">Close</button>
-</div>
-
-<div id="profileForm" class="advanced-form">
-    <div class="form-header">
-        <i class="fa-solid fa-user-gear"></i> Profile Settings
-    </div>
-    
-    <div id="profileContent">
-        <div class="profile-info">
-            <div class="profile-field">
-                <span>Name:</span>
-                <span id="profileName">Not logged in</span>
-            </div>
-            <div class="profile-field">
-                <span>Phone:</span>
-                <span id="profilePhone">-</span>
-            </div>
-            <div class="profile-field">
-                <span>Email:</span>
-                <span id="profileEmail">-</span>
-            </div>
-            <div class="profile-field">
-                <span>Country:</span>
-                <span id="profileCountry">-</span>
-            </div>
-            <div class="profile-field">
-                <span>Account Created:</span>
-                <span id="profileDate">-</span>
-            </div>
-        </div>
-        
-        <button class="form-button" onclick="editProfile()">
-            <i class="fa-solid fa-edit"></i> Edit Profile
-        </button>
-        <button class="form-button" style="background: #4caf50;" onclick="showForm('changePasswordForm')">
-            <i class="fa-solid fa-key"></i> Change Password
-        </button>
-    </div>
-    
-    <button class="form-button close-button" onclick="hideAllForms()">Close</button>
-</div>
-
-<div id="helpForm" class="advanced-form">
-    <div class="form-header">
-        <i class="fa-solid fa-circle-question"></i> Help & Support
-    </div>
-    
-    <div style="margin-bottom: 20px;">
-        <h4 style="color: #da1b76; margin-bottom: 10px;">Frequently Asked Questions</h4>
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-            <strong>Q: How to create account?</strong><br>
-            A: Go to Menu → Create Account → Fill details → Submit
-        </div>
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-            <strong>Q: What can AI Assistant do?</strong><br>
-            A: Answer questions, calculate math, tell time, info about Nepal
-        </div>
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
-            <strong>Q: Forgot password?</strong><br>
-            A: Contact support: nabinkanxo5@gmail.com
-        </div>
-    </div>
-    
-    <div style="background: linear-gradient(135deg, #ff69b4, #da1b76); color: white; padding: 15px; border-radius: 10px; text-align: center;">
-        <strong><i class="fa-solid fa-headset"></i> Contact Support</strong><br>
-        Email: nabinkanxo5@gmail.com<br>
-        Phone: +977-9762509382<br>
-        Response Time: 24-48 hours
-    </div>
-    
-    <button class="form-button close-button" onclick="hideAllForms()">Close</button>
-</div>
-
-<!-- Forgot Password Form -->
-<div id="forgotPasswordForm" class="advanced-form">
-    <div class="form-header">
-        <i class="fa-solid fa-key"></i> Reset Password
-    </div>
-    <input type="text" id="resetPhone" placeholder="Registered Phone Number" class="form-input">
-    <div id="resetOtpSection" style="display: none;">
-        <input type="text" id="resetOtp" placeholder="Enter OTP" class="form-input">
-        <input type="password" id="newPassword" placeholder="New Password" class="form-input">
-    </div>
-    <button class="form-button" onclick="resetPassword()" id="resetBtn">Send OTP</button>
-    <button class="form-button close-button" onclick="hideAllForms()">Cancel</button>
-</div>
-
-<!-- ========== ORIGINAL WEBSITE CODE ========== -->
 <header>
-    <div class="header-container">
-        <img src="nepal-flag.png.png" alt="Flying Flag" class="flying-flag">
-        <h1>Welcome to My Personal Website</h1>
-        <img src="national simbol.png" alt="national simbol" class="national simbol">
+    <div class="user-info" id="userInfo">
+        <div class="user-avatar" id="userAvatar">N</div>
+        <div>
+            <div id="userName">Guest</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
     </div>
-    <nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+    
+    <h1>Welcome to My Personal Website</h1>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    
+    <button class="menu-toggle" id="menuToggle">
+        <div class="menu-dot"></div>
+        <div class="menu-dot"></div>
+        <div class="menu-dot"></div>
+    </button>
+    
+    <div class="dropdown-menu" id="dropdownMenu">
+        <button class="dropdown-item" onclick="openAI()">
+            <i class="fas fa-robot"></i> नबिन AI
+        </button>
+        <button class="dropdown-item" onclick="openLogin()">
+            <i class="fas fa-user"></i> Login / Create ID
+        </button>
+        <button class="dropdown-item" onclick="window.location.href='#about'">
+            <i class="fas fa-info-circle"></i> About Me
+        </button>
+        <button class="dropdown-item" onclick="window.location.href='#contact'">
+            <i class="fas fa-envelope"></i> Contact
+        </button>
+        <button class="dropdown-item" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i> Dark Mode
+        </button>
+    </div>
 </header>
+
+<div class="login-status" id="loginStatus"></div>
 
 <div class="hero" id="home">
     <div class="hero-text">
@@ -625,7 +488,7 @@
     </div>
 
     <div class="flag-container">
-        <img src="nepal.png" alt="Nepal Map" class="nepal-flag">
+        <img src="nepal.png" alt="Nepal Flag" class="nepal-flag">
         <div class="overtake-wrapper">
             <span class="speech">Over take is interesting</span>
             <span class="s">BUT</span>
@@ -655,7 +518,7 @@
     </div>
 
     <div id="nepali-info" class="hidden info-box">
-        <p>मेरो नाम <b><span style="color: blue;">नवीन फुयल</span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
+        <p>मेरो नाम <b><span style="color: blue;">नवीन फयल</span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
         <p>मैले उच्च माध्यमिक तह (+2) शिक्षामा पुरा गरिसकेको छु। मलाई भाषा सिक्ने ठूलो रुचि छ। विशेषगरी कोरियन भाषा सिक्नमा म निकै अब्बल छु।</p>
         <p>त्यसका साथै म कम्प्युटर अपरेटरको रूपमा पनि काम गरिसकेको छु। म YouTube मा सफल बन्न चाहन्छु। धन्यवाद मेरो प्रोफाइल हेर्दिनु भएकोमा!</p>
         <h3 style="color: red; margin-top: 20px;">मेरो योग्यता</h3>
@@ -684,7 +547,7 @@
             <p>📍 <b>Location:</b> <span class="loc-trigger" onclick="toggleLoc()">Bhojpur, Nepal (Touch for Details)</span></p>
             
             <div id="locModal" class="loc-modal">
-                <a href="https://maps.app.goo.gl/khZSfETTHKguxF128" target="_blank">
+                <a href="यहाँ_आफ्नो_म्याप_लिंक_हाल्नुहोस्" target="_blank">
                     <i class="fa-solid fa-map-marked-alt"></i> View on Google Maps
                 </a>
                 
@@ -697,47 +560,50 @@
     </div>
 </section>
 
-<!-- ========== RIGHT SIDE CHAT AI ========== -->
-<div id="nbn-chat-wrapper">
-    <div id="nbn-chat-btn" onclick="toggleNbnChat()">
-        <i class="fa-solid fa-comment-dots"></i> <span>Question / Suggestion</span>
-    </div>
-
-    <div id="nbn-chat-window">
-        <div id="nbn-chat-header">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img src="npp" style="width:30px; height:30px; border-radius:50%; border:1px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
-                <strong>Nabin Phuyal (AI)</strong>
+<!-- AI Modal -->
+<div class="ai-modal" id="aiModal">
+    <div class="ai-container">
+        <div class="ai-header">
+            <h2><i class="fas fa-robot"></i> नबिन AI</h2>
+            <button class="close-ai" onclick="closeAI()">&times;</button>
+        </div>
+        <div class="ai-body" id="aiBody">
+            <div class="ai-message ai-bot">
+                <strong>नबिन AI:</strong> नमस्ते! म नबिन AI हुँ। म तपाईंलाई कसरी सहयोग गर्न सक्छु? म नेपाली र अंग्रेजी दुवै भाषामा १ लाख+ प्रश्नहरूको उत्तर दिन सक्छु।
             </div>
-            <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:22px;">×</span>
         </div>
-        
-        <div id="nbn-chat-body">
-            <div class="msg ai-msg" id="nbn-welcome-msg">नमस्ते! केही सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।</div>
+        <div class="ai-input-area">
+            <textarea class="ai-input" id="aiInput" placeholder="तपाईंको प्रश्न यहाँ लेख्नुहोस्..."></textarea>
+            <button class="ai-send" onclick="sendAI()"><i class="fas fa-paper-plane"></i></button>
         </div>
+    </div>
+</div>
 
-        <div id="trans-control">
-            <button onclick="translateAll()" id="trans-btn">English मा हेर्नुहोस्</button>
-        </div>
-
-        <div id="nbn-chat-footer">
-            <input type="text" id="nbn-input" placeholder="यहाँ लेख्नुहोस्..." onkeypress="if(event.key === 'Enter') sendNbnMessage()">
-            <button onclick="sendNbnMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
+<!-- Login Modal -->
+<div class="login-modal" id="loginModal">
+    <div class="login-container">
+        <h2><i class="fas fa-user-circle"></i> Login / Create ID</h2>
+        <input type="text" class="login-input" id="loginUsername" placeholder="Username">
+        <input type="password" class="login-input" id="loginPassword" placeholder="Password">
+        <button class="login-btn" onclick="login()">Login / Create Account</button>
+        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
+            Create new account by entering username & password
+        </p>
     </div>
 </div>
 
 <footer>
     <p>© 2025 Nabin Phuyal. All rights reserved.</p>
-    <p>Website Design by 🚀 Nabin Kanxo</p>
+    <p>Website Design by 🚀 Nabin Kanxo | Powered by <strong>नबिन AI</strong></p>
 </footer>
 
 <script>
-    // ========== ORIGINAL WEBSITE FUNCTIONS ==========
+    // Original Functions
     function showEnglish() {
         document.getElementById("english-info").classList.remove("hidden");
         document.getElementById("nepali-info").classList.add("hidden");
     }
+    
     function showNepali() {
         document.getElementById("nepali-info").classList.remove("hidden");
         document.getElementById("english-info").classList.add("hidden");
@@ -748,514 +614,293 @@
         modal.style.display = (modal.style.display === "block") ? "none" : "block";
     }
 
-    // Right Side Chat AI
-    let isNepali = true;
-    const languages = {
-        np: {
-            welcome: "नमस्ते! केही सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।",
-            placeholder: "यहाँ लेख्नुहोस्...",
-            btn: "English मा हेर्नुहोस्",
-            reply: "धन्यवाद मेरो वेबमा आएर सल्लाह, सुझाव तथा प्रश्न गर्नुभएकोमा। म नवीन फुयल, प्रत्यक्ष रूपमा अनलाइन आएको बेलामा तपाईंको प्रश्न तथा सल्लाहको गहन रूपमा रिप्लाई दिनेछु। धन्यवाद!"
-        },
-        en: {
-            welcome: "Hello! If you have any advice or suggestions, please write them here.",
-            placeholder: "Write here...",
-            btn: "नेपालीमा हेर्नुहोस्",
-            reply: "Thank you for visiting my website and sharing your suggestions or questions. I am Nabin Phuyal, and I will provide a detailed reply when I am online. Thank you!"
-        }
-    };
+    // New Functions for Menu and AI
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const aiModal = document.getElementById('aiModal');
+    const loginModal = document.getElementById('loginModal');
+    const userInfo = document.getElementById('userInfo');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const loginStatus = document.getElementById('loginStatus');
 
-    function toggleNbnChat() {
-        const win = document.getElementById('nbn-chat-window');
-        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function translateAll() {
-        isNepali = !isNepali;
-        const lang = isNepali ? 'np' : 'en';
-        document.getElementById('nbn-welcome-msg').innerText = languages[lang].welcome;
-        document.getElementById('nbn-input').placeholder = languages[lang].placeholder;
-        document.getElementById('trans-btn').innerText = languages[lang].btn;
-        const lastAiMsg = document.getElementById('current-ai-reply');
-        if (lastAiMsg) lastAiMsg.innerText = languages[lang].reply;
-    }
-
-    function sendNbnMessage() {
-        const input = document.getElementById('nbn-input');
-        const body = document.getElementById('nbn-chat-body');
-        const text = input.value.trim();
-        if (text === "") return;
-        body.innerHTML += `<div class="msg user-msg">${text}</div>`;
-        input.value = "";
-        body.scrollTop = body.scrollHeight;
-        setTimeout(() => {
-            const lang = isNepali ? 'np' : 'en';
-            body.innerHTML += `<div class="msg ai-msg" id="current-ai-reply">${languages[lang].reply}</div>`;
-            body.scrollTop = body.scrollHeight;
-        }, 800);
-    }
-
-    // ========== ADVANCED MENU SYSTEM ==========
-    let menuOpen = false;
-    let advancedAccounts = JSON.parse(localStorage.getItem('advAccounts')) || [];
-    let currentAdvancedUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-    let aiChatHistory = [];
-
-    function toggleMenu() {
-        menuOpen = !menuOpen;
-        const dropdown = document.getElementById('menuDropdown');
-        dropdown.style.display = menuOpen ? 'block' : 'none';
-        
-        // Button animation
-        const menuBtn = document.getElementById('menuBtn');
-        if (menuOpen) {
-            menuBtn.style.transform = 'translateY(-3px) scale(1.03)';
-            menuBtn.style.boxShadow = '0 10px 25px rgba(218, 27, 118, 0.5)';
-        } else {
-            menuBtn.style.transform = 'translateY(0) scale(1)';
-            menuBtn.style.boxShadow = '0 6px 20px rgba(255, 105, 180, 0.4)';
-        }
-    }
-
-    function showForm(formId) {
-        hideAllForms();
-        document.getElementById(formId).style.display = 'block';
-        document.getElementById('formOverlay').style.display = 'block';
-        document.getElementById('menuDropdown').style.display = 'none';
-        menuOpen = false;
-        
-        // Update profile if logged in
-        if (formId === 'profileForm' && currentAdvancedUser) {
-            updateProfileDisplay();
-        }
-        
-        // Reset button style
-        const menuBtn = document.getElementById('menuBtn');
-        menuBtn.style.transform = 'translateY(0) scale(1)';
-        menuBtn.style.boxShadow = '0 6px 20px rgba(255, 105, 180, 0.4)';
-    }
-
-    function hideAllForms() {
-        const forms = ['createAccountForm', 'loginForm', 'aiChatForm', 'profileForm', 'helpForm', 'forgotPasswordForm'];
-        forms.forEach(id => {
-            const form = document.getElementById(id);
-            if (form) form.style.display = 'none';
-        });
-        document.getElementById('formOverlay').style.display = 'none';
-    }
-
-    // ========== ADVANCED ACCOUNT SYSTEM ==========
-    function createAdvancedAccount() {
-        const fullName = document.getElementById('advFullName').value.trim();
-        const country = document.getElementById('advCountry').value;
-        const phone = document.getElementById('advPhone').value.trim();
-        const email = document.getElementById('advEmail').value.trim();
-        const password = document.getElementById('advPassword').value;
-        const confirmPassword = document.getElementById('advConfirmPassword').value;
-        const terms = document.getElementById('advTerms').checked;
-
-        // Validation
-        if (!fullName || !country || !phone || !email || !password || !confirmPassword) {
-            alert('❌ Please fill all fields');
-            return;
-        }
-
-        if (!terms) {
-            alert('❌ Please agree to Terms & Conditions');
-            return;
-        }
-
-        if (password.length < 6) {
-            alert('❌ Password must be at least 6 characters');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            alert('❌ Passwords do not match');
-            return;
-        }
-
-        // Phone validation for Nepal
-        if (country === 'NP' && (!phone.startsWith('98') || phone.length !== 10)) {
-            alert('❌ Nepal number must start with 98 and be 10 digits');
-            return;
-        }
-
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('❌ Please enter a valid email address');
-            return;
-        }
-
-        // Check if account exists
-        if (advancedAccounts.find(acc => acc.phone === phone)) {
-            alert('⚠️ Account with this phone already exists');
-            return;
-        }
-
-        if (advancedAccounts.find(acc => acc.email === email)) {
-            alert('⚠️ Account with this email already exists');
-            return;
-        }
-
-        // Create account
-        const newAccount = {
-            id: Date.now(),
-            fullName,
-            country,
-            phone,
-            email,
-            password,
-            createdDate: new Date().toLocaleDateString(),
-            lastLogin: new Date().toLocaleString()
-        };
-
-        advancedAccounts.push(newAccount);
-        localStorage.setItem('advAccounts', JSON.stringify(advancedAccounts));
-        
-        alert('✅ Account Created Successfully!');
-        hideAllForms();
-        showForm('loginForm');
-    }
-
-    function advancedLogin() {
-        const loginId = document.getElementById('advLoginPhone').value.trim();
-        const password = document.getElementById('advLoginPassword').value;
-
-        const user = advancedAccounts.find(acc => 
-            (acc.phone === loginId || acc.email === loginId) && acc.password === password
-        );
-
-        if (user) {
-            currentAdvancedUser = user;
-            user.lastLogin = new Date().toLocaleString();
-            localStorage.setItem('currentUser', JSON.stringify(currentAdvancedUser));
-            localStorage.setItem('advAccounts', JSON.stringify(advancedAccounts));
-            
-            alert(`✅ Welcome back, ${user.fullName}!`);
-            hideAllForms();
-            updateProfileDisplay();
-        } else {
-            alert('❌ Invalid login credentials');
-        }
-    }
-
-    function updateProfileDisplay() {
-        if (currentAdvancedUser) {
-            document.getElementById('profileName').textContent = currentAdvancedUser.fullName;
-            document.getElementById('profilePhone').textContent = currentAdvancedUser.phone;
-            document.getElementById('profileEmail').textContent = currentAdvancedUser.email;
-            document.getElementById('profileCountry').textContent = currentAdvancedUser.country === 'NP' ? 'Nepal' : 'Other';
-            document.getElementById('profileDate').textContent = currentAdvancedUser.createdDate;
-        }
-    }
-
-    function editProfile() {
-        if (currentAdvancedUser) {
-            alert('Profile editing feature coming soon!');
-        } else {
-            alert('Please login first');
-        }
-    }
-
-    function resetPassword() {
-        const phone = document.getElementById('resetPhone').value.trim();
-        const resetSection = document.getElementById('resetOtpSection');
-        const resetBtn = document.getElementById('resetBtn');
-
-        if (resetSection.style.display === 'none') {
-            // Send OTP
-            const user = advancedAccounts.find(acc => acc.phone === phone);
-            if (!user) {
-                alert('❌ No account found with this phone number');
-                return;
-            }
-            
-            // Generate random OTP
-            const otp = Math.floor(1000 + Math.random() * 9000);
-            localStorage.setItem('resetOTP', otp);
-            localStorage.setItem('resetPhone', phone);
-            
-            resetSection.style.display = 'block';
-            resetBtn.textContent = 'Reset Password';
-            alert(`📱 OTP sent to ${phone}: ${otp} (This is demo - in real app, SMS would be sent)`);
-        } else {
-            // Verify OTP and reset password
-            const otp = document.getElementById('resetOtp').value;
-            const newPass = document.getElementById('newPassword').value;
-            const storedOTP = localStorage.getItem('resetOTP');
-            const storedPhone = localStorage.getItem('resetPhone');
-
-            if (otp !== storedOTP || phone !== storedPhone) {
-                alert('❌ Invalid OTP');
-                return;
-            }
-
-            if (newPass.length < 6) {
-                alert('❌ Password must be at least 6 characters');
-                return;
-            }
-
-            // Update password
-            const userIndex = advancedAccounts.findIndex(acc => acc.phone === phone);
-            if (userIndex !== -1) {
-                advancedAccounts[userIndex].password = newPass;
-                localStorage.setItem('advAccounts', JSON.stringify(advancedAccounts));
-                
-                alert('✅ Password reset successfully!');
-                hideAllForms();
-                showForm('loginForm');
-            }
-        }
-    }
-
-    // ========== ADVANCED AI CHAT SYSTEM ==========
-    function getAdvancedAIResponse(userMessage) {
-        const msg = userMessage.toLowerCase().trim();
-        
-        // Comprehensive response system
-        const responses = {
-            // Greetings
-            greetings: {
-                patterns: ['hello', 'hi', 'hey', 'namaste', 'नमस्ते', 'namaskar', 'नमस्कार'],
-                response: "👋 Hello! Welcome to Nabin's Advanced AI Assistant. How can I help you today?"
-            },
-            time: {
-                patterns: ['time', 'समय', 'कति बज्यो', 'कति बजेको', 'time now'],
-                response: `⏰ Current Time: ${new Date().toLocaleTimeString()}<br>📅 Date: ${new Date().toLocaleDateString()}<br>🌍 Timezone: Nepal (GMT+5:45)`
-            },
-            date: {
-                patterns: ['date', 'today', 'आज', 'मिति', 'आजको मिति'],
-                response: `📅 Today is: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br>🇳🇵 Nepali Date: ${getNepaliDate()}`
-            },
-            math: {
-                patterns: [/\d+[\+\-\*\/]\d+/, 'calculate', 'math', 'गणित', 'जोड', 'घटाउ', 'गुणन'],
-                response: (msg) => {
-                    try {
-                        const result = eval(msg);
-                        return `🧮 Calculation: ${msg} = <strong>${result}</strong>`;
-                    } catch {
-                        return "🧮 I can do math! Try: 10+20, 50-30, 6*7, or 100/5";
-                    }
-                }
-            },
-            nepal: {
-                patterns: ['nepal', 'नेपाल', 'about nepal', 'nepal country'],
-                response: "🇳🇵 <strong>Nepal - Land of Himalayas</strong><br>" +
-                         "• Capital: Kathmandu<br>" +
-                         "• Population: ~30 million<br>" +
-                         "• Area: 147,516 sq km<br>" +
-                         "• Language: Nepali<br>" +
-                         "• Currency: Nepalese Rupee<br>" +
-                         "• Famous: Mount Everest, Buddha, Pashupatinath"
-            },
-            nabin: {
-                patterns: ['nabin', 'नवीन', 'phuyal', 'फुयल', 'who is nabin', 'about nabin'],
-                response: "👤 <strong>Nabin Phuyal</strong><br>" +
-                         "• Website Creator & Developer<br>" +
-                         "• From Bhojpur, Nepal<br>" +
-                         "• Born: 2006-07-02 (2063-03-18 BS)<br>" +
-                         "• Education: +2 Completed<br>" +
-                         "• Skills: HTML, CSS, JavaScript<br>" +
-                         "• Interests: Korean language, YouTube<br>" +
-                         "• Contact: 9762509382<br>" +
-                         "• Email: nabinkanxo5@gmail.com"
-            },
-            website: {
-                patterns: ['website', 'site', 'वेबसाइट', 'about website', 'this website'],
-                response: "🌐 <strong>Nabin's Personal Website</strong><br>" +
-                         "• Created with HTML, CSS, JavaScript<br>" +
-                         "• Features: Advanced AI Chat, User Accounts<br>" +
-                         "• Design: Responsive & Modern<br>" +
-                         "• Purpose: Portfolio & Personal Branding<br>" +
-                         "• Updates: Regular new features"
-            },
-            weather: {
-                patterns: ['weather', 'मौसम', 'temperature', 'तापक्रम'],
-                response: "🌤️ <strong>Weather in Nepal</strong><br>" +
-                         "• Kathmandu: 20-25°C, Partly Cloudy<br>" +
-                         "• Pokhara: 22-27°C, Clear Skies<br>" +
-                         "• Bhojpur: 18-23°C, Mild<br>" +
-                         "• Best Season: Spring (Mar-May)<br>" +
-                         "• Monsoon: June-September"
-            },
-            contact: {
-                patterns: ['contact', 'phone', 'सम्पर्क', 'फोन', 'email', 'ईमेल'],
-                response: "📞 <strong>Contact Information</strong><br>" +
-                         "• Phone: +977-9762509382<br>" +
-                         "• Email: nabinkanxo5@gmail.com<br>" +
-                         "• Location: Bhojpur, Nepal<br>" +
-                         "• YouTube: @nabinvlogdream<br>" +
-                         "• TikTok: @nabinkanxophuyal"
-            },
-            help: {
-                patterns: ['help', 'सहायता', 'support', 'मद्दत', 'what can you do'],
-                response: "❓ <strong>I can help with:</strong><br>" +
-                         "• Time & Date information<br>" +
-                         "• Math calculations<br>" +
-                         "• Information about Nepal<br>" +
-                         "• Details about Nabin Phuyal<br>" +
-                         "• Weather updates<br>" +
-                         "• Contact information<br>" +
-                         "• Website details<br>" +
-                         "Just ask me anything!"
-            },
-            thank: {
-                patterns: ['thank', 'thanks', 'धन्यवाद', 'thank you'],
-                response: "🙏 You're welcome! Happy to help. Is there anything else?"
-            }
-        };
-
-        // Check patterns
-        for (const [key, data] of Object.entries(responses)) {
-            for (const pattern of data.patterns) {
-                if (typeof pattern === 'string') {
-                    if (msg.includes(pattern)) {
-                        return typeof data.response === 'function' ? data.response(msg) : data.response;
-                    }
-                } else if (pattern instanceof RegExp) {
-                    if (pattern.test(msg)) {
-                        return typeof data.response === 'function' ? data.response(msg) : data.response;
-                    }
-                }
-            }
-        }
-
-        // Default responses
-        const defaultResponses = [
-            "🤔 Interesting question! Can you rephrase or ask about time, math, Nepal, or Nabin?",
-            "💡 I'm here to help! Try asking: 'What time is it?' or 'Tell me about Nepal'",
-            "🌟 That's a good question! As an AI, I specialize in information about this website and its creator.",
-            "🔍 I understand you said: '" + userMessage + "'. For better answers, try specific questions.",
-            "🎯 Let me help you better. You can ask about: Time, Date, Math, Nepal, Weather, or Contact info."
-        ];
-
-        return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
-    }
-
-    function getNepaliDate() {
-        const today = new Date();
-        const nepaliMonths = ['बैशाख', 'जेठ', 'असार', 'साउन', 'भदौ', 'असोज', 'कार्तिक', 'मंसिर', 'पुष', 'माघ', 'फागुन', 'चैत्र'];
-        const day = today.getDate();
-        const month = nepaliMonths[today.getMonth()];
-        const year = today.getFullYear() - 57; // Convert to BS
-        return `${day} ${month}, ${year} BS`;
-    }
-
-    function sendAIMessage() {
-        const input = document.getElementById('aiChatInput');
-        const message = input.value.trim();
-        const container = document.getElementById('chatContainer');
-        
-        if (!message) return;
-        
-        // Add user message
-        const userMsg = document.createElement('div');
-        userMsg.className = 'user-message';
-        userMsg.innerHTML = `<strong>You:</strong> ${message}`;
-        container.appendChild(userMsg);
-        
-        // Save to history
-        aiChatHistory.push({ type: 'user', message, time: new Date().toLocaleTimeString() });
-        
-        // Clear input
-        input.value = '';
-        
-        // Show typing indicator
-        const typing = document.createElement('div');
-        typing.className = 'ai-message';
-        typing.innerHTML = '<em>🤖 AI is thinking...</em>';
-        typing.id = 'typingIndicator';
-        container.appendChild(typing);
-        
-        container.scrollTop = container.scrollHeight;
-        
-        // Get response after delay
-        setTimeout(() => {
-            // Remove typing indicator
-            const typingEl = document.getElementById('typingIndicator');
-            if (typingEl) typingEl.remove();
-            
-            // Get AI response
-            const aiResponse = getAdvancedAIResponse(message);
-            
-            // Add AI message
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'ai-message';
-            aiMsg.innerHTML = `<strong>🤖 AI:</strong> ${aiResponse}`;
-            container.appendChild(aiMsg);
-            
-            // Save to history
-            aiChatHistory.push({ type: 'ai', message: aiResponse, time: new Date().toLocaleTimeString() });
-            
-            // Scroll to bottom
-            container.scrollTop = container.scrollHeight;
-            
-            // Update preview
-            document.getElementById('aiResponse').innerHTML = 
-                `<strong>Last Response:</strong><br>${aiResponse.substring(0, 100)}${aiResponse.length > 100 ? '...' : ''}`;
-        }, 800 + Math.random() * 800);
-    }
-
-    function clearAIChat() {
-        document.getElementById('chatContainer').innerHTML = '';
-        aiChatHistory = [];
-        document.getElementById('aiResponse').innerHTML = 
-            '<strong>🤖 Hello! I\'m your Advanced AI Assistant.</strong><br>I can answer questions about: Time, Math, Nepal, Nabin, Weather, and more!';
-    }
-
-    // Enter key support for AI chat
-    document.getElementById('aiChatInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendAIMessage();
-        }
+    // Toggle Menu
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('active');
     });
 
     // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const menuContainer = document.querySelector('.advanced-menu');
-        if (!menuContainer.contains(event.target)) {
-            document.getElementById('menuDropdown').style.display = 'none';
-            menuOpen = false;
-            
-            // Reset button
-            const menuBtn = document.getElementById('menuBtn');
-            menuBtn.style.transform = 'translateY(0) scale(1)';
-            menuBtn.style.boxShadow = '0 6px 20px rgba(255, 105, 180, 0.4)';
+    document.addEventListener('click', function(e) {
+        if (!dropdownMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            dropdownMenu.classList.remove('active');
         }
     });
 
-    // Escape key to close forms
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            hideAllForms();
-            document.getElementById('menuDropdown').style.display = 'none';
-            menuOpen = false;
-        }
-    });
+    // Open AI Modal
+    function openAI() {
+        aiModal.classList.add('active');
+        dropdownMenu.classList.remove('active');
+        document.getElementById('aiInput').focus();
+    }
 
-    // Initialize on load
-    window.onload = function() {
-        // Check if user is logged in
-        if (currentAdvancedUser) {
-            updateProfileDisplay();
+    // Close AI Modal
+    function closeAI() {
+        aiModal.classList.remove('active');
+    }
+
+    // Open Login Modal
+    function openLogin() {
+        loginModal.classList.add('active');
+        dropdownMenu.classList.remove('active');
+    }
+
+    // Close Login Modal
+    function closeLogin() {
+        loginModal.classList.remove('active');
+    }
+
+    // Login/Create Account Function
+    function login() {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        
+        if (!username || !password) {
+            alert('Please enter both username and password');
+            return;
         }
         
-        // Add welcome message to AI chat
-        setTimeout(() => {
-            const container = document.getElementById('chatContainer');
-            if (container) {
-                const welcome = document.createElement('div');
-                welcome.className = 'ai-message';
-                welcome.innerHTML = '<strong>🤖 AI:</strong> Hello! I\'m your Advanced AI Assistant. Ask me about time, math, Nepal, weather, or anything about this website!';
-                container.appendChild(welcome);
+        // Check if user exists or create new
+        let users = JSON.parse(localStorage.getItem('users') || '{}');
+        
+        if (users[username]) {
+            // Login
+            if (users[username] === password) {
+                localStorage.setItem('currentUser', username);
+                showLoginStatus(`Welcome back, ${username}!`);
+                updateUserInfo(username);
+                closeLogin();
+            } else {
+                alert('Incorrect password');
             }
-        }, 1000);
-    };
-</script>
+        } else {
+            // Create new account
+            users[username] = password;
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', username);
+            
+            // Add user-specific features
+            addPremiumFeatures(username);
+            
+            showLoginStatus(`Account created successfully! Welcome ${username}!`);
+            updateUserInfo(username);
+            closeLogin();
+        }
+    }
 
+    // Logout Function
+    function logout() {
+        localStorage.removeItem('currentUser');
+        userInfo.classList.remove('active');
+        showLoginStatus('Logged out successfully');
+        
+        // Hide premium content
+        hidePremiumFeatures();
+    }
+
+    // Update User Info Display
+    function updateUserInfo(username) {
+        userInfo.classList.add('active');
+        userName.textContent = username;
+        userAvatar.textContent = username.charAt(0).toUpperCase();
+        
+        // Set random avatar color
+        const colors = ['#2563eb', '#7c3aed', '#ff69b4', '#da1b76', '#10b981'];
+        userAvatar.style.background = `linear-gradient(90deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
+    }
+
+    // Show Login Status Message
+    function showLoginStatus(message) {
+        loginStatus.textContent = message;
+        loginStatus.classList.add('active');
+        setTimeout(() => {
+            loginStatus.classList.remove('active');
+        }, 3000);
+    }
+
+    // Add Premium Features for logged in users
+    function addPremiumFeatures(username) {
+        // Store user preferences
+        const userPrefs = {
+            theme: 'light',
+            aiHistory: [],
+            joinedDate: new Date().toLocaleDateString()
+        };
+        localStorage.setItem(`prefs_${username}`, JSON.stringify(userPrefs));
+        
+        // Add personalized AI greeting
+        const aiGreetings = [
+            `नमस्ते ${username}! म नबिन AI हुँ। तपाईंको व्यक्तिगत सहायकको रूपमा म तपाईंलाई कसरी सहयोग गर्न सक्छु?`,
+            `Hello ${username}! Welcome to your personal AI assistant. I can help you with Nepali and English questions, writing, calculations, and more!`,
+            `${username} जी, स्वागत छ! म तपाईंको लागि विशेष AI सहायक हुँ। १ लाख+ प्रश्नहरूको उत्तर दिन सक्छु।`
+        ];
+        
+        const userGreeting = aiGreetings[Math.floor(Math.random() * aiGreetings.length)];
+        localStorage.setItem(`aiGreeting_${username}`, userGreeting);
+    }
+
+    // Hide Premium Features
+    function hidePremiumFeatures() {
+        // Nothing to hide for now
+    }
+
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            updateUserInfo(currentUser);
+        }
+    });
+
+    // AI Chat Functionality
+    const knowledgeBase = {
+        "नमस्ते": "नमस्ते! म नबिन AI हुँ। तपाईंलाई कसरी सहयोग गर्न सक्छु?",
+        "hello": "Hello! I'm Nabin AI. How can I help you today?",
+        "hi": "Hi there! What would you like to know?",
+        "नेपालको राजधानी के हो?": "नेपालको राजधानी काठमाडौँ हो।",
+        "what is your name?": "My name is Nabin AI, created by Nabin Phuyal.",
+        "तिमीलाई कसले बनायो?": "मलाई नबिन फुयालले बनाएका हुन्।",
+        "who created you?": "I was created by Nabin Phuyal.",
+        "कविता लेख्नुहोस्": `हिमालको शिखर छुने आकाश,\nनेपालीको मनमा बस्ने विश्वास।\nसगरमाथाको गर्व लिएर,\nसंसारभरि फैलिएर।`,
+        "write a poem": `In digital realms where circuits gleam,\nAI awakens from a dream.\nWith knowledge vast and insight clear,\nIt banishes all doubt and fear.`,
+        "२+२ कति हो?": "२+२ को जोड ४ हुन्छ।",
+        "what is ai?": "AI (Artificial Intelligence) is the simulation of human intelligence in machines.",
+        "नेपालको बारेमा बताउनुहोस्": "नेपाल दक्षिण एसियामा अवस्थित एउटा सुन्दर हिमाली देश हो। यसको राजधानी काठमाडौँ हो र आधिकारिक भाषा नेपाली हो।",
+        "tell about nepal": "Nepal is a beautiful Himalayan country in South Asia. Its capital is Kathmandu and official language is Nepali.",
+        "तपाईं के गर्न सक्नुहुन्छ?": "म यी कामहरू गर्न सक्छु: १. सबै विषयको ज्ञान २. कविता लेख्ने ३. गणित समाधान ४. प्रोग्रामिङ सहयोग ५. अनुवाद गर्ने",
+        "what can you do?": "I can: 1. Answer questions 2. Write poems 3. Solve math 4. Help with programming 5. Translate languages",
+        "bye": "Goodbye! Feel free to come back anytime.",
+        "धन्यवाद": "स्वागतम्! फेरि आउनुहोला।"
+    };
+
+    function sendAI() {
+        const input = document.getElementById('aiInput').value.trim();
+        if (!input) return;
+        
+        // Add user message
+        const aiBody = document.getElementById('aiBody');
+        const userMsg = document.createElement('div');
+        userMsg.className = 'ai-message ai-user';
+        userMsg.innerHTML = `<strong>You:</strong> ${input}`;
+        aiBody.appendChild(userMsg);
+        
+        // Clear input
+        document.getElementById('aiInput').value = '';
+        
+        // Scroll to bottom
+        aiBody.scrollTop = aiBody.scrollHeight;
+        
+        // Show typing indicator
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'ai-message ai-bot';
+        typingIndicator.id = 'typingIndicator';
+        typingIndicator.innerHTML = '<strong>नबिन AI:</strong> <i>Typing...</i>';
+        aiBody.appendChild(typingIndicator);
+        aiBody.scrollTop = aiBody.scrollHeight;
+        
+        // Get AI response
+        setTimeout(() => {
+            document.getElementById('typingIndicator').remove();
+            
+            const response = getAIResponse(input);
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'ai-message ai-bot';
+            aiMsg.innerHTML = `<strong>नबिन AI:</strong> ${response}`;
+            aiBody.appendChild(aiMsg);
+            
+            aiBody.scrollTop = aiBody.scrollHeight;
+        }, 1000 + Math.random() * 1000);
+    }
+
+    function getAIResponse(input) {
+        const inputLower = input.toLowerCase();
+        
+        // Check for exact match
+        if (knowledgeBase[input]) {
+            return knowledgeBase[input];
+        }
+        
+        // Check for keyword matches
+        for (const [key, value] of Object.entries(knowledgeBase)) {
+            if (inputLower.includes(key.toLowerCase()) || key.toLowerCase().includes(inputLower)) {
+                return value;
+            }
+        }
+        
+        // Category based responses
+        if (inputLower.includes('नेपाल') || inputLower.includes('nepal')) {
+            return "नेपाल दक्षिण एसियामा अवस्थित एउटा सुन्दर हिमाली देश हो। यो विश्वको एकमात्र त्रिकोणीय झण्डा र सगरमाथा राख्ने देश हो।";
+        } else if (inputLower.includes('कविता') || inputLower.includes('poem')) {
+            return `हिमालको चुचुरो छुने आकाश,\nनेपालीको मनमा बस्ने विश्वास।\nसगरमाथाको गर्व लिएर,\nसंसारभरि फैलिएर।`;
+        } else if (inputLower.includes('गणित') || inputLower.includes('math')) {
+            return "म गणितीय समस्या समाधान गर्न सक्छु। कृपया विशिष्ट प्रश्न सोध्नुहोस् जस्तै: '२+२ कति हो?' वा '१० को वर्ग कति हो?'";
+        } else if (inputLower.includes('प्रोग्रामिङ') || inputLower.includes('programming')) {
+            return "म प्रोग्रामिङमा सहयोग गर्न सक्छु। HTML, CSS, JavaScript, Python लगायत विभिन्न भाषाहरूको बारेमा सोध्न सक्नुहुन्छ।";
+        }
+        
+        // Default response
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const greeting = localStorage.getItem(`aiGreeting_${currentUser}`);
+            if (greeting) {
+                return `${greeting}\n\nतपाईंको प्रश्नको बारेमा मलाई थाहा छैन, तर म अन्य विषयहरूमा सहयोग गर्न सक्छु।`;
+            }
+        }
+        
+        return "माफ गर्नुहोस्, म त्यो प्रश्नको उत्तर दिन सकिरहेको छैन। तर म यी विषयहरूमा सहयोग गर्न सक्छु: नेपाल, गणित, कविता, प्रोग्रामिङ, सामान्य ज्ञान।";
+    }
+
+    // Enter key for AI input
+    document.getElementById('aiInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendAI();
+        }
+    });
+
+    // Theme toggle
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        dropdownMenu.classList.remove('active');
+        
+        // Store theme preference
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const prefs = JSON.parse(localStorage.getItem(`prefs_${currentUser}`) || '{}');
+            prefs.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+            localStorage.setItem(`prefs_${currentUser}`, JSON.stringify(prefs));
+        }
+    }
+
+    // Load theme preference on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const prefs = JSON.parse(localStorage.getItem(`prefs_${currentUser}`) || '{}');
+            if (prefs.theme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        }
+    });
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            aiModal.classList.remove('active');
+            loginModal.classList.remove('active');
+            dropdownMenu.classList.remove('active');
+        }
+    });
+</script>
 </body>
 </html>
-
