@@ -51,17 +51,18 @@
         }
         
         /* Changed: Menu always visible when hamburger is clicked */
-        ..menu-options { 
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white; 
-    margin-top: 10px; 
-    border-radius: 12px; 
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15); 
-    overflow: hidden; 
-    width: 220px; 
-    z-index: 1002;
+        .<div class="menu-wrapper">
+    <div class="hamburger" id="menuBtn">
+        ☰
+    </div>
+
+    <div class="menu-options" id="menuBox">
+        <a href="#">➕ Create New Account</a>
+        <a href="#">🔐 Login with ID/Password</a>
+        <a href="#">🤖 Chat AI</a>
+        <a href="#">✍️ Poetry</a>
+    </div>
+</div>
 }
         }
         .menu-options button { 
@@ -681,4 +682,5 @@
 
 </body>
 </html>
+
 
