@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -300,6 +299,8 @@
         <button onclick="showMenuSection('login')"><i class="fa-solid fa-key"></i> Login with ID/Password</button>
         <button onclick="showMenuSection('chat-ai')"><i class="fa-solid fa-robot"></i> Chat AI</button>
     </div>
+</div> <!-- यो closing div थप्नु भएको थिएन -->
+
 <!-- Menu Forms -->
 <div id="create-account" class="menu-form-card">
     <h3 style="margin-top:0; color: #da1b76;">Create Account</h3>
@@ -540,7 +541,12 @@
 
     function showMenuSection(id) {
         hideAllForms();
-        document.getElementById(id).style.display = 'block';
+        // Fix: chat-ai-menu लाई चलाउने
+        if (id === 'chat-ai') {
+            document.getElementById('chat-ai-menu').style.display = 'block';
+        } else {
+            document.getElementById(id).style.display = 'block';
+        }
         document.getElementById('menu-options').style.display = 'none';
         menuOpen = false;
     }
@@ -662,5 +668,3 @@
 
 </body>
 </html>
-
-
