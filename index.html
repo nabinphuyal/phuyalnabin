@@ -11,34 +11,43 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8fbff; color: #333; line-height: 1.6; overflow-x: hidden; }
         
-        /* ========== 3-DOT MENU LEFT SIDE ========== */
-        .dot-menu-container {
+        /* ========== 3-LINE HAMBURGER MENU LEFT SIDE ========== */
+        .hamburger-menu-container {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 1001;
         }
         
-        .three-dot-menu { 
+        .hamburger-btn { 
             background: linear-gradient(90deg, #ff69b4, #da1b76);
             color: white; 
-            padding: 12px 20px; 
-            border-radius: 30px; 
+            padding: 12px 15px; 
+            border-radius: 10px; 
             font-weight: bold; 
-            width: 120px; 
+            width: 50px; 
+            height: 50px;
             text-align: center; 
             cursor: pointer; 
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
             transition: 0.3s;
-            font-size: 14px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 4px;
         }
-        .three-dot-menu:hover { 
+        .hamburger-btn:hover { 
             background: linear-gradient(90deg, #da1b76, #c71585); 
             transform: translateY(-2px);
+        }
+        
+        .hamburger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+            transition: 0.3s;
         }
         
         .menu-options { 
@@ -289,17 +298,19 @@
 </head>
 <body>
 
-<!-- ========== 3-DOT MENU LEFT SIDE ========== -->
-<div class="dot-menu-container">
-    <div class="three-dot-menu" onclick="toggleMenu()">
-        <i class="fa-solid fa-ellipsis-vertical"></i> Menu
+<!-- ========== 3-LINE HAMBURGER MENU LEFT SIDE ========== -->
+<div class="hamburger-menu-container">
+    <div class="hamburger-btn" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
     </div>
     <div class="menu-options" id="menu-options">
         <button onclick="showMenuSection('create-account')"><i class="fa-solid fa-user-plus"></i> Create New Account</button>
         <button onclick="showMenuSection('login')"><i class="fa-solid fa-key"></i> Login with ID/Password</button>
         <button onclick="showMenuSection('chat-ai')"><i class="fa-solid fa-robot"></i> Chat AI</button>
     </div>
-</div> <!-- यो closing div थप्नु भएको थिएन -->
+</div>
 
 <!-- Menu Forms -->
 <div id="create-account" class="menu-form-card">
@@ -527,7 +538,7 @@
         }, 800);
     }
 
-    // ========== 3-DOT MENU FUNCTIONS ==========
+    // ========== 3-LINE MENU FUNCTIONS ==========
     let menuOpen = false;
     let accounts = []; 
     let currentUser = null;
@@ -655,7 +666,7 @@
 
     // Close forms when clicking outside
     document.addEventListener('click', function(event) {
-        const menuContainer = document.querySelector('.dot-menu-container');
+        const menuContainer = document.querySelector('.hamburger-menu-container');
         const menuOptions = document.getElementById('menu-options');
         const forms = document.querySelectorAll('.menu-form-card');
         
