@@ -50,6 +50,7 @@
             transition: 0.3s;
         }
         
+        /* Changed: Menu always visible when hamburger is clicked */
         .menu-options { 
             position: absolute;
             top: 100%;
@@ -305,12 +306,12 @@
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
     </div>
+    <!-- Menu Options (always visible when hamburger is clicked) -->
     <div class="menu-options" id="menu-options">
         <button onclick="showMenuSection('create-account')"><i class="fa-solid fa-user-plus"></i> Create New Account</button>
         <button onclick="showMenuSection('login')"><i class="fa-solid fa-key"></i> Login with ID/Password</button>
         <button onclick="showMenuSection('chat-ai')"><i class="fa-solid fa-robot"></i> Chat AI</button>
-          <button onclick="window.location.href='poetry.html'"><i class="fa-solid fa-feather-pointed"></i> Poetry</button>
-</div>
+        <button onclick="window.location.href='poetry.html'"><i class="fa-solid fa-feather-pointed"></i> Poetry</button>
     </div>
 </div>
 
@@ -548,13 +549,12 @@
     function toggleMenu() {
         menuOpen = !menuOpen;
         document.getElementById('menu-options').style.display = menuOpen ? 'block' : 'none';
-        // Close all forms when menu is toggled
-        if (!menuOpen) hideAllForms();
+        // Menu touch गर्दा form तुरुन्त close हुने
+        hideAllForms();
     }
 
     function showMenuSection(id) {
         hideAllForms();
-        // Fix: chat-ai-menu लाई चलाउने
         if (id === 'chat-ai') {
             document.getElementById('chat-ai-menu').style.display = 'block';
         } else {
@@ -666,7 +666,7 @@
         alert("Logged out!"); 
     }
 
-    // Close forms when clicking outside
+    // Close menu when clicking outside
     document.addEventListener('click', function(event) {
         const menuContainer = document.querySelector('.hamburger-menu-container');
         const menuOptions = document.getElementById('menu-options');
@@ -681,6 +681,3 @@
 
 </body>
 </html>
-
-
-
