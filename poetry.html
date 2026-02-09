@@ -27,17 +27,14 @@
         .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
         .vault-item { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; border: 1px solid #30363d; cursor: pointer; background: #000; }
         
-        /* Full Screen Preview (LightBox) */
-        #preview-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
-        #preview-content { max-width: 90%; max-height: 90%; border-radius: 10px; }
+        /* Full Screen Preview */
+        #preview-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2001; justify-content: center; align-items: center; }
+        #preview-content { max-width: 95%; max-height: 90%; border-radius: 10px; }
         .close-preview { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; font-weight: bold; }
 
-        /* Notice Box */
         .notice-box { background: var(--notice-bg); border-left: 4px solid var(--secondary); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #cbd5e1; }
-
         #main-app { display: none; }
-        .poem-item { background: #fff; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 5px solid var(--secondary); position: relative; }
-        .del-btn { position: absolute; top: 10px; right: 10px; color: #ccc; cursor: pointer; font-size: 12px; }
+        .poem-item { background: #fff; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 5px solid var(--secondary); }
     </style>
 </head>
 <body>
@@ -58,6 +55,7 @@
     
     <div id="signup-fields" style="display:none">
         <input type="text" id="s-name" placeholder="पूरा नाम">
+        <input type="number" id="s-dob" placeholder="जन्म मिति (e.g. 20550101)">
         <input type="text" id="s-phone" placeholder="फोन नम्बर">
         <input type="password" id="s-pass" placeholder="पासवर्ड">
         <button class="btn btn-blue" onclick="signup()">Create Account</button>
@@ -65,7 +63,7 @@
     </div>
 
     <div style="margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">
-        <p style="font-size:11px; color:#666; margin-bottom:10px;"><b>Backup Restore:</b> नयाँ फोनमा डाटा सार्न फाइल यहाँ हाल्नुहोस्।</p>
+        <p style="font-size:11px; color:#666; margin-bottom:10px;"><b>Backup Restore:</b></p>
         <input type="file" id="importFile" accept=".json" style="font-size:12px;">
         <button class="btn btn-green" style="font-size:12px; padding:8px;" onclick="importData()">Restore Data</button>
     </div>
@@ -83,9 +81,7 @@
             <textarea id="p-body" placeholder="तपाईंको मनको कुरा यहाँ लेख्नुहोस्..." rows="4"></textarea>
             <button class="btn btn-blue" onclick="addPoem()">Save Note</button>
         </div>
-
         <div id="poem-list"></div>
-
         <button class="btn" style="background:#6c5ce7; color:white; height:60px; font-size:18px; margin-top:20px;" onclick="openVault()">🔐 OPEN SECRET VAULT</button>
         <button class="btn btn-red" onclick="logout()" style="margin-top:30px; opacity:0.6;">Logout</button>
     </div>
@@ -99,8 +95,7 @@
         </div>
 
         <div class="notice-box">
-            <p><b>💡 User Guide:</b> यो भित्रको फोटो/भिडियो तपाईंको फोनमा मात्र छ।</p>
-            <p style="font-size:11px; margin-top:5px;">डाटा हराउन नदिन तलको <b>Download Backup</b> बटन थिचेर फाइल सुरक्षित राख्नुहोला।</p>
+            <p>यो भित्रको डाटा सुरक्षित छ। पिन बिर्सिएमा रिकभर गर्न मिल्छ।</p>
         </div>
 
         <div class="card" style="background:#1c2128; border:1px solid #30363d;">
@@ -110,9 +105,8 @@
 
         <div class="vault-grid" id="vault-grid"></div>
 
-        <div style="margin-top:40px; padding:20px; border-top:1px solid #333; text-align:center;">
-            <button class="btn btn-green" onclick="exportData()">📥 Download Life-Time Backup File</button>
-            <p style="font-size:11px; color:#666; margin-top:10px;">यो फाइललाई Google Drive वा Email मा सेभ गर्नुहोस्।</p>
+        <div style="margin-top:40px; text-align:center;">
+            <button class="btn btn-green" onclick="exportData()">📥 Download Backup</button>
         </div>
     </div>
 </div>
@@ -123,17 +117,17 @@
     function toggleAuth(isSignup) {
         document.getElementById('login-fields').style.display = isSignup ? 'none' : 'block';
         document.getElementById('signup-fields').style.display = isSignup ? 'block' : 'none';
-        document.getElementById('auth-title').innerText = isSignup ? 'Register' : '🔒 Secure Login';
     }
 
     function signup() {
         const name = document.getElementById('s-name').value;
+        const dob = document.getElementById('s-dob').value;
         const phone = document.getElementById('s-phone').value;
         const pass = document.getElementById('s-pass').value;
-        if(!name || !phone || !pass) return alert("सबै विवरण भर्नुहोस्!");
+        if(!name || !phone || !pass || !dob) return alert("सबै विवरण भर्नुहोस्!");
         let users = JSON.parse(localStorage.getItem('users') || '[]');
         if(users.find(u => u.phone === phone)) return alert("यो नम्बरमा आईडी छ!");
-        users.push({ name, phone, pass });
+        users.push({ name, phone, pass, dob });
         localStorage.setItem('users', JSON.stringify(users));
         alert("Success! Now Login.");
         toggleAuth(false);
@@ -158,7 +152,7 @@
         const body = document.getElementById('p-body').value;
         if(!title || !body) return;
         let allData = JSON.parse(localStorage.getItem('app_data') || '{}');
-        if(!allData[currentUser.phone]) allData[currentUser.phone] = { poems: [], vault: [] };
+        if(!allData[currentUser.phone]) allData[currentUser.phone] = { poems: [], vault: [], vaultPin: null };
         allData[currentUser.phone].poems.unshift({ title, body, id: Date.now() });
         localStorage.setItem('app_data', JSON.stringify(allData));
         renderPoems();
@@ -178,11 +172,36 @@
     }
 
     function openVault() {
-        const pin = prompt("Confirm Password to enter Vault:");
-        if(pin === currentUser.pass) {
+        let allData = JSON.parse(localStorage.getItem('app_data') || '{}');
+        let userAppData = allData[currentUser.phone] || { poems: [], vault: [], vaultPin: null };
+        
+        if (!userAppData.vaultPin) {
+            let newPin = prompt("Set a new 4-digit Vault PIN:");
+            if (newPin && newPin.length === 4) {
+                userAppData.vaultPin = newPin;
+                allData[currentUser.phone] = userAppData;
+                localStorage.setItem('app_data', JSON.stringify(allData));
+                alert("PIN Set Successfully!");
+            } else {
+                return alert("Invalid PIN. Use 4 digits.");
+            }
+        }
+
+        let pin = prompt("Enter 4-digit Vault PIN (Or type 'FORGOT'):");
+        if (pin === userAppData.vaultPin) {
             document.getElementById('vault-section').style.display = 'block';
             renderVault();
-        } else alert("Wrong Password!");
+        } else if (pin && pin.toUpperCase() === 'FORGOT') {
+            let fName = prompt("Enter your Full Name:");
+            let fDob = prompt("Enter your DOB (Number only):");
+            if (fName === currentUser.name && fDob === currentUser.dob) {
+                alert("Your Vault PIN is: " + userAppData.vaultPin);
+            } else {
+                alert("Incorrect Details!");
+            }
+        } else {
+            alert("Wrong PIN!");
+        }
     }
 
     function closeVault() { document.getElementById('vault-section').style.display = 'none'; }
@@ -190,8 +209,6 @@
     function saveVaultFile() {
         const files = document.getElementById('v-file').files;
         let allData = JSON.parse(localStorage.getItem('app_data') || '{}');
-        if(!allData[currentUser.phone].vault) allData[currentUser.phone].vault = [];
-        
         Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -207,7 +224,7 @@
         const allData = JSON.parse(localStorage.getItem('app_data') || '{}');
         const items = allData[currentUser.phone]?.vault || [];
         const grid = document.getElementById('vault-grid');
-        grid.innerHTML = items.map((item, index) => {
+        grid.innerHTML = items.map(item => {
             if(item.type.includes('image')) {
                 return `<img src="${item.src}" class="vault-item" onclick="viewFull('${item.src}', 'img')">`;
             } else {
@@ -216,7 +233,6 @@
         }).join('');
     }
 
-    // Full Screen View Logic
     function viewFull(src, type) {
         const overlay = document.getElementById('preview-overlay');
         const container = document.getElementById('preview-media-container');
@@ -238,7 +254,7 @@
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `My_Secure_Vault_Backup.json`;
+        a.download = `Secure_Vault_Backup.json`;
         a.click();
     }
 
