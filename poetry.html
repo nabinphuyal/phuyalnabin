@@ -3,720 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabita Note - कविता नोट</title>
+    <title>Advanced Kabita Note & Secret Vault</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --bg: #f4f7f6;
+            --white: #ffffff;
         }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            background-image: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ecf0f1;
-        }
-        
-        .logo span {
-            color: #3498db;
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            font-style: italic;
-            color: #bdc3c7;
-        }
-        
-        .tagline-nepali {
-            font-size: 1.1rem;
-            margin-top: 5px;
-            color: #ecf0f1;
-        }
-        
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            min-height: calc(100vh - 150px);
-        }
-        
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            padding: 30px 0;
-        }
-        
-        .auth-box {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            color: #7f8c8d;
-            transition: all 0.3s ease;
-        }
-        
-        .auth-tab.active {
-            color: #3498db;
-            border-bottom: 3px solid #3498db;
-        }
-        
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-        
-        input:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .app-content {
-            display: none;
-            flex-grow: 1;
-            padding: 30px 0;
-        }
-        
-        .app-content.active {
-            display: block;
-        }
-        
-        .user-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-        }
-        
-        .user-info {
-            font-size: 1.1rem;
-        }
-        
-        .user-info strong {
-            color: #2c3e50;
-        }
-        
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-        
-        .logout-btn:hover {
-            background-color: #c0392b;
-        }
-        
-        .poem-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-        
-        .poem-form-container {
-            flex: 1;
-            min-width: 300px;
-            background-color: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        }
-        
-        .poem-list-container {
-            flex: 1;
-            min-width: 300px;
-            background-color: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f1f1f1;
-        }
-        
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            min-height: 200px;
-            resize: vertical;
-            transition: border-color 0.3s ease;
-        }
-        
-        textarea:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        
-        .poem-item {
-            background-color: #f8f9fa;
-            border-left: 4px solid #3498db;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .poem-title {
-            font-size: 1.3rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .poem-content {
-            color: #555;
-            line-height: 1.7;
-            white-space: pre-line;
-            margin-bottom: 15px;
-        }
-        
-        .poem-date {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            text-align: right;
-        }
-        
-        .empty-poems {
-            text-align: center;
-            color: #7f8c8d;
-            font-style: italic;
-            padding: 30px 0;
-        }
-        
-        .message {
-            padding: 12px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            color: #7f8c8d;
-            border-top: 1px solid #eee;
-        }
-        
-        @media (max-width: 768px) {
-            .poem-section {
-                flex-direction: column;
-            }
-            
-            .user-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg); color: #333; }
+
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+
+        /* Auth Styles */
+        .auth-card { background: var(--white); padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 450px; margin: 50px auto; }
+        .tabs { display: flex; margin-bottom: 20px; cursor: pointer; border-bottom: 2px solid #eee; }
+        .tab { flex: 1; padding: 10px; text-align: center; font-weight: bold; color: #777; }
+        .tab.active { color: var(--secondary); border-bottom: 2px solid var(--secondary); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+        .btn { background: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
+        .btn:hover { background: #2980b9; }
+
+        /* Main Content */
+        #main-app { display: none; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .menu-btns { display: flex; gap: 10px; }
+        .btn-sm { padding: 8px 15px; font-size: 14px; width: auto; }
+        .vault-btn { background: #8e44ad; }
+
+        /* Content Sections */
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .poem-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--secondary); position: relative; }
+        .delete-btn { position: absolute; right: 10px; top: 10px; color: red; cursor: pointer; font-size: 12px; }
+
+        /* Secret Vault */
+        #secret-vault { display: none; background: #2c3e50; color: white; min-height: 80vh; padding: 30px; border-radius: 15px; }
+        .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+        .vault-item { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #444; }
+
+        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">Kabita<span>Note</span></div>
-            <div class="tagline">Express your poetic thoughts</div>
-            <div class="tagline-nepali">आफ्ना कविताहरू यहाँ सङ्ग्रह गर्नुहोस्</div>
-        </header>
-        
-        <div class="app-container">
-            <!-- Authentication Section -->
-            <div class="auth-container" id="auth-container">
-                <div class="auth-box">
-                    <div class="auth-tabs">
-                        <div class="auth-tab active" id="login-tab">लग इन</div>
-                        <div class="auth-tab" id="signup-tab">आईडी सिर्जना गर्नुहोस्</div>
-                    </div>
-                    
-                    <!-- Login Form -->
-                    <div class="auth-form active" id="login-form">
-                        <div class="message" id="login-message"></div>
-                        <div class="form-group">
-                            <label for="login-username">प्रयोगकर्ता नाम</label>
-                            <input type="text" id="login-username" placeholder="आफ्नो प्रयोगकर्ता नाम लेख्नुहोस्">
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password">पासवर्ड</label>
-                            <input type="password" id="login-password" placeholder="आफ्नो पासवर्ड लेख्नुहोस्">
-                        </div>
-                        <button class="btn" id="login-btn">लग इन गर्नुहोस्</button>
-                    </div>
-                    
-                    <!-- Signup Form -->
-                    <div class="auth-form" id="signup-form">
-                        <div class="message" id="signup-message"></div>
-                        <div class="form-group">
-                            <label for="signup-username">प्रयोगकर्ता नाम</label>
-                            <input type="text" id="signup-username" placeholder="नयाँ प्रयोगकर्ता नाम लेख्नुहोस्">
-                        </div>
-                        <div class="form-group">
-                            <label for="signup-password">पासवर्ड</label>
-                            <input type="password" id="signup-password" placeholder="पासवर्ड लेख्नुहोस् (कम्तिमा ६ अक्षर)">
-                        </div>
-                        <div class="form-group">
-                            <label for="signup-confirm-password">पासवर्ड पुष्टि गर्नुहोस्</label>
-                            <input type="password" id="signup-confirm-password" placeholder="पासवर्ड फेरि लेख्नुहोस्">
-                        </div>
-                        <button class="btn" id="signup-btn">खाता सिर्जना गर्नुहोस्</button>
-                    </div>
-                </div>
+
+<div class="header">
+    <h1>Kabita Note <span style="color: #3498db;">& Vault</span></h1>
+    <p>सुरक्षित र गोप्य - तपाईंको आफ्नै डिजिटल डायरी</p>
+</div>
+
+<div class="container">
+    <div id="auth-section">
+        <div class="auth-card">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')">लग-इन</div>
+                <div class="tab" onclick="switchTab('signup')">नयाँ खाता</div>
+                <div class="tab" onclick="switchTab('forgot')">पासवर्ड बिर्सियो?</div>
             </div>
-            
-            <!-- Main App Content (After Login) -->
-            <div class="app-content" id="app-content">
-                <div class="user-header">
-                    <div class="user-info">
-                        स्वागत छ, <strong id="current-user">User</strong>! तपाईंको कविताहरू लेख्नुहोस् र सङ्ग्रह गर्नुहोस्।
-                    </div>
-                    <button class="logout-btn" id="logout-btn">लग आउट गर्नुहोस्</button>
+
+            <div id="login-form">
+                <div class="form-group">
+                    <label>फोन नम्बर (Phone Number)</label>
+                    <input type="text" id="l-phone" placeholder="Enter number">
                 </div>
-                
-                <div class="message" id="app-message"></div>
-                
-                <div class="poem-section">
-                    <div class="poem-form-container">
-                        <h2 class="section-title">नयाँ कविता लेख्नुहोस्</h2>
-                        <div class="form-group">
-                            <label for="poem-title">कविताको शीर्षक</label>
-                            <input type="text" id="poem-title" placeholder="कविताको शीर्षक लेख्नुहोस्">
-                        </div>
-                        <div class="form-group">
-                            <label for="poem-content">कविता</label>
-                            <textarea id="poem-content" placeholder="आफ्नो कविता यहाँ लेख्नुहोस्..."></textarea>
-                        </div>
-                        <button class="btn" id="save-poem-btn">कविता सुरक्षित गर्नुहोस्</button>
-                    </div>
-                    
-                    <div class="poem-list-container">
-                        <h2 class="section-title">मेरो कविताहरू</h2>
-                        <div id="poems-list">
-                            <!-- Poems will be displayed here -->
-                            <div class="empty-poems">तपाईंले अहिलेसम्म कुनै कविता सुरक्षित गर्नुभएको छैन। पहिलो कविता लेख्नुहोस्!</div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label>पासवर्ड (Password)</label>
+                    <input type="password" id="l-pass" placeholder="******">
+                </div>
+                <button class="btn" onclick="handleLogin()">प्रवेश गर्नुहोस्</button>
+            </div>
+
+            <div id="signup-form" style="display:none;">
+                <div class="form-group"><label>पूरा नाम (Full Name)</label><input type="text" id="s-name"></div>
+                <div class="form-group">
+                    <label>देश कोड र फोन (Country Code + Phone)</label>
+                    <input type="text" id="s-phone" placeholder="+977 98XXXXXXXX">
+                </div>
+                <div class="form-group"><label>जन्म मिति (Date of Birth)</label><input type="date" id="s-dob"></div>
+                <div class="form-group"><label>बलियो पासवर्ड (Strong Password)</label><input type="password" id="s-pass"></div>
+                <button class="btn" onclick="handleSignup()">खाता बनाउनुहोस्</button>
+            </div>
+
+            <div id="forgot-form" style="display:none;">
+                <p style="font-size: 13px; margin-bottom: 10px;">पासवर्ड रिसेट गर्न नाम र जन्म मिति मिल्नुपर्छ।</p>
+                <div class="form-group"><label>पूरा नाम</label><input type="text" id="f-name"></div>
+                <div class="form-group"><label>जन्म मिति</label><input type="date" id="f-dob"></div>
+                <button class="btn" onclick="handleForgot()">पासवर्ड देखाउनुहोस्</button>
+                <div id="recovered-pass" style="margin-top:15px; font-weight:bold; color:green;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <div class="nav-bar">
+            <div>नमस्ते, <b id="user-display">User</b></div>
+            <div class="menu-btns">
+                <button class="btn btn-sm vault-btn" onclick="toggleVault()">Secret Vault 🔐</button>
+                <button class="btn btn-sm" style="background:#7f8c8d" onclick="logout()">Log Out</button>
+            </div>
+        </div>
+
+        <div id="poem-content-area">
+            <div class="content-grid">
+                <div class="card">
+                    <h3>नयाँ कविता/नोट लेख्नुहोस्</h3><br>
+                    <input type="text" id="p-title" placeholder="शीर्षक..."><br><br>
+                    <textarea id="p-body" placeholder="यहाँ भावनाहरू लेख्नुहोस्..." rows="8"></textarea><br><br>
+                    <button class="btn" onclick="savePoem()">सुरक्षित गर्नुहोस्</button>
+                </div>
+                <div class="card">
+                    <h3>मेरो सङ्ग्रह</h3><br>
+                    <div id="poem-list"></div>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <p>Kabita Note - आफ्ना कविताहरू सुरक्षित गर्ने ठाउँ</p>
-            <p>© 2023 सर्वाधिकार सुरक्षित</p>
-        </footer>
-    </div>
 
-    <script>
-        // DOM elements
-        const authContainer = document.getElementById('auth-container');
-        const appContent = document.getElementById('app-content');
-        const loginTab = document.getElementById('login-tab');
-        const signupTab = document.getElementById('signup-tab');
-        const loginForm = document.getElementById('login-form');
-        const signupForm = document.getElementById('signup-form');
-        const loginBtn = document.getElementById('login-btn');
-        const signupBtn = document.getElementById('signup-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const savePoemBtn = document.getElementById('save-poem-btn');
-        const poemsList = document.getElementById('poems-list');
-        const currentUserElement = document.getElementById('current-user');
-        
-        // Message elements
-        const loginMessage = document.getElementById('login-message');
-        const signupMessage = document.getElementById('signup-message');
-        const appMessage = document.getElementById('app-message');
-        
-        // Current user
-        let currentUser = null;
-        
-        // Check if user is already logged in (from localStorage)
-        window.addEventListener('load', () => {
-            const savedUser = localStorage.getItem('kabitaNoteUser');
-            if (savedUser) {
-                currentUser = savedUser;
-                currentUserElement.textContent = currentUser;
-                authContainer.classList.remove('active');
-                appContent.classList.add('active');
-                loadPoems();
-            }
+        <div id="secret-vault">
+            <div style="display:flex; justify-content: space-between;">
+                <h2>Secret Vault (गोप्य ग्यालरी)</h2>
+                <button class="btn btn-sm" onclick="toggleVault()">बन्द गर्नुहोस्</button>
+            </div>
+            <p>यहाँ राखिएका फोटो र भिडियोहरू अरु कसैले देख्न सक्दैनन्।</p>
+            <div style="margin: 20px 0;">
+                <input type="file" id="vault-input" accept="image/*,video/*" multiple style="display:none;" onchange="uploadToVault()">
+                <button class="btn btn-sm" onclick="document.getElementById('vault-input').click()">+ फाइल थप्नुहोस्</button>
+            </div>
+            <div class="vault-grid" id="vault-grid"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentUser = null;
+
+    // LocalStorage Helper
+    const getUsers = () => JSON.parse(localStorage.getItem('v_users') || '[]');
+    const setUsers = (users) => localStorage.setItem('v_users', JSON.stringify(users));
+    const getData = () => JSON.parse(localStorage.getItem('v_data') || '{}');
+    const setData = (data) => localStorage.setItem('v_data', JSON.stringify(data));
+
+    // Tab Switching
+    function switchTab(type) {
+        document.getElementById('login-form').style.display = type === 'login' ? 'block' : 'none';
+        document.getElementById('signup-form').style.display = type === 'signup' ? 'block' : 'none';
+        document.getElementById('forgot-form').style.display = type === 'forgot' ? 'block' : 'none';
+        document.querySelectorAll('.tab').forEach((t, i) => {
+            t.classList.remove('active');
+            if((type==='login' && i===0) || (type==='signup' && i===1) || (type==='forgot' && i===2)) t.classList.add('active');
         });
+    }
+
+    // Signup Logic
+    function handleSignup() {
+        const name = document.getElementById('s-name').value;
+        const phone = document.getElementById('s-phone').value;
+        const dob = document.getElementById('s-dob').value;
+        const pass = document.getElementById('s-pass').value;
+
+        if(!name || !phone || !dob || !pass) return alert("सबै खाली ठाउँ भर्नुहोस्!");
+
+        let users = getUsers();
+        if(users.find(u => u.phone === phone)) return alert("यो नम्बरबाट पहिले नै खाता बनिसकेको छ!");
+
+        users.push({ name, phone, dob, pass });
+        setUsers(users);
+        alert("आईडी बन्यो! अब लग-इन गर्नुहोस्।");
+        switchTab('login');
+    }
+
+    // Login Logic
+    function handleLogin() {
+        const phone = document.getElementById('l-phone').value;
+        const pass = document.getElementById('l-pass').value;
+        const user = getUsers().find(u => u.phone === phone && u.pass === pass);
+
+        if(user) {
+            currentUser = user;
+            launchApp();
+        } else {
+            alert("नम्बर वा पासवर्ड मिलेन!");
+        }
+    }
+
+    // Forgot Password Logic
+    function handleForgot() {
+        const name = document.getElementById('f-name').value;
+        const dob = document.getElementById('f-dob').value;
+        const user = getUsers().find(u => u.name === name && u.dob === dob);
+
+        if(user) {
+            document.getElementById('recovered-pass').innerHTML = "तपाईंको पासवर्ड: " + user.pass;
+        } else {
+            alert("विवरण मिलेन! कृपया सही नाम र जन्म मिति राख्नुहोस्।");
+        }
+    }
+
+    // Launch App
+    function launchApp() {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        document.getElementById('user-display').innerText = currentUser.name;
+        renderPoems();
+        renderVault();
+    }
+
+    // Poem Logic
+    function savePoem() {
+        const title = document.getElementById('p-title').value;
+        const body = document.getElementById('p-body').value;
+        if(!title || !body) return alert("शीर्षक र नोट लेख्नुहोस्!");
+
+        let data = getData();
+        if(!data[currentUser.phone]) data[currentUser.phone] = { poems: [], vault: [] };
         
-        // Switch between login and signup tabs
-        loginTab.addEventListener('click', () => {
-            loginTab.classList.add('active');
-            signupTab.classList.remove('active');
-            loginForm.classList.add('active');
-            signupForm.classList.remove('active');
-            loginMessage.style.display = 'none';
-            signupMessage.style.display = 'none';
+        data[currentUser.phone].poems.push({ title, body, date: new Date().toLocaleString() });
+        setData(data);
+        
+        document.getElementById('p-title').value = '';
+        document.getElementById('p-body').value = '';
+        renderPoems();
+    }
+
+    function renderPoems() {
+        const data = getData()[currentUser.phone] || { poems: [] };
+        const list = document.getElementById('poem-list');
+        list.innerHTML = data.poems.length ? '' : '<p>अहिलेसम्म केही लेखिएको छैन।</p>';
+        
+        data.poems.forEach((p, index) => {
+            list.innerHTML += `
+                <div class="poem-item">
+                    <span class="delete-btn" onclick="deletePoem(${index})">❌</span>
+                    <b>${p.title}</b><br>
+                    <small>${p.date}</small>
+                    <p style="margin-top:10px; white-space: pre-wrap;">${p.body}</p>
+                </div>
+            `;
         });
-        
-        signupTab.addEventListener('click', () => {
-            signupTab.classList.add('active');
-            loginTab.classList.remove('active');
-            signupForm.classList.add('active');
-            loginForm.classList.remove('active');
-            loginMessage.style.display = 'none';
-            signupMessage.style.display = 'none';
-        });
-        
-        // Login functionality
-        loginBtn.addEventListener('click', () => {
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            
-            if (!username || !password) {
-                showMessage(loginMessage, 'error', 'कृपया प्रयोगकर्ता नाम र पासवर्ड भर्नुहोस्।');
-                return;
-            }
-            
-            // Check if user exists in localStorage
-            const users = JSON.parse(localStorage.getItem('kabitaNoteUsers')) || [];
-            const user = users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                // Successful login
-                currentUser = username;
-                localStorage.setItem('kabitaNoteUser', username);
-                currentUserElement.textContent = username;
-                
-                // Switch to app content
-                authContainer.classList.remove('active');
-                appContent.classList.add('active');
-                
-                // Clear login form
-                document.getElementById('login-username').value = '';
-                document.getElementById('login-password').value = '';
-                
-                // Load user's poems
-                loadPoems();
-                
-                showMessage(appMessage, 'success', 'लग इन सफल भयो! स्वागत छ, ' + username + '!');
-            } else {
-                showMessage(loginMessage, 'error', 'प्रयोगकर्ता नाम वा पासवर्ड गलत छ।');
-            }
-        });
-        
-        // Signup functionality
-        signupBtn.addEventListener('click', () => {
-            const username = document.getElementById('signup-username').value.trim();
-            const password = document.getElementById('signup-password').value.trim();
-            const confirmPassword = document.getElementById('signup-confirm-password').value.trim();
-            
-            if (!username || !password || !confirmPassword) {
-                showMessage(signupMessage, 'error', 'कृपया सबै फिल्डहरू भर्नुहोस्।');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showMessage(signupMessage, 'error', 'पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ।');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showMessage(signupMessage, 'error', 'पासवर्डहरू मेल खादैनन्।');
-                return;
-            }
-            
-            // Check if user already exists
-            const users = JSON.parse(localStorage.getItem('kabitaNoteUsers')) || [];
-            const existingUser = users.find(u => u.username === username);
-            
-            if (existingUser) {
-                showMessage(signupMessage, 'error', 'यो प्रयोगकर्ता नाम पहिले नै प्रयोगमा छ।');
-                return;
-            }
-            
-            // Add new user
-            users.push({ username, password });
-            localStorage.setItem('kabitaNoteUsers', JSON.stringify(users));
-            
-            // Auto login after signup
-            currentUser = username;
-            localStorage.setItem('kabitaNoteUser', username);
-            currentUserElement.textContent = username;
-            
-            // Switch to app content
-            authContainer.classList.remove('active');
-            appContent.classList.add('active');
-            
-            // Clear signup form
-            document.getElementById('signup-username').value = '';
-            document.getElementById('signup-password').value = '';
-            document.getElementById('signup-confirm-password').value = '';
-            
-            // Load user's poems (will be empty initially)
-            loadPoems();
-            
-            showMessage(appMessage, 'success', 'खाता सफलतापूर्वक सिर्जना गरियो! स्वागत छ, ' + username + '!');
-        });
-        
-        // Save poem functionality
-        savePoemBtn.addEventListener('click', () => {
-            if (!currentUser) return;
-            
-            const title = document.getElementById('poem-title').value.trim();
-            const content = document.getElementById('poem-content').value.trim();
-            
-            if (!title || !content) {
-                showMessage(appMessage, 'error', 'कृपया कविताको शीर्षक र कविता दुवै भर्नुहोस्।');
-                return;
-            }
-            
-            // Get existing poems
-            const poems = JSON.parse(localStorage.getItem('kabitaNotePoems')) || [];
-            
-            // Add new poem
-            const newPoem = {
-                id: Date.now(),
-                username: currentUser,
-                title,
-                content,
-                date: new Date().toLocaleDateString('ne-NP', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })
+    }
+
+    function deletePoem(index) {
+        let data = getData();
+        data[currentUser.phone].poems.splice(index, 1);
+        setData(data);
+        renderPoems();
+    }
+
+    // Vault Logic
+    function toggleVault() {
+        const v = document.getElementById('secret-vault');
+        const p = document.getElementById('poem-content-area');
+        if(v.style.display === 'none' || v.style.display === '') {
+            v.style.display = 'block';
+            p.style.display = 'none';
+        } else {
+            v.style.display = 'none';
+            p.style.display = 'block';
+        }
+    }
+
+    function uploadToVault() {
+        const files = document.getElementById('vault-input').files;
+        let data = getData();
+        if(!data[currentUser.phone]) data[currentUser.phone] = { poems: [], vault: [] };
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                data[currentUser.phone].vault.push({ type: file.type, src: e.target.result });
+                setData(data);
+                renderVault();
             };
-            
-            poems.push(newPoem);
-            localStorage.setItem('kabitaNotePoems', JSON.stringify(poems));
-            
-            // Clear form
-            document.getElementById('poem-title').value = '';
-            document.getElementById('poem-content').value = '';
-            
-            // Reload poems list
-            loadPoems();
-            
-            showMessage(appMessage, 'success', 'कविता सफलतापूर्वक सुरक्षित गरियो!');
+            reader.readAsDataURL(file);
         });
+    }
+
+    function renderVault() {
+        const data = getData()[currentUser.phone] || { vault: [] };
+        const grid = document.getElementById('vault-grid');
+        grid.innerHTML = '';
         
-        // Load poems for current user
-        function loadPoems() {
-            if (!currentUser) return;
-            
-            const allPoems = JSON.parse(localStorage.getItem('kabitaNotePoems')) || [];
-            const userPoems = allPoems.filter(poem => poem.username === currentUser);
-            
-            poemsList.innerHTML = '';
-            
-            if (userPoems.length === 0) {
-                poemsList.innerHTML = '<div class="empty-poems">तपाईंले अहिलेसम्म कुनै कविता सुरक्षित गर्नुभएको छैन। पहिलो कविता लेख्नुहोस्!</div>';
-                return;
-            }
-            
-            // Display poems in reverse chronological order (newest first)
-            userPoems.reverse().forEach(poem => {
-                const poemElement = document.createElement('div');
-                poemElement.className = 'poem-item';
-                poemElement.innerHTML = `
-                    <div class="poem-title">${poem.title}</div>
-                    <div class="poem-content">${poem.content}</div>
-                    <div class="poem-date">${poem.date}</div>
-                `;
-                poemsList.appendChild(poemElement);
-            });
-        }
-        
-        // Logout functionality
-        logoutBtn.addEventListener('click', () => {
-            currentUser = null;
-            localStorage.removeItem('kabitaNoteUser');
-            
-            // Switch to auth container
-            authContainer.classList.add('active');
-            appContent.classList.remove('active');
-            
-            // Reset to login tab
-            loginTab.click();
-            
-            // Clear any messages
-            appMessage.style.display = 'none';
-        });
-        
-        // Helper function to show messages
-        function showMessage(element, type, text) {
-            element.textContent = text;
-            element.className = `message ${type}`;
-            element.style.display = 'block';
-            
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Allow Enter key to submit forms
-        document.getElementById('login-password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loginBtn.click();
-        });
-        
-        document.getElementById('signup-confirm-password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') signupBtn.click();
-        });
-        
-        document.getElementById('poem-content').addEventListener('keypress', (e) => {
-            if (e.ctrlKey && e.key === 'Enter') savePoemBtn.click();
-        });
-        
-        // Add some sample poems for demo
-        window.addEventListener('load', () => {
-            // Check if we need to initialize sample data
-            if (!localStorage.getItem('kabitaNoteInitialized')) {
-                // Create some sample users
-                const sampleUsers = [
-                    { username: 'kabita', password: 'kabita123' },
-                    { username: 'kavi', password: 'kavi123' }
-                ];
-                localStorage.setItem('kabitaNoteUsers', JSON.stringify(sampleUsers));
-                
-                // Create some sample poems
-                const samplePoems = [
-                    {
-                        id: 1,
-                        username: 'kabita',
-                        title: 'प्रकृति',
-                        content: `हरियालीको सागरमा
-खोलाको मधुर स्वर
-चराको गीत संगै
-बग्छ जिन्दगी धार`,
-                        date: '२०८० असोज १०, १०:३० बिहान'
-                    },
-                    {
-                        id: 2,
-                        username: 'kabita',
-                        title: 'आमा',
-                        content: `आमाको माया अनमोल
-अन्धकारमा दियो सरोज
-सधैं साथ दिने साथी
-जीवनको यो सबैभन्दा ठूलो सम्पत्ति`,
-                        date: '२०८० असोज ५, २:१५ बिहान'
-                    },
-                    {
-                        id: 3,
-                        username: 'kavi',
-                        title: 'नेपाल',
-                        content: `हिमालको काखमा बसेको
-सुनौलो यो देश
-सगरमाथा हाम्रो शान
-नेपाल मेरो देश`,
-                        date: '२०८० भदौ २५, ४:४५ बेलुका'
-                    }
-                ];
-                
-                localStorage.setItem('kabitaNotePoems', JSON.stringify(samplePoems));
-                localStorage.setItem('kabitaNoteInitialized', 'true');
+        data.vault.forEach(item => {
+            if(item.type.includes('image')) {
+                grid.innerHTML += `<img src="${item.src}" class="vault-item">`;
+            } else {
+                grid.innerHTML += `<video src="${item.src}" class="vault-item" controls></video>`;
             }
         });
-    </script>
+    }
+
+    function logout() {
+        location.reload();
+    }
+</script>
+
 </body>
 </html>
