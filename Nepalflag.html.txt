@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nepal Flag Animation</title>
+<style>
+body {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background-color: #f0f0f0;
+margin: 0;
+}
+
+/* झण्डा राख्ने ठाउँ */
+.flag-container {
+perspective: 1000px;
+}
+
+/* झण्डाको स्टाइल र साइज */
+.flag {
+width: 150px; /* झण्डाको चौडाइ (बढाउन सकिन्छ) */
+height: auto;
+display: block;
+
+/* एनिमेसन लागू गरिएको */
+animation: wave 2.5s infinite ease-in-out;
+
+/* बायाँ भाग (लठ्ठी तिर) बाट हल्लिने बनाउन */
+transform-origin: left center;
+
+/* अलि राम्रो देखाउन छाया (Shadow) */
+filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.2));
+}
+
+/* हल्लिने प्रभाव (Wave Animation) */
+@keyframes wave {
+0% {
+transform: rotate(0deg) skewY(0deg);
+}
+25% {
+transform: rotate(3deg) skewY(2deg) scaleX(1.02);
+}
+50% {
+transform: rotate(0deg) skewY(0deg);
+}
+75% {
+transform: rotate(-3deg) skewY(-2deg) scaleX(0.98);
+}
+100% {
+transform: rotate(0deg) skewY(0deg);
+}
+}
+</style>
+</head>
+<body>
+
+<div class="flag-container">
+<img src="https://psc.gov.np/assets/public/images/nepal_flag.gif"
+alt="Nepal Flag"
+class="flag">
+</div>
+
+</body>
+</html>
