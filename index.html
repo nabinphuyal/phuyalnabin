@@ -168,21 +168,25 @@
         }
         
         /* Header section with Flying Flag and Symbol */
-        header { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76); 
-            color: white; 
-            padding: 25px 10px; 
-            text-align: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            position: relative;
-            z-index: 1000;
-        }
-        .header-container { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 15px; 
-        }
+  <header>
+    <div class="header-container">
+        <iframe src="Nepalflag.html" 
+                style="width: 80px; height: 100px; border: none; overflow: hidden;" 
+                scrolling="no">
+        </iframe>
+        
+        <h1>Welcome to My Personal Website</h1>
+        
+        <img src="national simbol.png" alt="national simbol" class="national simbol">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
         
         @keyframes flagFly {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -703,3 +707,4 @@
 
 </body>
 </html>
+
