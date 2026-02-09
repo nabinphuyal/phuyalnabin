@@ -183,14 +183,25 @@
             justify-content: center; 
             gap: 15px; 
         }
-        
-        /* Iframe for your Github Flag File */
-        .flag-iframe {
-            width: 80px;
-            height: 60px;
-            border: none;
-            overflow: hidden;
-            background: transparent;
+
+        /* NEW NEPAL FLAG ANIMATION STYLE */
+        .flag-wrapper {
+            perspective: 1000px;
+        }
+        .animated-flag {
+            width: 50px; /* Header size */
+            height: auto;
+            display: block;
+            animation: waveFlag 2.5s infinite ease-in-out;
+            transform-origin: left center;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.2));
+        }
+
+        @keyframes waveFlag {
+            0%, 100% { transform: rotate(0deg) skewY(0deg); }
+            25% { transform: rotate(3deg) skewY(2deg) scaleX(1.02); }
+            50% { transform: rotate(0deg) skewY(0deg); }
+            75% { transform: rotate(-3deg) skewY(-2deg) scaleX(0.98); }
         }
 
         /* National Symbol - Static */
@@ -364,7 +375,9 @@
 
 <header>
     <div class="header-container">
-        <iframe src="Nepalflag.html" class="flag-iframe" scrolling="no"></iframe>
+        <div class="flag-wrapper">
+            <img src="https://psc.gov.np/assets/public/images/nepal_flag.gif" alt="Nepal Flag" class="animated-flag">
+        </div>
         
         <h1>Welcome to My Personal Website</h1>
         
@@ -486,7 +499,6 @@
 </footer>
 
 <script>
-    // ========== ALL YOUR ORIGINAL SCRIPTS ==========
     function showEnglish() {
         document.getElementById("english-info").classList.remove("hidden");
         document.getElementById("nepali-info").classList.add("hidden");
