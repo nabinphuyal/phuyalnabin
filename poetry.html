@@ -3,138 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Kabita Note & Secret Vault</title>
+    <title>Life-Time Secure Kabita Note & Vault</title>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --bg: #f4f7f6;
-            --white: #ffffff;
-        }
+        :root { --primary: #2c3e50; --secondary: #3498db; --vault: #0d1117; --accent: #e74c3c; --notice-bg: #1e293b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f4f7f6; color: #333; line-height: 1.6; }
+        
+        /* UI Components */
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--secondary); }
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        .btn-blue { background: var(--secondary); color: white; }
+        .btn-green { background: #27ae60; color: white; }
+        .btn-red { background: var(--accent); color: white; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); color: #333; }
+        /* Auth Section */
+        #auth-section { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        /* Vault UI */
+        #vault-section { display: none; background: var(--vault); color: #e2e8f0; min-height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 20px; overflow-y: auto; }
+        .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .vault-item { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; border: 1px solid #30363d; cursor: pointer; background: #000; }
+        
+        /* Full Screen Preview (LightBox) */
+        #preview-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        #preview-content { max-width: 90%; max-height: 90%; border-radius: 10px; }
+        .close-preview { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; font-weight: bold; }
 
-        /* Auth Styles */
-        .auth-card { background: var(--white); padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 450px; margin: 50px auto; }
-        .tabs { display: flex; margin-bottom: 20px; cursor: pointer; border-bottom: 2px solid #eee; }
-        .tab { flex: 1; padding: 10px; text-align: center; font-weight: bold; color: #777; }
-        .tab.active { color: var(--secondary); border-bottom: 2px solid var(--secondary); }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 500; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-        .btn { background: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
-        .btn:hover { background: #2980b9; }
+        /* Notice Box */
+        .notice-box { background: var(--notice-bg); border-left: 4px solid var(--secondary); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #cbd5e1; }
 
-        /* Main Content */
         #main-app { display: none; }
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .menu-btns { display: flex; gap: 10px; }
-        .btn-sm { padding: 8px 15px; font-size: 14px; width: auto; }
-        .vault-btn { background: #8e44ad; }
-
-        /* Content Sections */
-        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .poem-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--secondary); position: relative; }
-        .delete-btn { position: absolute; right: 10px; top: 10px; color: red; cursor: pointer; font-size: 12px; }
-
-        /* Secret Vault */
-        #secret-vault { display: none; background: #2c3e50; color: white; min-height: 80vh; padding: 30px; border-radius: 15px; }
-        .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
-        .vault-item { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #444; }
-
-        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
+        .poem-item { background: #fff; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 5px solid var(--secondary); position: relative; }
+        .del-btn { position: absolute; top: 10px; right: 10px; color: #ccc; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>Kabita Note <span style="color: #3498db;">& Vault</span></h1>
-    <p>सुरक्षित र गोप्य - तपाईंको आफ्नै डिजिटल डायरी</p>
+<div id="preview-overlay">
+    <span class="close-preview" onclick="closePreview()">&times;</span>
+    <div id="preview-media-container" style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"></div>
 </div>
 
-<div class="container">
-    <div id="auth-section">
-        <div class="auth-card">
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('login')">लग-इन</div>
-                <div class="tab" onclick="switchTab('signup')">नयाँ खाता</div>
-                <div class="tab" onclick="switchTab('forgot')">पासवर्ड बिर्सियो?</div>
-            </div>
-
-            <div id="login-form">
-                <div class="form-group">
-                    <label>फोन नम्बर (Phone Number)</label>
-                    <input type="text" id="l-phone" placeholder="Enter number">
-                </div>
-                <div class="form-group">
-                    <label>पासवर्ड (Password)</label>
-                    <input type="password" id="l-pass" placeholder="******">
-                </div>
-                <button class="btn" onclick="handleLogin()">प्रवेश गर्नुहोस्</button>
-            </div>
-
-            <div id="signup-form" style="display:none;">
-                <div class="form-group"><label>पूरा नाम (Full Name)</label><input type="text" id="s-name"></div>
-                <div class="form-group">
-                    <label>देश कोड र फोन (Country Code + Phone)</label>
-                    <input type="text" id="s-phone" placeholder="+977 98XXXXXXXX">
-                </div>
-                <div class="form-group"><label>जन्म मिति (Date of Birth)</label><input type="date" id="s-dob"></div>
-                <div class="form-group"><label>बलियो पासवर्ड (Strong Password)</label><input type="password" id="s-pass"></div>
-                <button class="btn" onclick="handleSignup()">खाता बनाउनुहोस्</button>
-            </div>
-
-            <div id="forgot-form" style="display:none;">
-                <p style="font-size: 13px; margin-bottom: 10px;">पासवर्ड रिसेट गर्न नाम र जन्म मिति मिल्नुपर्छ।</p>
-                <div class="form-group"><label>पूरा नाम</label><input type="text" id="f-name"></div>
-                <div class="form-group"><label>जन्म मिति</label><input type="date" id="f-dob"></div>
-                <button class="btn" onclick="handleForgot()">पासवर्ड देखाउनुहोस्</button>
-                <div id="recovered-pass" style="margin-top:15px; font-weight:bold; color:green;"></div>
-            </div>
-        </div>
+<div id="auth-section">
+    <h2 id="auth-title" style="text-align:center; margin-bottom:20px;">🔒 Life-Time Vault</h2>
+    <div id="login-fields">
+        <input type="text" id="l-phone" placeholder="फोन नम्बर">
+        <input type="password" id="l-pass" placeholder="पासवर्ड">
+        <button class="btn btn-blue" onclick="login()">Login</button>
+        <p style="text-align:center; margin-top:15px; font-size:14px;">खाता छैन? <a href="#" onclick="toggleAuth(true)">Register</a></p>
+    </div>
+    
+    <div id="signup-fields" style="display:none">
+        <input type="text" id="s-name" placeholder="पूरा नाम">
+        <input type="text" id="s-phone" placeholder="फोन नम्बर">
+        <input type="password" id="s-pass" placeholder="पासवर्ड">
+        <button class="btn btn-blue" onclick="signup()">Create Account</button>
+        <p style="text-align:center; margin-top:15px; font-size:14px;">खाता छ? <a href="#" onclick="toggleAuth(false)">Login</a></p>
     </div>
 
-    <div id="main-app">
-        <div class="nav-bar">
-            <div>नमस्ते, <b id="user-display">User</b></div>
-            <div class="menu-btns">
-                <button class="btn btn-sm vault-btn" onclick="toggleVault()">Secret Vault 🔐</button>
-                <button class="btn btn-sm" style="background:#7f8c8d" onclick="logout()">Log Out</button>
-            </div>
+    <div style="margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">
+        <p style="font-size:11px; color:#666; margin-bottom:10px;"><b>Backup Restore:</b> नयाँ फोनमा डाटा सार्न फाइल यहाँ हाल्नुहोस्।</p>
+        <input type="file" id="importFile" accept=".json" style="font-size:12px;">
+        <button class="btn btn-green" style="font-size:12px; padding:8px;" onclick="importData()">Restore Data</button>
+    </div>
+</div>
+
+<div id="main-app">
+    <div class="header">
+        <h1>My Diary & Vault</h1>
+        <p id="welcome-msg"></p>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h3>लेख्नुहोस्...</h3>
+            <input type="text" id="p-title" placeholder="शीर्षक">
+            <textarea id="p-body" placeholder="तपाईंको मनको कुरा यहाँ लेख्नुहोस्..." rows="4"></textarea>
+            <button class="btn btn-blue" onclick="addPoem()">Save Note</button>
         </div>
 
-        <div id="poem-content-area">
-            <div class="content-grid">
-                <div class="card">
-                    <h3>नयाँ कविता/नोट लेख्नुहोस्</h3><br>
-                    <input type="text" id="p-title" placeholder="शीर्षक..."><br><br>
-                    <textarea id="p-body" placeholder="यहाँ भावनाहरू लेख्नुहोस्..." rows="8"></textarea><br><br>
-                    <button class="btn" onclick="savePoem()">सुरक्षित गर्नुहोस्</button>
-                </div>
-                <div class="card">
-                    <h3>मेरो सङ्ग्रह</h3><br>
-                    <div id="poem-list"></div>
-                </div>
-            </div>
+        <div id="poem-list"></div>
+
+        <button class="btn" style="background:#6c5ce7; color:white; height:60px; font-size:18px; margin-top:20px;" onclick="openVault()">🔐 OPEN SECRET VAULT</button>
+        <button class="btn btn-red" onclick="logout()" style="margin-top:30px; opacity:0.6;">Logout</button>
+    </div>
+</div>
+
+<div id="vault-section">
+    <div class="container">
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom:20px;">
+            <h2 style="color:var(--secondary)">🔒 Private Vault</h2>
+            <button class="btn btn-red" style="width:100px; margin:0;" onclick="closeVault()">Exit</button>
         </div>
 
-        <div id="secret-vault">
-            <div style="display:flex; justify-content: space-between;">
-                <h2>Secret Vault (गोप्य ग्यालरी)</h2>
-                <button class="btn btn-sm" onclick="toggleVault()">बन्द गर्नुहोस्</button>
-            </div>
-            <p>यहाँ राखिएका फोटो र भिडियोहरू अरु कसैले देख्न सक्दैनन्।</p>
-            <div style="margin: 20px 0;">
-                <input type="file" id="vault-input" accept="image/*,video/*" multiple style="display:none;" onchange="uploadToVault()">
-                <button class="btn btn-sm" onclick="document.getElementById('vault-input').click()">+ फाइल थप्नुहोस्</button>
-            </div>
-            <div class="vault-grid" id="vault-grid"></div>
+        <div class="notice-box">
+            <p><b>💡 User Guide:</b> यो भित्रको फोटो/भिडियो तपाईंको फोनमा मात्र छ।</p>
+            <p style="font-size:11px; margin-top:5px;">डाटा हराउन नदिन तलको <b>Download Backup</b> बटन थिचेर फाइल सुरक्षित राख्नुहोला।</p>
+        </div>
+
+        <div class="card" style="background:#1c2128; border:1px solid #30363d;">
+            <p style="color:#aaa; font-size:12px; margin-bottom:10px;">फोटो वा भिडियो थप्नुहोस्:</p>
+            <input type="file" id="v-file" accept="image/*,video/*" multiple onchange="saveVaultFile()" style="color:white; font-size:12px;">
+        </div>
+
+        <div class="vault-grid" id="vault-grid"></div>
+
+        <div style="margin-top:40px; padding:20px; border-top:1px solid #333; text-align:center;">
+            <button class="btn btn-green" onclick="exportData()">📥 Download Life-Time Backup File</button>
+            <p style="font-size:11px; color:#666; margin-top:10px;">यो फाइललाई Google Drive वा Email मा सेभ गर्नुहोस्।</p>
         </div>
     </div>
 </div>
@@ -142,141 +120,83 @@
 <script>
     let currentUser = null;
 
-    // LocalStorage Helper
-    const getUsers = () => JSON.parse(localStorage.getItem('v_users') || '[]');
-    const setUsers = (users) => localStorage.setItem('v_users', JSON.stringify(users));
-    const getData = () => JSON.parse(localStorage.getItem('v_data') || '{}');
-    const setData = (data) => localStorage.setItem('v_data', JSON.stringify(data));
-
-    // Tab Switching
-    function switchTab(type) {
-        document.getElementById('login-form').style.display = type === 'login' ? 'block' : 'none';
-        document.getElementById('signup-form').style.display = type === 'signup' ? 'block' : 'none';
-        document.getElementById('forgot-form').style.display = type === 'forgot' ? 'block' : 'none';
-        document.querySelectorAll('.tab').forEach((t, i) => {
-            t.classList.remove('active');
-            if((type==='login' && i===0) || (type==='signup' && i===1) || (type==='forgot' && i===2)) t.classList.add('active');
-        });
+    function toggleAuth(isSignup) {
+        document.getElementById('login-fields').style.display = isSignup ? 'none' : 'block';
+        document.getElementById('signup-fields').style.display = isSignup ? 'block' : 'none';
+        document.getElementById('auth-title').innerText = isSignup ? 'Register' : '🔒 Secure Login';
     }
 
-    // Signup Logic
-    function handleSignup() {
+    function signup() {
         const name = document.getElementById('s-name').value;
         const phone = document.getElementById('s-phone').value;
-        const dob = document.getElementById('s-dob').value;
         const pass = document.getElementById('s-pass').value;
-
-        if(!name || !phone || !dob || !pass) return alert("सबै खाली ठाउँ भर्नुहोस्!");
-
-        let users = getUsers();
-        if(users.find(u => u.phone === phone)) return alert("यो नम्बरबाट पहिले नै खाता बनिसकेको छ!");
-
-        users.push({ name, phone, dob, pass });
-        setUsers(users);
-        alert("आईडी बन्यो! अब लग-इन गर्नुहोस्।");
-        switchTab('login');
+        if(!name || !phone || !pass) return alert("सबै विवरण भर्नुहोस्!");
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        if(users.find(u => u.phone === phone)) return alert("यो नम्बरमा आईडी छ!");
+        users.push({ name, phone, pass });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert("Success! Now Login.");
+        toggleAuth(false);
     }
 
-    // Login Logic
-    function handleLogin() {
+    function login() {
         const phone = document.getElementById('l-phone').value;
         const pass = document.getElementById('l-pass').value;
-        const user = getUsers().find(u => u.phone === phone && u.pass === pass);
-
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.phone === phone && u.pass === pass);
         if(user) {
             currentUser = user;
-            launchApp();
-        } else {
-            alert("नम्बर वा पासवर्ड मिलेन!");
-        }
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = "नमस्ते, " + user.name;
+            renderPoems();
+        } else alert("Invalid Login!");
     }
 
-    // Forgot Password Logic
-    function handleForgot() {
-        const name = document.getElementById('f-name').value;
-        const dob = document.getElementById('f-dob').value;
-        const user = getUsers().find(u => u.name === name && u.dob === dob);
-
-        if(user) {
-            document.getElementById('recovered-pass').innerHTML = "तपाईंको पासवर्ड: " + user.pass;
-        } else {
-            alert("विवरण मिलेन! कृपया सही नाम र जन्म मिति राख्नुहोस्।");
-        }
-    }
-
-    // Launch App
-    function launchApp() {
-        document.getElementById('auth-section').style.display = 'none';
-        document.getElementById('main-app').style.display = 'block';
-        document.getElementById('user-display').innerText = currentUser.name;
-        renderPoems();
-        renderVault();
-    }
-
-    // Poem Logic
-    function savePoem() {
+    function addPoem() {
         const title = document.getElementById('p-title').value;
         const body = document.getElementById('p-body').value;
-        if(!title || !body) return alert("शीर्षक र नोट लेख्नुहोस्!");
-
-        let data = getData();
-        if(!data[currentUser.phone]) data[currentUser.phone] = { poems: [], vault: [] };
-        
-        data[currentUser.phone].poems.push({ title, body, date: new Date().toLocaleString() });
-        setData(data);
-        
+        if(!title || !body) return;
+        let allData = JSON.parse(localStorage.getItem('app_data') || '{}');
+        if(!allData[currentUser.phone]) allData[currentUser.phone] = { poems: [], vault: [] };
+        allData[currentUser.phone].poems.unshift({ title, body, id: Date.now() });
+        localStorage.setItem('app_data', JSON.stringify(allData));
+        renderPoems();
         document.getElementById('p-title').value = '';
         document.getElementById('p-body').value = '';
-        renderPoems();
     }
 
     function renderPoems() {
-        const data = getData()[currentUser.phone] || { poems: [] };
-        const list = document.getElementById('poem-list');
-        list.innerHTML = data.poems.length ? '' : '<p>अहिलेसम्म केही लेखिएको छैन।</p>';
+        const allData = JSON.parse(localStorage.getItem('app_data') || '{}');
+        const poems = allData[currentUser.phone]?.poems || [];
+        document.getElementById('poem-list').innerHTML = poems.map(p => `
+            <div class="poem-item">
+                <strong>${p.title}</strong>
+                <p style="margin-top:5px; white-space:pre-wrap; font-size:14px;">${p.body}</p>
+            </div>
+        `).join('');
+    }
+
+    function openVault() {
+        const pin = prompt("Confirm Password to enter Vault:");
+        if(pin === currentUser.pass) {
+            document.getElementById('vault-section').style.display = 'block';
+            renderVault();
+        } else alert("Wrong Password!");
+    }
+
+    function closeVault() { document.getElementById('vault-section').style.display = 'none'; }
+
+    function saveVaultFile() {
+        const files = document.getElementById('v-file').files;
+        let allData = JSON.parse(localStorage.getItem('app_data') || '{}');
+        if(!allData[currentUser.phone].vault) allData[currentUser.phone].vault = [];
         
-        data.poems.forEach((p, index) => {
-            list.innerHTML += `
-                <div class="poem-item">
-                    <span class="delete-btn" onclick="deletePoem(${index})">❌</span>
-                    <b>${p.title}</b><br>
-                    <small>${p.date}</small>
-                    <p style="margin-top:10px; white-space: pre-wrap;">${p.body}</p>
-                </div>
-            `;
-        });
-    }
-
-    function deletePoem(index) {
-        let data = getData();
-        data[currentUser.phone].poems.splice(index, 1);
-        setData(data);
-        renderPoems();
-    }
-
-    // Vault Logic
-    function toggleVault() {
-        const v = document.getElementById('secret-vault');
-        const p = document.getElementById('poem-content-area');
-        if(v.style.display === 'none' || v.style.display === '') {
-            v.style.display = 'block';
-            p.style.display = 'none';
-        } else {
-            v.style.display = 'none';
-            p.style.display = 'block';
-        }
-    }
-
-    function uploadToVault() {
-        const files = document.getElementById('vault-input').files;
-        let data = getData();
-        if(!data[currentUser.phone]) data[currentUser.phone] = { poems: [], vault: [] };
-
         Array.from(files).forEach(file => {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                data[currentUser.phone].vault.push({ type: file.type, src: e.target.result });
-                setData(data);
+            reader.onload = (e) => {
+                allData[currentUser.phone].vault.push({ src: e.target.result, type: file.type });
+                localStorage.setItem('app_data', JSON.stringify(allData));
                 renderVault();
             };
             reader.readAsDataURL(file);
@@ -284,23 +204,58 @@
     }
 
     function renderVault() {
-        const data = getData()[currentUser.phone] || { vault: [] };
+        const allData = JSON.parse(localStorage.getItem('app_data') || '{}');
+        const items = allData[currentUser.phone]?.vault || [];
         const grid = document.getElementById('vault-grid');
-        grid.innerHTML = '';
-        
-        data.vault.forEach(item => {
+        grid.innerHTML = items.map((item, index) => {
             if(item.type.includes('image')) {
-                grid.innerHTML += `<img src="${item.src}" class="vault-item">`;
+                return `<img src="${item.src}" class="vault-item" onclick="viewFull('${item.src}', 'img')">`;
             } else {
-                grid.innerHTML += `<video src="${item.src}" class="vault-item" controls></video>`;
+                return `<video src="${item.src}" class="vault-item" onclick="viewFull('${item.src}', 'vid')"></video>`;
             }
-        });
+        }).join('');
     }
 
-    function logout() {
-        location.reload();
+    // Full Screen View Logic
+    function viewFull(src, type) {
+        const overlay = document.getElementById('preview-overlay');
+        const container = document.getElementById('preview-media-container');
+        overlay.style.display = 'flex';
+        if(type === 'img') {
+            container.innerHTML = `<img src="${src}" id="preview-content">`;
+        } else {
+            container.innerHTML = `<video src="${src}" id="preview-content" controls autoplay></video>`;
+        }
     }
+
+    function closePreview() {
+        document.getElementById('preview-overlay').style.display = 'none';
+        document.getElementById('preview-media-container').innerHTML = '';
+    }
+
+    function exportData() {
+        const data = { users: localStorage.getItem('users'), app_data: localStorage.getItem('app_data') };
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `My_Secure_Vault_Backup.json`;
+        a.click();
+    }
+
+    function importData() {
+        const file = document.getElementById('importFile').files[0];
+        if(!file) return alert("Select file!");
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const d = JSON.parse(e.target.result);
+            localStorage.setItem('users', d.users);
+            localStorage.setItem('app_data', d.app_data);
+            alert("Data Restored!"); location.reload();
+        };
+        reader.readAsText(file);
+    }
+
+    function logout() { location.reload(); }
 </script>
-
 </body>
 </html>
