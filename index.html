@@ -14,90 +14,111 @@
         /* ========== 3-LINE HAMBURGER MENU LEFT SIDE ========== */
         .hamburger-menu-container {
             position: fixed;
-            top: 10px;
-            left: 10px;
+            top: 20px;
+            left: 20px;
             z-index: 1001;
         }
         
         .hamburger-btn { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            background: linear-gradient(135deg, #ff69b4, #da1b76);
             color: white; 
-            padding: 12px 15px; 
-            border-radius: 10px; 
+            padding: 14px 16px;
+            border-radius: 12px;
             font-weight: bold; 
-            width: 50px; 
-            height: 50px;
+            width: 55px;
+            height: 55px;
             text-align: center; 
             cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
-            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 4px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
         .hamburger-btn:hover { 
-            background: linear-gradient(90deg, #da1b76, #c71585); 
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #da1b76, #c71585); 
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(218, 27, 118, 0.6);
         }
         
         .hamburger-line {
-            width: 25px;
+            width: 26px;
             height: 3px;
             background-color: white;
-            border-radius: 2px;
-            transition: 0.3s;
+            border-radius: 3px;
+            transition: all 0.3s ease;
         }
-        
-        /* Changed: Menu always visible when hamburger is clicked */
-        .<div class="menu-wrapper">
-    <div class="hamburger" id="menuBtn">
-        ☰
-    </div>
 
-    <div class="menu-options" id="menuBox">
-        <a href="#">➕ Create New Account</a>
-        <a href="#">🔐 Login with ID/Password</a>
-        <a href="#">🤖 Chat AI</a>
-        <a href="#">✍️ Poetry</a>
-    </div>
-</div>
-}
+        .hamburger-btn:hover .hamburger-line:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+            width: 20px;
         }
+        .hamburger-btn:hover .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-btn:hover .hamburger-line:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+            width: 20px;
+        }
+
+        /* Menu Options */
+        .menu-options {
+            display: none;
+            position: absolute;
+            top: 65px;
+            left: 0;
+            background: white;
+            width: 260px;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+            overflow: hidden;
+            z-index: 1002;
+            animation: elegantReveal 0.4s ease-out;
+            border: 1px solid #f0f0f0;
+        }
+
         .menu-options button { 
             width: 100%; 
-            padding: 14px; 
+            padding: 16px 20px;
             border: none; 
             background: none; 
             cursor: pointer; 
             border-bottom: 1px solid #f0f0f0; 
             text-align: left; 
-            font-size: 14px; 
-            transition: 0.2s; 
+            font-size: 15px; 
+            transition: all 0.25s ease; 
             font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: #444;
         }
         .menu-options button:hover { 
-            background: #f8f9fa; 
+            background: linear-gradient(to right, #fff9fc, #fdf2f9);
             color: #ff69b4; 
+            padding-left: 24px;
+        }
+        .menu-options button:last-child {
+            border-bottom: none;
         }
         
         /* Menu Forms */
         .menu-form-card { 
             background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15); 
-            width: 320px; 
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+            width: 330px;
             position: fixed;
-            top: 80px;
-            left: 20px;
+            top: 90px;
+            left: 25px;
             z-index: 1003;
             display: none;
             animation: nbnPop 0.4s ease-out;
+            border: 1px solid #eee;
         }
         
         .input-box { 
@@ -168,7 +189,12 @@
             50% { transform: translateY(-8px) rotate(5deg); }
         }
         
-   
+        /* Flag Animation */
+        .flying-flag { 
+            width: 45px; 
+            height: auto; 
+            animation: flagFly 2s ease-in-out infinite; 
+        }
 
         /* National Symbol - Static (No Animation) */
         .national.simbol { 
@@ -177,7 +203,13 @@
             display: block;
         }
         
-       
+        /* Right flag flipped to face left */
+        .flipped-flag { transform: scaleX(-1); animation: flagFlyRight 2s ease-in-out infinite; }
+        @keyframes flagFlyRight {
+            0%, 100% { transform: scaleX(-1) translateY(0) rotate(0deg); }
+            50% { transform: scaleX(-1) translateY(-8px) rotate(-5deg); }
+        }
+
         nav ul { display: flex; justify-content: center; list-style: none; margin-top: 10px; }
         nav ul li { margin: 0 15px; }
         nav ul li a { color: white; text-decoration: none; font-size: 18px; font-weight: 500; }
@@ -521,12 +553,12 @@
         const body = document.getElementById('nbn-chat-body');
         const text = input.value.trim();
         if (text === "") return;
-        body.innerHTML += `<div class="msg user-msg">${text}</div>`;
+        body.innerHTML += <div class="msg user-msg">${text}</div>;
         input.value = "";
         body.scrollTop = body.scrollHeight;
         setTimeout(() => {
             const lang = isNepali ? 'np' : 'en';
-            body.innerHTML += `<div class="msg ai-msg" id="current-ai-reply">${languages[lang].reply}</div>`;
+            body.innerHTML += <div class="msg ai-msg" id="current-ai-reply">${languages[lang].reply}</div>;
             body.scrollTop = body.scrollHeight;
         }, 800);
     }
@@ -601,7 +633,7 @@
             currentUser = user;
             hideAllForms();
             document.getElementById('after-login').style.display = 'block';
-            document.getElementById('welcomeMsg').innerText = `Namaste, ${user.fullName}!`;
+            document.getElementById('welcomeMsg').innerText = Namaste, ${user.fullName}!;
             document.getElementById('post-login-content').innerHTML = '';
         } else {
             alert('Invalid Credentials!');
@@ -647,7 +679,7 @@
     }
     
     function showSMS() { 
-        alert(`Sending private SMS to ${currentUser.phone}...`); 
+        alert(Sending private SMS to ${currentUser.phone}...); 
     }
     
     function logout() { 
@@ -671,7 +703,3 @@
 
 </body>
 </html>
-
-
-
-
