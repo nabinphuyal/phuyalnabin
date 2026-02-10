@@ -1,187 +1,60 @@
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-<meta charset="UTF-8">
-<title>🔐 Secure Poetry Diary & Vault (Web)</title>
-<style>
-body{margin:0;font-family:Arial;background:#667eea}
-.container{max-width:1100px;margin:auto;padding:20px}
-.hidden{display:none}
-.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px}
-button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer}
-input,textarea{width:100%;padding:8px;margin:6px 0}
-.note{border-left:4px solid #667eea;padding:10px;margin:10px 0}
-.vault-item{width:120px;height:120px;overflow:hidden;position:relative}
-.vault-item img,.vault-item video{width:100%;height:100%;object-fit:cover}
-.actions{display:flex;gap:5px;margin-top:5px}
-</style>
+  <meta charset="UTF-8" />
+  <title>🔐 Secure Poetry Diary & Vault (Firebase)</title>
+  <style>
+    body{margin:0;font-family:Arial;background:#667eea}
+    .container{max-width:1100px;margin:auto;padding:20px}
+    .hidden{display:none}
+    .card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px}
+    button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer}
+    input,textarea{width:100%;padding:8px;margin:6px 0}
+    .note{border-left:4px solid #667eea;padding:10px;margin:10px 0}
+    .vault-item{width:120px;height:120px;overflow:hidden;position:relative}
+    .vault-item img,.vault-item video{width:100%;height:100%;object-fit:cover}
+    .actions{display:flex;gap:5px;margin-top:5px}
+  </style>
 </head>
-
 <body>
-<div class="container">
+  <div class="container">
 
-<!-- LOGIN -->
-<div id="loginCard" class="card">
-<h2>🔐 Login</h2>
-<input id="phone" placeholder="Phone">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<button onclick="register()">Register</button>
-</div>
+    <!-- LOGIN -->
+    <div id="loginCard" class="card">
+      <h2>🔐 Login with Phone</h2>
+      <input id="phone" placeholder="+977-XXXXXXXXXX" />
+      <button onclick="sendOTP()">Send OTP</button>
+      <div id="recaptcha-container"></div>
 
-<!-- APP -->
-<div id="app" class="hidden">
+      <div id="otpSection" style="display:none; margin-top: 10px;">
+        <input id="otp" placeholder="Enter OTP" />
+        <button onclick="verifyOTP()">Verify OTP</button>
+      </div>
+    </div>
 
-<div class="card">
-<h3>📝 Poetry / Notes</h3>
-<input id="title" placeholder="Title">
-<input id="tag" placeholder="Tag (love, pain...)">
-<textarea id="content" placeholder="Write..."></textarea>
-<button onclick="saveNote()">Save</button>
+    <!-- APP -->
+    <div id="app" class="hidden">
+      <div class="card">
+        <h3>📝 Poetry / Notes</h3>
+        <input id="title" placeholder="Title" />
+        <input id="tag" placeholder="Tag (love, pain...)" />
+        <textarea id="content" placeholder="Write..."></textarea>
+        <button onclick="saveNote()">Save</button>
+        <input placeholder="🔍 Search" oninput="searchNotes(this.value)" />
+        <div id="notes"></div>
+      </div>
 
-<input placeholder="🔍 Search" oninput="searchNotes(this.value)">
-<div id="notes"></div>
-</div>
+      <div class="card">
+        <h3>🔐 Vault</h3>
+        <button onclick="openVault()">Open / Add Media</button>
+        <div id="vault" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+      </div>
 
-<div class="card">
-<h3>🔐 Vault</h3>
-<button onclick="openVault()">Open / Add Media</button>
-<div id="vault" style="display:flex;gap:10px;flex-wrap:wrap"></div>
-</div>
+      <button onclick="logout()">Logout</button>
+    </div>
 
-<button onclick="logout()">Logout</button>
-</div>
+  </div>
 
-</div>
-
-<script>
-let user=null,data=null,vaultOpen=false;
-
-function register(){
-if(!phone.value||!pass.value)return alert("Fill all");
-let users=JSON.parse(localStorage.users||"[]");
-if(users.find(u=>u.phone==phone.value))return alert("Exists");
-user={phone:phone.value,pass:pass.value};
-users.push(user);
-localStorage.users=JSON.stringify(users);
-localStorage.data=localStorage.data||"{}";
-alert("Registered");
-}
-
-function login(){
-let users=JSON.parse(localStorage.users||"[]");
-user=users.find(u=>u.phone==phone.value&&u.pass==pass.value);
-if(!user)return alert("Wrong");
-let all=JSON.parse(localStorage.data||"{}");
-data=all[user.phone]||{notes:[],vault:[],pin:null};
-all[user.phone]=data;
-localStorage.data=JSON.stringify(all);
-loginCard.classList.add("hidden");
-app.classList.remove("hidden");
-renderNotes();renderVault();
-}
-
-function save(){
-let all=JSON.parse(localStorage.data);
-all[user.phone]=data;
-localStorage.data=JSON.stringify(all);
-}
-
-function saveNote(){
-let note={
-id:Date.now(),
-title:title.value,
-tag:tag.value,
-content:content.value,
-locked:false
-};
-data.notes.unshift(note);
-save();renderNotes();
-title.value=tag.value=content.value="";
-}
-
-function renderNotes(list=data.notes){
-notes.innerHTML="";
-list.forEach(n=>{
-let div=document.createElement("div");
-div.className="note";
-div.innerHTML=`<b>${n.title}</b> [${n.tag}]<br>${n.content}
-<div class="actions">
-<button onclick="lockNote(${n.id})">🔒</button>
-<button onclick="delNote(${n.id})">🗑</button>
-</div>`;
-notes.appendChild(div);
-});
-}
-
-function searchNotes(q){
-renderNotes(data.notes.filter(n=>n.title.includes(q)||n.content.includes(q)));
-}
-
-function lockNote(id){
-let n=data.notes.find(n=>n.id==id);
-let p=prompt("Set PIN");
-if(p){n.locked=true;n.pin=p;save();}
-}
-
-function delNote(id){
-data.notes=data.notes.filter(n=>n.id!=id);
-save();renderNotes();
-}
-
-function openVault(){
-if(!data.pin){
-let p=prompt("Set 4 digit PIN");
-if(!p||p.length!=4)return;
-data.pin=p;save();
-}
-let pin=prompt("Enter PIN");
-if(pin!=data.pin)return alert("Wrong PIN");
-
-let i=document.createElement("input");
-i.type="file";i.accept="image/*,video/*";i.multiple=true;
-i.onchange=e=>{
-[...e.target.files].forEach(f=>{
-let r=new FileReader();
-r.onload=ev=>{
-data.vault.unshift({
-id:Date.now()+Math.random(),
-data:ev.target.result,
-type:f.type.startsWith("image")?"img":"vid",
-hidden:false
-});
-save();renderVault();
-};
-r.readAsDataURL(f);
-});
-};
-i.click();
-}
-
-function renderVault(){
-vault.innerHTML="";
-data.vault.filter(v=>!v.hidden).forEach(v=>{
-let d=document.createElement("div");
-d.className="vault-item";
-d.innerHTML=v.type=="img"
-?`<img src="${v.data}">`
-:`<video src="${v.data}"></video>`;
-d.onclick=()=>viewVault(v.id);
-vault.appendChild(d);
-});
-}
-
-function viewVault(id){
-let pin=prompt("PIN");
-if(pin!=data.pin)return;
-let v=data.vault.find(v=>v.id==id);
-let act=prompt("1 Hide  2 Delete");
-if(act=="1"){v.hidden=true}
-if(act=="2"){data.vault=data.vault.filter(x=>x.id!=id)}
-save();renderVault();
-}
-
-function logout(){location.reload();}
-</script>
+  <!-- Firebase and app logic script is here (paste the script from Step 1) -->
 </body>
 </html>
