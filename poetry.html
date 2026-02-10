@@ -1,1130 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 जीवनभर सिक्योर कबिता डायरी र भल्ट</title>
-    <style>
-        :root {
-            --primary: #1a237e;
-            --secondary: #00bcd4;
-            --dark: #0a0e17;
-            --light: #f8f9fa;
-            --success: #4caf50;
-            --danger: #ff5252;
-            --warning: #ff9800;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-        }
-        
-        /* Auth Container */
-        .auth-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            animation: slideUp 0.5s ease;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .auth-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .auth-header h1 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-        
-        .auth-header p {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        /* Tabs */
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #eee;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            color: #777;
-            transition: all 0.3s;
-            border-bottom: 3px solid transparent;
-        }
-        
-        .auth-tab.active {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
-        }
-        
-        /* Forms */
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-            font-size: 14px;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
-        }
-        
-        /* Buttons */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Main App */
-        .app-container {
-            display: none;
-            width: 100%;
-        }
-        
-        .app-header {
-            background: rgba(10, 14, 23, 0.95);
-            color: white;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .app-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 0 0 15px 15px;
-        }
-        
-        @media (max-width: 768px) {
-            .app-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Notes Section */
-        .notes-section, .vault-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .section-title {
-            color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        /* Note Cards */
-        .note-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--secondary);
-            position: relative;
-        }
-        
-        .note-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        .note-content {
-            color: #555;
-            font-size: 14px;
-            white-space: pre-wrap;
-            line-height: 1.5;
-        }
-        
-        .note-date {
-            font-size: 12px;
-            color: #888;
-            margin-top: 10px;
-            text-align: right;
-        }
-        
-        .delete-note {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: var(--danger);
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
-        
-        .delete-note:hover {
-            opacity: 1;
-        }
-        
-        /* Vault Grid */
-        .vault-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-        
-        .vault-item {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            height: 150px;
-        }
-        
-        .vault-item img, .vault-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-        
-        .vault-item:hover img, .vault-item:hover video {
-            transform: scale(1.05);
-        }
-        
-        .vault-item-type {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        
-        /* Vault Fullscreen */
-        .vault-fullscreen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .vault-preview {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 10px;
-        }
-        
-        .close-preview {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 40px;
-            cursor: pointer;
-        }
-        
-        /* Backup Section */
-        .backup-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-        }
-        
-        .backup-info {
-            font-size: 12px;
-            color: #666;
-            margin-top: 10px;
-            line-height: 1.5;
-        }
-        
-        /* Alert Messages */
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        /* User Info */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>🔐 Secure Poetry Diary & Vault (Web)</title>
+<style>
+body{margin:0;font-family:Arial;background:#667eea}
+.container{max-width:1100px;margin:auto;padding:20px}
+.hidden{display:none}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px}
+button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer}
+input,textarea{width:100%;padding:8px;margin:6px 0}
+.note{border-left:4px solid #667eea;padding:10px;margin:10px 0}
+.vault-item{width:120px;height:120px;overflow:hidden;position:relative}
+.vault-item img,.vault-item video{width:100%;height:100%;object-fit:cover}
+.actions{display:flex;gap:5px;margin-top:5px}
+</style>
 </head>
+
 <body>
-    <!-- Authentication Section -->
-    <div class="container">
-        <div class="auth-container" id="authContainer">
-            <div class="auth-header">
-                <h1>🔐 जीवनभर सिक्योर डायरी</h1>
-                <p>एक पटक ID बनाउनुहोस्, जीवनभर प्रयोग गर्नुहोस्</p>
-            </div>
-            
-            <div class="alert" id="alertMessage"></div>
-            
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="showTab('login')">लगइन</div>
-                <div class="auth-tab" onclick="showTab('register')">रजिस्टर</div>
-            </div>
-            
-            <!-- Login Form -->
-            <div class="auth-form active" id="loginForm">
-                <div class="form-group">
-                    <label class="form-label">फोन नम्बर</label>
-                    <input type="text" class="form-input" id="loginPhone" placeholder="98XXXXXXXX" maxlength="10">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">पासवर्ड</label>
-                    <input type="password" class="form-input" id="loginPassword" placeholder="पासवर्ड">
-                </div>
-                
-                <button class="btn btn-primary" onclick="login()">
-                    <span>🔓 लगइन गर्नुहोस्</span>
-                </button>
-                
-                <div class="backup-info">
-                    <p><strong>ध्यान दिनुहोस्:</strong> एउटा ID सबै डिभाइसमा काम गर्नेछ। पासवर्ड बिर्सनुभयो भने फोन नम्बर र जन्म मिति प्रयोग गरेर रिकभर गर्न सक्नुहुन्छ।</p>
-                </div>
-            </div>
-            
-            <!-- Register Form -->
-            <div class="auth-form" id="registerForm">
-                <div class="form-group">
-                    <label class="form-label">पूरा नाम</label>
-                    <input type="text" class="form-input" id="registerName" placeholder="तपाईंको पूरा नाम">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">जन्म मिति</label>
-                    <input type="date" class="form-input" id="registerDOB">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">फोन नम्बर</label>
-                    <input type="text" class="form-input" id="registerPhone" placeholder="98XXXXXXXX" maxlength="10">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">पासवर्ड</label>
-                    <input type="password" class="form-input" id="registerPassword" placeholder="बलियो पासवर्ड">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">पासवर्ड पुष्टि गर्नुहोस्</label>
-                    <input type="password" class="form-input" id="registerConfirmPassword" placeholder="पासवर्ड पुनः लेख्नुहोस्">
-                </div>
-                
-                <button class="btn btn-success" onclick="register()">
-                    <span>📝 खाता बनाउनुहोस्</span>
-                </button>
-                
-                <div class="backup-info">
-                    <p><strong>जानकारी:</strong> यो ID लाइफटाइम चल्नेछ। फोन, कम्प्युटर, ट्याब्लेट - कुनै पनि डिभाइसमा प्रयोग गर्न सक्नुहुन्छ। पासवर्ड बिर्सन नदिनुहोस्!</p>
-                </div>
-            </div>
-            
-            <!-- Backup/Restore -->
-            <div class="backup-section">
-                <div class="form-group">
-                    <label class="form-label">ब्याकअप फाइल आयात गर्नुहोस् (.json)</label>
-                    <input type="file" class="form-input" id="backupFile" accept=".json">
-                </div>
-                
-                <button class="btn btn-secondary" onclick="importBackup()">
-                    <span>📂 डाटा पुनःस्थापना गर्नुहोस्</span>
-                </button>
-            </div>
-        </div>
-        
-        <!-- Main Application -->
-        <div class="app-container" id="appContainer">
-            <!-- Header -->
-            <div class="app-header">
-                <div>
-                    <h2>📖 मेरो सिक्योर डायरी</h2>
-                    <p id="welcomeText"></p>
-                </div>
-                
-                <div class="user-info">
-                    <div class="user-avatar" id="userAvatar"></div>
-                    <div>
-                        <div id="userName"></div>
-                        <button class="btn btn-danger" onclick="logout()" style="width: auto; padding: 8px 15px; font-size: 14px;">
-                            लगआउट
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Main Content -->
-            <div class="app-content">
-                <!-- Left: Notes Section -->
-                <div class="notes-section">
-                    <div class="section-title">
-                        <span>📝 नयाँ कबिता/नोट लेख्नुहोस्</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="text" class="form-input" id="noteTitle" placeholder="शीर्षक">
-                    </div>
-                    
-                    <div class="form-group">
-                        <textarea class="form-input" id="noteContent" rows="5" placeholder="तपाईंको मनको कुरा यहाँ लेख्नुहोस्..."></textarea>
-                    </div>
-                    
-                    <button class="btn btn-primary" onclick="saveNote()">
-                        <span>💾 सेभ गर्नुहोस्</span>
-                    </button>
-                    
-                    <div class="section-title" style="margin-top: 30px;">
-                        <span>📜 मेरा सबै नोटहरू</span>
-                    </div>
-                    
-                    <div id="notesList">
-                        <!-- Notes will appear here -->
-                    </div>
-                </div>
-                
-                <!-- Right: Vault Section -->
-                <div class="vault-section">
-                    <div class="section-title">
-                        <span>🔐 सिक्योर मिडिया भल्ट</span>
-                    </div>
-                    
-                    <div class="backup-info">
-                        <p>भल्टमा राखिएका फोटो/भिडियो कसैले हेर्न सक्दैनन्। तपाईंले मात्र पिन प्रयोग गरेर हेर्न सक्नुहुन्छ।</p>
-                    </div>
-                    
-                    <button class="btn btn-secondary" onclick="openVault()" style="margin-bottom: 20px;">
-                        <span>🔓 भल्ट खोल्नुहोस्</span>
-                    </button>
-                    
-                    <div class="vault-grid" id="vaultGrid">
-                        <!-- Vault items will appear here -->
-                    </div>
-                    
-                    <div class="backup-section">
-                        <div class="section-title">
-                            <span>💾 ब्याकअप गर्नुहोस्</span>
-                        </div>
-                        
-                        <button class="btn btn-success" onclick="exportBackup()">
-                            <span>📥 सम्पूर्ण डाटा डाउनलोड गर्नुहोस्</span>
-                        </button>
-                        
-                        <div class="backup-info">
-                            <p>ब्याकअप फाइल डाउनलोड गरेर सुरक्षित ठाउँमा राख्नुहोस्। यसै फाइल प्रयोग गरेर कुनै पनि डिभाइसमा तपाईंको डाटा पुनःस्थापना गर्न सक्नुहुन्छ।</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Vault Fullscreen Preview -->
-    <div class="vault-fullscreen" id="vaultPreview">
-        <span class="close-preview" onclick="closePreview()">&times;</span>
-        <div id="previewContent"></div>
-    </div>
+<div class="container">
 
-    <script>
-        // Global Variables
-        let currentUser = null;
-        let userData = null;
-        let isVaultOpen = false;
+<!-- LOGIN -->
+<div id="loginCard" class="card">
+<h2>🔐 Login</h2>
+<input id="phone" placeholder="Phone">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="register()">Register</button>
+</div>
 
-        // Show/Hide Tabs
-        function showTab(tab) {
-            // Update tabs
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
-            if (tab === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
-            }
-        }
+<!-- APP -->
+<div id="app" class="hidden">
 
-        // Show Alert
-        function showAlert(message, type = 'success') {
-            const alert = document.getElementById('alertMessage');
-            alert.textContent = message;
-            alert.className = `alert alert-${type}`;
-            alert.style.display = 'block';
-            
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 5000);
-        }
+<div class="card">
+<h3>📝 Poetry / Notes</h3>
+<input id="title" placeholder="Title">
+<input id="tag" placeholder="Tag (love, pain...)">
+<textarea id="content" placeholder="Write..."></textarea>
+<button onclick="saveNote()">Save</button>
 
-        // Register Function
-        function register() {
-            const name = document.getElementById('registerName').value.trim();
-            const dob = document.getElementById('registerDOB').value;
-            const phone = document.getElementById('registerPhone').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            // Validation
-            if (!name || !dob || !phone || !password) {
-                showAlert('सबै विवरण भर्नुहोस्!', 'error');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showAlert('पासवर्ड मेल खाएन!', 'error');
-                return;
-            }
-            
-            if (phone.length !== 10 || isNaN(phone)) {
-                showAlert('सही फोन नम्बर लेख्नुहोस्!', 'error');
-                return;
-            }
-            
-            // Get existing users
-            const users = JSON.parse(localStorage.getItem('secure_diary_users') || '[]');
-            
-            // Check if user already exists
-            if (users.find(user => user.phone === phone)) {
-                showAlert('यो फोन नम्बरमा पहिले नै खाता छ!', 'error');
-                return;
-            }
-            
-            // Create new user
-            const newUser = {
-                id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                name: name,
-                dob: dob,
-                phone: phone,
-                password: password,
-                created: new Date().toISOString(),
-                lastLogin: new Date().toISOString()
-            };
-            
-            // Save user
-            users.push(newUser);
-            localStorage.setItem('secure_diary_users', JSON.stringify(users));
-            
-            // Initialize user data
-            const userAppData = {
-                userId: newUser.id,
-                notes: [],
-                vault: [],
-                settings: {
-                    vaultPin: null,
-                    lastBackup: null
-                }
-            };
-            
-            const allData = JSON.parse(localStorage.getItem('secure_diary_data') || '{}');
-            allData[newUser.id] = userAppData;
-            localStorage.setItem('secure_diary_data', JSON.stringify(allData));
-            
-            showAlert('खाता सफलतापूर्वक बन्यो! अब लगइन गर्नुहोस्।', 'success');
-            showTab('login');
-            
-            // Clear form
-            document.getElementById('registerName').value = '';
-            document.getElementById('registerDOB').value = '';
-            document.getElementById('registerPhone').value = '';
-            document.getElementById('registerPassword').value = '';
-            document.getElementById('registerConfirmPassword').value = '';
-        }
+<input placeholder="🔍 Search" oninput="searchNotes(this.value)">
+<div id="notes"></div>
+</div>
 
-        // Login Function
-        function login() {
-            const phone = document.getElementById('loginPhone').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            // Validation
-            if (!phone || !password) {
-                showAlert('फोन नम्बर र पासवर्ड भर्नुहोस्!', 'error');
-                return;
-            }
-            
-            // Get users
-            const users = JSON.parse(localStorage.getItem('secure_diary_users') || '[]');
-            const user = users.find(u => u.phone === phone && u.password === password);
-            
-            if (!user) {
-                showAlert('गलत फोन नम्बर वा पासवर्ड!', 'error');
-                return;
-            }
-            
-            // Update last login
-            user.lastLogin = new Date().toISOString();
-            localStorage.setItem('secure_diary_users', JSON.stringify(users));
-            
-            // Set current user
-            currentUser = user;
-            
-            // Load user data
-            loadUserData();
-            
-            // Show main app
-            document.getElementById('authContainer').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block';
-            
-            // Update UI
-            document.getElementById('welcomeText').textContent = `नमस्ते, ${user.name}`;
-            document.getElementById('userName').textContent = user.name;
-            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-            
-            // Load notes and vault preview
-            loadNotes();
-            loadVaultPreview();
-        }
+<div class="card">
+<h3>🔐 Vault</h3>
+<button onclick="openVault()">Open / Add Media</button>
+<div id="vault" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+</div>
 
-        // Load User Data
-        function loadUserData() {
-            const allData = JSON.parse(localStorage.getItem('secure_diary_data') || '{}');
-            
-            if (!allData[currentUser.id]) {
-                // Initialize if not exists
-                allData[currentUser.id] = {
-                    userId: currentUser.id,
-                    notes: [],
-                    vault: [],
-                    settings: {
-                        vaultPin: null,
-                        lastBackup: null
-                    }
-                };
-                localStorage.setItem('secure_diary_data', JSON.stringify(allData));
-            }
-            
-            userData = allData[currentUser.id];
-            return userData;
-        }
+<button onclick="logout()">Logout</button>
+</div>
 
-        // Save User Data
-        function saveUserData() {
-            const allData = JSON.parse(localStorage.getItem('secure_diary_data') || '{}');
-            allData[currentUser.id] = userData;
-            localStorage.setItem('secure_diary_data', JSON.stringify(allData));
-        }
+</div>
 
-        // Save Note
-        function saveNote() {
-            const title = document.getElementById('noteTitle').value.trim();
-            const content = document.getElementById('noteContent').value.trim();
-            
-            if (!title || !content) {
-                showAlert('शीर्षक र कबिता/नोट लेख्नुहोस्!', 'error');
-                return;
-            }
-            
-            const note = {
-                id: 'note_' + Date.now(),
-                title: title,
-                content: content,
-                date: new Date().toISOString(),
-                encrypted: false
-            };
-            
-            userData.notes.unshift(note);
-            saveUserData();
-            
-            // Clear form
-            document.getElementById('noteTitle').value = '';
-            document.getElementById('noteContent').value = '';
-            
-            // Reload notes
-            loadNotes();
-            
-            showAlert('कबिता/नोट सेभ गरियो!', 'success');
-        }
+<script>
+let user=null,data=null,vaultOpen=false;
 
-        // Load Notes
-        function loadNotes() {
-            const notesList = document.getElementById('notesList');
-            
-            if (!userData.notes || userData.notes.length === 0) {
-                notesList.innerHTML = `
-                    <div style="text-align: center; padding: 40px 20px; color: #666;">
-                        <div style="font-size: 48px; margin-bottom: 20px;">📝</div>
-                        <h3>अहिलेसम्म कुनै नोट छैन</h3>
-                        <p>पहिलो कबिता/नोट लेख्नुहोस्!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            notesList.innerHTML = userData.notes.map(note => `
-                <div class="note-card">
-                    <div class="delete-note" onclick="deleteNote('${note.id}')">🗑️</div>
-                    <div class="note-title">${note.title}</div>
-                    <div class="note-content">${note.content}</div>
-                    <div class="note-date">${new Date(note.date).toLocaleDateString('ne-NP')}</div>
-                </div>
-            `).join('');
-        }
+function register(){
+if(!phone.value||!pass.value)return alert("Fill all");
+let users=JSON.parse(localStorage.users||"[]");
+if(users.find(u=>u.phone==phone.value))return alert("Exists");
+user={phone:phone.value,pass:pass.value};
+users.push(user);
+localStorage.users=JSON.stringify(users);
+localStorage.data=localStorage.data||"{}";
+alert("Registered");
+}
 
-        // Delete Note
-        function deleteNote(noteId) {
-            if (!confirm('यो नोट मेटाउन निश्चित हुनुहुन्छ?')) return;
-            
-            userData.notes = userData.notes.filter(note => note.id !== noteId);
-            saveUserData();
-            loadNotes();
-            
-            showAlert('नोट मेटाइयो!', 'success');
-        }
+function login(){
+let users=JSON.parse(localStorage.users||"[]");
+user=users.find(u=>u.phone==phone.value&&u.pass==pass.value);
+if(!user)return alert("Wrong");
+let all=JSON.parse(localStorage.data||"{}");
+data=all[user.phone]||{notes:[],vault:[],pin:null};
+all[user.phone]=data;
+localStorage.data=JSON.stringify(all);
+loginCard.classList.add("hidden");
+app.classList.remove("hidden");
+renderNotes();renderVault();
+}
 
-        // Open Vault
-        function openVault() {
-            if (isVaultOpen) {
-                // Vault is already open, ask for PIN to add files
-                const pin = prompt('भल्टमा फाइल थप्न PIN लेख्नुहोस्:');
-                if (pin !== userData.settings.vaultPin) {
-                    showAlert('गलत PIN!', 'error');
-                    return;
-                }
-                
-                // Open file selector
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*,video/*';
-                input.multiple = true;
-                
-                input.onchange = (e) => {
-                    const files = e.target.files;
-                    saveToVault(files);
-                };
-                
-                input.click();
-                return;
-            }
-            
-            // First time opening vault
-            if (!userData.settings.vaultPin) {
-                // Set new PIN
-                const newPin = prompt('भल्टको लागि 4-अंकीय PIN सेट गर्नुहोस्:');
-                
-                if (!newPin || newPin.length !== 4 || isNaN(newPin)) {
-                    showAlert('सही 4-अंकीय PIN लेख्नुहोस्!', 'error');
-                    return;
-                }
-                
-                userData.settings.vaultPin = newPin;
-                saveUserData();
-                
-                showAlert('भल्ट PIN सेट गरियो! अब फाइलहरू थप्न सक्नुहुन्छ।', 'success');
-                isVaultOpen = true;
-                
-                // Open file selector
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*,video/*';
-                input.multiple = true;
-                
-                input.onchange = (e) => {
-                    const files = e.target.files;
-                    saveToVault(files);
-                };
-                
-                input.click();
-            } else {
-                // Ask for PIN
-                const pin = prompt('भल्ट खोल्न PIN लेख्नुहोस् (वा "बिर्सनुभयो" लेख्नुहोस्):');
-                
-                if (pin && pin.toLowerCase() === 'बिर्सनुभयो') {
-                    // Password recovery
-                    const recoveryPhone = prompt('फोन नम्बर लेख्नुहोस्:');
-                    const recoveryDOB = prompt('जन्म मिति लेख्नुहोस् (YYYY-MM-DD):');
-                    
-                    if (recoveryPhone === currentUser.phone && recoveryDOB === currentUser.dob) {
-                        alert(`तपाईंको भल्ट PIN हो: ${userData.settings.vaultPin}`);
-                        return;
-                    } else {
-                        showAlert('मिलान गर्न सकिएन!', 'error');
-                        return;
-                    }
-                }
-                
-                if (pin !== userData.settings.vaultPin) {
-                    showAlert('गलत PIN!', 'error');
-                    return;
-                }
-                
-                isVaultOpen = true;
-                showAlert('भल्ट खोलियो! अब फाइलहरू थप्न सक्नुहुन्छ।', 'success');
-                
-                // Open file selector
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*,video/*';
-                input.multiple = true;
-                
-                input.onchange = (e) => {
-                    const files = e.target.files;
-                    saveToVault(files);
-                };
-                
-                input.click();
-            }
-        }
+function save(){
+let all=JSON.parse(localStorage.data);
+all[user.phone]=data;
+localStorage.data=JSON.stringify(all);
+}
 
-        // Save to Vault
-        function saveToVault(files) {
-            if (!files.length) return;
-            
-            Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const vaultItem = {
-                        id: 'vault_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                        data: e.target.result,
-                        type: file.type.startsWith('image/') ? 'image' : 'video',
-                        name: file.name,
-                        size: file.size,
-                        uploaded: new Date().toISOString()
-                    };
-                    
-                    if (!userData.vault) userData.vault = [];
-                    userData.vault.unshift(vaultItem);
-                    saveUserData();
-                    
-                    loadVaultPreview();
-                    showAlert('फाइल भल्टमा सेभ गरियो!', 'success');
-                };
-                reader.readAsDataURL(file);
-            });
-        }
+function saveNote(){
+let note={
+id:Date.now(),
+title:title.value,
+tag:tag.value,
+content:content.value,
+locked:false
+};
+data.notes.unshift(note);
+save();renderNotes();
+title.value=tag.value=content.value="";
+}
 
-        // Load Vault Preview
-        function loadVaultPreview() {
-            const vaultGrid = document.getElementById('vaultGrid');
-            
-            if (!userData.vault || userData.vault.length === 0) {
-                vaultGrid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #666;">
-                        <div style="font-size: 48px; margin-bottom: 15px;">🔒</div>
-                        <h4>भल्ट खाली छ</h4>
-                        <p>फोटो/भिडियो थप्न "भल्ट खोल्नुहोस्" बटन क्लिक गर्नुहोस्</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Show only first 6 items as preview
-            const previewItems = userData.vault.slice(0, 6);
-            
-            vaultGrid.innerHTML = previewItems.map(item => `
-                <div class="vault-item" onclick="previewVaultItem('${item.id}')">
-                    ${item.type === 'image' ? 
-                        `<img src="${item.data}" alt="Vault Image">` : 
-                        `<video><source src="${item.data}" type="video/mp4"></video>`
-                    }
-                    <div class="vault-item-type">${item.type === 'image' ? '📷' : '🎬'}</div>
-                </div>
-            `).join('');
-            
-            // Add "View All" if more items
-            if (userData.vault.length > 6) {
-                vaultGrid.innerHTML += `
-                    <div class="vault-item" onclick="viewAllVaultItems()" 
-                         style="background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                        +${userData.vault.length - 6} थप<br>
-                        सबै हेर्नुहोस्
-                    </div>
-                `;
-            }
-        }
+function renderNotes(list=data.notes){
+notes.innerHTML="";
+list.forEach(n=>{
+let div=document.createElement("div");
+div.className="note";
+div.innerHTML=`<b>${n.title}</b> [${n.tag}]<br>${n.content}
+<div class="actions">
+<button onclick="lockNote(${n.id})">🔒</button>
+<button onclick="delNote(${n.id})">🗑</button>
+</div>`;
+notes.appendChild(div);
+});
+}
 
-        // Preview Vault Item
-        function previewVaultItem(itemId) {
-            const item = userData.vault.find(i => i.id === itemId);
-            if (!item) return;
-            
-            // Ask for PIN to view
-            const pin = prompt('यो मिडिया हेर्न PIN लेख्नुहोस्:');
-            if (pin !== userData.settings.vaultPin) {
-                showAlert('गलत PIN!', 'error');
-                return;
-            }
-            
-            const previewContent = document.getElementById('previewContent');
-            const vaultPreview = document.getElementById('vaultPreview');
-            
-            if (item.type === 'image') {
-                previewContent.innerHTML = `<img src="${item.data}" class="vault-preview">`;
-            } else {
-                previewContent.innerHTML = `
-                    <video controls autoplay class="vault-preview">
-                        <source src="${item.data}" type="video/mp4">
-                    </video>
-                `;
-            }
-            
-            vaultPreview.style.display = 'flex';
-        }
+function searchNotes(q){
+renderNotes(data.notes.filter(n=>n.title.includes(q)||n.content.includes(q)));
+}
 
-        // View All Vault Items
-        function viewAllVaultItems() {
-            const pin = prompt('सबै मिडिया हेर्न PIN लेख्नुहोस्:');
-            if (pin !== userData.settings.vaultPin) {
-                showAlert('गलत PIN!', 'error');
-                return;
-            }
-            
-            const vaultGrid = document.getElementById('vaultGrid');
-            
-            vaultGrid.innerHTML = userData.vault.map(item => `
-                <div class="vault-item" onclick="previewVaultItem('${item.id}')">
-                    ${item.type === 'image' ? 
-                        `<img src="${item.data}" alt="Vault Image">` : 
-                        `<video><source src="${item.data}" type="video/mp4"></video>`
-                    }
-                    <div class="vault-item-type">${item.type === 'image' ? '📷' : '🎬'}</div>
-                </div>
-            `).join('');
-            
-            showAlert('सबै मिडिया देखाइयो!', 'success');
-        }
+function lockNote(id){
+let n=data.notes.find(n=>n.id==id);
+let p=prompt("Set PIN");
+if(p){n.locked=true;n.pin=p;save();}
+}
 
-        // Close Preview
-        function closePreview() {
-            document.getElementById('vaultPreview').style.display = 'none';
-            document.getElementById('previewContent').innerHTML = '';
-        }
+function delNote(id){
+data.notes=data.notes.filter(n=>n.id!=id);
+save();renderNotes();
+}
 
-        // Export Backup
-        function exportBackup() {
-            const backupData = {
-                version: '2.0',
-                exportDate: new Date().toISOString(),
-                user: currentUser,
-                userData: userData
-            };
-            
-            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Secure_Diary_Backup_${currentUser.phone}_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            // Update last backup
-            userData.settings.lastBackup = new Date().toISOString();
-            saveUserData();
-            
-            showAlert('ब्याकअप डाउनलोड गरियो!', 'success');
-        }
+function openVault(){
+if(!data.pin){
+let p=prompt("Set 4 digit PIN");
+if(!p||p.length!=4)return;
+data.pin=p;save();
+}
+let pin=prompt("Enter PIN");
+if(pin!=data.pin)return alert("Wrong PIN");
 
-        // Import Backup
-        function importBackup() {
-            const fileInput = document.getElementById('backupFile');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                showAlert('पहिले फाइल छान्नुहोस्!', 'error');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const backupData = JSON.parse(e.target.result);
-                    
-                    // Verify backup
-                    if (!backupData.user || !backupData.userData) {
-                        showAlert('अमान्य ब्याकअप फाइल!', 'error');
-                        return;
-                    }
-                    
-                    // Get existing users
-                    const users = JSON.parse(localStorage.getItem('secure_diary_users') || '[]');
-                    
-                    // Check if user exists
-                    const existingUserIndex = users.findIndex(u => u.phone === backupData.user.phone);
-                    
-                    if (existingUserIndex !== -1) {
-                        // Update existing user
-                        users[existingUserIndex] = backupData.user;
-                    } else {
-                        // Add new user
-                        users.push(backupData.user);
-                    }
-                    
-                    localStorage.setItem('secure_diary_users', JSON.stringify(users));
-                    
-                    // Save user data
-                    const allData = JSON.parse(localStorage.getItem('secure_diary_data') || '{}');
-                    allData[backupData.user.id] = backupData.userData;
-                    localStorage.setItem('secure_diary_data', JSON.stringify(allData));
-                    
-                    showAlert('डाटा सफलतापूर्वक पुनःस्थापना गरियो!', 'success');
-                    location.reload();
-                    
-                } catch (error) {
-                    showAlert('फाइल पढ्न सकिएन!', 'error');
-                    console.error(error);
-                }
-            };
-            reader.readAsText(file);
-        }
+let i=document.createElement("input");
+i.type="file";i.accept="image/*,video/*";i.multiple=true;
+i.onchange=e=>{
+[...e.target.files].forEach(f=>{
+let r=new FileReader();
+r.onload=ev=>{
+data.vault.unshift({
+id:Date.now()+Math.random(),
+data:ev.target.result,
+type:f.type.startsWith("image")?"img":"vid",
+hidden:false
+});
+save();renderVault();
+};
+r.readAsDataURL(f);
+});
+};
+i.click();
+}
 
-        // Logout
-        function logout() {
-            if (confirm('लगआउट गर्न निश्चित हुनुहुन्छ?')) {
-                isVaultOpen = false;
-                location.reload();
-            }
-        }
+function renderVault(){
+vault.innerHTML="";
+data.vault.filter(v=>!v.hidden).forEach(v=>{
+let d=document.createElement("div");
+d.className="vault-item";
+d.innerHTML=v.type=="img"
+?`<img src="${v.data}">`
+:`<video src="${v.data}"></video>`;
+d.onclick=()=>viewVault(v.id);
+vault.appendChild(d);
+});
+}
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check for demo mode
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('demo') === 'true') {
-                document.getElementById('loginPhone').value = '9800000000';
-                document.getElementById('loginPassword').value = 'demo123';
-            }
-        });
-    </script>
+function viewVault(id){
+let pin=prompt("PIN");
+if(pin!=data.pin)return;
+let v=data.vault.find(v=>v.id==id);
+let act=prompt("1 Hide  2 Delete");
+if(act=="1"){v.hidden=true}
+if(act=="2"){data.vault=data.vault.filter(x=>x.id!=id)}
+save();renderVault();
+}
+
+function logout(){location.reload();}
+</script>
 </body>
 </html>
