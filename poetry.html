@@ -7,23 +7,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
     <style>
         :root { --primary: #1e3c72; --secondary: #2a4f8c; --accent: #ff4757; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
-        .container { background: white; width: 100%; max-width: 500px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 25px; position: relative; }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 20px; }
-        input, textarea, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; }
-        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { background: var(--secondary); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background: #0f2027; background: linear-gradient(to right, #2c5364, #203a43, #0f2027); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        
+        .container { background: white; width: 100%; max-width: 450px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); padding: 30px; overflow: hidden; }
+        
+        h2 { color: var(--primary); text-align: center; margin-bottom: 20px; font-size: 24px; }
+        input, textarea, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
+        
+        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button:hover { background: var(--secondary); transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+
         .hidden { display: none !important; }
-        .iti { width: 100%; } /* For country code input */
-        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .vault-btn { background: #ffa502; padding: 5px 15px; border-radius: 5px; cursor: pointer; color: white; font-size: 14px; }
-        .media-item { position: relative; margin: 10px 0; border-radius: 10px; overflow: hidden; background: #000; }
-        .media-item img, .media-item video { width: 100%; display: block; }
-        .del-btn { position: absolute; top: 5px; right: 5px; background: red; color: white; padding: 5px; border-radius: 50%; cursor: pointer; }
-        .msg { padding: 10px; border-radius: 5px; text-align: center; margin: 10px 0; }
-        .error { background: #ffebee; color: #c62828; }
-        .success { background: #e8f5e9; color: #2e7d32; }
+        .iti { width: 100%; margin: 10px 0; } /* Fix for phone input */
+        
+        .nav-header { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 10px; border-radius: 10px; margin-bottom: 15px; }
+        .vault-btn { background: #f39c12; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; }
+
+        .msg { padding: 12px; border-radius: 10px; text-align: center; margin: 10px 0; font-size: 14px; animation: fadeIn 0.5s; }
+        .error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+        .success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -34,78 +40,85 @@
 
     <div id="loginSection">
         <h2>🔐 लगइन गर्नुहोस्</h2>
-        <input type="text" id="loginPhone" placeholder="फोन नम्बर">
+        <input type="text" id="loginPhone" placeholder="फोन नम्बर हाल्नुहोस्">
         <input type="password" id="loginPass" placeholder="पासवर्ड">
         <button id="loginBtn">लगइन</button>
-        <p style="text-align:right; font-size:14px; color:var(--primary); cursor:pointer;" id="goForget">पासवर्ड बिर्सनुभयो?</p>
-        <p style="text-align:center; margin-top:15px;">खाता छैन? <b id="goReg" style="color:var(--primary); cursor:pointer;">खोल्नुहोस्</b></p>
+        <p style="text-align:right; font-size:13px; color:var(--primary); cursor:pointer; text-decoration: underline;" id="goForget">पासवर्ड बिर्सनुभयो?</p>
+        <hr style="margin:20px 0; opacity: 0.2;">
+        <p style="text-align:center;">खाता छैन? <b id="goReg" style="color:var(--primary); cursor:pointer; font-size: 18px;">खोल्नुहोस्</b></p>
     </div>
 
     <div id="registerSection" class="hidden">
-        <h2>✍️ नयाँ खाता</h2>
+        <h2>✍️ नयाँ खाता खोल्नुहोस्</h2>
         <input type="text" id="regName" placeholder="पूरा नाम">
-        <input type="tel" id="regPhone">
-        <input type="date" id="regDob">
+        <input type="tel" id="regPhone"> <input type="date" id="regDob">
         <input type="email" id="regEmail" placeholder="इमेल (वैकल्पिक)">
-        <input type="password" id="regPass" placeholder="पासवर्ड बनाउनुहोस्">
+        <input type="password" id="regPass" placeholder="बलियो पासवर्ड">
         <button id="sendOtpBtn">OTP पठाउनुहोस्</button>
         
         <div id="otpDiv" class="hidden">
-            <input type="text" id="regOtp" placeholder="OTP कोड हाल्नुहोस्">
-            <button id="verifyRegBtn">खाता बनाउनुहोस्</button>
+            <input type="text" id="regOtp" placeholder="सिममा आएको ६ अंकको कोड">
+            <button id="verifyRegBtn" style="background: #27ae60;">खाता पुष्टि गर्नुहोस्</button>
         </div>
-        <p id="backLogin" style="text-align:center; cursor:pointer; margin-top:10px;">← लगइनमा फर्कनुहोस्</p>
+        <p id="backLogin" style="text-align:center; cursor:pointer; margin-top:15px; color: #666;">← लगइनमा फर्कनुहोस्</p>
     </div>
 
     <div id="forgetSection" class="hidden">
-        <h2>🔑 पासवर्ड रिसेट</h2>
+        <h2>🔑 पासवर्ड बिर्सनुभयो?</h2>
         <input type="tel" id="forgetPhone">
-        <button id="sendForgetOtpBtn">OTP पठाउनुहोस्</button>
+        <button id="sendForgetOtpBtn">रिसेट कोड पठाउनुहोस्</button>
         <div id="forgetOtpDiv" class="hidden">
             <input type="text" id="forgetOtp" placeholder="OTP कोड">
-            <input type="password" id="newPass" placeholder="नयाँ पासवर्ड">
-            <button id="resetPassBtn">पासवर्ड फेर्नुहोस्</button>
+            <input type="password" id="newPass" placeholder="नयाँ पासवर्ड हाल्नुहोस्">
+            <button id="resetPassBtn">पासवर्ड अपडेट गर्नुहोस्</button>
         </div>
+        <p id="backLogin2" style="text-align:center; cursor:pointer; margin-top:15px;">फर्कनुहोस्</p>
     </div>
 
     <div id="mainApp" class="hidden">
         <div class="nav-header">
-            <h3>📝 मेरा नोटहरू</h3>
+            <h3>📝 डायरी / नोट</h3>
             <div class="vault-btn" id="openVault">Personal Vault 🔐</div>
         </div>
-        <textarea id="noteContent" rows="4" placeholder="यहाँ कविता वा नोट लेख्नुहोस्..."></textarea>
-        <button id="saveNoteBtn">सेभ गर्नुहोस्</button>
-        <div id="notesList" style="margin-top:20px;"></div>
-        <button id="logoutBtn" style="background:gray; margin-top:20px;">लगआउट</button>
+        <p id="welcomeUser" style="font-size: 14px; margin-bottom: 5px; color: #555;"></p>
+        <textarea id="noteContent" rows="4" placeholder="यहाँ आफ्नो मनका कुरा, कविता वा नोट लेख्नुहोस्..."></textarea>
+        <button id="saveNoteBtn">सुरक्षित गर्नुहोस्</button>
+        <div id="notesList" style="margin-top:20px; max-height: 300px; overflow-y: auto;"></div>
+        <button id="logoutBtn" style="background:#bdc3c7; color: #333; margin-top:20px;">लगआउट</button>
     </div>
 
     <div id="vaultPinSection" class="hidden">
-        <h2 id="pinTitle">🔒 भल्ट पिन</h2>
-        <input type="password" id="vaultPin" maxlength="4" placeholder="४ अंकको पिन">
+        <h2 id="pinTitle">🔒 भल्ट सुरक्षा</h2>
+        <p style="text-align:center; font-size: 13px; color: #777; margin-bottom: 10px;">तपाईंको निजी फोटो/भिडियो हेर्न पिन हाल्नुहोस्</p>
+        <input type="password" id="vaultPin" maxlength="4" placeholder="४ अंकको सेक्रेट पिन" style="text-align:center; font-size: 24px; letter-spacing: 10px;">
         <button id="enterVaultBtn">भल्ट खोल्नुहोस्</button>
-        <p id="forgetPin" style="text-align:center; color:red; cursor:pointer; margin-top:10px;">पिन बिर्सनुभयो? (Reset via OTP)</p>
-        <button id="closePin" style="background:#ccc;">फर्कनुहोस्</button>
+        <p id="forgetPin" style="text-align:center; color:red; cursor:pointer; margin-top:10px; font-size:12px;">पिन बिर्सनुभयो? रिसेट गर्नुहोस्</p>
+        <button id="closePin" style="background:#eee; color: #333;">बन्द गर्नुहोस्</button>
     </div>
 
     <div id="vaultMediaSection" class="hidden">
         <div class="nav-header">
-            <h3>🖼️ प्राइभेट भल्ट</h3>
-            <button id="exitVault" style="width:auto; padding:5px 10px; background:var(--accent);">Exit</button>
+            <h3>🖼️ प्राइभेट ग्यालरी</h3>
+            <button id="exitVault" style="width:auto; padding:5px 15px; background:var(--accent); margin:0;">निस्कनुहोस्</button>
         </div>
+        <label style="font-size:13px; color:#666;">फोटो वा भिडियो थप्नुहोस्:</label>
         <input type="file" id="mediaUpload" accept="image/*,video/*">
-        <p id="uploadStatus" style="font-size:12px;"></p>
-        <div id="mediaGrid" style="margin-top:20px;"></div>
+        <div id="mediaGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;"></div>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 <script type="module">
+    // Firebase Imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+    // आफ्नो Firebase विवरण यहाँ हाल्नुहोस्
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY", // यहाँ आफ्नो Firebase API Key हाल्नुहोस्
+        apiKey: "AIzaSyDV7fx22nrD_lQ_52NYa_D8gWqSO-usXj4", 
         authDomain: "nepali-valut-d0c28.firebaseapp.com",
         projectId: "nepali-valut-d0c28",
         storageBucket: "nepali-valut-d0c28.appspot.com",
@@ -118,182 +131,172 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    let confirmationResult, currentUser, userPhone;
+    let confirmationResult, currentUser;
 
-    // Initialize Phone Input (All Countries)
-    import { intlTelInput } from "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.js";
-    const phoneInput = window.intlTelInput(document.querySelector("#regPhone"), {
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        separateDialCode: true
-    });
-    const forgetPhoneInput = window.intlTelInput(document.querySelector("#forgetPhone"), {
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        separateDialCode: true
-    });
-
-    // --- Navigation Logic ---
+    // UI Navigation Function (सबै बटनले काम गर्ने बनाउन)
     const show = (id) => {
-        document.querySelectorAll('.container > div:not(#messageBox):not(#recaptcha-container)').forEach(d => d.classList.add('hidden'));
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('registerSection').classList.add('hidden');
+        document.getElementById('forgetSection').classList.add('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
+        document.getElementById('vaultPinSection').classList.add('hidden');
+        document.getElementById('vaultMediaSection').classList.add('hidden');
         document.getElementById(id).classList.remove('hidden');
     };
 
+    // Click Events
     document.getElementById('goReg').onclick = () => show('registerSection');
     document.getElementById('backLogin').onclick = () => show('loginSection');
+    document.getElementById('backLogin2').onclick = () => show('loginSection');
     document.getElementById('goForget').onclick = () => show('forgetSection');
     document.getElementById('closePin').onclick = () => show('mainApp');
     document.getElementById('exitVault').onclick = () => show('mainApp');
 
-    // --- Auth Logic ---
+    // Phone Input Initialization
+    const itiReg = window.intlTelInput(document.querySelector("#regPhone"), { separateDialCode: true, initialCountry: "np" });
+    const itiForget = window.intlTelInput(document.querySelector("#forgetPhone"), { separateDialCode: true, initialCountry: "np" });
+
+    // --- Message Alert ---
+    function msg(t, type) {
+        const b = document.getElementById('messageBox');
+        b.innerHTML = `<div class="msg ${type}">${t}</div>`;
+        setTimeout(() => b.innerHTML = '', 5000);
+    }
+
+    // --- Recaptcha ---
     window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'invisible' });
 
-    // Send OTP for Registration
+    // १. OTP पठाउने (दर्ता गर्दा)
     document.getElementById('sendOtpBtn').onclick = async () => {
-        const fullPhone = phoneInput.getNumber();
+        const phone = itiReg.getNumber();
+        if(!phone) return msg("नम्बर हाल्नुहोस्", "error");
         try {
-            confirmationResult = await signInWithPhoneNumber(auth, fullPhone, window.recaptchaVerifier);
+            confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
             document.getElementById('otpDiv').classList.remove('hidden');
-            msg("OTP पठाइयो!", "success");
+            msg("तपाईंको सिममा OTP कोड पठाइएको छ।", "success");
         } catch (err) { msg(err.message, "error"); }
     };
 
-    // Verify OTP and Create Account
+    // २. खाता सिर्जना (OTP पुष्टि पछि)
     document.getElementById('verifyRegBtn').onclick = async () => {
         const otp = document.getElementById('regOtp').value;
         const name = document.getElementById('regName').value;
         const pass = document.getElementById('regPass').value;
-        const email = document.getElementById('regEmail').value || `${Date.now()}@v.com`;
+        const email = document.getElementById('regEmail').value || `${Date.now()}@temp.com`;
 
         try {
             const result = await confirmationResult.confirm(otp);
-            // Create email/pass link for permanent login
+            // Link phone with email/pass for life-time access
             const userCred = await createUserWithEmailAndPassword(auth, email, pass);
             await setDoc(doc(db, "users", userCred.user.uid), {
-                name, phone: phoneInput.getNumber(), dob: document.getElementById('regDob').value, email: email, vaultPin: null
+                name, phone: itiReg.getNumber(), email, vaultPin: null
             });
-            msg("खाता बन्यो! अब लगइन गर्नुहोस्।", "success");
+            msg("बधाई छ! खाता बन्यो। अब लगइन गर्नुहोस्।", "success");
             show('loginSection');
-        } catch (err) { msg(err.message, "error"); }
+        } catch (err) { msg("OTP गलत छ वा समय सकियो।", "error"); }
     };
 
-    // Login Logic
+    // ३. लगइन
     document.getElementById('loginBtn').onclick = async () => {
-        const phone = document.getElementById('loginPhone').value;
+        const email = document.getElementById('loginPhone').value; // Currently uses email as ID
         const pass = document.getElementById('loginPass').value;
-        // Search user by phone in Firestore (Simplified for this demo: user needs to use email used in reg)
         try {
-            await signInWithEmailAndPassword(auth, phone, pass); 
-            // Note: In production, first fetch email from Firestore using Phone number
-        } catch (err) { msg("लगइन असफल! विवरण जाँच गर्नुहोस्।", "error"); }
+            await signInWithEmailAndPassword(auth, email, pass);
+            msg("लगइन सफल!", "success");
+        } catch (err) { msg("इमेल वा पासवर्ड मिलेन।", "error"); }
     };
 
-    // --- Main App Logic (Notes) ---
+    // ४. अटो लगइन चेक
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
             show('mainApp');
+            const d = await getDoc(doc(db, "users", user.uid));
+            if(d.exists()) document.getElementById('welcomeUser').innerText = "नमस्ते, " + d.data().name;
             loadNotes();
         } else {
             show('loginSection');
         }
     });
 
-    async function loadNotes() {
-        const q = query(collection(db, "users", currentUser.uid, "notes"), orderBy("timestamp", "desc"));
-        onSnapshot(q, (snap) => {
-            let html = '';
-            snap.forEach(d => {
-                html += `<div style="background:#f9f9f9; padding:10px; margin:10px 0; border-radius:8px; border-left:4px solid var(--primary)">${d.data().text}</div>`;
-            });
-            document.getElementById('notesList').innerHTML = html;
-        });
-    }
-
+    // ५. नोट सेभ गर्ने
     document.getElementById('saveNoteBtn').onclick = async () => {
         const text = document.getElementById('noteContent').value;
-        if (!text) return;
-        await addDoc(collection(db, "users", currentUser.uid, "notes"), { text, timestamp: serverTimestamp() });
+        if(!text) return;
+        await addDoc(collection(db, "users", currentUser.uid, "notes"), {
+            text, timestamp: serverTimestamp()
+        });
         document.getElementById('noteContent').value = '';
     };
 
-    // --- Vault Logic ---
-    document.getElementById('openVault').onclick = async () => {
-        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-        const data = userDoc.data();
-        if (!data.vaultPin) {
-            document.getElementById('pinTitle').innerText = "नयाँ ४-अंकको पिन सेट गर्नुहोस्";
-        } else {
-            document.getElementById('pinTitle').innerText = "पिन हाल्नुहोस्";
-        }
-        show('vaultPinSection');
-    };
-
-    document.getElementById('enterVaultBtn').onclick = async () => {
-        const pinInput = document.getElementById('vaultPin').value;
-        const userRef = doc(db, "users", currentUser.uid);
-        const userDoc = await getDoc(userRef);
-        
-        if (!userDoc.data().vaultPin) {
-            await updateDoc(userRef, { vaultPin: pinInput });
-            msg("पिन सेट भयो!", "success");
-            show('vaultMediaSection');
-            loadMedia();
-        } else if (userDoc.data().vaultPin === pinInput) {
-            show('vaultMediaSection');
-            loadMedia();
-        } else {
-            msg("गलत पिन!", "error");
-        }
-    };
-
-    // --- Media Logic (Upload/Delete) ---
-    document.getElementById('mediaUpload').onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const storageRef = ref(storage, `users/${currentUser.uid}/${Date.now()}_${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on('state_changed', 
-            (s) => { document.getElementById('uploadStatus').innerText = "अपलोड हुँदैछ..."; },
-            (err) => msg(err.message, "error"),
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-                    await addDoc(collection(db, "users", currentUser.uid, "media"), {
-                        url, type: file.type.split('/')[0], name: file.name, path: storageRef.fullPath
-                    });
-                    document.getElementById('uploadStatus').innerText = "सफल!";
-                });
-            }
-        );
-    };
-
-    function loadMedia() {
-        const q = collection(db, "users", currentUser.uid, "media");
+    function loadNotes() {
+        const q = query(collection(db, "users", currentUser.uid, "notes"), orderBy("timestamp", "desc"));
         onSnapshot(q, (snap) => {
-            let html = '';
-            snap.forEach(d => {
-                const data = d.data();
-                html += `<div class="media-item">
-                    <span class="del-btn" onclick="deleteMedia('${d.id}', '${data.path}')">X</span>
-                    ${data.type === 'image' ? `<img src="${data.url}" onclick="window.open('${data.url}')">` : `<video src="${data.url}" controls></video>`}
-                </div>`;
+            let h = '';
+            snap.forEach(doc => {
+                h += `<div style="background:#f1f1f1; padding:10px; border-radius:8px; margin-bottom:8px; font-size:15px;">${doc.data().text}</div>`;
             });
-            document.getElementById('mediaGrid').innerHTML = html;
+            document.getElementById('notesList').innerHTML = h || '<p style="color:#999; text-align:center;">अझै केही लेखिएको छैन।</p>';
         });
     }
 
-    window.deleteMedia = async (id, path) => {
-        if (!confirm("के तपाईं यो फाइल हटाउन चाहनुहुन्छ?")) return;
-        await deleteDoc(doc(db, "users", currentUser.uid, "media", id));
-        await deleteObject(ref(storage, path));
+    // ६. भल्ट खोल्ने र पिन सेट गर्ने
+    document.getElementById('openVault').onclick = () => show('vaultPinSection');
+
+    document.getElementById('enterVaultBtn').onclick = async () => {
+        const pin = document.getElementById('vaultPin').value;
+        if(pin.length < 4) return msg("४ अंकको पिन हाल्नुहोस्", "error");
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userRef);
+        const storedPin = userDoc.data().vaultPin;
+
+        if (!storedPin) {
+            await updateDoc(userRef, { vaultPin: pin });
+            msg("नयाँ पिन सेट गरियो!", "success");
+            show('vaultMediaSection');
+            loadMedia();
+        } else if (storedPin === pin) {
+            show('vaultMediaSection');
+            loadMedia();
+        } else {
+            msg("गलत पिन! फेरि प्रयास गर्नुहोस्।", "error");
+        }
     };
 
-    document.getElementById('logoutBtn').onclick = () => signOut(auth);
+    // ७. मिडिया अपलोड (Photo/Video)
+    document.getElementById('mediaUpload').onchange = async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        msg("अपलोड हुँदैछ...", "success");
 
-    function msg(t, type) {
-        const b = document.getElementById('messageBox');
-        b.innerHTML = `<div class="msg ${type}">${t}</div>`;
-        setTimeout(() => b.innerHTML = '', 4000);
+        const path = `vault/${currentUser.uid}/${Date.now()}_${file.name}`;
+        const sRef = ref(storage, path);
+        await uploadBytesResumable(sRef, file);
+        const url = await getDownloadURL(sRef);
+
+        await addDoc(collection(db, "users", currentUser.uid, "media"), {
+            url, path, type: file.type.startsWith('image') ? 'img' : 'vid'
+        });
+        msg("अपलोड सफल!", "success");
+    };
+
+    function loadMedia() {
+        onSnapshot(collection(db, "users", currentUser.uid, "media"), (snap) => {
+            let h = '';
+            snap.forEach(d => {
+                const data = d.data();
+                if(data.type === 'img') {
+                    h += `<div style="position:relative;"><img src="${data.url}" style="width:100%; border-radius:10px; height:150px; object-fit:cover;"><button onclick="window.open('${data.url}')" style="padding:2px; font-size:10px;">Full View</button></div>`;
+                } else {
+                    h += `<div><video src="${data.url}" controls style="width:100%; border-radius:10px; height:150px; object-fit:cover;"></video></div>`;
+                }
+            });
+            document.getElementById('mediaGrid').innerHTML = h;
+        });
     }
+
+    document.getElementById('logoutBtn').onclick = () => signOut(auth);
 </script>
 
 </body>
