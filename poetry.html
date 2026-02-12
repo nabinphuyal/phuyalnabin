@@ -1,60 +1,231 @@
 <!DOCTYPE html>
-<html lang="ne">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>🔐 Secure Poetry Diary & Vault (Firebase)</title>
-  <style>
-    body{margin:0;font-family:Arial;background:#667eea}
-    .container{max-width:1100px;margin:auto;padding:20px}
-    .hidden{display:none}
-    .card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px}
-    button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer}
-    input,textarea{width:100%;padding:8px;margin:6px 0}
-    .note{border-left:4px solid #667eea;padding:10px;margin:10px 0}
-    .vault-item{width:120px;height:120px;overflow:hidden;position:relative}
-    .vault-item img,.vault-item video{width:100%;height:100%;object-fit:cover}
-    .actions{display:flex;gap:5px;margin-top:5px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नेपाली Vault 🔐</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 500px; margin: auto; padding: 20px; background: #f9f9f9; }
+        input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; }
+        button { background: #1e3c72; color: white; font-weight: bold; border: none; }
+        button:hover { background: #2a4f8c; }
+        #vaultSection, #registerSection { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .note { background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 10px; }
+    </style>
 </head>
 <body>
-  <div class="container">
 
-    <!-- LOGIN -->
-    <div id="loginCard" class="card">
-      <h2>🔐 Login with Phone</h2>
-      <input id="phone" placeholder="+977-XXXXXXXXXX" />
-      <button onclick="sendOTP()">Send OTP</button>
-      <div id="recaptcha-container"></div>
+    <h2>🔐 नेपाली Vault</h2>
+    <p>तपाईंको व्यक्तिगत नोट, कविता, फोटो भल्ट</p>
 
-      <div id="otpSection" style="display:none; margin-top: 10px;">
-        <input id="otp" placeholder="Enter OTP" />
-        <button onclick="verifyOTP()">Verify OTP</button>
-      </div>
+    <div id="recaptcha-container"></div>
+
+    <div id="loginForm">
+        <h3>📲 OTP बाट लगइन</h3>
+        <input type="text" id="phoneNumber" placeholder="+977 98XXXXXXXX" />
+        <button id="sendOtpBtn">OTP पठाउनुहोस्</button>
+        <input type="text" id="otpCode" placeholder="OTP कोड हाल्नुहोस्" />
+        <button id="verifyOtpBtn">भेरिफाइ गर्नुहोस्</button>
     </div>
 
-    <!-- APP -->
-    <div id="app" class="hidden">
-      <div class="card">
-        <h3>📝 Poetry / Notes</h3>
-        <input id="title" placeholder="Title" />
-        <input id="tag" placeholder="Tag (love, pain...)" />
-        <textarea id="content" placeholder="Write..."></textarea>
-        <button onclick="saveNote()">Save</button>
-        <input placeholder="🔍 Search" oninput="searchNotes(this.value)" />
-        <div id="notes"></div>
-      </div>
-
-      <div class="card">
-        <h3>🔐 Vault</h3>
-        <button onclick="openVault()">Open / Add Media</button>
-        <div id="vault" style="display:flex;gap:10px;flex-wrap:wrap"></div>
-      </div>
-
-      <button onclick="logout()">Logout</button>
+    <div id="registerSection">
+        <h3>✍️ खाता खोल्नुहोस्</h3>
+        <input type="text" id="fullName" placeholder="पूरा नाम" />
+        <input type="email" id="email" placeholder="इमेल ठेगाना" />
+        <input type="date" id="dob" />
+        <button id="saveUserBtn">खाता खोल्नुहोस्</button>
     </div>
 
-  </div>
+    <div id="vaultSection">
+        <h3>🗄️ तपाईंको भल्ट</h3>
+        <p id="welcomeMessage"></p>
+        
+        <div class="note">
+            <h4>📝 कविता / नोट</h4>
+            <textarea id="noteContent" rows="4" style="width:100%; padding:10px;" placeholder="आफ्नो नोट यहाँ लेख्नुहोस्..."></textarea>
+            <button id="saveNoteBtn">सेभ गर्नुहोस्</button>
+        </div>
 
-  <!-- Firebase and app logic script is here (paste the script from Step 1) -->
+        <div style="margin-top:20px;">
+            <h4>📖 तपाईंका सेभ गरिएका नोटहरू</h4>
+            <div id="notesList"></div>
+        </div>
+
+        <button id="logoutBtn" style="background:crimson;">लगआउट</button>
+    </div>
+
+    <p id="message" style="margin-top:20px;"></p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // ✅ तिम्रो सही Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCX6ffsL503dsQ0nYSwLAicvxS9xuJbjGA",
+            authDomain: "nepali-valut.firebaseapp.com",
+            projectId: "nepali-valut",
+            storageBucket: "nepali-valut.firebasestorage.app",
+            messagingSenderId: "807530923828",
+            appId: "1:807530923828:web:5823d7306e3268e18f0761"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.confirmationResult = null;
+        let currentUser = null;
+
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'normal',
+            'callback': (response) => {}
+        });
+
+        document.getElementById("sendOtpBtn").addEventListener("click", async function() {
+            const phone = document.getElementById("phoneNumber").value;
+            if (!phone) { alert("फोन नम्बर हाल्नुहोस्"); return; }
+
+            try {
+                const confirmation = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+                window.confirmationResult = confirmation;
+                document.getElementById("message").innerText = "✅ OTP पठाइयो!";
+            } catch (error) {
+                document.getElementById("message").innerText = "❌ OTP पठाउन सकिएन: " + error.message;
+            }
+        });
+
+        document.getElementById("verifyOtpBtn").addEventListener("click", async function() {
+            const otp = document.getElementById("otpCode").value;
+            if (!otp) { alert("OTP हाल्नुहोस्"); return; }
+
+            try {
+                const result = await window.confirmationResult.confirm(otp);
+                currentUser = result.user;
+                
+                const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+                
+                if (userDoc.exists()) {
+                    document.getElementById("welcomeMessage").innerText = "स्वागतम्, " + userDoc.data().fullName + " 👋";
+                    document.getElementById("vaultSection").style.display = "block";
+                    document.getElementById("registerSection").style.display = "none";
+                    document.getElementById("loginForm").style.display = "none";
+                    loadUserNotes(currentUser.uid);
+                } else {
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("registerSection").style.display = "block";
+                    document.getElementById("message").innerText = "📝 कृपया खाता खोल्नुहोस्";
+                }
+            } catch (error) {
+                document.getElementById("message").innerText = "❌ OTP गलत छ";
+            }
+        });
+
+        document.getElementById("saveUserBtn").addEventListener("click", async function() {
+            const fullName = document.getElementById("fullName").value;
+            const email = document.getElementById("email").value;
+            const dob = document.getElementById("dob").value;
+
+            if (!fullName || !email || !dob) {
+                alert("सबै जानकारी भर्नुहोस्");
+                return;
+            }
+
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    fullName: fullName,
+                    email: email,
+                    dob: dob,
+                    phone: currentUser.phoneNumber,
+                    createdAt: new Date()
+                });
+
+                document.getElementById("welcomeMessage").innerText = "स्वागतम्, " + fullName + " 👋";
+                document.getElementById("registerSection").style.display = "none";
+                document.getElementById("vaultSection").style.display = "block";
+                document.getElementById("message").innerText = "✅ खाता सफलतापूर्वक खोलियो!";
+                
+                loadUserNotes(currentUser.uid);
+            } catch (error) {
+                alert("डाटा सेभ हुन सकेन: " + error.message);
+            }
+        });
+
+        document.getElementById("saveNoteBtn").addEventListener("click", async function() {
+            const noteContent = document.getElementById("noteContent").value;
+            if (!noteContent) { alert("नोट लेख्नुहोस्"); return; }
+
+            const noteId = Date.now().toString();
+            try {
+                await setDoc(doc(db, "users", currentUser.uid, "notes", noteId), {
+                    content: noteContent,
+                    timestamp: new Date()
+                });
+                document.getElementById("noteContent").value = "";
+                alert("नोट सेभ भयो ✅");
+            } catch (error) {
+                alert("सेभ हुन सकेन: " + error.message);
+            }
+        });
+
+        function loadUserNotes(userId) {
+            const notesListDiv = document.getElementById("notesList");
+            notesListDiv.innerHTML = "लोड हुँदै...";
+
+            const q = query(collection(db, "users", userId, "notes"), orderBy("timestamp", "desc"));
+            
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    notesListDiv.innerHTML = "<p>कुनै नोट छैन। माथि लेख्नुहोस्।</p>";
+                    return;
+                }
+
+                let html = "";
+                snapshot.forEach((doc) => {
+                    const note = doc.data();
+                    html += `<div style="background:#eee; padding:10px; margin:10px 0; border-radius:8px;">
+                                <p>${note.content}</p>
+                                <small>${new Date(note.timestamp?.toDate()).toLocaleString()}</small>
+                             </div>`;
+                });
+                notesListDiv.innerHTML = html;
+            });
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", async function() {
+            await signOut(auth);
+            currentUser = null;
+            document.getElementById("vaultSection").style.display = "none";
+            document.getElementById("registerSection").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("message").innerText = "लगआउट भयो। फेरि भेटौँला।";
+        });
+
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                
+                if (userDoc.exists()) {
+                    document.getElementById("welcomeMessage").innerText = "पुनः स्वागतम्, " + userDoc.data().fullName + " 👋";
+                    document.getElementById("vaultSection").style.display = "block";
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("registerSection").style.display = "none";
+                    loadUserNotes(user.uid);
+                } else {
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("registerSection").style.display = "block";
+                }
+            } else {
+                document.getElementById("loginForm").style.display = "block";
+                document.getElementById("vaultSection").style.display = "none";
+                document.getElementById("registerSection").style.display = "none";
+            }
+        });
+    </script>
+
 </body>
 </html>
