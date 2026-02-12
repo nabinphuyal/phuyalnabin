@@ -23,22 +23,14 @@
             border-radius: 32px;
             padding: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.2);
         }
         .card {
             background: white;
             border-radius: 24px;
             padding: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        h2, h3 {
-            color: #1e3c72;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        input, button, textarea {
+        h2, h3 { color: #1e3c72; margin-bottom: 16px; }
+        input, button {
             width: 100%;
             padding: 14px 16px;
             margin: 10px 0;
@@ -52,9 +44,16 @@
             font-weight: bold;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
         }
-        button:hover { background: #2a4f8c; transform: scale(1.02); }
+        button:hover { background: #2a4f8c; }
+        .hidden { display: none; }
+        .forget-link {
+            text-align: right;
+            margin: 8px 0;
+            color: #1e3c72;
+            cursor: pointer;
+            text-decoration: underline;
+        }
         .pin-box {
             display: flex;
             gap: 10px;
@@ -85,22 +84,12 @@
             object-fit: cover;
             border-radius: 12px;
         }
-        .hidden { display: none; }
-        .forget-link {
-            text-align: right;
-            margin: 8px 0;
-            color: #1e3c72;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .success { color: #2e7d32; background: #e8f5e9; padding: 12px; border-radius: 50px; }
-        .error { color: #c62828; background: #ffebee; padding: 12px; border-radius: 50px; }
     </style>
 </head>
 <body>
 <div class="app-container" id="app">
 
-    <!-- 🔐 LOGIN SECTION -->
+    <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
         <h2>🔐 नेपाली भल्टमा स्वागतम्</h2>
         <div id="recaptcha-container"></div>
@@ -111,10 +100,12 @@
             <input type="password" id="loginPassword" placeholder="पासवर्ड">
             <button id="loginBtn">लगइन गर्नुहोस्</button>
             <div class="forget-link" id="forgetPasswordLink">पासवर्ड बिर्सनुभयो?</div>
-            <p style="text-align:center; margin-top:16px;">खाता छैन? <strong id="showRegister" style="color:#1e3c72; cursor:pointer;">खाता खोल्नुहोस्</strong></p>
+            <p style="text-align:center; margin-top:16px;">
+                खाता छैन? <strong id="showRegister" style="color:#1e3c72; cursor:pointer;">खाता खोल्नुहोस्</strong>
+            </p>
         </div>
 
-        <!-- 📝 REGISTER TAB -->
+        <!-- REGISTER TAB -->
         <div id="registerTab" class="hidden">
             <h3>✍️ खाता खोल्नुहोस्</h3>
             <input type="text" id="regFullName" placeholder="पूरा नाम *">
@@ -125,10 +116,12 @@
             <button id="sendRegisterOtpBtn">OTP पठाउनुहोस्</button>
             <input type="text" id="regOtpCode" placeholder="OTP कोड हाल्नुहोस्">
             <button id="createAccountBtn">खाता खोल्नुहोस्</button>
-            <p style="text-align:center; margin-top:16px;"><strong id="backToLogin" style="color:#1e3c72; cursor:pointer;">← लगइन पेजमा जानुहोस्</strong></p>
+            <p style="text-align:center; margin-top:16px;">
+                <strong id="backToLogin" style="color:#1e3c72; cursor:pointer;">← लगइन पेजमा जानुहोस्</strong>
+            </p>
         </div>
 
-        <!-- 🔑 FORGET PASSWORD TAB -->
+        <!-- FORGET PASSWORD TAB -->
         <div id="forgetTab" class="hidden">
             <h3>🔑 पासवर्ड रिसेट</h3>
             <input type="text" id="forgetPhone" placeholder="फोन नम्बर +97798XXXXXXXX">
@@ -136,60 +129,57 @@
             <input type="text" id="forgetOtpCode" placeholder="OTP कोड">
             <input type="password" id="newPassword" placeholder="नयाँ पासवर्ड">
             <button id="resetPasswordBtn">पासवर्ड रिसेट गर्नुहोस्</button>
-            <p style="text-align:center; margin-top:16px;"><strong id="backToLoginFromForget" style="color:#1e3c72; cursor:pointer;">← लगइन पेजमा जानुहोस्</strong></p>
+            <p style="text-align:center; margin-top:16px;">
+                <strong id="backToLoginFromForget" style="color:#1e3c72; cursor:pointer;">← लगइन पेजमा जानुहोस्</strong>
+            </p>
         </div>
     </div>
 
-    <!-- 🗄️ MAIN APP (NOTES + VAULT) -->
+    <!-- MAIN APP -->
     <div id="mainApp" class="card hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; justify-content:space-between;">
             <h2>🗄️ नेपाली भल्ट</h2>
             <button id="logoutBtn" style="width:auto; padding:10px 20px; background:crimson;">लगआउट</button>
         </div>
         <p id="welcomeUser" style="background:#e3f2fd; padding:12px; border-radius:50px;"></p>
-
-        <!-- नोट / कविता सेक्सन -->
+        
         <div style="margin-top:20px;">
             <h3>📝 नोट / कविता</h3>
-            <textarea id="noteContent" rows="4" placeholder="यहाँ लेख्नुहोस्..."></textarea>
+            <textarea id="noteContent" rows="4" style="width:100%; padding:10px;" placeholder="यहाँ लेख्नुहोस्..."></textarea>
             <button id="saveNoteBtn">सेभ गर्नुहोस्</button>
             <div id="notesList" style="margin-top:20px;"></div>
         </div>
 
-        <!-- 🔒 PERSONAL VAULT बटन -->
         <button id="openVaultBtn" style="margin-top:20px; background:#4a2c6d;">🔒 व्यक्तिगत भल्ट खोल्नुहोस्</button>
     </div>
 
-    <!-- 🔐 PIN VERIFICATION FOR VAULT -->
+    <!-- PIN VERIFICATION -->
     <div id="pinVaultSection" class="card hidden">
         <h3>🔒 भल्ट पिन</h3>
-        <p>कृपया ४-अङ्कको पिन हाल्नुहोस्</p>
+        <p>४ अङ्कको पिन हाल्नुहोस्</p>
         <div class="pin-box">
-            <input type="password" id="pin1" maxlength="1" pattern="\d" inputmode="numeric">
-            <input type="password" id="pin2" maxlength="1" pattern="\d" inputmode="numeric">
-            <input type="password" id="pin3" maxlength="1" pattern="\d" inputmode="numeric">
-            <input type="password" id="pin4" maxlength="1" pattern="\d" inputmode="numeric">
+            <input type="password" id="pin1" maxlength="1">
+            <input type="password" id="pin2" maxlength="1">
+            <input type="password" id="pin3" maxlength="1">
+            <input type="password" id="pin4" maxlength="1">
         </div>
         <button id="verifyPinBtn">भेरिफाइ गर्नुहोस्</button>
         <div class="forget-link" id="forgetPinLink">पिन बिर्सनुभयो?</div>
-        <p style="margin-top:16px;" id="pinMessage"></p>
     </div>
 
-    <!-- 🎬 VAULT MEDIA SECTION -->
+    <!-- VAULT MEDIA -->
     <div id="vaultMediaSection" class="card hidden">
         <div style="display:flex; justify-content:space-between;">
             <h3>🎬 मेरो भल्ट</h3>
             <button id="backToMainFromVault" style="width:auto; padding:8px 16px; background:#666;">← पछाडि</button>
         </div>
         
-        <!-- फोटो/भिडियो अपलोड -->
         <div style="margin:20px 0; padding:20px; background:#f5f5f5; border-radius:16px;">
-            <p><strong>नयाँ फोटो / भिडियो थप्नुहोस्</strong></p>
+            <p><strong>नयाँ फोटो / भिडियो</strong></p>
             <input type="file" id="mediaUpload" accept="image/,video/">
             <button id="uploadMediaBtn">अपलोड गर्नुहोस्</button>
         </div>
 
-        <!-- मिडिया ग्रिड -->
         <div id="mediaGrid" class="vault-grid"></div>
     </div>
 
@@ -197,11 +187,20 @@
 </div>
 
 <script type="module">
-    // 🔥 FIREBASE IMPORT
+    // 🔥 Firebase Import
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, listAll } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+    import { 
+        getAuth, RecaptchaVerifier, signInWithPhoneNumber, 
+        signInWithEmailAndPassword, createUserWithEmailAndPassword, 
+        signOut, onAuthStateChanged, updatePassword 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { 
+        getFirestore, doc, setDoc, getDoc, collection, query, 
+        orderBy, onSnapshot, addDoc, serverTimestamp, where, getDocs 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { 
+        getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
     // ✅ तिम्रो Firebase Config
     const firebaseConfig = {
@@ -218,13 +217,13 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // Global vars
+    // Global Variables
     window.confirmationResult = null;
     let currentUser = null;
     let currentUserId = null;
     let forgetPhoneNumber = null;
 
-    // 📸 UI Elements
+    // DOM Elements
     const loginSection = document.getElementById('loginSection');
     const mainApp = document.getElementById('mainApp');
     const pinVaultSection = document.getElementById('pinVaultSection');
@@ -234,27 +233,49 @@
     const forgetTab = document.getElementById('forgetTab');
     const globalMsg = document.getElementById('globalMessage');
 
-    // 🔁 Tab switching
-    document.getElementById('showRegister').onclick = () => { loginTab.classList.add('hidden'); registerTab.classList.remove('hidden'); };
-    document.getElementById('backToLogin').onclick = () => { registerTab.classList.add('hidden'); loginTab.classList.remove('hidden'); };
-    document.getElementById('forgetPasswordLink').onclick = () => { loginTab.classList.add('hidden'); forgetTab.classList.remove('hidden'); };
-    document.getElementById('backToLoginFromForget').onclick = () => { forgetTab.classList.add('hidden'); loginTab.classList.remove('hidden'); };
-    document.getElementById('backToMainFromVault').onclick = () => { vaultMediaSection.classList.add('hidden'); mainApp.classList.remove('hidden'); };
+    // Tab Switching
+    document.getElementById('showRegister').onclick = () => {
+        loginTab.classList.add('hidden');
+        registerTab.classList.remove('hidden');
+    };
+    document.getElementById('backToLogin').onclick = () => {
+        registerTab.classList.add('hidden');
+        loginTab.classList.remove('hidden');
+    };
+    document.getElementById('forgetPasswordLink').onclick = () => {
+        loginTab.classList.add('hidden');
+        forgetTab.classList.remove('hidden');
+    };
+    document.getElementById('backToLoginFromForget').onclick = () => {
+        forgetTab.classList.add('hidden');
+        loginTab.classList.remove('hidden');
+    };
+    document.getElementById('backToMainFromVault').onclick = () => {
+        vaultMediaSection.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+    };
 
     // ✅ reCAPTCHA
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'normal' });
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        size: 'normal'
+    });
 
-    // 📲 SEND OTP FOR REGISTER
+    // 📲 Send OTP for Register
     document.getElementById('sendRegisterOtpBtn').onclick = async () => {
         const phone = document.getElementById('regPhone').value.trim();
-        if (!phone.startsWith('+')) return alert('फोन नम्बर +977 सहित हाल्नुहोस्');
+        if (!phone.startsWith('+')) {
+            alert('फोन नम्बर +977 सहित हाल्नुहोस्');
+            return;
+        }
         try {
             window.confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
             showMessage('✅ OTP पठाइयो', 'success');
-        } catch(e) { showMessage('❌ ' + e.message, 'error'); }
+        } catch(e) {
+            showMessage('❌ ' + e.message, 'error');
+        }
     };
 
-    // 🆕 CREATE ACCOUNT (OTP पछि मात्र)
+    // 🆕 Create Account
     document.getElementById('createAccountBtn').onclick = async () => {
         const fullName = document.getElementById('regFullName').value;
         const phone = document.getElementById('regPhone').value;
@@ -263,79 +284,114 @@
         const password = document.getElementById('regPassword').value;
         const otp = document.getElementById('regOtpCode').value;
 
-        if (!fullName || !phone || !dob || !password || !otp) return alert('* भएका सबै फिल्ड भर्नुहोस्');
-        if (!window.confirmationResult) return alert('पहिला OTP पठाउनुहोस्');
+        if (!fullName || !phone || !dob || !password || !otp) {
+            alert('* भएका सबै फिल्ड भर्नुहोस्');
+            return;
+        }
+        if (!window.confirmationResult) {
+            alert('पहिला OTP पठाउनुहोस्');
+            return;
+        }
 
         try {
             const result = await window.confirmationResult.confirm(otp);
             const user = result.user;
             
-            // Email/Password account creation
-            const emailUser = await createUserWithEmailAndPassword(auth, email || ${user.phoneNumber}@vault.np, password);
+            const emailUser = await createUserWithEmailAndPassword(
+                auth, 
+                email || ${user.phoneNumber}@vault.np, 
+                password
+            );
             
             await setDoc(doc(db, 'users', emailUser.user.uid), {
-                fullName, phone, email: email || '', dob,
-                password: 'encrypted', uid: emailUser.user.uid,
+                fullName,
+                phone,
+                email: email || '',
+                dob,
                 createdAt: serverTimestamp()
             });
 
-            // Set default PIN
-            await setDoc(doc(db, 'vault', emailUser.user.uid), { pin: '0000' });
+            await setDoc(doc(db, 'vault', emailUser.user.uid), {
+                pin: '0000'
+            });
             
             showMessage('✅ खाता सफलतापूर्वक खोलियो!', 'success');
             loginTab.classList.remove('hidden');
             registerTab.classList.add('hidden');
-        } catch(e) { showMessage('❌ ' + e.message, 'error'); }
+        } catch(e) {
+            showMessage('❌ ' + e.message, 'error');
+        }
     };
 
-    // 🔐 LOGIN
+    // 🔐 Login
     document.getElementById('loginBtn').onclick = async () => {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
+        
+        if (!email || !password) {
+            alert('इमेल र पासवर्ड हाल्नुहोस्');
+            return;
+        }
+        
         try {
             await signInWithEmailAndPassword(auth, email, password);
-        } catch(e) { showMessage('❌ इमेल वा पासवर्ड गलत', 'error'); }
+        } catch(e) {
+            showMessage('❌ इमेल वा पासवर्ड गलत', 'error');
+        }
     };
 
-    // 🔑 FORGET PASSWORD SEND OTP
+    // 🔑 Forget Password - Send OTP
     document.getElementById('sendForgetOtpBtn').onclick = async () => {
         forgetPhoneNumber = document.getElementById('forgetPhone').value.trim();
-        if (!forgetPhoneNumber.startsWith('+')) return alert('+977 सहित हाल्नुहोस्');
+        if (!forgetPhoneNumber.startsWith('+')) {
+            alert('+977 सहित हाल्नुहोस्');
+            return;
+        }
         try {
             window.confirmationResult = await signInWithPhoneNumber(auth, forgetPhoneNumber, window.recaptchaVerifier);
             showMessage('✅ OTP पठाइयो', 'success');
-        } catch(e) { showMessage('❌ ' + e.message, 'error'); }
+        } catch(e) {
+            showMessage('❌ ' + e.message, 'error');
+        }
     };
 
-    // 🔁 RESET PASSWORD
+    // 🔁 Reset Password
     document.getElementById('resetPasswordBtn').onclick = async () => {
         const otp = document.getElementById('forgetOtpCode').value;
         const newPass = document.getElementById('newPassword').value;
-        if (!otp || !newPass) return alert('OTP र नयाँ पासवर्ड हाल्नुहोस्');
+        
+        if (!otp || !newPass) {
+            alert('OTP र नयाँ पासवर्ड हाल्नुहोस्');
+            return;
+        }
 
         try {
             const result = await window.confirmationResult.confirm(otp);
             const user = result.user;
             
-            // Find user by phone
             const q = query(collection(db, 'users'), where('phone', '==', forgetPhoneNumber));
             const snap = await getDocs(q);
-            if (snap.empty) return alert('खाता फेला परेन');
+            
+            if (snap.empty) {
+                alert('खाता फेला परेन');
+                return;
+            }
             
             const userDoc = snap.docs[0];
             const email = userDoc.data().email || ${forgetPhoneNumber}@vault.np;
             
-            // Reauthenticate and update password
             const credential = await signInWithEmailAndPassword(auth, email, 'dummy');
             await updatePassword(credential.user, newPass);
             
             showMessage('✅ पासवर्ड सफलतापूर्वक परिवर्तन भयो', 'success');
             forgetTab.classList.add('hidden');
             loginTab.classList.remove('hidden');
-        } catch(e) { showMessage('❌ ' + e.message, 'error'); }
+        } catch(e) {
+            showMessage('❌ ' + e.message, 'error');
+        }
     };
 
-    // 👤 AUTH STATE
+    // 👤 Auth State
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
@@ -356,37 +412,59 @@
         }
     });
 
-    // 📝 LOAD NOTES
+    // 📝 Load Notes
     function loadNotes() {
-        const q = query(collection(db, 'users', currentUserId, 'notes'), orderBy('timestamp', 'desc'));
+        const q = query(
+            collection(db, 'users', currentUserId, 'notes'),
+            orderBy('timestamp', 'desc')
+        );
+        
         onSnapshot(q, (snap) => {
             let html = '';
-            snap.forEach(d => html += <div style="background:#f9f9f9; padding:12px; margin:8px 0; border-radius:12px;">${d.data().content}</div>);
+            snap.forEach(d => {
+                html += `<div style="background:#f9f9f9; padding:12px; margin:8px 0; border-radius:12px;">
+                            ${d.data().content}
+                        </div>`;
+            });
             document.getElementById('notesList').innerHTML = html || '<p>कुनै नोट छैन</p>';
         });
     }
 
-    // 💾 SAVE NOTE
+    // 💾 Save Note
     document.getElementById('saveNoteBtn').onclick = async () => {
         const content = document.getElementById('noteContent').value.trim();
-        if (!content) return alert('नोट लेख्नुहोस्');
-        await addDoc(collection(db, 'users', currentUserId, 'notes'), { content, timestamp: serverTimestamp() });
+        if (!content) {
+            alert('नोट लेख्नुहोस्');
+            return;
+        }
+        
+        await addDoc(collection(db, 'users', currentUserId, 'notes'), {
+            content,
+            timestamp: serverTimestamp()
+        });
+        
         document.getElementById('noteContent').value = '';
         showMessage('✅ नोट सेभ भयो', 'success');
     };
 
-    // 🔓 OPEN VAULT (PIN VERIFICATION)
+    // 🔓 Open Vault
     document.getElementById('openVaultBtn').onclick = () => {
         mainApp.classList.add('hidden');
         pinVaultSection.classList.remove('hidden');
     };
 
-    // ✅ PIN VERIFY
+    // ✅ Verify PIN
     document.getElementById('verifyPinBtn').onclick = async () => {
-        const pin = [...document.querySelectorAll('.pin-box input')].map(i => i.value).join('');
-        if (pin.length !== 4) return alert('४ अङ्कको पिन हाल्नुहोस्');
+        const pin = [...document.querySelectorAll('.pin-box input')]
+            .map(i => i.value).join('');
+        
+        if (pin.length !== 4) {
+            alert('४ अङ्कको पिन हाल्नुहोस्');
+            return;
+        }
 
         const vaultDoc = await getDoc(doc(db, 'vault', currentUserId));
+        
         if (vaultDoc.exists() && vaultDoc.data().pin === pin) {
             pinVaultSection.classList.add('hidden');
             vaultMediaSection.classList.remove('hidden');
@@ -396,33 +474,54 @@
         }
     };
 
-    // 🔁 FORGET PIN
+    // 🔁 Forget PIN
     document.getElementById('forgetPinLink').onclick = async () => {
-        if (!currentUser?.phoneNumber) return alert('फोन नम्बर भेटिएन');
+        if (!currentUser?.phoneNumber) {
+            alert('फोन नम्बर भेटिएन');
+            return;
+        }
+        
         try {
-            window.confirmationResult = await signInWithPhoneNumber(auth, currentUser.phoneNumber, window.recaptchaVerifier);
+            window.confirmationResult = await signInWithPhoneNumber(
+                auth, 
+                currentUser.phoneNumber, 
+                window.recaptchaVerifier
+            );
+            
             const otp = prompt('फोनमा OTP पठाइयो, कोड हाल्नुहोस्:');
             if (!otp) return;
+            
             await window.confirmationResult.confirm(otp);
+            
             const newPin = prompt('नयाँ ४ अङ्कको पिन हाल्नुहोस्:');
             if (newPin && newPin.length === 4) {
-                await setDoc(doc(db, 'vault', currentUserId), { pin: newPin }, { merge: true });
+                await setDoc(doc(db, 'vault', currentUserId), 
+                    { pin: newPin }, 
+                    { merge: true }
+                );
                 alert('✅ पिन परिवर्तन भयो');
             }
-        } catch(e) { alert('❌ ' + e.message); }
+        } catch(e) {
+            alert('❌ ' + e.message);
+        }
     };
 
-    // 📤 UPLOAD MEDIA
+    // 📤 Upload Media
     document.getElementById('uploadMediaBtn').onclick = async () => {
         const file = document.getElementById('mediaUpload').files[0];
-        if (!file) return alert('फाइल चयन गर्नुहोस्');
+        if (!file) {
+            alert('फाइल चयन गर्नुहोस्');
+            return;
+        }
 
         const storageRef = ref(storage, vault/${currentUserId}/${Date.now()}_${file.name});
         await uploadBytes(storageRef, file);
         const url = await getDownloadURL(storageRef);
         
         await addDoc(collection(db, 'users', currentUserId, 'vaultMedia'), {
-            url, name: file.name, type: file.type.split('/')[0],
+            url,
+            name: file.name,
+            type: file.type.split('/')[0],
             timestamp: serverTimestamp()
         });
         
@@ -430,17 +529,22 @@
         loadMedia();
     };
 
-    // 📸 LOAD MEDIA
+    // 📸 Load Media
     async function loadMedia() {
-        const q = query(collection(db, 'users', currentUserId, 'vaultMedia'), orderBy('timestamp', 'desc'));
+        const q = query(
+            collection(db, 'users', currentUserId, 'vaultMedia'),
+            orderBy('timestamp', 'desc')
+        );
+        
         onSnapshot(q, (snap) => {
             let html = '';
             snap.forEach((doc) => {
                 const media = doc.data();
                 const mediaId = doc.id;
+                
                 if (media.type === 'image') {
                     html += `<div class="media-card">
-                        <img src="${media.url}" style="width:100%; height:150px; object-fit:cover; border-radius:12px;" onclick="window.open('${media.url}','_blank')">
+                        <img src="${media.url}" style="width:100%; height:150px; object-fit:cover; border-radius:12px;">
                         <div style="display:flex; gap:5px; margin-top:8px;">
                             <button onclick="window.open('${media.url}','_blank')" style="background:blue;">🔍</button>
                             <button onclick="deleteMedia('${mediaId}')" style="background:crimson;">🗑️</button>
@@ -450,7 +554,7 @@
                     html += `<div class="media-card">
                         <video src="${media.url}" style="width:100%; height:150px; border-radius:12px;" controls></video>
                         <div style="display:flex; gap:5px; margin-top:8px;">
-                            <button onclick="document.querySelector('video').requestFullscreen()" style="background:green;">⛶</button>
+                            <button onclick="this.parentElement.parentElement.querySelector('video').requestFullscreen()" style="background:green;">⛶</button>
                             <button onclick="deleteMedia('${mediaId}')" style="background:crimson;">🗑️</button>
                         </div>
                     </div>`;
@@ -460,24 +564,24 @@
         });
     }
 
-    // 🗑️ DELETE MEDIA
+    // 🗑️ Delete Media
     window.deleteMedia = async (mediaId) => {
         if (!confirm('हटाउने हो?')) return;
         await deleteDoc(doc(db, 'users', currentUserId, 'vaultMedia', mediaId));
-        // Note: Storage delete separate
     };
 
-    // 🚪 LOGOUT
+    // 🚪 Logout
     document.getElementById('logoutBtn').onclick = async () => {
         await signOut(auth);
     };
 
+    // 📢 Show Message
     function showMessage(msg, type) {
-        globalMsg.innerHTML = <div class="${type}">${msg}</div>;
+        globalMsg.innerHTML = <div style="padding:12px; border-radius:50px; background:${type === 'success' ? '#e8f5e9' : '#ffebee'}; color:${type === 'success' ? '#2e7d32' : '#c62828'};">${msg}</div>;
         setTimeout(() => globalMsg.innerHTML = '', 3000);
     }
 
-    // Auto move PIN inputs
+    // 🔢 Auto move PIN inputs
     document.querySelectorAll('.pin-box input').forEach((input, index) => {
         input.oninput = function() {
             if (this.value.length === 1 && index < 3) {
@@ -485,7 +589,6 @@
             }
         };
     });
-
 </script>
 </body>
 </html>
