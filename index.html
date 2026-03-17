@@ -11,7 +11,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8fbff; color: #333; line-height: 1.6; overflow-x: hidden; }
         
-        /* ========== 3-LINE HAMBURGER MENU LEFT SIDE ========== */
+        /* ========== PROFESSIONAL 3-LINE HAMBURGER MENU LEFT SIDE ========== */
         .hamburger-menu-container {
             position: fixed;
             top: 20px;
@@ -20,86 +20,116 @@
         }
         
         .hamburger-btn { 
-            background: linear-gradient(135deg, #ff69b4, #da1b76);
+            background: linear-gradient(145deg, #2c3e50, #1a2634);
             color: white; 
             padding: 14px 16px;
-            border-radius: 12px;
+            border-radius: 50px;
             font-weight: bold; 
-            width: 55px;
-            height: 55px;
+            width: 60px;
+            height: 60px;
             text-align: center; 
             cursor: pointer; 
-            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            gap: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
         }
         .hamburger-btn:hover { 
-            background: linear-gradient(135deg, #da1b76, #c71585); 
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(218, 27, 118, 0.6);
+            background: linear-gradient(145deg, #1a2634, #0f1a24);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .hamburger-btn:active {
+            transform: translateY(0) scale(0.95);
         }
         
         .hamburger-line {
-            width: 26px;
+            width: 28px;
             height: 3px;
             background-color: white;
-            border-radius: 3px;
-            transition: all 0.3s ease;
+            border-radius: 6px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-origin: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .hamburger-btn:hover .hamburger-line:nth-child(1) {
-            transform: translateY(6px) rotate(45deg);
-            width: 20px;
+            transform: translateY(8px) rotate(45deg);
+            width: 28px;
+            background: #ffd700;
         }
         .hamburger-btn:hover .hamburger-line:nth-child(2) {
             opacity: 0;
+            transform: scale(0.2);
         }
         .hamburger-btn:hover .hamburger-line:nth-child(3) {
-            transform: translateY(-6px) rotate(-45deg);
-            width: 20px;
+            transform: translateY(-8px) rotate(-45deg);
+            width: 28px;
+            background: #ffd700;
         }
 
         /* Menu Options */
         .menu-options {
             display: none;
             position: absolute;
-            top: 65px;
+            top: 75px;
             left: 0;
-            background: white;
-            width: 260px;
-            border-radius: 16px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            width: 280px;
+            border-radius: 20px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.25);
             overflow: hidden;
             z-index: 1002;
-            animation: elegantReveal 0.4s ease-out;
-            border: 1px solid #f0f0f0;
+            animation: menuSlideIn 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+            transform-origin: top left;
+        }
+
+        @keyframes menuSlideIn {
+            0% { opacity: 0; transform: translateY(-20px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .menu-options button { 
             width: 100%; 
-            padding: 16px 20px;
+            padding: 18px 24px;
             border: none; 
             background: none; 
             cursor: pointer; 
-            border-bottom: 1px solid #f0f0f0; 
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
             text-align: left; 
             font-size: 15px; 
-            transition: all 0.25s ease; 
+            transition: all 0.4s ease; 
             font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #444;
+            gap: 15px;
+            color: #2c3e50;
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
         .menu-options button:hover { 
-            background: linear-gradient(to right, #fff9fc, #fdf2f9);
-            color: #ff69b4; 
-            padding-left: 24px;
+            background: linear-gradient(90deg, #f8f9fa, #ffffff);
+            color: #1a2634; 
+            padding-left: 32px;
+            font-weight: 600;
+        }
+        .menu-options button i {
+            font-size: 18px;
+            width: 24px;
+            color: #1a2634;
+            transition: 0.3s;
+        }
+        .menu-options button:hover i {
+            color: #ffd700;
+            transform: scale(1.1);
         }
         .menu-options button:last-child {
             border-bottom: none;
@@ -107,73 +137,89 @@
         
         /* Menu Forms */
         .menu-form-card { 
-            background: white; 
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
             padding: 28px;
-            border-radius: 18px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
-            width: 330px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            width: 350px;
             position: fixed;
             top: 90px;
             left: 25px;
             z-index: 1003;
             display: none;
-            animation: nbnPop 0.4s ease-out;
-            border: 1px solid #eee;
+            animation: formPop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        
+        @keyframes formPop {
+            0% { opacity: 0; transform: scale(0.8) translateY(-20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
         
         .input-box { 
             margin: 8px 0; 
-            padding: 12px; 
+            padding: 14px 18px; 
             width: 100%; 
-            border-radius: 8px; 
-            border: 1px solid #ddd; 
+            border-radius: 50px;
+            border: 2px solid #eef2f6; 
             box-sizing: border-box; 
             outline: none; 
             font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
         }
         .input-box:focus { 
-            border-color: #ff69b4; 
-            box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.2);
+            border-color: #1a2634; 
+            box-shadow: 0 0 0 4px rgba(26, 38, 52, 0.1);
+            transform: translateY(-2px);
         }
         
         .btn-main { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76);
+            background: linear-gradient(90deg, #1a2634, #2c3e50);
             color: white; 
             border: none; 
-            padding: 12px; 
+            padding: 14px; 
             width: 100%; 
-            border-radius: 8px; 
-            font-weight: bold; 
+            border-radius: 50px; 
+            font-weight: 600; 
             cursor: pointer; 
-            margin-top: 10px; 
+            margin-top: 12px; 
             font-family: 'Poppins', sans-serif;
-            transition: 0.3s;
+            transition: all 0.4s;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255,215,0,0.3);
         }
         .btn-main:hover { 
-            background: linear-gradient(90deg, #da1b76, #c71585);
-            transform: translateY(-2px);
+            background: linear-gradient(90deg, #2c3e50, #1a2634);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(26, 38, 52, 0.3);
+        }
+        .btn-main:active {
+            transform: translateY(-1px);
         }
         
         .hidden { display: none !important; }
         
         #chatResp { 
             margin-top: 10px; 
-            padding: 12px; 
+            padding: 15px; 
             background: #f8f9fa; 
-            border-left: 4px solid #ff69b4; 
-            border-radius: 5px; 
+            border-left: 4px solid #1a2634; 
+            border-radius: 12px; 
             font-size: 14px; 
-            line-height: 1.5; 
-            min-height: 40px; 
+            line-height: 1.6; 
+            min-height: 50px; 
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
         
         /* Header section */
         header { 
-            background: linear-gradient(90deg, #ff69b4, #da1b76); 
+            background: linear-gradient(90deg, #1a2634, #2c3e50); 
             color: white; 
             padding: 25px 10px; 
             text-align: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
             position: relative;
             z-index: 1000;
         }
@@ -181,142 +227,148 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            gap: 15px; 
+            gap: 20px; 
+            flex-wrap: wrap;
         }
 
-        /* NEW NEPAL FLAG ANIMATION STYLE */
+        /* NEPAL FLAG ANIMATION STYLE */
         .flag-wrapper {
             perspective: 1000px;
         }
         .animated-flag {
-            width: 50px; /* Header size */
+            width: 50px;
             height: auto;
             display: block;
             animation: waveFlag 2.5s infinite ease-in-out;
             transform-origin: left center;
-            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.2));
+            filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.2));
         }
 
         @keyframes waveFlag {
-            0%, 100% { transform: rotate(0deg) skewY(0deg); }
-            25% { transform: rotate(3deg) skewY(2deg) scaleX(1.02); }
-            50% { transform: rotate(0deg) skewY(0deg); }
-            75% { transform: rotate(-3deg) skewY(-2deg) scaleX(0.98); }
+            0%, 100% { transform: rotate(0deg) skewY(0deg) scaleX(1); }
+            25% { transform: rotate(4deg) skewY(2deg) scaleX(1.05); }
+            50% { transform: rotate(0deg) skewY(0deg) scaleX(1); }
+            75% { transform: rotate(-4deg) skewY(-2deg) scaleX(0.95); }
         }
 
-        /* National Symbol - Static */
+        /* National Symbol */
         .national.simbol { 
-            width:105px; 
+            width: 105px; 
             height: auto; 
             display: block;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.2));
         }
 
-        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 10px; }
-        nav ul li { margin: 0 15px; }
-        nav ul li a { color: white; text-decoration: none; font-size: 18px; font-weight: 500; }
+        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 15px; gap: 20px; flex-wrap: wrap; }
+        nav ul li a { color: white; text-decoration: none; font-size: 18px; font-weight: 500; transition: 0.3s; padding: 5px 10px; border-radius: 20px; }
+        nav ul li a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         /* ================= ANIMATIONS ================= */
-        @keyframes elegantReveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes wave { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         /* ================= HERO SECTION ================= */
-        .hero { min-height: 80vh; background-color: #e3f2fd; margin: 20px; border-radius: 30px; display: flex; align-items: center; justify-content: space-around; padding: 40px; flex-wrap: wrap; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .hero { min-height: 80vh; background: linear-gradient(135deg, #ffffff, #f0f5fa); margin: 30px; border-radius: 50px; display: flex; align-items: center; justify-content: space-around; padding: 50px; flex-wrap: wrap; color: #333; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         .hero-text { max-width: 500px; text-align: left; }
-        .main-quote { font-size: 30px; font-weight: bold; margin-bottom: 20px; color: #1a237e; animation: elegantReveal 1.8s ease-out forwards; }
+        .main-quote { font-size: 32px; font-weight: 700; margin-bottom: 20px; color: #1a2634; animation: fadeInLeft 1.8s ease-out forwards; line-height: 1.4; }
         
-        .overtake-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+        .overtake-wrapper { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 15px; }
         
-        .speech { font-size: 18px; font-weight: bold; color: #2e7d32; animation: fadeInLeft 1s ease-out 0.5s both; }
-        .s { font-size: 18px; font-weight: 800; color: #f9a825; letter-spacing: 1px; animation: fadeInLeft 1s ease-out 0.8s both; }
-        .d { font-size: 18px; font-weight: bold; color: #d32f2f; animation: fadeInLeft 1s ease-out 1.1s both; }
+        .speech { font-size: 20px; font-weight: 600; color: #2e7d32; animation: fadeInLeft 1s ease-out 0.5s both; }
+        .s { font-size: 20px; font-weight: 800; color: #f9a825; letter-spacing: 1px; animation: fadeInLeft 1s ease-out 0.8s both; }
+        .d { font-size: 20px; font-weight: 700; color: #d32f2f; animation: fadeInLeft 1s ease-out 1.1s both; }
 
         .flag-container { display: flex; flex-direction: column; align-items: center; }
-        .nepal-flag { width: 200px; height: auto; margin-bottom: 10px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); animation: wave 3s ease-in-out infinite, popIn 1s ease-out 1.4s both; }
+        .nepal-flag { width: 220px; height: auto; margin-bottom: 15px; filter: drop-shadow(5px 8px 12px rgba(0,0,0,0.15)); animation: wave 3s ease-in-out infinite, popIn 1s ease-out 1.4s both; }
         
         .hero-image-container { display: flex; flex-direction: column; align-items: center; animation: popIn 1.2s ease-out; }
-        .hero img.profile-pic { width: 300px; border-radius: 20px; border: 6px solid white; box-shadow: 0px 15px 35px rgba(0,0,0,0.1); }
-        .hero-author-name { margin-top: 15px; font-size: 30px; font-weight: 700; color: #da1b76; text-transform: uppercase; letter-spacing: 2px; }
+        .hero img.profile-pic { width: 300px; height: 300px; border-radius: 30px; border: 6px solid white; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); object-fit: cover; }
+        .hero-author-name { margin-top: 20px; font-size: 32px; font-weight: 700; color: #1a2634; text-transform: uppercase; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
 
         /* ================= CONTENT SECTIONS ================= */
-        section { max-width: 950px; margin: 40px auto; padding: 40px; background: white; border-radius: 20px; text-align: center; box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.05); }
-        .info-box { text-align: left; margin-top: 25px; padding: 25px; border-left: 6px solid #ff69b4; background: #fff9fc; border-radius: 0 15px 15px 0; }
-        button { margin: 10px; background-color: #ff69b4; color: white; padding: 14px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        button:hover { background-color: #da1b76; transform: translateY(-3px); }
-        .social-links { display: flex; justify-content: center; gap: 30px; font-size: 35px; margin-top: 25px; }
-        .social-links a { color: #555; transition: 0.4s; }
-        .social-links a:hover { color: #ff69b4; transform: scale(1.2); }
-        .qual-item { margin-bottom: 8px; display: block; font-weight: 500; }
+        section { max-width: 1000px; margin: 50px auto; padding: 50px; background: white; border-radius: 40px; text-align: center; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.08); }
+        .info-box { text-align: left; margin-top: 30px; padding: 30px; border-left: 8px solid #1a2634; background: #f8fafd; border-radius: 0 20px 20px 0; }
+        button { margin: 10px; background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; padding: 16px 32px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.4s; font-size: 16px; }
+        button:hover { background: linear-gradient(90deg, #2c3e50, #1a2634); transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(26, 38, 52, 0.2); }
+        .social-links { display: flex; justify-content: center; gap: 35px; font-size: 40px; margin-top: 30px; }
+        .social-links a { color: #2c3e50; transition: 0.4s; }
+        .social-links a:hover { color: #1a2634; transform: scale(1.3) translateY(-5px); }
+        .qual-item { margin-bottom: 12px; display: block; font-weight: 500; font-size: 16px; }
 
         /* ================= LOCATION POPUP BOX ================= */
-        .contact-info { text-align: left; display: inline-block; margin-top: 20px; width: 100%; max-width: 400px; }
-        .location-wrapper { margin-top: 15px; position: relative; }
-        .loc-trigger { color: #da1b76; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 1.1rem; }
+        .contact-info { text-align: left; display: inline-block; margin-top: 20px; width: 100%; max-width: 450px; }
+        .location-wrapper { margin-top: 20px; position: relative; }
+        .loc-trigger { color: #1a2634; font-weight: 700; cursor: pointer; text-decoration: underline; font-size: 1.1rem; transition: 0.3s; }
+        .loc-trigger:hover { color: #000; transform: translateX(5px); }
         
         .loc-modal { 
             display: none; 
             background: #fff; 
-            border: 2px solid #da1b76; 
-            padding: 15px; 
-            border-radius: 15px; 
-            margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            animation: elegantReveal 0.4s ease;
+            border: 3px solid #1a2634; 
+            padding: 20px; 
+            border-radius: 20px; 
+            margin-top: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            animation: formPop 0.4s ease;
         }
         .loc-modal a {
             display: block;
-            background: #f0f0f0;
-            margin: 8px 0;
-            padding: 10px;
+            background: #f0f5fa;
+            margin: 10px 0;
+            padding: 12px 18px;
             text-decoration: none;
             color: #333;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             transition: 0.3s;
         }
-        .loc-modal a:hover { background: #ffe6f2; color: #da1b76; }
-        .credit-text { font-size: 12px; color: #777; font-style: italic; margin-top: 5px; }
+        .loc-modal a:hover { background: #1a2634; color: white; transform: translateX(5px); }
+        .credit-text { font-size: 12px; color: #777; font-style: italic; margin-top: 8px; }
 
-        footer { background: #1a1a1a; color: white; padding: 30px 0; margin-top: 60px; text-align: center; }
+        footer { background: linear-gradient(90deg, #1a2634, #0f1a24); color: white; padding: 40px 0; margin-top: 80px; text-align: center; }
 
         /* ================= CHAT AI CSS ================= */
         #nbn-chat-btn {
             position: fixed; bottom: 30px; right: 30px;
-            background: linear-gradient(90deg, #ff69b4, #da1b76);
-            color: white; padding: 15px 25px; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 5px 20px rgba(218, 27, 118, 0.4);
-            z-index: 1000; font-weight: 600; display: flex; align-items: center; gap: 10px;
-            transition: 0.3s; font-family: 'Poppins', sans-serif;
+            background: linear-gradient(90deg, #1a2634, #2c3e50);
+            color: white; padding: 18px 28px; border-radius: 60px;
+            cursor: pointer; box-shadow: 0 8px 25px rgba(26, 38, 52, 0.4);
+            z-index: 1000; font-weight: 600; display: flex; align-items: center; gap: 12px;
+            transition: all 0.4s; font-family: 'Poppins', sans-serif;
+            border: 1px solid rgba(255,215,0,0.3);
         }
-        #nbn-chat-btn:hover { transform: scale(1.05); }
+        #nbn-chat-btn:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 15px 35px rgba(26, 38, 52, 0.5); }
 
         #nbn-chat-window {
             position: fixed; bottom: 100px; right: 30px;
-            width: 350px; height: 500px; background: white;
-            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 380px; height: 520px; background: white;
+            border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             display: none; flex-direction: column; z-index: 1000; overflow: hidden;
-            border: 1px solid #eee; animation: nbnPop 0.4s ease-out;
+            border: 1px solid #eee; animation: nbnPop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             font-family: 'Poppins', sans-serif;
         }
 
-        @keyframes nbnPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes nbnPop { from { transform: scale(0.8) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
 
-        #nbn-chat-header { background: #da1b76; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        #nbn-chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #fdfdfd; display: flex; flex-direction: column; gap: 12px; }
+        #nbn-chat-header { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        #nbn-chat-body { flex: 1; padding: 20px; overflow-y: auto; background: #f8fafd; display: flex; flex-direction: column; gap: 15px; }
         
-        .msg { padding: 10px 15px; border-radius: 18px; font-size: 14px; max-width: 85%; line-height: 1.5; position: relative; }
-        .user-msg { background: #ff69b4; color: white; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(255,105,180,0.3); }
-        .ai-msg { background: #f0f2f5; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg { padding: 12px 18px; border-radius: 25px; font-size: 14px; max-width: 85%; line-height: 1.5; position: relative; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .user-msg { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(26,38,52,0.2); }
+        .ai-msg { background: #eef2f6; color: #333; align-self: flex-start; border-bottom-left-radius: 5px; }
 
-        #trans-control { padding: 8px; background: #f8f8f8; text-align: center; border-top: 1px solid #eee; }
-        #trans-btn { background: white; color: #da1b76; padding: 5px 15px; font-size: 12px; border: 1px solid #da1b76; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: 600; }
-        #trans-btn:hover { background: #da1b76; color: white; }
+        #trans-control { padding: 10px; background: #ffffff; text-align: center; border-top: 1px solid #eef2f6; }
+        #trans-btn { background: white; color: #1a2634; padding: 8px 20px; font-size: 13px; border: 2px solid #1a2634; border-radius: 30px; cursor: pointer; transition: 0.3s; font-weight: 600; }
+        #trans-btn:hover { background: #1a2634; color: white; transform: translateY(-2px); }
 
-        #nbn-chat-footer { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
-        #nbn-input { flex: 1; border: 1px solid #ddd; padding: 10px 15px; border-radius: 25px; outline: none; font-size: 14px; }
-        #nbn-chat-footer button { background: #da1b76; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; transition: 0.2s; }
-        #nbn-chat-footer button:hover { background: #ff69b4; }
+        #nbn-chat-footer { padding: 20px; display: flex; gap: 12px; background: white; border-top: 1px solid #eef2f6; }
+        #nbn-input { flex: 1; border: 2px solid #eef2f6; padding: 12px 20px; border-radius: 30px; outline: none; font-size: 14px; transition: 0.3s; }
+        #nbn-input:focus { border-color: #1a2634; box-shadow: 0 0 0 4px rgba(26,38,52,0.1); }
+        #nbn-chat-footer button { background: #1a2634; color: white; border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; transition: 0.3s; margin: 0; padding: 0; }
+        #nbn-chat-footer button:hover { background: #2c3e50; transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -336,7 +388,7 @@
 </div>
 
 <div id="create-account" class="menu-form-card">
-    <h3 style="margin-top:0; color: #da1b76;">Create Account</h3>
+    <h3 style="margin-top:0; color: #1a2634; font-weight: 700;">Create Account</h3>
     <input type="text" id="fullName" placeholder="Full Name" class="input-box">
     <select id="country" class="input-box">
         <option value="">Select Country</option>
@@ -350,7 +402,7 @@
 </div>
 
 <div id="login" class="menu-form-card">
-    <h3 style="color: #da1b76;">Login</h3>
+    <h3 style="color: #1a2634;">Login</h3>
     <input type="text" id="loginPhone" placeholder="Phone Number" class="input-box">
     <input type="password" id="loginPassword" placeholder="Password" class="input-box">
     <button class="btn-main" onclick="loginUser()">Login</button>
@@ -358,7 +410,7 @@
 </div>
 
 <div id="chat-ai-menu" class="menu-form-card" style="width: 350px;">
-    <h3 style="color: #da1b76;">AI Assistant</h3>
+    <h3 style="color: #1a2634;">AI Assistant</h3>
     <div id="chatResp">Hi! I am your AI. How can I help you today?</div>
     <textarea id="chatInput" placeholder="Try saying 'Hello', 'Time', or '10 + 20'..." class="input-box" rows="2"></textarea>
     <button class="btn-main" onclick="sendChat()">Send Message</button>
@@ -366,7 +418,7 @@
 </div>
 
 <div id="after-login" class="menu-form-card">
-    <h3 id="welcomeMsg" style="color: #da1b76;">Welcome!</h3>
+    <h3 id="welcomeMsg" style="color: #1a2634;">Welcome!</h3>
     <button class="btn-main" style="background:#4caf50" onclick="showNotice()">Notice</button>
     <button class="btn-main" style="background:#2196f3" onclick="showSMS()">Personal SMS</button>
     <button class="btn-main" style="background:#666" onclick="logout()">Logout</button>
@@ -407,31 +459,31 @@
 </div>
 
 <section id="about">
-    <h2 style="color: #da1b76;">About Me</h2>
+    <h2 style="color: #1a2634;">About Me</h2>
     <div style="margin-top: 20px;">
         <button onclick="showEnglish()">Read in English</button>
         <button onclick="showNepali()">नेपालीमा पढ्नुहोस्</button>
     </div>
 
     <div id="english-info" class="hidden info-box">
-        <p>My name is <b><span style="color: blue;">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS). I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2. I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. I have also worked as a Computer Operator. My dream is to become a successful YouTuber. Thank you for visiting my profile!</p>
-        <h3 style="color: red; margin-top: 20px;">My Qualifications</h3>
+        <p>My name is <b><span style="color: #1a2634;">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS). I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2. I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. I have also worked as a Computer Operator. My dream is to become a successful YouTuber. Thank you for visiting my profile!</p>
+        <h3 style="color: #da1b76; margin-top: 20px;">My Qualifications</h3>
         <span class="qual-item">✅ Plus 2 in Education</span>
         <span class="qual-item">✅ Certified Advanced Computer Operator</span>
         <span class="qual-item">✅ Can talk normally Nepali, Hindi, English And Korean Language</span>
     </div>
 
     <div id="nepali-info" class="hidden info-box">
-        <p>मेरो नाम <b><span style="color: blue;">नवीन फुयल</span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
+        <p>मेरो नाम <b><span style="color: #1a2634;">नवीन फुयल</span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
         <p>मैले उच्च माध्यमिक तह (+2) शिक्षामा पुरा गरिसकेको छु। मलाई भाषा सिक्ने ठूलो रुचि छ। विशेषगरी कोरियन भाषा सिक्नमा म निकै अब्बल छु।</p>
         <p>त्यसका साथै म कम्प्युटर अपरेटरको रूपमा पनि काम गरिसकेको छु। म YouTube मा सफल बन्न चाहन्छु। धन्यवाद मेरो प्रोफाइल हेर्दिनु भएकोमा!</p>
-        <h3 style="color: red; margin-top: 20px;">मेरो योग्यता</h3>
+        <h3 style="color: #da1b76; margin-top: 20px;">मेरो योग्यता</h3>
         <span class="qual-item">✅ शिक्षामा प्लस २</span>
         <span class="qual-item">✅ प्रमाणित कम्प्युटर अपरेटर</span>
         <span class="qual-item">✅ नेपाली,कोरिएन,हिन्दी,अङ्ग्रेजी भाषामा सामान्य कुरा गर्न सक्ने </span>
     </div>
 
-    <h3 style="color: orange; margin-top: 40px;">Social Links</h3>
+    <h3 style="color: #1a2634; margin-top: 40px;">Social Links</h3>
     <div class="social-links">
         <a href="http://www.youtube.com/@nabinvlogdream" target="_blank"><i class="fab fa-youtube"></i></a>
         <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank"><i class="fab fa-tiktok"></i></a>
@@ -442,7 +494,7 @@
 </section>
 
 <section id="contact">
-    <h2 style="color: #da1b76;">Contact Me</h2>
+    <h2 style="color: #1a2634;">Contact Me</h2>
     <div class="contact-info">
         <p>📞 <b>Phone:</b> +977-9762509382</p>
         <p>📧 <b>Email:</b> nabinkanxo5@gmail.com</p>
@@ -472,10 +524,10 @@
     <div id="nbn-chat-window">
         <div id="nbn-chat-header">
             <div style="display:flex; align-items:center; gap:10px;">
-                <img src="npp" style="width:30px; height:30px; border-radius:50%; border:1px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                <img src="npp" style="width:35px; height:35px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                 <strong>Nabin Phuyal (AI)</strong>
             </div>
-            <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:22px;">×</span>
+            <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:28px;">×</span>
         </div>
         
         <div id="nbn-chat-body">
@@ -633,6 +685,14 @@
         alert("Logged out!"); 
     }
 
+    function showNotice() {
+        document.getElementById('post-login-content').innerHTML = "📢 All notices will be displayed here soon!";
+    }
+
+    function showSMS() {
+        document.getElementById('post-login-content').innerHTML = "✉️ You have no new messages.";
+    }
+
     document.addEventListener('click', function(event) {
         const menuContainer = document.querySelector('.hamburger-menu-container');
         const menuOptions = document.getElementById('menu-options');
@@ -645,7 +705,3 @@
 
 </body>
 </html>
-
-
-
-
