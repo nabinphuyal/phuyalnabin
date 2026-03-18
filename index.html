@@ -231,6 +231,30 @@
             flex-wrap: wrap;
         }
 
+        /* Interesting Header Text Animation */
+        .interesting-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ffffff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: glowText 2s ease-in-out infinite, floatText 3s ease-in-out infinite;
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+
+        @keyframes glowText {
+            0%, 100% { filter: drop-shadow(0 0 5px #ffd700); }
+            50% { filter: drop-shadow(0 0 20px #ffd700); }
+        }
+
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
         /* NEPAL FLAG ANIMATION STYLE */
         .flag-wrapper {
             perspective: 1000px;
@@ -328,47 +352,202 @@
 
         footer { background: linear-gradient(90deg, #1a2634, #0f1a24); color: white; padding: 40px 0; margin-top: 80px; text-align: center; }
 
-        /* ================= CHAT AI CSS ================= */
-        #nbn-chat-btn {
-            position: fixed; bottom: 30px; right: 30px;
-            background: linear-gradient(90deg, #1a2634, #2c3e50);
-            color: white; padding: 18px 28px; border-radius: 60px;
-            cursor: pointer; box-shadow: 0 8px 25px rgba(26, 38, 52, 0.4);
-            z-index: 1000; font-weight: 600; display: flex; align-items: center; gap: 12px;
-            transition: all 0.4s; font-family: 'Poppins', sans-serif;
-            border: 1px solid rgba(255,215,0,0.3);
+        /* ================= SCROLL-TRIGGERED CHAT AI CSS ================= */
+        #nbn-chat-wrapper {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        #nbn-chat-btn:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 15px 35px rgba(26, 38, 52, 0.5); }
+        
+        #nbn-chat-wrapper.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        #nbn-chat-btn {
+            background: linear-gradient(90deg, #1a2634, #2c3e50);
+            color: white; 
+            padding: 18px 28px; 
+            border-radius: 60px;
+            cursor: pointer; 
+            box-shadow: 0 8px 25px rgba(26, 38, 52, 0.4);
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            transition: all 0.4s; 
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid rgba(255,215,0,0.3);
+            animation: pulseButton 2s infinite;
+        }
+        
+        @keyframes pulseButton {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        #nbn-chat-btn:hover { 
+            transform: scale(1.05) translateY(-5px); 
+            box-shadow: 0 15px 35px rgba(26, 38, 52, 0.5);
+            animation: none;
+        }
 
         #nbn-chat-window {
-            position: fixed; bottom: 100px; right: 30px;
-            width: 380px; height: 520px; background: white;
-            border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-            display: none; flex-direction: column; z-index: 1000; overflow: hidden;
-            border: 1px solid #eee; animation: nbnPop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: fixed; 
+            bottom: 100px; 
+            right: 30px;
+            width: 380px; 
+            height: 520px; 
+            background: white;
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            display: none; 
+            flex-direction: column; 
+            z-index: 1000; 
+            overflow: hidden;
+            border: 1px solid #eee; 
+            animation: nbnPop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             font-family: 'Poppins', sans-serif;
         }
 
-        @keyframes nbnPop { from { transform: scale(0.8) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        @keyframes nbnPop { 
+            from { transform: scale(0.8) translateY(20px); opacity: 0; } 
+            to { transform: scale(1) translateY(0); opacity: 1; } 
+        }
 
-        #nbn-chat-header { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        #nbn-chat-body { flex: 1; padding: 20px; overflow-y: auto; background: #f8fafd; display: flex; flex-direction: column; gap: 15px; }
+        #nbn-chat-header { 
+            background: linear-gradient(90deg, #1a2634, #2c3e50); 
+            color: white; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
         
-        .msg { padding: 12px 18px; border-radius: 25px; font-size: 14px; max-width: 85%; line-height: 1.5; position: relative; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #nbn-chat-body { 
+            flex: 1; 
+            padding: 20px; 
+            overflow-y: auto; 
+            background: #f8fafd; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
         
-        .user-msg { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(26,38,52,0.2); }
-        .ai-msg { background: #eef2f6; color: #333; align-self: flex-start; border-bottom-left-radius: 5px; }
+        .msg { 
+            padding: 12px 18px; 
+            border-radius: 25px; 
+            font-size: 14px; 
+            max-width: 85%; 
+            line-height: 1.5; 
+            position: relative; 
+            animation: fadeIn 0.3s; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .user-msg { 
+            background: linear-gradient(90deg, #1a2634, #2c3e50); 
+            color: white; 
+            align-self: flex-end; 
+            border-bottom-right-radius: 5px; 
+            box-shadow: 0 3px 10px rgba(26,38,52,0.2); 
+        }
+        
+        .ai-msg { 
+            background: #eef2f6; 
+            color: #333; 
+            align-self: flex-start; 
+            border-bottom-left-radius: 5px; 
+        }
 
-        #trans-control { padding: 10px; background: #ffffff; text-align: center; border-top: 1px solid #eef2f6; }
-        #trans-btn { background: white; color: #1a2634; padding: 8px 20px; font-size: 13px; border: 2px solid #1a2634; border-radius: 30px; cursor: pointer; transition: 0.3s; font-weight: 600; }
-        #trans-btn:hover { background: #1a2634; color: white; transform: translateY(-2px); }
+        #trans-control { 
+            padding: 10px; 
+            background: #ffffff; 
+            text-align: center; 
+            border-top: 1px solid #eef2f6; 
+        }
+        
+        #trans-btn { 
+            background: white; 
+            color: #1a2634; 
+            padding: 8px 20px; 
+            font-size: 13px; 
+            border: 2px solid #1a2634; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: 600; 
+        }
+        
+        #trans-btn:hover { 
+            background: #1a2634; 
+            color: white; 
+            transform: translateY(-2px); 
+        }
 
-        #nbn-chat-footer { padding: 20px; display: flex; gap: 12px; background: white; border-top: 1px solid #eef2f6; }
-        #nbn-input { flex: 1; border: 2px solid #eef2f6; padding: 12px 20px; border-radius: 30px; outline: none; font-size: 14px; transition: 0.3s; }
-        #nbn-input:focus { border-color: #1a2634; box-shadow: 0 0 0 4px rgba(26,38,52,0.1); }
-        #nbn-chat-footer button { background: #1a2634; color: white; border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; transition: 0.3s; margin: 0; padding: 0; }
-        #nbn-chat-footer button:hover { background: #2c3e50; transform: scale(1.1); }
+        #nbn-chat-footer { 
+            padding: 20px; 
+            display: flex; 
+            gap: 12px; 
+            background: white; 
+            border-top: 1px solid #eef2f6; 
+        }
+        
+        #nbn-input { 
+            flex: 1; 
+            border: 2px solid #eef2f6; 
+            padding: 12px 20px; 
+            border-radius: 30px; 
+            outline: none; 
+            font-size: 14px; 
+            transition: 0.3s; 
+        }
+        
+        #nbn-input:focus { 
+            border-color: #1a2634; 
+            box-shadow: 0 0 0 4px rgba(26,38,52,0.1); 
+        }
+        
+        #nbn-chat-footer button { 
+            background: #1a2634; 
+            color: white; 
+            border: none; 
+            width: 48px; 
+            height: 48px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            display: grid; 
+            place-items: center; 
+            transition: 0.3s; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        #nbn-chat-footer button:hover { 
+            background: #2c3e50; 
+            transform: scale(1.1); 
+        }
+
+        /* Success message styling */
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 10px;
+            animation: fadeIn 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -431,7 +610,7 @@
             <img src="https://psc.gov.np/assets/public/images/nepal_flag.gif" alt="Nepal Flag" class="animated-flag">
         </div>
         
-        <h1>Welcome to My Personal Website</h1>
+        <h1 class="interesting-text">🇳🇵 नमस्ते Nabin Phuyal 🇳🇵</h1>
         
         <img src="national simbol.png" alt="national simbol" class="national simbol">
     </div>
@@ -581,6 +760,20 @@
         }
     };
 
+    // Scroll detection for chat box
+    window.addEventListener('scroll', function() {
+        const chatWrapper = document.getElementById('nbn-chat-wrapper');
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const pageHeight = document.documentElement.scrollHeight;
+        
+        // Show when scrolled to bottom (within 100px of bottom)
+        if (pageHeight - scrollPosition < 100) {
+            chatWrapper.classList.add('show');
+        } else {
+            chatWrapper.classList.remove('show');
+        }
+    });
+
     function toggleNbnChat() {
         const win = document.getElementById('nbn-chat-window');
         win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
@@ -599,14 +792,25 @@
         const body = document.getElementById('nbn-chat-body');
         const text = input.value.trim();
         if (text === "") return;
+        
+        // Add user message
         body.innerHTML += `<div class="msg user-msg">${text}</div>`;
+        
+        // Send email using mailto
+        const subject = encodeURIComponent("Question/Suggestion from Website Visitor");
+        const bodyText = encodeURIComponent(`New message from website:\n\n${text}\n\n---\nSent from Nabin Phuyal's website`);
+        window.location.href = `mailto:nabinkanxo5@gmail.com?subject=${subject}&body=${bodyText}`;
+        
+        // Clear input
         input.value = "";
-        body.scrollTop = body.scrollHeight;
+        
+        // Add success message
         setTimeout(() => {
-            const lang = isNepali ? 'np' : 'en';
-            body.innerHTML += `<div class="msg ai-msg">${languages[lang].reply}</div>`;
+            body.innerHTML += `<div class="msg ai-msg success-message">✓ तपाईंको सन्देश पठाइएको छ! (nabinkanxo5@gmail.com)</div>`;
             body.scrollTop = body.scrollHeight;
-        }, 800);
+        }, 500);
+        
+        body.scrollTop = body.scrollHeight;
     }
 
     let menuOpen = false;
