@@ -230,9 +230,74 @@
         .flag-container { display: flex; flex-direction: column; align-items: center; }
         .nepal-flag { width: 220px; height: auto; margin-bottom: 15px; filter: drop-shadow(5px 8px 12px rgba(0,0,0,0.15)); animation: wave 3s ease-in-out infinite, popIn 1s ease-out 1.4s both; }
         
-        .hero-image-container { display: flex; flex-direction: column; align-items: center; animation: popIn 1.2s ease-out; }
-        .hero img.profile-pic { width: 300px; height: 300px; border-radius: 30px; border: 6px solid white; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); object-fit: cover; }
-        .hero-author-name { margin-top: 20px; font-size: 32px; font-weight: 700; color: #1a2634; text-transform: uppercase; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        .hero-image-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            animation: popIn 1.2s ease-out;
+            position: relative;
+        }
+
+        /* ===== PROFILE PHOTO WITH BHOJPUR BACKGROUND & BLUR ===== */
+        .profile-wrapper {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 6px solid white;
+            box-shadow: 0px 20px 40px rgba(0,0,0,0.15);
+        }
+
+        /* Background Image (Bhojpur) with Blur */
+        .profile-wrapper .bg-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=600&h=600&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            transform: scale(1.1);
+            z-index: 0;
+        }
+
+        /* Profile Photo (Nabin.png) - स्पष्ट, माथि */
+        .profile-wrapper .profile-pic {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            border-radius: 24px;
+            /* Photo को पारदर्शिता अलि दिइयो ताकि background झल्कियोस् */
+            opacity: 0.92;
+        }
+
+        /* Optional: overlay गर्नको लागि */
+        .profile-wrapper .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.3));
+            z-index: 2;
+            border-radius: 0 0 24px 24px;
+            pointer-events: none;
+        }
+
+        .hero-author-name { 
+            margin-top: 20px; 
+            font-size: 32px; 
+            font-weight: 700; 
+            color: #1a2634; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1); 
+        }
 
         section { max-width: 1000px; margin: 50px auto; padding: 50px; background: white; border-radius: 40px; text-align: center; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.08); }
         .info-box { text-align: left; margin-top: 30px; padding: 30px; border-left: 8px solid #1a2634; background: #f8fafd; border-radius: 0 20px 20px 0; }
@@ -472,6 +537,15 @@
             margin-top: 10px;
             animation: fadeIn 0.3s;
         }
+
+        @media (max-width: 600px) {
+            .profile-wrapper {
+                width: 220px;
+                height: 220px;
+            }
+            .hero-author-name { font-size: 24px; }
+            .interesting-text { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -521,7 +595,14 @@
     </div>
 
     <div class="hero-image-container">
-        <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic">
+        <div class="profile-wrapper">
+            <!-- Bhojpur Background with Blur -->
+            <div class="bg-blur"></div>
+            <!-- Profile Photo (Nabin.png) -->
+            <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic">
+            <!-- Overlay for gradient effect -->
+            <div class="overlay"></div>
+        </div>
         <div class="hero-author-name">NABIN PHUYAL</div>
     </div>
 </div>
