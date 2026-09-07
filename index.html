@@ -236,31 +236,34 @@
             align-items: center; 
             animation: popIn 1.2s ease-out;
             position: relative;
+            width: 100%;
+            max-width: 500px;
         }
 
-        /* ===== PROFILE PHOTO WITH BHOJPUR BACKGROUND & BLUR ===== */
+        /* ===== PROFILE PHOTO - SCREEN WIDTH अनुसार ===== */
         .profile-wrapper {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 1 / 1;
             border-radius: 30px;
             overflow: hidden;
             border: 6px solid white;
             box-shadow: 0px 20px 40px rgba(0,0,0,0.15);
         }
 
-        /* Background Image (Bhojpur) with Blur */
+        /* Background Image (Bhojpur) with LESS Blur */
         .profile-wrapper .bg-blur {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=600&h=600&fit=crop');
+            background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&h=800&fit=crop');
             background-size: cover;
             background-position: center;
-            filter: blur(8px);
-            transform: scale(1.1);
+            filter: blur(3px); /* Blur कम गरियो */
+            transform: scale(1.05);
             z-index: 0;
         }
 
@@ -272,18 +275,17 @@
             object-fit: cover;
             z-index: 1;
             border-radius: 24px;
-            /* Photo को पारदर्शिता अलि दिइयो ताकि background झल्कियोस् */
-            opacity: 0.92;
+            opacity: 0.95;
         }
 
-        /* Optional: overlay गर्नको लागि */
+        /* Overlay - तल्लो भागमा हल्का shadow */
         .profile-wrapper .overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40%;
-            background: linear-gradient(transparent, rgba(0,0,0,0.3));
+            height: 30%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.2));
             z-index: 2;
             border-radius: 0 0 24px 24px;
             pointer-events: none;
@@ -538,13 +540,21 @@
             animation: fadeIn 0.3s;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .profile-wrapper {
-                width: 220px;
-                height: 220px;
+                max-width: 300px;
             }
             .hero-author-name { font-size: 24px; }
             .interesting-text { font-size: 1.5rem; }
+            .hero { padding: 30px 20px; margin: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .profile-wrapper {
+                max-width: 220px;
+            }
+            .hero-author-name { font-size: 18px; }
+            .interesting-text { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -596,11 +606,11 @@
 
     <div class="hero-image-container">
         <div class="profile-wrapper">
-            <!-- Bhojpur Background with Blur -->
+            <!-- Bhojpur Background with LESS Blur -->
             <div class="bg-blur"></div>
             <!-- Profile Photo (Nabin.png) -->
             <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic">
-            <!-- Overlay for gradient effect -->
+            <!-- Overlay -->
             <div class="overlay"></div>
         </div>
         <div class="hero-author-name">NABIN PHUYAL</div>
