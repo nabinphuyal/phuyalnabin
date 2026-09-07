@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -277,8 +276,8 @@ html
         }
 
         /* National Symbol */
-        .national-simbol { 
-            width: 65px; 
+        .national.simbol { 
+            width: 105px; 
             height: auto; 
             display: block;
             filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.2));
@@ -308,7 +307,7 @@ html
         .nepal-flag { width: 220px; height: auto; margin-bottom: 15px; filter: drop-shadow(5px 8px 12px rgba(0,0,0,0.15)); animation: wave 3s ease-in-out infinite, popIn 1s ease-out 1.4s both; }
         
         .hero-image-container { display: flex; flex-direction: column; align-items: center; animation: popIn 1.2s ease-out; }
-        .hero img.profile-pic { width: 300px; height: 300px; border-radius: 30px; border: 6px solid white; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); object-fit: cover; background: #1a2634; color: white; }
+        .hero img.profile-pic { width: 300px; height: 300px; border-radius: 30px; border: 6px solid white; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); object-fit: cover; }
         .hero-author-name { margin-top: 20px; font-size: 32px; font-weight: 700; color: #1a2634; text-transform: uppercase; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
 
         /* ================= CONTENT SECTIONS ================= */
@@ -608,12 +607,12 @@ html
 <header>
     <div class="header-container">
         <div class="flag-wrapper">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Flag_of_Nepal.svg/2560px-Flag_of_Nepal.svg.png" alt="Nepal Flag" class="animated-flag">
+            <img src="https://psc.gov.np/assets/public/images/nepal_flag.gif" alt="Nepal Flag" class="animated-flag">
         </div>
         
         <h1 class="interesting-text">WELCOME TO MY PERSONAL WEB</h1>
         
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Coat_of_arms_of_Nepal.svg/2560px-Coat_of_arms_of_Nepal.svg.png" alt="National Symbol" class="national-simbol">
+        <img src="national simbol.png" alt="national simbol" class="national simbol">
     </div>
     <nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav>
 </header>
@@ -624,7 +623,7 @@ html
     </div>
 
     <div class="flag-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Nepal_physical_map.svg/2560px-Nepal_physical_map.svg.png" alt="Nepal Map" class="nepal-flag">
+        <img src="nepal.png" alt="Nepal Map" class="nepal-flag">
         <div class="overtake-wrapper">
             <span class="speech">Over take is interesting</span>
             <span class="s">BUT</span>
@@ -633,7 +632,7 @@ html
     </div>
 
     <div class="hero-image-container">
-        <img src="https://via.placeholder.com/300x300/1a2634/ffffff?text=NABIN" alt="Nabin Phuyal" class="profile-pic">
+        <img src="npp" alt="Nabin Phuyal" class="profile-pic">
         <div class="hero-author-name">NABIN PHUYAL</div>
     </div>
 </div>
@@ -704,7 +703,7 @@ html
     <div id="nbn-chat-window">
         <div id="nbn-chat-header">
             <div style="display:flex; align-items:center; gap:10px;">
-                <img src="https://via.placeholder.com/35/1a2634/ffffff?text=NP" style="width:35px; height:35px; border-radius:50%; border:2px solid white; object-fit: cover;">
+                <img src="npp" style="width:35px; height:35px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                 <strong>Nabin Phuyal (AI)</strong>
             </div>
             <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:28px;">×</span>
@@ -910,4 +909,3 @@ html
 
 </body>
 </html>
-```
