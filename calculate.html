@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ne">
 <head>
@@ -13,7 +12,6 @@
         
         .container { max-width: 950px; margin: 0 auto; padding: 20px; }
         
-        /* Home Page */
         #homePage { text-align: center; padding: 80px 20px; }
         #homePage h1 { font-size: 3rem; color: #1a2634; margin-bottom: 10px; }
         #homePage .subtitle { color: #666; font-size: 1.2rem; margin-bottom: 40px; }
@@ -38,7 +36,6 @@
         .btn-warning { background: #f9a825; color: #1a2634; padding: 10px 25px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn-warning:hover { background: #f57f17; transform: scale(1.02); }
         
-        /* Login Page */
         #loginPage, #createPage, #notePage, #forgotPage { display: none; padding: 40px 30px; background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-top: 20px; }
         .form-group { margin: 20px 0; }
         .form-group label { display: block; font-weight: 600; color: #1a2634; margin-bottom: 8px; }
@@ -47,10 +44,10 @@
             border-radius: 15px; font-size: 1rem; transition: 0.3s; outline: none;
         }
         .form-group input:focus, .form-group textarea:focus { border-color: #1a2634; box-shadow: 0 0 0 4px rgba(26,38,52,0.1); }
-        .form-group textarea { height: 80px; resize: vertical; }
         
         .input-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
-        .input-group input { flex: 1; min-width: 200px; }
+        .input-group input { flex: 1; min-width: 150px; }
+        .input-group input:first-child { flex: 2; }
         
         .header-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eef2f6; }
         .header-bar h2 { color: #1a2634; }
@@ -90,7 +87,25 @@
         .back-btn { background: none; border: none; color: #1a2634; font-size: 1.5rem; cursor: pointer; padding: 5px 15px; }
         .back-btn:hover { color: #d32f2f; }
         
-        .login-options { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .note-table-header {
+            display: flex;
+            background: #1a2634;
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            gap: 15px;
+            border-radius: 12px 12px 0 0;
+        }
+        .note-table-header span:first-child { min-width: 50px; }
+        .note-table-header span:nth-child(2) { flex: 2; }
+        .note-table-header span:nth-child(3) { flex: 1; text-align: right; padding-right: 55px; }
+        
+        .note-list-container {
+            background: #f8fafd;
+            border-radius: 0 0 12px 12px;
+            border: 1px solid #eef2f6;
+            border-top: none;
+        }
         
         @media (max-width: 600px) {
             #homePage h1 { font-size: 2rem; }
@@ -99,6 +114,8 @@
             .action-bar { justify-content: center; }
             .note-item { flex-wrap: wrap; }
             .note-item .item-amount { text-align: left; padding-left: 55px; flex-basis: 100%; }
+            .note-table-header { flex-wrap: wrap; }
+            .note-table-header span:nth-child(3) { padding-right: 15px; }
         }
     </style>
 </head>
@@ -108,7 +125,7 @@
 
 <div class="container">
 
-    <!-- ========== HOME PAGE ========== -->
+    <!-- HOME PAGE -->
     <div id="homePage">
         <h1>📝 Nabin Note App</h1>
         <p class="subtitle">तपाईंको नोटहरू सुरक्षित राख्नुहोस्</p>
@@ -119,85 +136,70 @@
         <button class="btn-secondary" onclick="showForgotPage()" style="border-color:#d32f2f; color:#d32f2f;">🔑 Forget ID ?</button>
     </div>
 
-    <!-- ========== LOGIN PAGE ========== -->
+    <!-- LOGIN PAGE -->
     <div id="loginPage">
         <div class="header-bar">
             <button class="back-btn" onclick="goHome()">←</button>
             <h2>🔑 Login</h2>
             <span></span>
         </div>
-        
         <div class="form-group">
             <label>🆔 File ID</label>
             <input type="number" id="loginId" placeholder="जस्तै: 2343">
         </div>
-        
         <div class="form-group">
             <label>👤 Full Name</label>
             <input type="text" id="loginName" placeholder="तपाईंको नाम">
         </div>
-        
         <button class="btn-primary" onclick="loginUser()" style="width:100%;">✅ Login</button>
-        
         <p style="text-align:center; margin-top:15px;">
             <span class="forgot-link" onclick="showForgotPage()">🔑 Forget ID?</span>
         </p>
     </div>
 
-    <!-- ========== CREATE PAGE ========== -->
+    <!-- CREATE PAGE -->
     <div id="createPage">
         <div class="header-bar">
             <button class="back-btn" onclick="goHome()">←</button>
             <h2>📄 Create New File</h2>
             <span></span>
         </div>
-        
         <div class="form-group">
             <label>👤 Full Name</label>
-            <input type="text" id="createName" placeholder="तपाईंको नाम लेख्नुहोस्">
+            <input type="text" id="createName" placeholder="तपाईंको नाम">
         </div>
-        
         <div class="form-group">
             <label>🆔 File ID (जस्तै: 2343)</label>
             <input type="number" id="createId" placeholder="Enter unique ID" min="1000" max="9999">
         </div>
-        
         <div class="form-group">
             <label>📧 Gmail (For password reset)</label>
             <input type="email" id="createEmail" placeholder="your@gmail.com">
         </div>
-        
         <button class="btn-primary" onclick="createFile()" style="width:100%;">✅ Create File</button>
-        <p style="text-align:center; margin-top:15px; font-size:0.9rem; color:#666;">
-            ⚠️ ID 1000-9999 सम्म मात्र, पहिले नै प्रयोग भएको ID लिँदा error देखाउँछ।
-        </p>
     </div>
 
-    <!-- ========== FORGOT PAGE ========== -->
+    <!-- FORGOT PAGE -->
     <div id="forgotPage">
         <div class="header-bar">
             <button class="back-btn" onclick="goHome()">←</button>
             <h2>🔑 Forgot ID</h2>
             <span></span>
         </div>
-        
         <div class="form-group">
-            <label>📧 आफ्नो Gmail लेख्नुहोस्</label>
+            <label>📧 Gmail</label>
             <input type="email" id="forgotEmail" placeholder="your@gmail.com">
         </div>
-        
         <div class="form-group" id="otpSection" style="display:none;">
-            <label>🔢 OTP Code (तपाईंको Gmail मा पठाइयो)</label>
+            <label>🔢 OTP Code</label>
             <input type="text" id="otpInput" placeholder="Enter OTP">
         </div>
-        
         <button class="btn-primary" onclick="sendOTP()" style="width:100%;">📨 Send OTP</button>
-        <button class="btn-secondary" onclick="verifyOTP()" style="width:100%; margin-top:10px;" id="verifyBtn" style="display:none;">✅ Verify & Get ID</button>
-        
+        <button class="btn-secondary" onclick="verifyOTP()" style="width:100%; margin-top:10px;" id="verifyBtn" style="display:none;">✅ Verify</button>
         <div id="forgotResult" style="margin-top:20px; padding:15px; background:#f8fafd; border-radius:15px; display:none;"></div>
     </div>
 
-    <!-- ========== NOTE PAGE ========== -->
+    <!-- NOTE PAGE -->
     <div id="notePage">
         <div class="header-bar">
             <button class="back-btn" onclick="goHome()">←</button>
@@ -210,55 +212,49 @@
             </div>
         </div>
         
-        <!-- Note Input -->
         <div class="form-group">
             <label>✏️ नयाँ नोट (वस्तु + रकम)</label>
             <div class="input-group">
-                <input type="text" id="noteName" placeholder="वस्तुको नाम (जस्तै: खोर्सानी)" style="flex:2;">
-                <input type="number" id="noteAmount" placeholder="रकम (जस्तै: 12.5)" style="flex:1;">
+                <input type="text" id="noteName" placeholder="वस्तुको नाम (जस्तै: खोर्सानी)">
+                <input type="number" id="noteAmount" placeholder="रकम (जस्तै: 12.5)" step="0.01">
                 <button class="btn-primary" onclick="addNote()" style="padding:12px 25px;">➕ Add</button>
             </div>
         </div>
         
-        <!-- Action Buttons -->
         <div class="action-bar">
             <button class="btn-secondary" onclick="downloadPDF(false)">📥 PDF (सबै)</button>
             <button class="btn-success" onclick="downloadPDF(true)">📊 PDF + Total</button>
             <button class="btn-warning" onclick="calculateTotal()">🧮 Calculate Total</button>
         </div>
         
-        <!-- Total Display -->
         <div id="totalDisplay" class="total-display" style="display:none;">
             📊 Total: रु. <span id="totalValue">0</span>
         </div>
         
-        <!-- Notes List Table -->
-        <div style="margin-top:20px; background:#f8fafd; border-radius:15px; overflow:hidden; border:1px solid #eef2f6;">
-            <div style="display:flex; background:#1a2634; color:white; padding:12px 20px; font-weight:600; gap:15px;">
-                <span style="min-width:50px;">क्र.स.</span>
-                <span style="flex:2;">वस्तु</span>
-                <span style="flex:1; text-align:right; padding-right:15px;">रकम (रु.)</span>
-                <span style="min-width:40px;"></span>
+        <div style="margin-top:20px;">
+            <div class="note-table-header">
+                <span>क्र.स.</span>
+                <span>वस्तु</span>
+                <span>रकम (रु.)</span>
             </div>
-            <div id="noteList">
-                <p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन। माथि लेख्नुहोस्!</p>
+            <div class="note-list-container" id="noteList">
+                <p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन।</p>
             </div>
         </div>
         
-        <!-- Note count -->
         <p style="text-align:right; color:#999; font-size:0.9rem; margin-top:10px;" id="noteCount">कुल नोट: 0</p>
     </div>
 
 </div>
 
 <script>
-    // ==================== DATA STORAGE ====================
+    // ==================== DATA ====================
     let files = JSON.parse(localStorage.getItem('nabinFiles')) || [];
     let currentFile = null;
     let currentNotes = [];
     let otpStorage = {};
 
-    // ==================== HOME FUNCTIONS ====================
+    // ==================== NAVIGATION ====================
     function goHome() {
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('loginPage').style.display = 'none';
@@ -308,7 +304,7 @@
 
         const file = files.find(f => f.id === id && f.name.toLowerCase() === name.toLowerCase());
         if (!file) {
-            showToast('❌ ID वा Name मिलेन! कृपया फेरि प्रयास गर्नुहोस्।');
+            showToast('❌ ID वा Name मिलेन!');
             return;
         }
 
@@ -317,19 +313,19 @@
         document.getElementById('loginName').value = '';
     }
 
-    // ==================== CREATE FILE ====================
+    // ==================== CREATE ====================
     function createFile() {
         const name = document.getElementById('createName').value.trim();
         const id = document.getElementById('createId').value.trim();
         const email = document.getElementById('createEmail').value.trim();
 
         if (!name || !id || !email) {
-            showToast('⚠️ कृपया सबै फिल्ड भर्नुहोस्!');
+            showToast('⚠️ सबै फिल्ड भर्नुहोस्!');
             return;
         }
 
         if (id.length < 4 || id.length > 4 || isNaN(id)) {
-            showToast('⚠️ ID ४ अंकको (१०००-९९९९) मात्र हुनुपर्छ!');
+            showToast('⚠️ ID ४ अंकको (१०००-९९९९) मात्र!');
             return;
         }
 
@@ -342,14 +338,13 @@
             id: id,
             name: name,
             email: email,
-            notes: [], // [{name: 'खोर्सानी', amount: 12.5}, ...]
+            notes: [],
             createdAt: new Date().toISOString()
         };
 
         files.push(newFile);
         localStorage.setItem('nabinFiles', JSON.stringify(files));
-
-        showToast('✅ File Created Successfully! ID: ' + id);
+        showToast('✅ File Created! ID: ' + id);
         openFile(id);
     }
 
@@ -373,7 +368,6 @@
         document.getElementById('fileInfo').innerHTML = `📁 ID: ${file.id} | 👤 ${file.name}`;
         renderNotes();
 
-        // Clear create form
         document.getElementById('createName').value = '';
         document.getElementById('createId').value = '';
         document.getElementById('createEmail').value = '';
@@ -385,12 +379,11 @@
         const amount = document.getElementById('noteAmount').value.trim();
 
         if (!name) {
-            showToast('⚠️ कृपया वस्तुको नाम लेख्नुहोस्!');
+            showToast('⚠️ वस्तुको नाम लेख्नुहोस्!');
             return;
         }
-
         if (!amount || isNaN(amount)) {
-            showToast('⚠️ कृपया रकम लेख्नुहोस् (संख्या मात्र)!');
+            showToast('⚠️ रकम लेख्नुहोस् (संख्या)!');
             return;
         }
 
@@ -427,7 +420,7 @@
         const countDisplay = document.getElementById('noteCount');
         
         if (currentNotes.length === 0) {
-            container.innerHTML = `<p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन। माथि लेख्नुहोस्!</p>`;
+            container.innerHTML = `<p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन।</p>`;
             countDisplay.textContent = 'कुल नोट: 0';
             document.getElementById('totalDisplay').style.display = 'none';
             return;
@@ -446,8 +439,6 @@
         });
         container.innerHTML = html;
         countDisplay.textContent = `कुल नोट: ${currentNotes.length}`;
-        
-        // Auto-hide total display
         document.getElementById('totalDisplay').style.display = 'none';
     }
 
@@ -457,7 +448,7 @@
         return div.innerHTML;
     }
 
-    // ==================== CALCULATE TOTAL ====================
+    // ==================== CALCULATE ====================
     function calculateTotal() {
         if (currentNotes.length === 0) {
             showToast('⚠️ कुनै नोट छैन!');
@@ -465,20 +456,17 @@
         }
 
         let total = 0;
-        currentNotes.forEach(note => {
-            total += note.amount;
-        });
+        currentNotes.forEach(note => { total += note.amount; });
 
-        const display = document.getElementById('totalDisplay');
         document.getElementById('totalValue').textContent = total.toFixed(2);
-        display.style.display = 'block';
+        document.getElementById('totalDisplay').style.display = 'block';
         showToast(`📊 Total: रु. ${total.toFixed(2)}`);
     }
 
     // ==================== DELETE FILE ====================
     function deleteFile() {
         if (!currentFile) return;
-        if (confirm(`⚠️ के तपाईं ${currentFile.id} (${currentFile.name}) फाइल मेटाउन चाहनुहुन्छ? यो स्थायी हुन्छ!`)) {
+        if (confirm(`⚠️ ${currentFile.id} (${currentFile.name}) मेटाउन?`)) {
             files = files.filter(f => f.id !== currentFile.id);
             localStorage.setItem('nabinFiles', JSON.stringify(files));
             showToast('🗑️ File deleted!');
@@ -489,65 +477,70 @@
     // ==================== PDF DOWNLOAD ====================
     function downloadPDF(includeTotal) {
         if (currentNotes.length === 0) {
-            showToast('⚠️ कुनै नोट छैन! पहिले केही लेख्नुहोस्।');
+            showToast('⚠️ कुनै नोट छैन!');
             return;
         }
 
         let total = 0;
         currentNotes.forEach(note => { total += note.amount; });
 
-        let content = `
-            <div style="font-family: 'Poppins', sans-serif; padding: 30px; max-width: 800px; margin: auto; position: relative;">
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80px; color: rgba(0,0,0,0.03); font-weight: 700; pointer-events: none; white-space: nowrap; z-index: 0;">
-                    NABIN
-                </div>
-                <div style="position: relative; z-index: 1;">
-                    <h1 style="color: #1a2634; border-bottom: 3px solid #1a2634; padding-bottom: 10px;">
-                        📝 My Notes
-                    </h1>
-                    <p style="color: #666; margin-bottom: 20px;">
-                        <strong>ID:</strong> ${currentFile.id} | 
-                        <strong>Name:</strong> ${currentFile.name} | 
-                        <strong>Date:</strong> ${new Date().toLocaleDateString()}
-                    </p>
-                    <hr style="margin: 20px 0; border-color: #eef2f6;">
-                    
-                    <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
-                        <thead>
-                            <tr style="background: #1a2634; color: white; text-align: left;">
-                                <th style="padding: 10px 15px;">क्र.स.</th>
-                                <th style="padding: 10px 15px;">वस्तु</th>
-                                <th style="padding: 10px 15px; text-align: right;">रकम (रु.)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-        `;
-
+        // Build table rows
+        let tableRows = '';
         currentNotes.forEach((note, i) => {
-            content += `
+            tableRows += `
                 <tr style="border-bottom: 1px solid #eef2f6;">
-                    <td style="padding: 10px 15px; font-weight:600;">${i+1}</td>
+                    <td style="padding: 10px 15px; font-weight:600; text-align:center;">${i+1}</td>
                     <td style="padding: 10px 15px;">${escapeHTML(note.name)}</td>
-                    <td style="padding: 10px 15px; text-align: right;">${note.amount.toFixed(2)}</td>
+                    <td style="padding: 10px 15px; text-align:right;">रु. ${note.amount.toFixed(2)}</td>
                 </tr>
             `;
         });
 
-        content += `
-                        </tbody>
-                    </table>
-        `;
-
+        let totalHTML = '';
         if (includeTotal) {
-            content += `
+            totalHTML = `
                 <div style="margin-top: 20px; background: #1a2634; color: white; padding: 15px 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 1.2rem;">
                     📊 Total: रु. ${total.toFixed(2)}
                 </div>
             `;
         }
 
-        content += `
-                    <p style="margin-top: 30px; text-align: center; color: #999; font-size: 0.8rem; border-top: 2px solid #eef2f6; padding-top: 20px;">
+        let content = `
+            <div style="font-family: 'Poppins', sans-serif; padding: 30px; max-width: 800px; margin: auto; position: relative;">
+                <!-- Watermark -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80px; color: rgba(0,0,0,0.04); font-weight: 700; pointer-events: none; white-space: nowrap; z-index: 0;">
+                    NABIN
+                </div>
+                
+                <div style="position: relative; z-index: 1;">
+                    <h1 style="color: #1a2634; border-bottom: 3px solid #1a2634; padding-bottom: 10px;">
+                        📝 My Notes
+                    </h1>
+                    
+                    <p style="color: #555; margin: 15px 0 20px 0; font-size: 1rem;">
+                        <strong>ID:</strong> ${currentFile.id} &nbsp;|&nbsp; 
+                        <strong>Name:</strong> ${currentFile.name} &nbsp;|&nbsp; 
+                        <strong>Date:</strong> ${new Date().toLocaleDateString()}
+                    </p>
+                    
+                    <hr style="margin: 20px 0; border-color: #eef2f6;">
+                    
+                    <table style="width:100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background: #1a2634; color: white; text-align: left;">
+                                <th style="padding: 12px 15px; text-align:center;">क्र.स.</th>
+                                <th style="padding: 12px 15px;">वस्तु</th>
+                                <th style="padding: 12px 15px; text-align:right;">रकम (रु.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                    
+                    ${totalHTML}
+                    
+                    <p style="margin-top: 30px; text-align: center; color: #999; font-size: 0.75rem; border-top: 2px solid #eef2f6; padding-top: 20px;">
                         Generated by Nabin Note App | © 2025 Nabin Phuyal
                     </p>
                 </div>
@@ -568,25 +561,25 @@
 
         html2pdf().set(opt).from(element).save().then(() => {
             document.body.removeChild(element);
-            showToast('✅ PDF Download Success!');
+            showToast('✅ PDF Downloaded!');
         }).catch(err => {
             document.body.removeChild(element);
-            showToast('❌ PDF download error!');
+            showToast('❌ PDF Error!');
             console.error(err);
         });
     }
 
-    // ==================== FORGET ID / OTP ====================
+    // ==================== FORGET ====================
     function sendOTP() {
         const email = document.getElementById('forgotEmail').value.trim();
         if (!email) {
-            showToast('⚠️ कृपया Gmail लेख्नुहोस्!');
+            showToast('⚠️ Gmail लेख्नुहोस्!');
             return;
         }
 
         const file = files.find(f => f.email === email);
         if (!file) {
-            showToast('❌ यो Gmail सँग कुनै फाइल लिङ्क छैन!');
+            showToast('❌ यो Gmail सँग कुनै फाइल छैन!');
             return;
         }
 
@@ -598,11 +591,10 @@
         document.getElementById('forgotResult').style.display = 'block';
         document.getElementById('forgotResult').innerHTML = `
             <div style="background:#e8f5e9; padding:15px; border-radius:12px; color:#2e7d32;">
-                ✅ OTP पठाइयो! <br>
-                <strong>${otp}</strong> (Demo: यो OTP तपाईंको Gmail मा गएको हुन्थ्यो)
+                ✅ OTP: <strong>${otp}</strong> (Demo)
             </div>
         `;
-        showToast('📨 OTP sent! (Demo: ' + otp + ')');
+        showToast('📨 OTP: ' + otp);
     }
 
     function verifyOTP() {
@@ -611,7 +603,7 @@
         const storedOtp = otpStorage[email];
 
         if (!enteredOtp) {
-            showToast('⚠️ कृपया OTP लेख्नुहोस्!');
+            showToast('⚠️ OTP लेख्नुहोस्!');
             return;
         }
 
@@ -620,17 +612,14 @@
             if (file) {
                 document.getElementById('forgotResult').innerHTML = `
                     <div style="background:#e8f5e9; padding:15px; border-radius:12px;">
-                        ✅ Verified! तपाईंको File ID: <strong>${file.id}</strong> <br>
-                        👤 Name: ${file.name} <br>
-                        <button class="btn-primary" onclick="openFile('${file.id}')" style="margin-top:15px; padding:10px 30px;">
-                            📂 Open File
-                        </button>
+                        ✅ Verified! ID: <strong>${file.id}</strong> | Name: ${file.name}
+                        <br><button class="btn-primary" onclick="openFile('${file.id}')" style="margin-top:15px; padding:10px 30px;">📂 Open</button>
                     </div>
                 `;
-                showToast('✅ Verified successfully!');
+                showToast('✅ Verified!');
             }
         } else {
-            showToast('❌ OTP मिलेन! पुन: प्रयास गर्नुहोस्।');
+            showToast('❌ OTP मिलेन!');
         }
     }
 
@@ -645,7 +634,7 @@
         }, 3000);
     }
 
-    // ==================== AUTO-LOGIN CHECK ====================
+    // ==================== AUTO OPEN ====================
     window.onload = function() {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
