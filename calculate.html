@@ -37,6 +37,8 @@
         .btn-secondary { background: #eef2f6; color: #1a2634; border: 2px solid #1a2634; }
         .btn-secondary:hover { background: #1a2634; color: white; transform: translateY(-3px); }
         .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 30px; }
+        .btn-link { background: none; border: none; color: #1a2634; text-decoration: underline; cursor: pointer; font-weight: 600; padding: 5px; }
+        .btn-link:hover { color: #d32f2f; }
         
         .hidden { display: none !important; }
         
@@ -76,6 +78,12 @@
         .modal-box .btn-group { display: flex; gap: 12px; margin-top: 15px; }
         .modal-box .btn-group button { flex: 1; }
         
+        .auth-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap; }
+        
+        .example-box { background: #f8fafd; padding: 12px 18px; border-radius: 12px; margin: 10px 0; border: 1px dashed #1a2634; }
+        .example-box p { color: #666; font-size: 0.9rem; }
+        .example-box strong { color: #1a2634; }
+        
         @media (max-width: 600px) {
             .note-item { flex-wrap: wrap; }
             .note-item .item-amount { text-align: left; padding-left: 55px; flex-basis: 100%; }
@@ -83,6 +91,7 @@
             .note-table-header span:nth-child(3) { padding-right: 15px; }
             .input-group { flex-direction: column; }
             .action-bar { justify-content: center; }
+            .auth-links { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -103,25 +112,54 @@
     </div>
 </div>
 
+<!-- ===== FORGET MODAL ===== -->
+<div class="modal-overlay" id="forgetModal">
+    <div class="modal-box">
+        <h3>🔑 Forget ID / Name</h3>
+        <p style="color:#666; margin-bottom:10px;">तपाईंको ID लेख्नुहोस्, Name पठाइदिन्छौं।</p>
+        <input type="number" id="forgetIdInput" placeholder="तपाईंको ID">
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="forgetId()">📨 Get Name</button>
+            <button class="btn btn-secondary" onclick="closeForgetModal()">Cancel</button>
+        </div>
+        <div id="forgetResult" style="margin-top:15px; padding:12px; background:#f8fafd; border-radius:12px; display:none;"></div>
+    </div>
+</div>
+
 <div class="container">
 
     <!-- ===== LOGIN PAGE ===== -->
     <div id="loginPage" class="card">
         <h2>🔑 Login</h2>
         <p style="color:#666; margin-bottom:15px;">तपाईंको ID र Name हाल्नुहोस्</p>
+        
+        <div class="example-box">
+            <p>📌 <strong>Example:</strong> ID: <strong>2343</strong> | Name: <strong>Nabin</strong></p>
+        </div>
+        
         <div class="input-group">
             <input type="number" id="loginId" placeholder="ID">
-            <input type="text" id="loginName" placeholder="Name ">
+            <input type="text" id="loginName" placeholder="Name">
             <button class="btn btn-primary" onclick="loginUser()">✅ Login</button>
         </div>
-        <p style="margin-top:10px; font-size:0.9rem; color:#999;">⚠️ ID 1000-9999 सम्म, पहिले नै बनेको ID+Name ले मात्र Login हुन्छ</p>
+        
+        <div class="auth-links">
+            <button class="btn btn-secondary btn-sm" onclick="showCreate()">📄 Create Account</button>
+            <button class="btn btn-secondary btn-sm" onclick="showForget()">🔑 Forget ID / Name</button>
+        </div>
     </div>
 
     <!-- ===== CREATE ACCOUNT PAGE ===== -->
     <div id="createPage" class="card hidden">
         <h2>📄 Create New Account</h2>
+        <p style="color:#666; margin-bottom:15px;">नयाँ ID र Name बनाउनुहोस्</p>
+        
+        <div class="example-box">
+            <p>📌 <strong>Example:</strong> ID: <strong>2343</strong> | Name: <strong>Nabin</strong></p>
+        </div>
+        
         <div class="input-group">
-            <input type="number" id="createId" placeholder="ID (जस्तै: 2343)">
+            <input type="number" id="createId" placeholder="ID" min="1000" max="9999">
             <input type="text" id="createName" placeholder="Full Name">
         </div>
         <button class="btn btn-primary" onclick="createAccount()">✅ Create Account</button>
@@ -142,8 +180,8 @@
             
             <!-- Add Note -->
             <div class="input-group">
-                <input type="text" id="noteName" placeholder="वस्तुको नाम (जस्तै: खोर्सानी)">
-                <input type="number" id="noteAmount" placeholder="रकम (जस्तै: 12.5)" step="0.01">
+                <input type="text" id="noteName" placeholder="वस्तुको नाम ">
+                <input type="number" id="noteAmount" placeholder="रकम " step="0.01">
                 <button class="btn btn-primary" onclick="addNote()">➕ Add</button>
             </div>
             
@@ -189,8 +227,7 @@
         appId: "1:123456789:web:abcdef"
     };
 
-    // तपाईंको Firebase config माथि हाल्नुहोस् ^^^^^
-
+    
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
@@ -208,19 +245,70 @@
         toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
 
-    // ==================== LOGIN / CREATE ====================
+    // ==================== NAVIGATION ====================
     function showLogin() {
         document.getElementById('loginPage').classList.remove('hidden');
         document.getElementById('createPage').classList.add('hidden');
         document.getElementById('notePage').classList.add('hidden');
+        closeForgetModal();
     }
 
     function showCreate() {
         document.getElementById('loginPage').classList.add('hidden');
         document.getElementById('createPage').classList.remove('hidden');
         document.getElementById('notePage').classList.add('hidden');
+        closeForgetModal();
     }
 
+    // ==================== FORGET ID ====================
+    function showForget() {
+        document.getElementById('forgetModal').style.display = 'flex';
+        document.getElementById('forgetResult').style.display = 'none';
+        document.getElementById('forgetIdInput').value = '';
+    }
+
+    function closeForgetModal() {
+        document.getElementById('forgetModal').style.display = 'none';
+    }
+
+    function forgetId() {
+        const id = document.getElementById('forgetIdInput').value.trim();
+        if (!id) {
+            showToast('⚠️ कृपया ID लेख्नुहोस्!');
+            return;
+        }
+
+        database.ref('users/' + id).once('value').then(snapshot => {
+            const resultDiv = document.getElementById('forgetResult');
+            if (!snapshot.exists()) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<div style="color:#d32f2f;">❌ यो ID अवस्थित छैन!</div>`;
+                return;
+            }
+
+            const userData = snapshot.val();
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="color:#2e7d32;">
+                    ✅ यो ID को Name: <strong>${userData.name}</strong>
+                    <br><br>
+                    <button class="btn btn-primary btn-sm" onclick="autoFillLogin('${id}', '${userData.name}')">
+                        📝 Login गर्नुहोस्
+                    </button>
+                </div>
+            `;
+            showToast('✅ Name फेला पर्यो!');
+        });
+    }
+
+    function autoFillLogin(id, name) {
+        closeForgetModal();
+        document.getElementById('loginId').value = id;
+        document.getElementById('loginName').value = name;
+        loginUser();
+    }
+
+    // ==================== CREATE ACCOUNT ====================
     function createAccount() {
         const id = document.getElementById('createId').value.trim();
         const name = document.getElementById('createName').value.trim();
@@ -234,7 +322,6 @@
             return;
         }
 
-        // Check if already exists
         database.ref('users/' + id).once('value').then(snapshot => {
             if (snapshot.exists()) {
                 showToast('❌ यो ID पहिले नै प्रयोग भइसकेको छ!');
@@ -244,12 +331,16 @@
                     notes: []
                 }).then(() => {
                     showToast('✅ Account Created! ID: ' + id);
+                    document.getElementById('loginId').value = id;
+                    document.getElementById('loginName').value = name;
                     showLogin();
+                    loginUser();
                 });
             }
         });
     }
 
+    // ==================== LOGIN ====================
     function loginUser() {
         const id = document.getElementById('loginId').value.trim();
         const name = document.getElementById('loginName').value.trim();
@@ -261,13 +352,13 @@
 
         database.ref('users/' + id).once('value').then(snapshot => {
             if (!snapshot.exists()) {
-                showToast('❌ यो ID अवस्थित छैन! कृपया Create Account गर्नुहोस्।');
+                showToast('❌ यो ID अवस्थित छैन! Create Account गर्नुहोस्।');
                 return;
             }
 
             const userData = snapshot.val();
             if (userData.name.toLowerCase() !== name.toLowerCase()) {
-                showToast('❌ Name मिलेन! कृपया सही Name लेख्नुहोस्।');
+                showToast('❌ Name मिलेन!');
                 return;
             }
 
