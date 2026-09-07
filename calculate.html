@@ -138,8 +138,8 @@
         </div>
         
         <div class="input-group">
-            <input type="number" id="loginId" placeholder="ID (जस्तै: 2343)">
-            <input type="text" id="loginName" placeholder="Name (जस्तै: Nabin)">
+            <input type="number" id="loginId" placeholder="ID ">
+            <input type="text" id="loginName" placeholder="Name ">
             <button class="btn btn-primary" onclick="loginUser()">✅ Login</button>
         </div>
         
@@ -159,7 +159,7 @@
         </div>
         
         <div class="input-group">
-            <input type="number" id="createId" placeholder="ID (जस्तै: 2343)" min="1000" max="9999">
+            <input type="number" id="createId" placeholder="ID " min="1000" max="9999">
             <input type="text" id="createName" placeholder="Full Name">
         </div>
         <button class="btn btn-primary" onclick="createAccount()">✅ Create Account</button>
@@ -180,8 +180,8 @@
             
             <!-- Add Note -->
             <div class="input-group">
-                <input type="text" id="noteName" placeholder="वस्तुको नाम (जस्तै: खोर्सानी)">
-                <input type="number" id="noteAmount" placeholder="रकम (जस्तै: 12.5)" step="0.01">
+                <input type="text" id="noteName" placeholder="वस्तुको नाम ">
+                <input type="number" id="noteAmount" placeholder="रकम " step="0.01">
                 <button class="btn btn-primary" onclick="addNote()">➕ Add</button>
             </div>
             
@@ -218,7 +218,15 @@
 <script>
     // ==================== FIREBASE CONFIG ====================
     const firebaseConfig = {
-        apiKey: "AIzaSyB8mJtY3H8mLNw2l5P5H7rXp3FqA2ZcYw", // तपाईंको config हाल्नुहोस्
+        apiKey: "AIzaSyB8mJtY3H8mLNw2l5P5H7rXp3FqA2ZcYw", // const firebaseConfig = {
+  apiKey: "AIzaSyBftJknyJL2ven0wzDjIczpZPW2D2iHCRk",
+  authDomain: "nabin-note-app-fb445.firebaseapp.com",
+  databaseURL: "https://nabin-note-app-fb445-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nabin-note-app-fb445",
+  storageBucket: "nabin-note-app-fb445.firebasestorage.app",
+  messagingSenderId: "49720607054",
+  appId: "1:49720607054:web:84a60c5f748fc21b681e1f"
+};
         authDomain: "your-project.firebaseapp.com",
         databaseURL: "https://your-project-default-rtdb.firebaseio.com",
         projectId: "your-project",
@@ -227,7 +235,7 @@
         appId: "1:123456789:web:abcdef"
     };
 
-    // तपाईंको Firebase config माथि हाल्नुहोस् ^^^^^
+    
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
