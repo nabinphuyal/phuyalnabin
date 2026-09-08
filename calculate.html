@@ -42,10 +42,11 @@
         
         .hidden { display: none !important; }
         
-        .note-item { display: flex; align-items: center; gap: 15px; padding: 12px 20px; background: #f8fafd; border-radius: 12px; margin-bottom: 8px; border-left: 4px solid #1a2634; }
+        .note-item { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 15px; padding: 12px 20px; background: #f8fafd; border-radius: 12px; margin-bottom: 8px; border-left: 4px solid #1a2634; }
         .note-item .sn { font-weight: 700; color: #1a2634; min-width: 40px; }
-        .note-item .item-name { flex: 2; color: #333; }
-        .note-item .item-amount { flex: 1; color: #1a2634; font-weight: 600; text-align: right; padding-right: 15px; }
+        .note-item .item-name { flex: 2; color: #333; min-width: 100px; }
+        .note-item .item-amount { flex: 1; color: #1a2634; font-weight: 600; text-align: right; padding-right: 15px; min-width: 80px; }
+        .note-item .item-datetime { flex: 1.5; color: #555; font-size: 0.75rem; background: #eef2f6; padding: 4px 12px; border-radius: 30px; text-align: center; min-width: 130px; }
         .note-item .action-btns { display: flex; gap: 6px; }
         .note-item .action-btns button { background: none; border: none; cursor: pointer; padding: 5px 8px; border-radius: 8px; transition: 0.3s; font-size: 1rem; }
         .note-item .action-btns .edit-btn { color: #f9a825; }
@@ -54,10 +55,11 @@
         .note-item .action-btns .delete-btn:hover { background: #ffebee; }
         
         .total-display { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; padding: 15px 25px; border-radius: 15px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 15px 0; }
-        .note-table-header { display: flex; background: #1a2634; color: white; padding: 12px 20px; font-weight: 600; gap: 15px; border-radius: 12px 12px 0 0; }
+        .note-table-header { display: flex; background: #1a2634; color: white; padding: 12px 20px; font-weight: 600; gap: 15px; border-radius: 12px 12px 0 0; flex-wrap: wrap; }
         .note-table-header span:first-child { min-width: 50px; }
         .note-table-header span:nth-child(2) { flex: 2; }
-        .note-table-header span:nth-child(3) { flex: 1; text-align: right; padding-right: 55px; }
+        .note-table-header span:nth-child(3) { flex: 1; text-align: right; padding-right: 15px; }
+        .note-table-header span:nth-child(4) { flex: 1.5; text-align: center; }
         .note-list-container { background: #f8fafd; border-radius: 0 0 12px 12px; border: 1px solid #eef2f6; border-top: none; }
         
         .action-bar { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
@@ -85,10 +87,11 @@
         .example-box strong { color: #1a2634; }
         
         @media (max-width: 600px) {
-            .note-item { flex-wrap: wrap; }
-            .note-item .item-amount { text-align: left; padding-left: 55px; flex-basis: 100%; }
-            .note-table-header { flex-wrap: wrap; }
-            .note-table-header span:nth-child(3) { padding-right: 15px; }
+            .note-item { flex-direction: column; align-items: stretch; }
+            .note-item .item-amount { text-align: left; padding-left: 0; }
+            .note-item .item-datetime { text-align: left; }
+            .note-table-header { flex-direction: column; align-items: stretch; }
+            .note-table-header span { text-align: left !important; }
             .input-group { flex-direction: column; }
             .action-bar { justify-content: center; }
             .auth-links { flex-direction: column; align-items: center; }
@@ -203,6 +206,7 @@
                     <span>क्र.स.</span>
                     <span>वस्तु</span>
                     <span>रकम (रु.)</span>
+                    <span>मिति / समय</span>
                 </div>
                 <div class="note-list-container" id="noteList">
                     <p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन।</p>
@@ -394,7 +398,19 @@
         if (!name) { showToast('⚠️ वस्तुको नाम लेख्नुहोस्!'); return; }
         if (!amount || isNaN(amount)) { showToast('⚠️ रकम लेख्नुहोस् (संख्या)!'); return; }
 
-        currentNotes.push({ name: name, amount: parseFloat(amount) });
+        const now = new Date();
+        const datetime = now.toLocaleString('ne-NP', { 
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: true 
+        });
+
+        currentNotes.push({ 
+            name: name, 
+            amount: parseFloat(amount),
+            datetime: datetime,
+            timestamp: now.getTime()
+        });
         saveNotes();
         renderNotes();
         document.getElementById('noteName').value = '';
@@ -432,7 +448,13 @@
         if (!name) { showToast('⚠️ वस्तुको नाम लेख्नुहोस्!'); return; }
         if (!amount || isNaN(amount)) { showToast('⚠️ रकम लेख्नुहोस् (संख्या)!'); return; }
 
-        currentNotes[editIndex] = { name: name, amount: parseFloat(amount) };
+        // Keep existing datetime, only update name and amount
+        const oldNote = currentNotes[editIndex];
+        currentNotes[editIndex] = { 
+            ...oldNote,
+            name: name, 
+            amount: parseFloat(amount)
+        };
         saveNotes();
         renderNotes();
         closeEditModal();
@@ -458,11 +480,22 @@
 
         let html = '';
         currentNotes.forEach((note, i) => {
+            // if datetime missing, generate from timestamp or now
+            let displayDateTime = note.datetime || '—';
+            if (!note.datetime && note.timestamp) {
+                const d = new Date(note.timestamp);
+                displayDateTime = d.toLocaleString('ne-NP', { 
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: true 
+                });
+            }
             html += `
                 <div class="note-item">
                     <span class="sn">${i + 1}</span>
                     <span class="item-name">${escapeHTML(note.name)}</span>
                     <span class="item-amount">रु. ${note.amount.toFixed(2)}</span>
+                    <span class="item-datetime">${displayDateTime}</span>
                     <div class="action-btns">
                         <button class="edit-btn" onclick="editNote(${i})" title="Edit"><i class="fa-solid fa-pen"></i></button>
                         <button class="delete-btn" onclick="deleteNote(${i})" title="Delete"><i class="fa-solid fa-trash"></i></button>
@@ -508,11 +541,21 @@
 
         let tableRows = '';
         currentNotes.forEach((note, i) => {
+            let displayDateTime = note.datetime || '—';
+            if (!note.datetime && note.timestamp) {
+                const d = new Date(note.timestamp);
+                displayDateTime = d.toLocaleString('ne-NP', { 
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: true 
+                });
+            }
             tableRows += `
                 <tr style="border-bottom: 1px solid #eef2f6;">
                     <td style="padding: 10px 15px; font-weight:600; text-align:center;">${i+1}</td>
                     <td style="padding: 10px 15px;">${escapeHTML(note.name)}</td>
                     <td style="padding: 10px 15px; text-align:right;">रु. ${note.amount.toFixed(2)}</td>
+                    <td style="padding: 10px 15px; text-align:center; font-size:0.8rem; color:#555;">${displayDateTime}</td>
                 </tr>
             `;
         });
@@ -547,6 +590,7 @@
                                 <th style="padding: 12px 15px; text-align:center;">क्र.स.</th>
                                 <th style="padding: 12px 15px;">वस्तु</th>
                                 <th style="padding: 12px 15px; text-align:right;">रकम (रु.)</th>
+                                <th style="padding: 12px 15px; text-align:center;">मिति / समय</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -591,4 +635,3 @@
 
 </body>
 </html>
- 
