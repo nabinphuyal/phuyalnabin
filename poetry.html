@@ -181,13 +181,7 @@ import {
     sendPasswordResetEmail, 
     onAuthStateChanged, 
     signOut,
-    sendEmailVerification,
-    applyActionCode,
-    verifyPasswordResetCode,
-    confirmPasswordReset,
-    sendSignInLinkToEmail,
-    isSignInWithEmailLink,
-    signInWithEmailLink
+    sendEmailVerification
 } from "firebase/auth";
 import { 
     getFirestore, 
@@ -202,9 +196,9 @@ import {
     getDownloadURL, deleteObject 
 } from "firebase/storage";
 
-// ===== FIREBASE CONFIG =====
+// ===== FIREBASE CONFIG (नयाँ API Key सहित) =====
 const firebaseConfig = {
-    apiKey: "AIzaSyAP-1n_zCGesgB4J85AOMCtRIdrd-SOgl4",
+    apiKey: "AIzaSyC4kOB0Z4db5eHnluz3aq6IeXEKKD8BPUE",  // ← नयाँ API Key
     authDomain: "nepali-vault-app.firebaseapp.com",
     projectId: "nepali-vault-app",
     storageBucket: "nepali-vault-app.firebasestorage.app",
@@ -219,6 +213,7 @@ const storage = getStorage(app);
 
 let currentUser = null;
 let pendingUserData = null;
+let verificationInterval = null;
 
 // ===== HELPERS =====
 function show(id) {
@@ -254,11 +249,6 @@ function openModal(content) {
 document.getElementById('closeModal').onclick = () => document.getElementById('mediaModal').style.display = 'none';
 window.onclick = (e) => { if (e.target === document.getElementById('mediaModal')) document.getElementById('mediaModal').style.display = 'none'; };
 
-// ===== GENERATE OTP =====
-function generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
 // ===== SEND OTP VIA EMAIL =====
 document.getElementById('sendOtpBtn').onclick = async () => {
     const email = document.getElementById('regEmail').value.trim();
@@ -274,20 +264,13 @@ document.getElementById('sendOtpBtn').onclick = async () => {
     }
 
     try {
-        // First, try to create account (this will fail if email exists)
-        // We'll create account and send verification email
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         currentUser = userCred.user;
-        
-        // Save pending data
         pendingUserData = { name, phone };
         
-        // Send email verification (OTP via email)
         await sendEmailVerification(currentUser);
+        msg('✅ OTP कोड तपाईंको इमेलमा पठाइयो!', 'success');
         
-        msg('✅ OTP कोड तपाईंको इमेलमा पठाइयो! कृपया जाँच गर्नुहोस्।', 'success');
-        
-        // Show OTP section
         document.getElementById('otpSection').classList.remove('hidden');
         document.getElementById('sendOtpBtn').classList.add('hidden');
         document.getElementById('regEmail').disabled = true;
@@ -295,20 +278,16 @@ document.getElementById('sendOtpBtn').onclick = async () => {
         document.getElementById('regName').disabled = true;
         document.getElementById('regPhone').disabled = true;
         
-        // Start checking for verification
         checkEmailVerification();
         
     } catch (err) {
         if (err.code === 'auth/email-already-in-use') {
-            msg('यो इमेल पहिले नै प्रयोग भइसकेको छ। कृपया अर्को इमेल प्रयोग गर्नुहोस्।', 'error');
+            msg('यो इमेल पहिले नै प्रयोग भइसकेको छ।', 'error');
         } else {
             msg(err.message, 'error');
         }
     }
 };
-
-// ===== CHECK EMAIL VERIFICATION =====
-let verificationInterval = null;
 
 function checkEmailVerification() {
     if (verificationInterval) clearInterval(verificationInterval);
@@ -323,7 +302,6 @@ function checkEmailVerification() {
         if (currentUser.emailVerified) {
             clearInterval(verificationInterval);
             
-            // Save user data to Firestore
             if (pendingUserData) {
                 await setDoc(doc(db, 'users', currentUser.uid), {
                     name: pendingUserData.name,
@@ -337,23 +315,23 @@ function checkEmailVerification() {
             
             msg('✅ इमेल प्रमाणित भयो! खाता सक्रिय भयो।', 'success');
             
-            // Enable fields
             document.getElementById('regEmail').disabled = false;
             document.getElementById('regPassword').disabled = false;
             document.getElementById('regName').disabled = false;
             document.getElementById('regPhone').disabled = false;
             
-            // Show main app
             show('mainApp');
-            document.getElementById('welcomeUser').textContent = `नमस्ते, ${currentUser.displayName || 'साथी'} 👋`;
+            const docSnap = await getDoc(doc(db, 'users', currentUser.uid));
+            if (docSnap.exists()) {
+                document.getElementById('welcomeUser').textContent = `नमस्ते, ${docSnap.data().name} 👋`;
+            }
             loadNotes();
             loadMedia();
             
-            // Reset UI
             document.getElementById('otpSection').classList.add('hidden');
             document.getElementById('sendOtpBtn').classList.remove('hidden');
         }
-    }, 3000); // Check every 3 seconds
+    }, 3000);
 }
 
 // ===== RESEND OTP =====
@@ -364,17 +342,13 @@ document.getElementById('resendOtpBtn').onclick = async () => {
     }
 };
 
-// ===== VERIFY OTP (Alternative: Manual OTP) =====
+// ===== VERIFY OTP =====
 document.getElementById('verifyOtpBtn').onclick = async () => {
-    // This is a manual OTP verification option
-    // Since Firebase doesn't support custom OTP via email, we use email verification
-    // But we can check if email is verified
     if (currentUser) {
         await currentUser.reload();
         if (currentUser.emailVerified) {
             if (verificationInterval) clearInterval(verificationInterval);
             
-            // Save user data
             if (pendingUserData) {
                 await setDoc(doc(db, 'users', currentUser.uid), {
                     name: pendingUserData.name,
@@ -388,11 +362,14 @@ document.getElementById('verifyOtpBtn').onclick = async () => {
             
             msg('✅ इमेल प्रमाणित भयो!', 'success');
             show('mainApp');
-            document.getElementById('welcomeUser').textContent = `नमस्ते, ${currentUser.displayName || 'साथी'} 👋`;
+            const docSnap = await getDoc(doc(db, 'users', currentUser.uid));
+            if (docSnap.exists()) {
+                document.getElementById('welcomeUser').textContent = `नमस्ते, ${docSnap.data().name} 👋`;
+            }
             loadNotes();
             loadMedia();
         } else {
-            msg('❌ इमेल प्रमाणित भएको छैन। कृपया इमेलमा आएको OTP कोड प्रयोग गर्नुहोस्।', 'error');
+            msg('❌ इमेल प्रमाणित भएको छैन।', 'error');
         }
     }
 };
@@ -428,7 +405,7 @@ document.getElementById('sendResetBtn').onclick = async () => {
     if (!email) return msg('इमेल लेख्नुहोस्', 'error');
     try {
         await sendPasswordResetEmail(auth, email);
-        msg('✅ रिसेट लिङ्क इमेलमा पठाइयो (स्प्याम पनि हेर्नुहोस्)', 'success');
+        msg('✅ रिसेट लिङ्क इमेलमा पठाइयो', 'success');
         setTimeout(() => show('loginSection'), 3000);
     } catch (err) {
         if (err.code === 'auth/user-not-found') {
@@ -451,9 +428,7 @@ onAuthStateChanged(auth, async (user) => {
         loadNotes();
         loadMedia();
     } else if (user && !user.emailVerified) {
-        // User exists but email not verified
         currentUser = user;
-        // Don't show main app, show verification message
         msg('📧 कृपया आफ्नो इमेल प्रमाणित गर्नुहोस्।', 'info');
         show('loginSection');
     } else {
