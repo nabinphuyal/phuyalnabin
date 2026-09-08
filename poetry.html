@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ne">
 <head>
@@ -10,11 +9,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background: #0f2027; background: linear-gradient(to right, #2c5364, #203a43, #0f2027); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
         
-        .container { background: white; width: 100%; max-width: 450px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); padding: 30px; overflow: hidden; }
+        .container { background: white; width: 100%; max-width: 500px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); padding: 30px; overflow: hidden; }
         
         h2 { color: var(--primary); text-align: center; margin-bottom: 20px; font-size: 24px; }
         h3 { color: var(--primary); }
-        input, textarea, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
+        input, textarea, button, select { width: 100%; padding: 14px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
         textarea { resize: vertical; min-height: 100px; }
         
         button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -23,6 +22,7 @@
         button.danger { background: var(--accent); }
         button.success { background: #27ae60; }
         button.warning { background: #f39c12; }
+        button.gray { background: #95a5a6; }
 
         .hidden { display: none !important; }
         
@@ -38,9 +38,12 @@
         
         .media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .media-item { position: relative; border-radius: 10px; overflow: hidden; background: #f0f0f0; }
-        .media-item img, .media-item video { width: 100%; height: 150px; object-fit: cover; }
-        .media-item .delete-btn { position: absolute; top: 5px; right: 5px; background: rgba(255,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; }
-        .media-item .view-btn { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 5px; padding: 4px 10px; cursor: pointer; font-size: 12px; }
+        .media-item img, .media-item video { width: 100%; height: 180px; object-fit: cover; }
+        .media-item .media-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); padding: 8px; display: flex; justify-content: space-around; }
+        .media-item .media-overlay button { flex: 1; margin: 0 5px; padding: 6px 10px; font-size: 12px; border-radius: 8px; }
+        .media-item .media-overlay .view-btn { background: #3498db; }
+        .media-item .media-overlay .delete-btn { background: #e74c3c; }
+        .media-item .media-type { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; }
         
         .note-item { background: #f8f9fa; padding: 12px; border-radius: 10px; margin-bottom: 8px; border-left: 3px solid var(--primary); }
         .note-item small { color: #999; display: block; margin-top: 5px; font-size: 11px; }
@@ -57,6 +60,19 @@
         hr { margin: 20px 0; opacity: 0.2; }
         .text-center { text-align: center; }
         .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        
+        .file-upload-wrapper { position: relative; overflow: hidden; }
+        .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; }
+        .file-upload-btn { background: #3498db; color: white; padding: 14px; border-radius: 12px; text-align: center; cursor: pointer; }
+        .file-upload-btn:hover { background: #2980b9; }
+        
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .modal-content { max-width: 90%; max-height: 90%; }
+        .modal-content video, .modal-content img { max-width: 100%; max-height: 90vh; border-radius: 10px; }
+        .modal-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+        
+        .empty-state { grid-column: 1/-1; color: #999; text-align: center; padding: 40px 0; }
     </style>
 </head>
 <body>
@@ -71,7 +87,7 @@
         <input type="password" id="loginPassword" placeholder="पासवर्ड">
         <button id="loginBtn">लगइन</button>
         <p class="text-center mt-10">
-            <span class="clickable" id="goForget">पासवर्ड बिर्सनुभयो?</span>
+            <span class="clickable" id="goForget">🔑 पासवर्ड बिर्सनुभयो?</span>
         </p>
         <hr>
         <p class="text-center">खाता छैन? <span class="clickable" id="goReg" style="font-weight:bold; font-size:18px;">खोल्नुहोस्</span></p>
@@ -84,19 +100,16 @@
         <input type="tel" id="regPhone" placeholder="फोन नम्बर (उदा: 9841234567)">
         <input type="email" id="regEmail" placeholder="इमेल ठेगाना">
         <input type="password" id="regPassword" placeholder="बलियो पासवर्ड (कम्तीमा ६ अक्षर)">
-        
-        <div id="otpSection" class="hidden">
-            <input type="text" id="regOtp" placeholder="सिममा आएको ६ अंकको OTP" maxlength="6">
-            <button id="verifyOtpBtn" class="success">✅ खाता पुष्टि गर्नुहोस्</button>
-        </div>
-        
-        <button id="sendOtpBtn" class="warning">📱 OTP पठाउनुहोस्</button>
+        <button id="registerBtn" class="success">✅ खाता खोल्नुहोस्</button>
         <p class="text-center mt-10"><span class="clickable" id="backLogin">← लगइनमा फर्कनुहोस्</span></p>
     </div>
 
     <!-- ===== FORGET PASSWORD ===== -->
     <div id="forgetSection" class="hidden">
         <h2>🔑 पासवर्ड रिसेट</h2>
+        <p style="color:#666; font-size:14px; text-align:center; margin-bottom:15px;">
+            आफ्नो इमेल लेख्नुहोस्, हामी रिसेट लिङ्क पठाउँछौं।
+        </p>
         <input type="email" id="forgetEmail" placeholder="आफ्नो इमेल लेख्नुहोस्">
         <button id="sendResetEmailBtn" class="warning">📧 रिसेट लिङ्क पठाउनुहोस्</button>
         <p class="text-center mt-10"><span class="clickable" id="backLogin2">← फर्कनुहोस्</span></p>
@@ -133,10 +146,21 @@
             <h3>🖼️ प्राइभेट ग्यालरी</h3>
             <button id="exitVault" style="width:auto; padding:5px 15px; background:var(--accent);">✕</button>
         </div>
-        <input type="file" id="mediaUpload" accept="image/*,video/*">
+        
+        <div class="file-upload-wrapper">
+            <div class="file-upload-btn">📤 फोटो/भिडियो अपलोड गर्नुहोस्</div>
+            <input type="file" id="mediaUpload" accept="image/*,video/*" multiple>
+        </div>
+        
         <div id="mediaGrid" class="media-grid"></div>
         <button id="logoutBtn2" style="background:#bdc3c7; color:#333; margin-top:15px;">🚪 लगआउट</button>
     </div>
+</div>
+
+<!-- ===== MEDIA VIEW MODAL ===== -->
+<div class="modal" id="mediaModal">
+    <span class="modal-close" id="closeModal">&times;</span>
+    <div class="modal-content" id="modalContent"></div>
 </div>
 
 <!-- Firebase SDKs -->
@@ -191,7 +215,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 let currentUser = null;
-let selectedFile = null;
+let uploadedFiles = [];
 
 // ===== UI HELPERS =====
 function show(id) {
@@ -215,8 +239,25 @@ document.getElementById('goForget').onclick = () => show('forgetSection');
 document.getElementById('closePin').onclick = () => show('mainApp');
 document.getElementById('exitVault').onclick = () => show('mainApp');
 
+// ===== MODAL =====
+function openModal(content) {
+    const modal = document.getElementById('mediaModal');
+    const container = document.getElementById('modalContent');
+    container.innerHTML = content;
+    modal.style.display = 'flex';
+}
+
+document.getElementById('closeModal').onclick = () => {
+    document.getElementById('mediaModal').style.display = 'none';
+};
+window.onclick = (e) => {
+    if (e.target === document.getElementById('mediaModal')) {
+        document.getElementById('mediaModal').style.display = 'none';
+    }
+};
+
 // ===== REGISTER =====
-document.getElementById('sendOtpBtn').onclick = async () => {
+document.getElementById('registerBtn').onclick = async () => {
     const email = document.getElementById('regEmail').value.trim();
     const password = document.getElementById('regPassword').value.trim();
     const name = document.getElementById('regName').value.trim();
@@ -230,7 +271,7 @@ document.getElementById('sendOtpBtn').onclick = async () => {
     }
 
     try {
-        // First create user with email/password
+        // Create user with email/password
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         currentUser = userCred.user;
         
@@ -246,12 +287,13 @@ document.getElementById('sendOtpBtn').onclick = async () => {
         // Send email verification
         await sendEmailVerification(currentUser);
         
-        msg('✅ खाता बन्यो! कृपया आफ्नो इमेल प्रमाणित गर्नुहोस्। अब लगइन गर्नुहोस्।', 'success');
+        msg('✅ खाता बन्यो! कृपया आफ्नो इमेल प्रमाणित गर्नुहोस्।', 'success');
         
-        // Show login
-        document.getElementById('loginEmail').value = email;
-        document.getElementById('loginPassword').value = password;
-        show('loginSection');
+        // Auto login
+        show('mainApp');
+        document.getElementById('welcomeUser').textContent = `नमस्ते, ${name} 👋`;
+        loadNotes();
+        loadMedia();
         
     } catch (err) {
         if (err.code === 'auth/email-already-in-use') {
@@ -292,10 +334,14 @@ document.getElementById('sendResetEmailBtn').onclick = async () => {
     
     try {
         await sendPasswordResetEmail(auth, email);
-        msg('✅ रिसेट लिङ्क तपाईंको इमेलमा पठाइयो। कृपया चेक गर्नुहोस्।', 'success');
-        setTimeout(() => show('loginSection'), 3000);
+        msg('✅ रिसेट लिङ्क तपाईंको इमेलमा पठाइयो। कृपया चेक गर्नुहोस् (स्प्याम पनि हेर्नुहोस्)।', 'success');
+        setTimeout(() => show('loginSection'), 4000);
     } catch (err) {
-        msg(err.message, 'error');
+        if (err.code === 'auth/user-not-found') {
+            msg('यो इमेल दर्ता छैन।', 'error');
+        } else {
+            msg(err.message, 'error');
+        }
     }
 };
 
@@ -403,36 +449,39 @@ document.getElementById('enterVaultBtn').onclick = async () => {
 
 // ===== MEDIA UPLOAD =====
 document.getElementById('mediaUpload').onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
     
-    if (file.size > 10 * 1024 * 1024) {
-        msg('फाइल १० MB भन्दा सानो हुनुपर्छ', 'error');
-        return;
-    }
-    
-    msg('⏳ अपलोड हुँदैछ...', 'info');
-    
-    const path = `vault/${currentUser.uid}/${Date.now()}_${file.name}`;
-    const storageRef = ref(storage, path);
-    
-    try {
-        const uploadTask = await uploadBytesResumable(storageRef, file);
-        const url = await getDownloadURL(storageRef);
+    for (const file of files) {
+        if (file.size > 50 * 1024 * 1024) {
+            msg(`${file.name} - ५० MB भन्दा ठूलो छ!`, 'error');
+            continue;
+        }
         
-        await addDoc(collection(db, 'users', currentUser.uid, 'media'), {
-            url: url,
-            path: path,
-            type: file.type.startsWith('image') ? 'image' : 'video',
-            filename: file.name,
-            timestamp: serverTimestamp()
-        });
+        msg(`⏳ ${file.name} अपलोड हुँदैछ...`, 'info');
         
-        msg('✅ फाइल अपलोड भयो!', 'success');
-        document.getElementById('mediaUpload').value = '';
-    } catch (err) {
-        msg(err.message, 'error');
+        const path = `vault/${currentUser.uid}/${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, path);
+        
+        try {
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+            
+            await addDoc(collection(db, 'users', currentUser.uid, 'media'), {
+                url: url,
+                path: path,
+                type: file.type.startsWith('image') ? 'image' : 'video',
+                filename: file.name,
+                fileSize: file.size,
+                timestamp: serverTimestamp()
+            });
+            
+            msg(`✅ ${file.name} अपलोड भयो!`, 'success');
+        } catch (err) {
+            msg(`${file.name} अपलोड गर्न असफल: ${err.message}`, 'error');
+        }
     }
+    document.getElementById('mediaUpload').value = '';
 };
 
 function loadMedia() {
@@ -441,38 +490,61 @@ function loadMedia() {
     onSnapshot(q, (snap) => {
         const container = document.getElementById('mediaGrid');
         if (snap.empty) {
-            container.innerHTML = '<p style="grid-column:1/-1; color:#999; text-align:center;">अहिलेसम्म कुनै फोटो/भिडियो छैन।</p>';
+            container.innerHTML = '<div class="empty-state">📭 अहिलेसम्म कुनै फोटो/भिडियो छैन।</div>';
             return;
         }
         let html = '';
         snap.forEach(doc => {
             const data = doc.data();
             const isImage = data.type === 'image';
+            const typeLabel = isImage ? '🖼️' : '🎬';
+            
             html += `
-                <div class="media-item">
+                <div class="media-item" data-id="${doc.id}">
                     ${isImage 
-                        ? `<img src="${data.url}" alt="${data.filename}">` 
-                        : `<video src="${data.url}" controls></video>`
+                        ? `<img src="${data.url}" alt="${data.filename}" loading="lazy">` 
+                        : `<video src="${data.url}" muted></video>`
                     }
-                    <button class="view-btn" onclick="window.open('${data.url}','_blank')">🔍 हेर्नुहोस्</button>
-                    <button class="delete-btn" data-id="${doc.id}">✕</button>
+                    <div class="media-type">${typeLabel}</div>
+                    <div class="media-overlay">
+                        <button class="view-btn" data-url="${data.url}" data-type="${data.type}">🔍 हेर्नुहोस्</button>
+                        <button class="delete-btn" data-id="${doc.id}">🗑️</button>
+                    </div>
                 </div>
             `;
         });
         container.innerHTML = html;
         
+        // View button
+        container.querySelectorAll('.view-btn').forEach(btn => {
+            btn.onclick = () => {
+                const url = btn.dataset.url;
+                const type = btn.dataset.type;
+                if (type === 'image') {
+                    openModal(`<img src="${url}" style="max-width:100%; max-height:90vh; border-radius:10px;">`);
+                } else {
+                    openModal(`<video controls autoplay style="max-width:100%; max-height:90vh; border-radius:10px;"><source src="${url}"></video>`);
+                }
+            };
+        });
+        
+        // Delete button
         container.querySelectorAll('.delete-btn').forEach(btn => {
             btn.onclick = async () => {
-                if (confirm('फाइल मेटाउने?')) {
+                if (confirm('के तपाईं यो फाइल मेटाउन चाहनुहुन्छ?')) {
                     const docId = btn.dataset.id;
-                    const docSnap = await getDoc(doc(db, 'users', currentUser.uid, 'media', docId));
-                    const data = docSnap.data();
-                    if (data?.path) {
-                        const ref = storage.ref(data.path);
-                        await deleteObject(ref);
+                    try {
+                        const docSnap = await getDoc(doc(db, 'users', currentUser.uid, 'media', docId));
+                        const data = docSnap.data();
+                        if (data?.path) {
+                            const fileRef = ref(storage, data.path);
+                            await deleteObject(fileRef);
+                        }
+                        await deleteDoc(doc(db, 'users', currentUser.uid, 'media', docId));
+                        msg('🗑️ फाइल मेटियो', 'info');
+                    } catch (err) {
+                        msg(err.message, 'error');
                     }
-                    await deleteDoc(doc(db, 'users', currentUser.uid, 'media', docId));
-                    msg('🗑️ फाइल मेटियो', 'info');
                 }
             };
         });
@@ -492,6 +564,13 @@ document.getElementById('logoutBtn2').onclick = logout;
 show('loginSection');
 
 console.log('🚀 App started successfully!');
+console.log('📌 Features:');
+console.log('  ✅ Register with Email/Password');
+console.log('  ✅ Login with Email/Password');
+console.log('  ✅ Password Reset via Email');
+console.log('  ✅ Notes CRUD');
+console.log('  ✅ Vault with PIN');
+console.log('  ✅ Photo/Video Upload, View, Delete');
 </script>
 
 </body>
