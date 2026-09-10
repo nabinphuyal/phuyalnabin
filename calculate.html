@@ -58,7 +58,7 @@ h2{color:#1a2634;margin-bottom:20px}.input-group{display:flex;gap:15px;flex-wrap
 <div class="modal-overlay" id="recoveryModal">
 <div class="modal-box">
 <h3>🔐 Account Recovery</h3>
-<p class="small">ID बिर्सनुभएको छ भने तपाईंले account मा राखेको Recovery Email लेख्नुहोस्। Email मा सुरक्षित recovery link पठाइन्छ। त्यसबाट password reset गरेर login गरेपछि तपाईंको ID देखिन्छ।</p>
+<p class="small">Password बिर्सनुभएको छ भने तपाईंले account खोल्दा राखेको Recovery Email लेख्नुहोस्। Email मा सुरक्षित recovery link पठाइन्छ। त्यसबाट password reset गर्नुहोस्।</p>
 <input type="email" id="recoveryEmail" placeholder="Recovery Email">
 <div class="btn-group">
 <button class="btn btn-primary" onclick="sendRecovery()">📨 Send Email</button>
@@ -72,38 +72,38 @@ h2{color:#1a2634;margin-bottom:20px}.input-group{display:flex;gap:15px;flex-wrap
 <!-- LOGIN -->
 <div id="loginPage" class="card">
 <h2>🔑 Secure Login</h2>
-<p style="color:#666;margin-bottom:15px">ID र Password हाल्नुहोस्</p>
-<div class="example-box"><p>📌 Example: ID <strong>2343</strong> | Password <strong>Nabin@2026</strong></p></div>
+<p style="color:#666;margin-bottom:15px">Username र Password हाल्नुहोस्</p>
+<div class="example-box"><p>📌 Example: Username <strong>Nabin01</strong> | Password <strong>Nabin@2026</strong></p></div>
 <div class="input-group">
-<input type="text" id="loginId" placeholder="ID / Username" autocomplete="username">
+<input type="text" id="loginId" placeholder="Username" autocomplete="username">
 <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
 <button class="btn btn-primary" onclick="loginUser()">✅ Login</button>
 </div>
 <div class="auth-links">
 <button class="btn btn-secondary btn-sm" onclick="showCreate()">📄 Create Account</button>
-<button class="btn btn-secondary btn-sm" onclick="showRecovery()">🔑 Forgot ID / Password</button>
+<button class="btn btn-secondary btn-sm" onclick="showRecovery()">🔑 Forgot Password</button>
 </div>
 </div>
 
 <!-- CREATE -->
 <div id="createPage" class="card hidden">
-<h2>📄 Create Secure Account</h2>
-<p style="color:#666;margin-bottom:15px">ID, Name, Password र Recovery Email राख्नुहोस्।</p>
+<h2>📄 Create Account</h2>
+<p style="color:#666;margin-bottom:15px">Username, Recovery Email र Password राख्नुहोस्।</p>
 <div class="example-box">
-<p>🆔 ID: <strong>2343</strong></p>
-<p>👤 Name: <strong>Nabin@01</strong></p>
-<p>🔐 Password: <strong>Nabin@2026</strong></p>
+<p>👤 Username: <strong>Nabin01</strong></p>
 <p>📧 Recovery Email: <strong>your@email.com</strong></p>
+<p>🔐 Password: <strong>Nabin@2026</strong></p>
 </div>
 <div class="input-group">
-<input type="text" id="createId" placeholder="ID / Username (4+ characters)" maxlength="30" autocomplete="username">
-<input type="text" id="createName" placeholder="Name (जस्तै Nabin@01)" maxlength="50">
+<input type="text" id="createId" placeholder="Username (4+ characters)" maxlength="30" autocomplete="username">
+</div>
+<div class="input-group">
+<input type="email" id="createEmail" placeholder="Recovery Email" autocomplete="email">
 </div>
 <div class="input-group">
 <input type="password" id="createPassword" placeholder="Strong Password (कम्तीमा 8 characters)" autocomplete="new-password">
-<input type="email" id="createEmail" placeholder="Recovery Email" autocomplete="email">
 </div>
-<p class="small">Password मा कम्तीमा 8 characters राख्नुहोस्। Name मा @ # 1 _ - जस्ता characters राख्न सकिन्छ।</p>
+<p class="small">Password मा कम्तीमा 8 characters राख्नुहोस्। Username मा अक्षर, अंक, . _ @ # - मात्र राख्न सकिन्छ।</p>
 <br>
 <button class="btn btn-primary" onclick="createAccount()">✅ Create Account</button>
 <button class="btn btn-secondary" onclick="showLogin()" style="margin-top:10px">← Back to Login</button>
@@ -177,32 +177,28 @@ function closeRecovery(){document.getElementById('recoveryModal').style.display=
 
 function normalizeId(v){return v.trim().toLowerCase().replace(/\s+/g,'')}
 function validId(id){return /^[a-zA-Z0-9._@#-]{4,30}$/.test(id)}
-function validName(name){return name.length>=2 && name.length<=50}
 function validPassword(p){return p.length>=8}
 
 async function createAccount(){
  const idRaw=document.getElementById('createId').value;
  const id=normalizeId(idRaw);
- const name=document.getElementById('createName').value.trim();
  const password=document.getElementById('createPassword').value;
  const email=document.getElementById('createEmail').value.trim().toLowerCase();
 
- if(!validId(id)){showToast('⚠️ ID 4-30 characters: अक्षर, अंक, . _ @ # - मात्र');return}
- if(!validName(name)){showToast('⚠️ Name 2-50 characters राख्नुहोस्!');return}
+ if(!validId(id)){showToast('⚠️ Username 4-30 characters: अक्षर, अंक, . _ @ # - मात्र');return}
  if(!validPassword(password)){showToast('⚠️ Password कम्तीमा 8 characters हुनुपर्छ!');return}
  if(!email || !email.includes('@')){showToast('⚠️ सही Recovery Email राख्नुहोस्!');return}
 
  try{
    const idSnap=await database.ref('idIndex/'+id).once('value');
-   if(idSnap.exists()){showToast('❌ यो ID पहिले नै प्रयोग भइसकेको छ!');return}
+   if(idSnap.exists()){showToast('❌ यो Username पहिले नै प्रयोग भइसकेको छ!');return}
 
    const cred=await auth.createUserWithEmailAndPassword(email,password);
    const uid=cred.user.uid;
 
-   // ✅ users मा सेभ गर्ने (auth भइसकेको छ)
+   // ✅ users मा सेभ गर्ने (नाम नराखी, Username मात्र)
    await database.ref('users/'+uid).set({
      id:id,
-     name:name,
      email:email,
      createdAt:firebase.database.ServerValue.TIMESTAMP,
      notes:[]
@@ -215,7 +211,7 @@ async function createAccount(){
    });
 
    showToast('✅ Account created! अब Login गर्नुहोस्।');
-   alert('✅ Account सफलतापूर्वक बनेको छ! अब ID र Password ले Login गर्नुहोस्।');
+   alert('✅ Account सफलतापूर्वक बनेको छ! अब Username र Password ले Login गर्नुहोस्।');
    await auth.signOut();
    document.getElementById('loginId').value=id;
    showLogin();
@@ -231,19 +227,19 @@ async function createAccount(){
 async function loginUser(){
  const id=normalizeId(document.getElementById('loginId').value);
  const password=document.getElementById('loginPassword').value;
- if(!id||!password){showToast('⚠️ ID र Password दुवै भर्नुहोस्!');return}
+ if(!id||!password){showToast('⚠️ Username र Password दुवै भर्नुहोस्!');return}
 
  try{
-   // ✅ १. idIndex बाट UID र Email निकाल्ने (यो सबैले पढ्न पाउँछ)
+   // ✅ १. idIndex बाट UID र Email निकाल्ने
    const idSnap=await database.ref('idIndex/'+id).once('value');
-   if(!idSnap.exists()){showToast('❌ ID वा Password गलत छ!');return}
+   if(!idSnap.exists()){showToast('❌ Username वा Password गलत छ!');return}
    const indexData = idSnap.val();
    const uid = indexData.uid;
    const email = indexData.email;
 
-   if(!uid || !email){showToast('❌ Account data अपूर्ण छ! पुनः खाता खोल्नुहोस्।');return}
+   if(!uid || !email){showToast('❌ Account data अपूर्ण छ!');return}
 
-   // ✅ २. अब सिधै लगइन गर्ने (email idIndex बाट थाहा भयो)
+   // ✅ २. सिधै लगइन गर्ने
    const cred=await auth.signInWithEmailAndPassword(email,password);
 
    // ✅ ३. लगइन भइसकेपछि users बाट डाटा पढ्ने
@@ -251,18 +247,18 @@ async function loginUser(){
    if(!userSnap.exists()){showToast('❌ Account data भेटिएन!');return}
    const data=userSnap.val();
 
-   currentUser={uid:uid,id:data.id,name:data.name,email:data.email};
+   currentUser={uid:uid,id:data.id,email:data.email};
    currentNotes=Array.isArray(data.notes)?data.notes:[];
    document.getElementById('loginPage').classList.add('hidden');
    document.getElementById('createPage').classList.add('hidden');
    document.getElementById('notePage').classList.remove('hidden');
-   document.getElementById('displayName').textContent=currentUser.name;
+   document.getElementById('displayName').textContent=currentUser.id;
    document.getElementById('displayId').textContent=currentUser.id;
    renderNotes();
-   showToast('✅ Welcome, '+currentUser.name+'!');
+   showToast('✅ Welcome, '+currentUser.id+'!');
  }catch(e){
    console.error(e);
-   if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') showToast('❌ ID वा Password गलत छ!');
+   if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') showToast('❌ Username वा Password गलत छ!');
    else showToast('❌ Login भएन!');
  }
 }
@@ -272,7 +268,7 @@ async function sendRecovery(){
  if(!email){showToast('⚠️ Recovery Email राख्नुहोस्!');return}
  try{
    await auth.sendPasswordResetEmail(email);
-   document.getElementById('recoveryResult').innerHTML='<div class="success">✅ Recovery email पठाइयो। Email खोलेर password reset गर्नुहोस्। त्यसपछि आफ्नो ID + नयाँ password ले login गर्नुहोस्।</div>';
+   document.getElementById('recoveryResult').innerHTML='<div class="success">✅ Recovery email पठाइयो। Email खोलेर password reset गर्नुहोस्। त्यसपछि Username + नयाँ password ले login गर्नुहोस्।</div>';
    showToast('📨 Recovery email पठाइयो!');
  }catch(e){
    console.error(e);
@@ -356,7 +352,7 @@ function downloadPDF(includeTotal){
  currentNotes.forEach((n,i)=>{rows+=`<tr><td>${i+1}</td><td>${escapeHTML(n.name)}</td><td>रु. ${Number(n.amount).toFixed(2)}</td><td>${escapeHTML(n.datetime||'—')}</td></tr>`});
  const totalHtml=includeTotal?`<h3 style="margin-top:20px;text-align:center">Total: रु. ${total.toFixed(2)}</h3>`:'';
  const el=document.createElement('div');
- el.innerHTML=`<div style="font-family:Arial;padding:30px;width:800px"><h1>Nabin Note</h1><p><b>ID:</b> ${escapeHTML(currentUser.id)} &nbsp; <b>Name:</b> ${escapeHTML(currentUser.name)}</p><table style="width:100%;border-collapse:collapse;margin-top:20px"><thead><tr><th>क्र.स.</th><th>वस्तु</th><th>रकम</th><th>मिति/समय</th></tr></thead><tbody>${rows}</tbody></table>${totalHtml}</div>`;
+ el.innerHTML=`<div style="font-family:Arial;padding:30px;width:800px"><h1>Nabin Note</h1><p><b>Username:</b> ${escapeHTML(currentUser.id)} &nbsp; <b>Email:</b> ${escapeHTML(currentUser.email)}</p><table style="width:100%;border-collapse:collapse;margin-top:20px"><thead><tr><th>क्र.स.</th><th>वस्तु</th><th>रकम</th><th>मिति/समय</th></tr></thead><tbody>${rows}</tbody></table>${totalHtml}</div>`;
  document.body.appendChild(el);
  html2pdf().set({margin:.5,filename:`notes_${currentUser.id}_${new Date().toISOString().slice(0,10)}.pdf`,html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}}).from(el).save().then(()=>{el.remove();showToast('✅ PDF Downloaded!')});
 }
@@ -367,12 +363,12 @@ auth.onAuthStateChanged(async user=>{
    const snap=await database.ref('users/'+user.uid).once('value');
    if(!snap.exists()){await auth.signOut();showLogin();return}
    const d=snap.val();
-   currentUser={uid:user.uid,id:d.id,name:d.name,email:d.email};
+   currentUser={uid:user.uid,id:d.id,email:d.email};
    currentNotes=Array.isArray(d.notes)?d.notes:[];
    document.getElementById('loginPage').classList.add('hidden');
    document.getElementById('createPage').classList.add('hidden');
    document.getElementById('notePage').classList.remove('hidden');
-   document.getElementById('displayName').textContent=d.name;
+   document.getElementById('displayName').textContent=d.id;
    document.getElementById('displayId').textContent=d.id;
    renderNotes();
  }catch(e){console.error(e)}
