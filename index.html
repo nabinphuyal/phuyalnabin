@@ -240,7 +240,6 @@
             max-width: 500px;
         }
 
-        /* ===== PROFILE PHOTO - SCREEN WIDTH अनुसार ===== */
         .profile-wrapper {
             position: relative;
             width: 100%;
@@ -252,7 +251,6 @@
             box-shadow: 0px 20px 40px rgba(0,0,0,0.15);
         }
 
-        /* Background Image (Bhojpur) with LESS Blur */
         .profile-wrapper .bg-blur {
             position: absolute;
             top: 0;
@@ -262,12 +260,11 @@
             background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&h=800&fit=crop');
             background-size: cover;
             background-position: center;
-            filter: blur(3px); /* Blur कम गरियो */
+            filter: blur(3px);
             transform: scale(1.05);
             z-index: 0;
         }
 
-        /* Profile Photo (Nabin.png) - स्पष्ट, माथि */
         .profile-wrapper .profile-pic {
             position: relative;
             width: 100%;
@@ -278,7 +275,6 @@
             opacity: 0.95;
         }
 
-        /* Overlay - तल्लो भागमा हल्का shadow */
         .profile-wrapper .overlay {
             position: absolute;
             bottom: 0;
@@ -566,20 +562,20 @@
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
     </div>
+    
     <div class="menu-options" id="menu-options">
-    <button onclick="window.location.href='poetry.html'">
-        <i class="fa-solid fa-feather-pointed"></i> Poetry/valut
-    </button>
-        
-    <button onclick="window.location.href='popularity.html'">
-        <i class="fa-solid fa-quote-left" style="color: #ffd700;"></i> Famous Quotes
-    </button>
-    <button onclick="window.location.href='calculate.html'" 
-            style="border-bottom: none; background: linear-gradient(90deg, #f8f9fa, #e8f5e9);">
-        <i class="fa-solid fa-calculator" style="color: #2e7d32;"></i> Calculate
-    </button>
+        <button onclick="window.location.href='poetry.html'">
+            <i class="fa-solid fa-feather-pointed"></i> Poetry/vault
+        </button>
+        <button onclick="window.location.href='popularity.html'">
+            <i class="fa-solid fa-quote-left" style="color: #ffd700;"></i> Famous Quotes
+        </button>
+        <button onclick="window.location.href='calculate.html'" 
+                style="border-bottom: none; background: linear-gradient(90deg, #f8f9fa, #e8f5e9);">
+            <i class="fa-solid fa-calculator" style="color: #2e7d32;"></i> Calculate
+        </button>
+    </div>
 </div>
-
 
 <header>
     <div class="header-container">
@@ -591,7 +587,14 @@
         
         <img src="national simbol.png" alt="national simbol" class="national-simbol">
     </div>
-    <nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="popularity.html">Quotes</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 </header>
 
 <div class="hero" id="home">
@@ -610,11 +613,8 @@
 
     <div class="hero-image-container">
         <div class="profile-wrapper">
-            <!-- Bhojpur Background with LESS Blur -->
             <div class="bg-blur"></div>
-            <!-- Profile Photo (Nabin.png) -->
             <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic">
-            <!-- Overlay -->
             <div class="overlay"></div>
         </div>
         <div class="hero-author-name">NABIN PHUYAL</div>
@@ -810,11 +810,8 @@
             }
         }
     });
-
-    document.querySelector('.hamburger-btn').addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
 </script>
 
 </body>
 </html>
+
