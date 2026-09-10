@@ -73,7 +73,7 @@ h2{color:#1a2634;margin-bottom:20px}.input-group{display:flex;gap:15px;flex-wrap
 <div id="loginPage" class="card">
 <h2>🔑 Secure Login</h2>
 <p style="color:#666;margin-bottom:15px">ID र Password हाल्नुहोस्</p>
-<div class="example-box"><p>📌 Example: ID <strong>2343</strong> | Password <strong>Nabin@2026</strong></p></div>
+<div class="example-box"><p>📌 Example: ID <strong>1234</strong> | Password <strong>Name@1234</strong></p></div>
 <div class="input-group">
 <input type="text" id="loginId" placeholder="ID / Username" autocomplete="username">
 <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
@@ -193,13 +193,13 @@ async function createAccount(){
  if(!email || !email.includes('@')){showToast('⚠️ सही Recovery Email राख्नुहोस्!');return}
 
  try{
-   // ID index is only used to find the authentication email.
    const idSnap=await database.ref('idIndex/'+id).once('value');
    if(idSnap.exists()){showToast('❌ यो ID पहिले नै प्रयोग भइसकेको छ!');return}
 
    const cred=await auth.createUserWithEmailAndPassword(email,password);
    const uid=cred.user.uid;
 
+   // ✅ पहिले users मा सेभ गर्ने (auth भइसकेको छ, auth.uid == uid हुन्छ)
    await database.ref('users/'+uid).set({
      id:id,
      name:name,
@@ -208,10 +208,8 @@ async function createAccount(){
      notes:[]
    });
 
+   // ✅ त्यसपछि idIndex मा सेभ गर्ने
    await database.ref('idIndex/'+id).set(uid);
-   
-   // ✅ इमेल भेरिफिकेसन हटाइयो (झन्झट हटाउन)
-   // await cred.user.sendEmailVerification();
 
    showToast('✅ Account created! अब Login गर्नुहोस्।');
    alert('✅ Account सफलतापूर्वक बनेको छ! अब ID र Password ले Login गर्नुहोस्।');
@@ -233,24 +231,16 @@ async function loginUser(){
  if(!id||!password){showToast('⚠️ ID र Password दुवै भर्नुहोस्!');return}
 
  try{
+  
    const idSnap=await database.ref('idIndex/'+id).once('value');
    if(!idSnap.exists()){showToast('❌ ID वा Password गलत छ!');return}
    const uid=idSnap.val();
+   
    const userSnap=await database.ref('users/'+uid).once('value');
    if(!userSnap.exists()){showToast('❌ Account data भेटिएन!');return}
    const data=userSnap.val();
 
    const cred=await auth.signInWithEmailAndPassword(data.email,password);
-   
-   // ✅ इमेल भेरिफिकेसन चेक हटाइयो
-   /*
-   if(!cred.user.emailVerified){
-     await auth.signOut();
-     showToast('⚠️ पहिले आफ्नो Email verify गर्नुहोस्!');
-     alert('तपाईंको email verify भएको छैन। Email मा आएको verification link थिच्नुहोस्।');
-     return;
-   }
-   */
 
    currentUser={uid:uid,id:data.id,name:data.name,email:data.email};
    currentNotes=Array.isArray(data.notes)?data.notes:[];
@@ -277,7 +267,6 @@ async function sendRecovery(){
    showToast('📨 Recovery email पठाइयो!');
  }catch(e){
    console.error(e);
-   // Deliberately generic: do not reveal whether an email has an account.
    document.getElementById('recoveryResult').innerHTML='<div class="success">📨 यदि यो email account मा जोडिएको छ भने recovery email पठाइनेछ।</div>';
  }
 }
@@ -363,11 +352,8 @@ function downloadPDF(includeTotal){
  html2pdf().set({margin:.5,filename:`notes_${currentUser.id}_${new Date().toISOString().slice(0,10)}.pdf`,html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}}).from(el).save().then(()=>{el.remove();showToast('✅ PDF Downloaded!')});
 }
 
-// Keep session after refresh, but never auto-login a different person.
 auth.onAuthStateChanged(async user=>{
  if(!user){showLogin();return}
- // ✅ इमेल भेरिफिकेसन चेक हटाइयो
- // if(!user.emailVerified){await auth.signOut();showLogin();return}
  try{
    const snap=await database.ref('users/'+user.uid).once('value');
    if(!snap.exists()){await auth.signOut();showLogin();return}
