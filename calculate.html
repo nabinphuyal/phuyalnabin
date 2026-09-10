@@ -73,7 +73,7 @@ h2{color:#1a2634;margin-bottom:20px}.input-group{display:flex;gap:15px;flex-wrap
 <div id="loginPage" class="card">
 <h2>🔑 Secure Login</h2>
 <p style="color:#666;margin-bottom:15px">ID र Password हाल्नुहोस्</p>
-<div class="example-box"><p>📌 Example: ID <strong>1234</strong> | Password <strong>Name@1234</strong></p></div>
+<div class="example-box"><p>📌 Example: ID <strong>2343</strong> | Password <strong>Nabin@2026</strong></p></div>
 <div class="input-group">
 <input type="text" id="loginId" placeholder="ID / Username" autocomplete="username">
 <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
@@ -199,7 +199,7 @@ async function createAccount(){
    const cred=await auth.createUserWithEmailAndPassword(email,password);
    const uid=cred.user.uid;
 
-   // ✅ पहिले users मा सेभ गर्ने (auth भइसकेको छ, auth.uid == uid हुन्छ)
+   // ✅ users मा सेभ गर्ने (auth भइसकेको छ)
    await database.ref('users/'+uid).set({
      id:id,
      name:name,
@@ -208,8 +208,11 @@ async function createAccount(){
      notes:[]
    });
 
-   // ✅ त्यसपछि idIndex मा सेभ गर्ने
-   await database.ref('idIndex/'+id).set(uid);
+   // ✅ idIndex मा UID र Email दुवै सेभ गर्ने
+   await database.ref('idIndex/'+id).set({
+     uid: uid,
+     email: email
+   });
 
    showToast('✅ Account created! अब Login गर्नुहोस्।');
    alert('✅ Account सफलतापूर्वक बनेको छ! अब ID र Password ले Login गर्नुहोस्।');
@@ -231,16 +234,22 @@ async function loginUser(){
  if(!id||!password){showToast('⚠️ ID र Password दुवै भर्नुहोस्!');return}
 
  try{
-  
+   // ✅ १. idIndex बाट UID र Email निकाल्ने (यो सबैले पढ्न पाउँछ)
    const idSnap=await database.ref('idIndex/'+id).once('value');
    if(!idSnap.exists()){showToast('❌ ID वा Password गलत छ!');return}
-   const uid=idSnap.val();
-   
+   const indexData = idSnap.val();
+   const uid = indexData.uid;
+   const email = indexData.email;
+
+   if(!uid || !email){showToast('❌ Account data अपूर्ण छ! पुनः खाता खोल्नुहोस्।');return}
+
+   // ✅ २. अब सिधै लगइन गर्ने (email idIndex बाट थाहा भयो)
+   const cred=await auth.signInWithEmailAndPassword(email,password);
+
+   // ✅ ३. लगइन भइसकेपछि users बाट डाटा पढ्ने
    const userSnap=await database.ref('users/'+uid).once('value');
    if(!userSnap.exists()){showToast('❌ Account data भेटिएन!');return}
    const data=userSnap.val();
-
-   const cred=await auth.signInWithEmailAndPassword(data.email,password);
 
    currentUser={uid:uid,id:data.id,name:data.name,email:data.email};
    currentNotes=Array.isArray(data.notes)?data.notes:[];
