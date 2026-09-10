@@ -209,10 +209,12 @@ async function createAccount(){
    });
 
    await database.ref('idIndex/'+id).set(uid);
-   await cred.user.sendEmailVerification();
+   
+   // ✅ इमेल भेरिफिकेसन हटाइयो (झन्झट हटाउन)
+   // await cred.user.sendEmailVerification();
 
-   showToast('✅ Account created! Email verification link पठाइएको छ।');
-   alert('Account बनेको छ। पहिले आफ्नो email खोल्नुहोस् र verification link थिच्नुहोस्। त्यसपछि ID + Password ले login गर्नुहोस्।');
+   showToast('✅ Account created! अब Login गर्नुहोस्।');
+   alert('✅ Account सफलतापूर्वक बनेको छ! अब ID र Password ले Login गर्नुहोस्।');
    await auth.signOut();
    document.getElementById('loginId').value=id;
    showLogin();
@@ -239,12 +241,16 @@ async function loginUser(){
    const data=userSnap.val();
 
    const cred=await auth.signInWithEmailAndPassword(data.email,password);
+   
+   // ✅ इमेल भेरिफिकेसन चेक हटाइयो
+   /*
    if(!cred.user.emailVerified){
      await auth.signOut();
      showToast('⚠️ पहिले आफ्नो Email verify गर्नुहोस्!');
      alert('तपाईंको email verify भएको छैन। Email मा आएको verification link थिच्नुहोस्।');
      return;
    }
+   */
 
    currentUser={uid:uid,id:data.id,name:data.name,email:data.email};
    currentNotes=Array.isArray(data.notes)?data.notes:[];
@@ -360,7 +366,8 @@ function downloadPDF(includeTotal){
 // Keep session after refresh, but never auto-login a different person.
 auth.onAuthStateChanged(async user=>{
  if(!user){showLogin();return}
- if(!user.emailVerified){await auth.signOut();showLogin();return}
+ // ✅ इमेल भेरिफिकेसन चेक हटाइयो
+ // if(!user.emailVerified){await auth.signOut();showLogin();return}
  try{
    const snap=await database.ref('users/'+user.uid).once('value');
    if(!snap.exists()){await auth.signOut();showLogin();return}
