@@ -1,637 +1,380 @@
-
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nabin Note - Calculate</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #f0f4f8; min-height: 100vh; padding: 20px; }
-        .container { max-width: 950px; margin: auto; }
-        
-        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-top: 20px; }
-        .card h2 { color: #1a2634; margin-bottom: 20px; }
-        .card h3 { color: #1a2634; margin: 15px 0 10px 0; }
-        
-        .input-group { display: flex; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
-        .input-group input { flex: 1; min-width: 150px; padding: 14px 20px; border: 2px solid #eef2f6; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; }
-        .input-group input:focus { border-color: #1a2634; box-shadow: 0 0 0 4px rgba(26,38,52,0.1); }
-        .input-group input:first-child { flex: 2; }
-        
-        .btn { padding: 12px 28px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.4s; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(26,38,52,0.3); }
-        .btn-success { background: #2e7d32; color: white; }
-        .btn-success:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(46,125,50,0.3); }
-        .btn-danger { background: #d32f2f; color: white; }
-        .btn-danger:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(211,47,47,0.3); }
-        .btn-warning { background: #f9a825; color: #1a2634; }
-        .btn-warning:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(249,168,37,0.3); }
-        .btn-secondary { background: #eef2f6; color: #1a2634; border: 2px solid #1a2634; }
-        .btn-secondary:hover { background: #1a2634; color: white; transform: translateY(-3px); }
-        .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 30px; }
-        .btn-link { background: none; border: none; color: #1a2634; text-decoration: underline; cursor: pointer; font-weight: 600; padding: 5px; }
-        .btn-link:hover { color: #d32f2f; }
-        
-        .hidden { display: none !important; }
-        
-        .note-item { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 15px; padding: 12px 20px; background: #f8fafd; border-radius: 12px; margin-bottom: 8px; border-left: 4px solid #1a2634; }
-        .note-item .sn { font-weight: 700; color: #1a2634; min-width: 40px; }
-        .note-item .item-name { flex: 2; color: #333; min-width: 100px; }
-        .note-item .item-amount { flex: 1; color: #1a2634; font-weight: 600; text-align: right; padding-right: 15px; min-width: 80px; }
-        .note-item .item-datetime { flex: 1.5; color: #555; font-size: 0.75rem; background: #eef2f6; padding: 4px 12px; border-radius: 30px; text-align: center; min-width: 130px; }
-        .note-item .action-btns { display: flex; gap: 6px; }
-        .note-item .action-btns button { background: none; border: none; cursor: pointer; padding: 5px 8px; border-radius: 8px; transition: 0.3s; font-size: 1rem; }
-        .note-item .action-btns .edit-btn { color: #f9a825; }
-        .note-item .action-btns .edit-btn:hover { background: #fff8e1; }
-        .note-item .action-btns .delete-btn { color: #d32f2f; }
-        .note-item .action-btns .delete-btn:hover { background: #ffebee; }
-        
-        .total-display { background: linear-gradient(90deg, #1a2634, #2c3e50); color: white; padding: 15px 25px; border-radius: 15px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 15px 0; }
-        .note-table-header { display: flex; background: #1a2634; color: white; padding: 12px 20px; font-weight: 600; gap: 15px; border-radius: 12px 12px 0 0; flex-wrap: wrap; }
-        .note-table-header span:first-child { min-width: 50px; }
-        .note-table-header span:nth-child(2) { flex: 2; }
-        .note-table-header span:nth-child(3) { flex: 1; text-align: right; padding-right: 15px; }
-        .note-table-header span:nth-child(4) { flex: 1.5; text-align: center; }
-        .note-list-container { background: #f8fafd; border-radius: 0 0 12px 12px; border: 1px solid #eef2f6; border-top: none; }
-        
-        .action-bar { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
-        
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a2634; color: white; padding: 15px 30px; border-radius: 15px; font-weight: 500; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 999; animation: slideUp 0.4s; }
-        @keyframes slideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-        
-        .login-info { background: #e8f5e9; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .login-info strong { color: #2e7d32; }
-        
-        /* Edit Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .modal-box { background: white; padding: 30px; border-radius: 25px; max-width: 450px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: formPop 0.4s; }
-        @keyframes formPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        .modal-box h3 { color: #1a2634; margin-bottom: 15px; }
-        .modal-box input { width: 100%; padding: 14px 20px; border: 2px solid #eef2f6; border-radius: 15px; font-size: 1rem; outline: none; margin: 8px 0; }
-        .modal-box input:focus { border-color: #1a2634; }
-        .modal-box .btn-group { display: flex; gap: 12px; margin-top: 15px; }
-        .modal-box .btn-group button { flex: 1; }
-        
-        .auth-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap; }
-        
-        .example-box { background: #f8fafd; padding: 12px 18px; border-radius: 12px; margin: 10px 0; border: 1px dashed #1a2634; }
-        .example-box p { color: #666; font-size: 0.9rem; }
-        .example-box strong { color: #1a2634; }
-        
-        @media (max-width: 600px) {
-            .note-item { flex-direction: column; align-items: stretch; }
-            .note-item .item-amount { text-align: left; padding-left: 0; }
-            .note-item .item-datetime { text-align: left; }
-            .note-table-header { flex-direction: column; align-items: stretch; }
-            .note-table-header span { text-align: left !important; }
-            .input-group { flex-direction: column; }
-            .action-bar { justify-content: center; }
-            .auth-links { flex-direction: column; align-items: center; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nabin Note - Secure</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#f0f4f8;min-height:100vh;padding:20px}.container{max-width:950px;margin:auto}
+.card{background:#fff;padding:30px;border-radius:25px;box-shadow:0 10px 40px rgba(0,0,0,.08);margin-top:20px}
+h2{color:#1a2634;margin-bottom:20px}.input-group{display:flex;gap:15px;flex-wrap:wrap;margin:15px 0}
+.input-group input,.modal-box input{flex:1;min-width:150px;padding:14px 20px;border:2px solid #eef2f6;border-radius:15px;font-size:1rem;outline:none}
+.input-group input:focus,.modal-box input:focus{border-color:#1a2634}
+.btn{padding:12px 28px;border:0;border-radius:50px;font-weight:600;cursor:pointer;font-size:.95rem;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(90deg,#1a2634,#2c3e50);color:#fff}.btn-success{background:#2e7d32;color:#fff}
+.btn-danger{background:#d32f2f;color:#fff}.btn-warning{background:#f9a825;color:#1a2634}
+.btn-secondary{background:#eef2f6;color:#1a2634;border:2px solid #1a2634}.btn-sm{padding:6px 14px;font-size:.8rem}
+.hidden{display:none!important}.auth-links{display:flex;justify-content:center;gap:12px;margin-top:15px;flex-wrap:wrap}
+.example-box{background:#f8fafd;padding:12px 18px;border-radius:12px;margin:10px 0;border:1px dashed #1a2634}
+.example-box p{color:#666;font-size:.9rem}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a2634;color:#fff;padding:15px 30px;border-radius:15px;z-index:9999;display:none}
+.login-info{background:#e8f5e9;padding:12px 20px;border-radius:12px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.note-item{display:flex;flex-wrap:wrap;align-items:center;gap:10px 15px;padding:12px 20px;background:#f8fafd;border-radius:12px;margin-bottom:8px;border-left:4px solid #1a2634}
+.note-item .sn{font-weight:700;min-width:40px}.item-name{flex:2;min-width:100px}.item-amount{flex:1;font-weight:600;text-align:right;min-width:80px}
+.item-datetime{flex:1.5;color:#555;font-size:.75rem;background:#eef2f6;padding:4px 12px;border-radius:30px;text-align:center;min-width:130px}
+.action-btns{display:flex;gap:6px}.action-btns button{background:none;border:0;cursor:pointer;padding:5px 8px;font-size:1rem}.edit-btn{color:#f9a825}.delete-btn{color:#d32f2f}
+.total-display{background:linear-gradient(90deg,#1a2634,#2c3e50);color:#fff;padding:15px 25px;border-radius:15px;text-align:center;font-size:1.3rem;font-weight:700;margin:15px 0}
+.note-table-header{display:flex;background:#1a2634;color:#fff;padding:12px 20px;font-weight:600;gap:15px;border-radius:12px 12px 0 0;flex-wrap:wrap}
+.note-table-header span:first-child{min-width:50px}.note-table-header span:nth-child(2){flex:2}.note-table-header span:nth-child(3){flex:1;text-align:right}.note-table-header span:nth-child(4){flex:1.5;text-align:center}
+.note-list-container{background:#f8fafd;border-radius:0 0 12px 12px;border:1px solid #eef2f6;border-top:0}
+.action-bar{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center}
+.modal-box{background:#fff;padding:30px;border-radius:25px;max-width:450px;width:90%;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal-box input{width:100%;margin:8px 0}.modal-box .btn-group{display:flex;gap:12px;margin-top:15px}.modal-box .btn-group button{flex:1}
+.small{font-size:.82rem;color:#666;line-height:1.6}.success{color:#2e7d32}.danger{color:#d32f2f}
+@media(max-width:600px){.note-item{flex-direction:column;align-items:stretch}.item-amount{text-align:left}.item-datetime{text-align:left}.note-table-header{flex-direction:column}.input-group{flex-direction:column}}
+</style>
 </head>
 <body>
-
 <div id="toast" class="toast"></div>
 
-<!-- ===== EDIT MODAL ===== -->
+<!-- EDIT MODAL -->
 <div class="modal-overlay" id="editModal">
-    <div class="modal-box">
-        <h3>✏️ Edit Note</h3>
-        <input type="text" id="editName" placeholder="वस्तुको नाम">
-        <input type="number" id="editAmount" placeholder="रकम" step="0.01">
-        <div class="btn-group">
-            <button class="btn btn-success" onclick="saveEdit()">💾 Save</button>
-            <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-        </div>
-    </div>
-</div>
+<div class="modal-box">
+<h3>✏️ Edit Note</h3>
+<input type="text" id="editName" placeholder="वस्तुको नाम">
+<input type="number" id="editAmount" placeholder="रकम" step="0.01">
+<div class="btn-group">
+<button class="btn btn-success" onclick="saveEdit()">💾 Save</button>
+<button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+</div></div></div>
 
-<!-- ===== FORGET MODAL ===== -->
-<div class="modal-overlay" id="forgetModal">
-    <div class="modal-box">
-        <h3>🔑 Forget ID / Name</h3>
-        <p style="color:#666; margin-bottom:10px;">तपाईंको ID लेख्नुहोस्, Name पठाइदिन्छौं।</p>
-        <input type="number" id="forgetIdInput" placeholder="तपाईंको ID">
-        <div class="btn-group">
-            <button class="btn btn-primary" onclick="forgetId()">📨 Get Name</button>
-            <button class="btn btn-secondary" onclick="closeForgetModal()">Cancel</button>
-        </div>
-        <div id="forgetResult" style="margin-top:15px; padding:12px; background:#f8fafd; border-radius:12px; display:none;"></div>
-    </div>
+<!-- RECOVERY MODAL -->
+<div class="modal-overlay" id="recoveryModal">
+<div class="modal-box">
+<h3>🔐 Account Recovery</h3>
+<p class="small">ID बिर्सनुभएको छ भने तपाईंले account मा राखेको Recovery Email लेख्नुहोस्। Email मा सुरक्षित recovery link पठाइन्छ। त्यसबाट password reset गरेर login गरेपछि तपाईंको ID देखिन्छ।</p>
+<input type="email" id="recoveryEmail" placeholder="Recovery Email">
+<div class="btn-group">
+<button class="btn btn-primary" onclick="sendRecovery()">📨 Send Email</button>
+<button class="btn btn-secondary" onclick="closeRecovery()">Cancel</button>
 </div>
+<div id="recoveryResult" style="margin-top:15px"></div>
+</div></div>
 
 <div class="container">
 
-    <!-- ===== LOGIN PAGE ===== -->
-    <div id="loginPage" class="card">
-        <h2>🔑 Login</h2>
-        <p style="color:#666; margin-bottom:15px;">तपाईंको ID र Name हाल्नुहोस्</p>
-        
-        <div class="example-box">
-            <p>📌 <strong>Example:</strong> ID: <strong>2343</strong> | Name: <strong>Nabin</strong></p>
-        </div>
-        
-        <div class="input-group">
-            <input type="number" id="loginId" placeholder="ID ">
-            <input type="text" id="loginName" placeholder="Name ">
-            <button class="btn btn-primary" onclick="loginUser()">✅ Login</button>
-        </div>
-        
-        <div class="auth-links">
-            <button class="btn btn-secondary btn-sm" onclick="showCreate()">📄 Create Account</button>
-            <button class="btn btn-secondary btn-sm" onclick="showForget()">🔑 Forget ID / Name</button>
-        </div>
-    </div>
+<!-- LOGIN -->
+<div id="loginPage" class="card">
+<h2>🔑 Secure Login</h2>
+<p style="color:#666;margin-bottom:15px">ID र Password हाल्नुहोस्</p>
+<div class="example-box"><p>📌 Example: ID <strong>2343</strong> | Password <strong>Nabin@2026</strong></p></div>
+<div class="input-group">
+<input type="text" id="loginId" placeholder="ID / Username" autocomplete="username">
+<input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+<button class="btn btn-primary" onclick="loginUser()">✅ Login</button>
+</div>
+<div class="auth-links">
+<button class="btn btn-secondary btn-sm" onclick="showCreate()">📄 Create Account</button>
+<button class="btn btn-secondary btn-sm" onclick="showRecovery()">🔑 Forgot ID / Password</button>
+</div>
+</div>
 
-    <!-- ===== CREATE ACCOUNT PAGE ===== -->
-    <div id="createPage" class="card hidden">
-        <h2>📄 Create New Account</h2>
-        <p style="color:#666; margin-bottom:15px;">नयाँ ID र Name बनाउनुहोस्</p>
-        
-        <div class="example-box">
-            <p>📌 <strong>Example:</strong> ID: <strong>2343</strong> | Name: <strong>Nabin</strong></p>
-        </div>
-        
-        <div class="input-group">
-            <input type="number" id="createId" placeholder="ID " min="1000" max="9999">
-            <input type="text" id="createName" placeholder="Full Name">
-        </div>
-        <button class="btn btn-primary" onclick="createAccount()">✅ Create Account</button>
-        <button class="btn btn-secondary" onclick="showLogin()" style="margin-top:10px;">← Back to Login</button>
-    </div>
+<!-- CREATE -->
+<div id="createPage" class="card hidden">
+<h2>📄 Create Secure Account</h2>
+<p style="color:#666;margin-bottom:15px">ID, Name, Password र Recovery Email राख्नुहोस्।</p>
+<div class="example-box">
+<p>🆔 ID: <strong>2343</strong></p>
+<p>👤 Name: <strong>Nabin@01</strong></p>
+<p>🔐 Password: <strong>Nabin@2026</strong></p>
+<p>📧 Recovery Email: <strong>your@email.com</strong></p>
+</div>
+<div class="input-group">
+<input type="text" id="createId" placeholder="ID / Username (4+ characters)" maxlength="30" autocomplete="username">
+<input type="text" id="createName" placeholder="Name (जस्तै Nabin@01)" maxlength="50">
+</div>
+<div class="input-group">
+<input type="password" id="createPassword" placeholder="Strong Password (कम्तीमा 8 characters)" autocomplete="new-password">
+<input type="email" id="createEmail" placeholder="Recovery Email" autocomplete="email">
+</div>
+<p class="small">Password मा कम्तीमा 8 characters राख्नुहोस्। Name मा @ # 1 _ - जस्ता characters राख्न सकिन्छ।</p>
+<br>
+<button class="btn btn-primary" onclick="createAccount()">✅ Create Account</button>
+<button class="btn btn-secondary" onclick="showLogin()" style="margin-top:10px">← Back to Login</button>
+</div>
 
-    <!-- ===== NOTE PAGE ===== -->
-    <div id="notePage" class="hidden">
-        <div class="card">
-            <div class="login-info">
-                <div>👤 <strong id="displayName">---</strong> | 🆔 <strong id="displayId">---</strong></div>
-                <div>
-                    <button class="btn btn-secondary btn-sm" onclick="logoutUser()">🚪 Logout</button>
-                </div>
-            </div>
-            
-            <h2>📝 My Notes</h2>
-            
-            <!-- Add Note -->
-            <div class="input-group">
-                <input type="text" id="noteName" placeholder="वस्तुको नाम ">
-                <input type="number" id="noteAmount" placeholder="रकम " step="0.01">
-                <button class="btn btn-primary" onclick="addNote()">➕ Add</button>
-            </div>
-            
-            <!-- Action Buttons -->
-            <div class="action-bar">
-                <button class="btn btn-secondary" onclick="downloadPDF(false)">📥 PDF (सबै)</button>
-                <button class="btn btn-success" onclick="downloadPDF(true)">📊 PDF + Total</button>
-                <button class="btn btn-warning" onclick="calculateTotal()">🧮 Calculate Total</button>
-            </div>
-            
-            <!-- Total Display -->
-            <div id="totalDisplay" class="total-display hidden">
-                📊 Total: रु. <span id="totalValue">0</span>
-            </div>
-            
-            <!-- Notes List -->
-            <div style="margin-top:20px;">
-                <div class="note-table-header">
-                    <span>क्र.स.</span>
-                    <span>वस्तु</span>
-                    <span>रकम (रु.)</span>
-                    <span>मिति / समय</span>
-                </div>
-                <div class="note-list-container" id="noteList">
-                    <p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन।</p>
-                </div>
-            </div>
-            
-            <p style="text-align:right; color:#999; font-size:0.9rem; margin-top:10px;" id="noteCount">कुल नोट: 0</p>
-        </div>
-    </div>
-
+<!-- NOTES -->
+<div id="notePage" class="hidden">
+<div class="card">
+<div class="login-info">
+<div>👤 <strong id="displayName">---</strong> | 🆔 <strong id="displayId">---</strong></div>
+<button class="btn btn-secondary btn-sm" onclick="logoutUser()">🚪 Logout</button>
+</div>
+<h2>📝 My Notes</h2>
+<div class="input-group">
+<input type="text" id="noteName" placeholder="वस्तुको नाम">
+<input type="number" id="noteAmount" placeholder="रकम" step="0.01">
+<button class="btn btn-primary" onclick="addNote()">➕ Add</button>
+</div>
+<div class="action-bar">
+<button class="btn btn-secondary" onclick="downloadPDF(false)">📥 PDF (सबै)</button>
+<button class="btn btn-success" onclick="downloadPDF(true)">📊 PDF + Total</button>
+<button class="btn btn-warning" onclick="calculateTotal()">🧮 Calculate Total</button>
+</div>
+<div id="totalDisplay" class="total-display hidden">📊 Total: रु. <span id="totalValue">0</span></div>
+<div style="margin-top:20px">
+<div class="note-table-header"><span>क्र.स.</span><span>वस्तु</span><span>रकम (रु.)</span><span>मिति / समय</span></div>
+<div class="note-list-container" id="noteList"></div>
+</div>
+<p style="text-align:right;color:#999;font-size:.9rem;margin-top:10px" id="noteCount">कुल नोट: 0</p>
+</div></div>
 </div>
 
 <script>
-    // ==================== FIREBASE CONFIG ====================
-    const firebaseConfig = {
-        apiKey: "AIzaSyBftJknyJL2ven0wzDjIczpZPW2D2iHCRk",
-        authDomain: "nabin-note-app-fb445.firebaseapp.com",
-        databaseURL: "https://nabin-note-app-fb445-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "nabin-note-app-fb445",
-        storageBucket: "nabin-note-app-fb445.firebasestorage.app",
-        messagingSenderId: "49720607054",
-        appId: "1:49720607054:web:84a60c5f748fc21b681e1f"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyBftJknyJL2ven0wzDjIczpZPW2D2iHCRk",
+  authDomain: "nabin-note-app-fb445.firebaseapp.com",
+  databaseURL: "https://nabin-note-app-fb445-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nabin-note-app-fb445",
+  storageBucket: "nabin-note-app-fb445.firebasestorage.app",
+  messagingSenderId: "49720607054",
+  appId: "1:49720607054:web:84a60c5f748fc21b681e1f"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const database = firebase.database();
 
-    // ==================== GLOBAL VARIABLES ====================
-    let currentUser = null;
-    let currentNotes = [];
-    let editIndex = null;
+let currentUser=null, currentNotes=[], editIndex=null;
 
-    // ==================== TOAST ====================
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.textContent = msg;
-        toast.style.display = 'block';
-        clearTimeout(toast._timer);
-        toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
-    }
+function showToast(msg){
+ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
+ clearTimeout(t._timer); t._timer=setTimeout(()=>t.style.display='none',3500);
+}
+function showLogin(){
+ document.getElementById('loginPage').classList.remove('hidden');
+ document.getElementById('createPage').classList.add('hidden');
+ document.getElementById('notePage').classList.add('hidden');
+ closeRecovery();
+}
+function showCreate(){
+ document.getElementById('loginPage').classList.add('hidden');
+ document.getElementById('createPage').classList.remove('hidden');
+ document.getElementById('notePage').classList.add('hidden');
+}
+function showRecovery(){
+ document.getElementById('recoveryModal').style.display='flex';
+ document.getElementById('recoveryEmail').value='';
+ document.getElementById('recoveryResult').innerHTML='';
+}
+function closeRecovery(){document.getElementById('recoveryModal').style.display='none'}
 
-    // ==================== NAVIGATION ====================
-    function showLogin() {
-        document.getElementById('loginPage').classList.remove('hidden');
-        document.getElementById('createPage').classList.add('hidden');
-        document.getElementById('notePage').classList.add('hidden');
-        closeForgetModal();
-    }
+function normalizeId(v){return v.trim().toLowerCase().replace(/\s+/g,'')}
+function validId(id){return /^[a-zA-Z0-9._@#-]{4,30}$/.test(id)}
+function validName(name){return name.length>=2 && name.length<=50}
+function validPassword(p){return p.length>=8}
 
-    function showCreate() {
-        document.getElementById('loginPage').classList.add('hidden');
-        document.getElementById('createPage').classList.remove('hidden');
-        document.getElementById('notePage').classList.add('hidden');
-        closeForgetModal();
-    }
+async function createAccount(){
+ const idRaw=document.getElementById('createId').value;
+ const id=normalizeId(idRaw);
+ const name=document.getElementById('createName').value.trim();
+ const password=document.getElementById('createPassword').value;
+ const email=document.getElementById('createEmail').value.trim().toLowerCase();
 
-    // ==================== FORGET ID ====================
-    function showForget() {
-        document.getElementById('forgetModal').style.display = 'flex';
-        document.getElementById('forgetResult').style.display = 'none';
-        document.getElementById('forgetIdInput').value = '';
-    }
+ if(!validId(id)){showToast('⚠️ ID 4-30 characters: अक्षर, अंक, . _ @ # - मात्र');return}
+ if(!validName(name)){showToast('⚠️ Name 2-50 characters राख्नुहोस्!');return}
+ if(!validPassword(password)){showToast('⚠️ Password कम्तीमा 8 characters हुनुपर्छ!');return}
+ if(!email || !email.includes('@')){showToast('⚠️ सही Recovery Email राख्नुहोस्!');return}
 
-    function closeForgetModal() {
-        document.getElementById('forgetModal').style.display = 'none';
-    }
+ try{
+   // ID index is only used to find the authentication email.
+   const idSnap=await database.ref('idIndex/'+id).once('value');
+   if(idSnap.exists()){showToast('❌ यो ID पहिले नै प्रयोग भइसकेको छ!');return}
 
-    function forgetId() {
-        const id = document.getElementById('forgetIdInput').value.trim();
-        if (!id) {
-            showToast('⚠️ कृपया ID लेख्नुहोस्!');
-            return;
-        }
+   const cred=await auth.createUserWithEmailAndPassword(email,password);
+   const uid=cred.user.uid;
 
-        database.ref('users/' + id).once('value').then(snapshot => {
-            const resultDiv = document.getElementById('forgetResult');
-            if (!snapshot.exists()) {
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = `<div style="color:#d32f2f;">❌ यो ID अवस्थित छैन!</div>`;
-                return;
-            }
+   await database.ref('users/'+uid).set({
+     id:id,
+     name:name,
+     email:email,
+     createdAt:firebase.database.ServerValue.TIMESTAMP,
+     notes:[]
+   });
 
-            const userData = snapshot.val();
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                <div style="color:#2e7d32;">
-                    ✅ यो ID को Name: <strong>${userData.name}</strong>
-                    <br><br>
-                    <button class="btn btn-primary btn-sm" onclick="autoFillLogin('${id}', '${userData.name}')">
-                        📝 Login गर्नुहोस्
-                    </button>
-                </div>
-            `;
-            showToast('✅ Name फेला पर्यो!');
-        });
-    }
+   await database.ref('idIndex/'+id).set(uid);
+   await cred.user.sendEmailVerification();
 
-    function autoFillLogin(id, name) {
-        closeForgetModal();
-        document.getElementById('loginId').value = id;
-        document.getElementById('loginName').value = name;
-        loginUser();
-    }
+   showToast('✅ Account created! Email verification link पठाइएको छ।');
+   alert('Account बनेको छ। पहिले आफ्नो email खोल्नुहोस् र verification link थिच्नुहोस्। त्यसपछि ID + Password ले login गर्नुहोस्।');
+   await auth.signOut();
+   document.getElementById('loginId').value=id;
+   showLogin();
+ }catch(e){
+   if(e.code==='auth/email-already-in-use') showToast('❌ यो Email पहिले नै प्रयोग भइसकेको छ!');
+   else if(e.code==='auth/invalid-email') showToast('❌ Email गलत छ!');
+   else if(e.code==='auth/weak-password') showToast('❌ Password अझ बलियो बनाउनुहोस्!');
+   else showToast('❌ Account बनाउन सकिएन: '+e.message);
+   console.error(e);
+ }
+}
 
-    // ==================== CREATE ACCOUNT ====================
-    function createAccount() {
-        const id = document.getElementById('createId').value.trim();
-        const name = document.getElementById('createName').value.trim();
+async function loginUser(){
+ const id=normalizeId(document.getElementById('loginId').value);
+ const password=document.getElementById('loginPassword').value;
+ if(!id||!password){showToast('⚠️ ID र Password दुवै भर्नुहोस्!');return}
 
-        if (!id || !name) {
-            showToast('⚠️ कृपया ID र Name दुवै भर्नुहोस्!');
-            return;
-        }
-        if (id.length < 4 || id.length > 4 || isNaN(id)) {
-            showToast('⚠️ ID ४ अंकको (१०००-९९९९) मात्र!');
-            return;
-        }
+ try{
+   const idSnap=await database.ref('idIndex/'+id).once('value');
+   if(!idSnap.exists()){showToast('❌ ID वा Password गलत छ!');return}
+   const uid=idSnap.val();
+   const userSnap=await database.ref('users/'+uid).once('value');
+   if(!userSnap.exists()){showToast('❌ Account data भेटिएन!');return}
+   const data=userSnap.val();
 
-        database.ref('users/' + id).once('value').then(snapshot => {
-            if (snapshot.exists()) {
-                showToast('❌ यो ID पहिले नै प्रयोग भइसकेको छ!');
-            } else {
-                database.ref('users/' + id).set({
-                    name: name,
-                    notes: []
-                }).then(() => {
-                    showToast('✅ Account Created! ID: ' + id);
-                    document.getElementById('loginId').value = id;
-                    document.getElementById('loginName').value = name;
-                    showLogin();
-                    loginUser();
-                });
-            }
-        });
-    }
+   const cred=await auth.signInWithEmailAndPassword(data.email,password);
+   if(!cred.user.emailVerified){
+     await auth.signOut();
+     showToast('⚠️ पहिले आफ्नो Email verify गर्नुहोस्!');
+     alert('तपाईंको email verify भएको छैन। Email मा आएको verification link थिच्नुहोस्।');
+     return;
+   }
 
-    // ==================== LOGIN ====================
-    function loginUser() {
-        const id = document.getElementById('loginId').value.trim();
-        const name = document.getElementById('loginName').value.trim();
+   currentUser={uid:uid,id:data.id,name:data.name,email:data.email};
+   currentNotes=Array.isArray(data.notes)?data.notes:[];
+   document.getElementById('loginPage').classList.add('hidden');
+   document.getElementById('createPage').classList.add('hidden');
+   document.getElementById('notePage').classList.remove('hidden');
+   document.getElementById('displayName').textContent=currentUser.name;
+   document.getElementById('displayId').textContent=currentUser.id;
+   renderNotes();
+   showToast('✅ Welcome, '+currentUser.name+'!');
+ }catch(e){
+   console.error(e);
+   if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') showToast('❌ ID वा Password गलत छ!');
+   else showToast('❌ Login भएन!');
+ }
+}
 
-        if (!id || !name) {
-            showToast('⚠️ कृपया ID र Name दुवै भर्नुहोस्!');
-            return;
-        }
+async function sendRecovery(){
+ const email=document.getElementById('recoveryEmail').value.trim().toLowerCase();
+ if(!email){showToast('⚠️ Recovery Email राख्नुहोस्!');return}
+ try{
+   await auth.sendPasswordResetEmail(email);
+   document.getElementById('recoveryResult').innerHTML='<div class="success">✅ Recovery email पठाइयो। Email खोलेर password reset गर्नुहोस्। त्यसपछि आफ्नो ID + नयाँ password ले login गर्नुहोस्।</div>';
+   showToast('📨 Recovery email पठाइयो!');
+ }catch(e){
+   console.error(e);
+   // Deliberately generic: do not reveal whether an email has an account.
+   document.getElementById('recoveryResult').innerHTML='<div class="success">📨 यदि यो email account मा जोडिएको छ भने recovery email पठाइनेछ।</div>';
+ }
+}
 
-        database.ref('users/' + id).once('value').then(snapshot => {
-            if (!snapshot.exists()) {
-                showToast('❌ यो ID अवस्थित छैन! Create Account गर्नुहोस्।');
-                return;
-            }
+async function logoutUser(){
+ await auth.signOut();
+ currentUser=null; currentNotes=[];
+ document.getElementById('loginId').value='';
+ document.getElementById('loginPassword').value='';
+ showLogin(); showToast('🚪 Logged out!');
+}
 
-            const userData = snapshot.val();
-            if (userData.name.toLowerCase() !== name.toLowerCase()) {
-                showToast('❌ Name मिलेन!');
-                return;
-            }
+function saveNotes(){
+ if(!currentUser)return;
+ return database.ref('users/'+currentUser.uid+'/notes').set(currentNotes);
+}
+function addNote(){
+ const name=document.getElementById('noteName').value.trim();
+ const amount=document.getElementById('noteAmount').value.trim();
+ if(!name){showToast('⚠️ वस्तुको नाम लेख्नुहोस्!');return}
+ if(!amount||isNaN(amount)){showToast('⚠️ रकम लेख्नुहोस्!');return}
+ const now=new Date();
+ currentNotes.push({
+   name:name,amount:parseFloat(amount),
+   datetime:now.toLocaleString('ne-NP',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}),
+   timestamp:now.getTime()
+ });
+ saveNotes(); renderNotes();
+ document.getElementById('noteName').value='';document.getElementById('noteAmount').value='';
+ showToast('✅ Note added!');
+}
+function deleteNote(i){
+ if(confirm('के तपाईं यो नोट मेटाउन चाहनुहुन्छ?')){
+  currentNotes.splice(i,1);saveNotes();renderNotes();showToast('🗑️ Note deleted!');
+ }
+}
+function editNote(i){
+ editIndex=i;const n=currentNotes[i];
+ document.getElementById('editName').value=n.name;
+ document.getElementById('editAmount').value=n.amount;
+ document.getElementById('editModal').style.display='flex';
+}
+function closeEditModal(){document.getElementById('editModal').style.display='none';editIndex=null}
+function saveEdit(){
+ const name=document.getElementById('editName').value.trim();
+ const amount=document.getElementById('editAmount').value.trim();
+ if(!name||!amount||isNaN(amount)){showToast('⚠️ सही विवरण राख्नुहोस्!');return}
+ currentNotes[editIndex]={...currentNotes[editIndex],name:name,amount:parseFloat(amount)};
+ saveNotes();renderNotes();closeEditModal();showToast('✅ Note updated!');
+}
+function escapeHTML(text){
+ const d=document.createElement('div');d.textContent=String(text??'');return d.innerHTML;
+}
+function renderNotes(){
+ const c=document.getElementById('noteList'),count=document.getElementById('noteCount');
+ if(!currentNotes.length){
+  c.innerHTML='<p style="color:#999;text-align:center;padding:30px">अहिलेसम्म कुनै नोट छैन।</p>';
+  count.textContent='कुल नोट: 0';document.getElementById('totalDisplay').classList.add('hidden');return;
+ }
+ let html='';
+ currentNotes.forEach((n,i)=>{
+  let dt=n.datetime||'—';
+  if(!n.datetime&&n.timestamp)dt=new Date(n.timestamp).toLocaleString('ne-NP');
+  html+=`<div class="note-item"><span class="sn">${i+1}</span><span class="item-name">${escapeHTML(n.name)}</span><span class="item-amount">रु. ${Number(n.amount).toFixed(2)}</span><span class="item-datetime">${escapeHTML(dt)}</span><div class="action-btns"><button class="edit-btn" onclick="editNote(${i})"><i class="fa-solid fa-pen"></i></button><button class="delete-btn" onclick="deleteNote(${i})"><i class="fa-solid fa-trash"></i></button></div></div>`;
+ });
+ c.innerHTML=html;count.textContent=`कुल नोट: ${currentNotes.length}`;
+ document.getElementById('totalDisplay').classList.add('hidden');
+}
+function calculateTotal(){
+ if(!currentNotes.length){showToast('⚠️ कुनै नोट छैन!');return}
+ const total=currentNotes.reduce((s,n)=>s+Number(n.amount),0);
+ document.getElementById('totalValue').textContent=total.toFixed(2);
+ document.getElementById('totalDisplay').classList.remove('hidden');
+}
+function downloadPDF(includeTotal){
+ if(!currentNotes.length){showToast('⚠️ कुनै नोट छैन!');return}
+ let total=currentNotes.reduce((s,n)=>s+Number(n.amount),0),rows='';
+ currentNotes.forEach((n,i)=>{rows+=`<tr><td>${i+1}</td><td>${escapeHTML(n.name)}</td><td>रु. ${Number(n.amount).toFixed(2)}</td><td>${escapeHTML(n.datetime||'—')}</td></tr>`});
+ const totalHtml=includeTotal?`<h3 style="margin-top:20px;text-align:center">Total: रु. ${total.toFixed(2)}</h3>`:'';
+ const el=document.createElement('div');
+ el.innerHTML=`<div style="font-family:Arial;padding:30px;width:800px"><h1>Nabin Note</h1><p><b>ID:</b> ${escapeHTML(currentUser.id)} &nbsp; <b>Name:</b> ${escapeHTML(currentUser.name)}</p><table style="width:100%;border-collapse:collapse;margin-top:20px"><thead><tr><th>क्र.स.</th><th>वस्तु</th><th>रकम</th><th>मिति/समय</th></tr></thead><tbody>${rows}</tbody></table>${totalHtml}</div>`;
+ document.body.appendChild(el);
+ html2pdf().set({margin:.5,filename:`notes_${currentUser.id}_${new Date().toISOString().slice(0,10)}.pdf`,html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}}).from(el).save().then(()=>{el.remove();showToast('✅ PDF Downloaded!')});
+}
 
-            currentUser = { id: id, name: userData.name };
-            currentNotes = userData.notes || [];
-
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('createPage').classList.add('hidden');
-            document.getElementById('notePage').classList.remove('hidden');
-
-            document.getElementById('displayName').textContent = currentUser.name;
-            document.getElementById('displayId').textContent = currentUser.id;
-
-            renderNotes();
-            showToast('✅ Welcome, ' + currentUser.name + '!');
-        });
-    }
-
-    function logoutUser() {
-        currentUser = null;
-        currentNotes = [];
-        document.getElementById('notePage').classList.add('hidden');
-        document.getElementById('loginPage').classList.remove('hidden');
-        document.getElementById('loginId').value = '';
-        document.getElementById('loginName').value = '';
-        showToast('🚪 Logged out!');
-    }
-
-    // ==================== NOTES CRUD ====================
-    function addNote() {
-        const name = document.getElementById('noteName').value.trim();
-        const amount = document.getElementById('noteAmount').value.trim();
-
-        if (!name) { showToast('⚠️ वस्तुको नाम लेख्नुहोस्!'); return; }
-        if (!amount || isNaN(amount)) { showToast('⚠️ रकम लेख्नुहोस् (संख्या)!'); return; }
-
-        const now = new Date();
-        const datetime = now.toLocaleString('ne-NP', { 
-            year: 'numeric', month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: true 
-        });
-
-        currentNotes.push({ 
-            name: name, 
-            amount: parseFloat(amount),
-            datetime: datetime,
-            timestamp: now.getTime()
-        });
-        saveNotes();
-        renderNotes();
-        document.getElementById('noteName').value = '';
-        document.getElementById('noteAmount').value = '';
-        document.getElementById('noteName').focus();
-        showToast('✅ Note added!');
-    }
-
-    function deleteNote(index) {
-        if (confirm('के तपाईं यो नोट मेटाउन चाहनुहुन्छ?')) {
-            currentNotes.splice(index, 1);
-            saveNotes();
-            renderNotes();
-            showToast('🗑️ Note deleted!');
-        }
-    }
-
-    function editNote(index) {
-        editIndex = index;
-        const note = currentNotes[index];
-        document.getElementById('editName').value = note.name;
-        document.getElementById('editAmount').value = note.amount;
-        document.getElementById('editModal').style.display = 'flex';
-    }
-
-    function closeEditModal() {
-        document.getElementById('editModal').style.display = 'none';
-        editIndex = null;
-    }
-
-    function saveEdit() {
-        const name = document.getElementById('editName').value.trim();
-        const amount = document.getElementById('editAmount').value.trim();
-
-        if (!name) { showToast('⚠️ वस्तुको नाम लेख्नुहोस्!'); return; }
-        if (!amount || isNaN(amount)) { showToast('⚠️ रकम लेख्नुहोस् (संख्या)!'); return; }
-
-        // Keep existing datetime, only update name and amount
-        const oldNote = currentNotes[editIndex];
-        currentNotes[editIndex] = { 
-            ...oldNote,
-            name: name, 
-            amount: parseFloat(amount)
-        };
-        saveNotes();
-        renderNotes();
-        closeEditModal();
-        showToast('✅ Note updated!');
-    }
-
-    function saveNotes() {
-        if (currentUser) {
-            database.ref('users/' + currentUser.id + '/notes').set(currentNotes);
-        }
-    }
-
-    function renderNotes() {
-        const container = document.getElementById('noteList');
-        const countDisplay = document.getElementById('noteCount');
-
-        if (currentNotes.length === 0) {
-            container.innerHTML = `<p style="color:#999; text-align:center; padding:30px 0;">अहिलेसम्म कुनै नोट छैन।</p>`;
-            countDisplay.textContent = 'कुल नोट: 0';
-            document.getElementById('totalDisplay').classList.add('hidden');
-            return;
-        }
-
-        let html = '';
-        currentNotes.forEach((note, i) => {
-            // if datetime missing, generate from timestamp or now
-            let displayDateTime = note.datetime || '—';
-            if (!note.datetime && note.timestamp) {
-                const d = new Date(note.timestamp);
-                displayDateTime = d.toLocaleString('ne-NP', { 
-                    year: 'numeric', month: 'short', day: 'numeric',
-                    hour: '2-digit', minute: '2-digit', second: '2-digit',
-                    hour12: true 
-                });
-            }
-            html += `
-                <div class="note-item">
-                    <span class="sn">${i + 1}</span>
-                    <span class="item-name">${escapeHTML(note.name)}</span>
-                    <span class="item-amount">रु. ${note.amount.toFixed(2)}</span>
-                    <span class="item-datetime">${displayDateTime}</span>
-                    <div class="action-btns">
-                        <button class="edit-btn" onclick="editNote(${i})" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                        <button class="delete-btn" onclick="deleteNote(${i})" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-        countDisplay.textContent = `कुल नोट: ${currentNotes.length}`;
-        document.getElementById('totalDisplay').classList.add('hidden');
-    }
-
-    function escapeHTML(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // ==================== CALCULATE ====================
-    function calculateTotal() {
-        if (currentNotes.length === 0) {
-            showToast('⚠️ कुनै नोट छैन!');
-            return;
-        }
-
-        let total = 0;
-        currentNotes.forEach(note => { total += note.amount; });
-
-        document.getElementById('totalValue').textContent = total.toFixed(2);
-        document.getElementById('totalDisplay').classList.remove('hidden');
-        showToast(`📊 Total: रु. ${total.toFixed(2)}`);
-    }
-
-    // ==================== PDF DOWNLOAD ====================
-    function downloadPDF(includeTotal) {
-        if (currentNotes.length === 0) {
-            showToast('⚠️ कुनै नोट छैन!');
-            return;
-        }
-
-        let total = 0;
-        currentNotes.forEach(note => { total += note.amount; });
-
-        let tableRows = '';
-        currentNotes.forEach((note, i) => {
-            let displayDateTime = note.datetime || '—';
-            if (!note.datetime && note.timestamp) {
-                const d = new Date(note.timestamp);
-                displayDateTime = d.toLocaleString('ne-NP', { 
-                    year: 'numeric', month: 'short', day: 'numeric',
-                    hour: '2-digit', minute: '2-digit', second: '2-digit',
-                    hour12: true 
-                });
-            }
-            tableRows += `
-                <tr style="border-bottom: 1px solid #eef2f6;">
-                    <td style="padding: 10px 15px; font-weight:600; text-align:center;">${i+1}</td>
-                    <td style="padding: 10px 15px;">${escapeHTML(note.name)}</td>
-                    <td style="padding: 10px 15px; text-align:right;">रु. ${note.amount.toFixed(2)}</td>
-                    <td style="padding: 10px 15px; text-align:center; font-size:0.8rem; color:#555;">${displayDateTime}</td>
-                </tr>
-            `;
-        });
-
-        let totalHTML = '';
-        if (includeTotal) {
-            totalHTML = `
-                <div style="margin-top: 20px; background: #1a2634; color: white; padding: 15px 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 1.2rem;">
-                    📊 Total: रु. ${total.toFixed(2)}
-                </div>
-            `;
-        }
-
-        let content = `
-            <div style="font-family: 'Poppins', sans-serif; padding: 30px; max-width: 800px; margin: auto; position: relative;">
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80px; color: rgba(0,0,0,0.04); font-weight: 700; pointer-events: none; white-space: nowrap; z-index: 0;">
-                    NABIN
-                </div>
-                <div style="position: relative; z-index: 1;">
-                    <h1 style="color: #1a2634; border-bottom: 3px solid #1a2634; padding-bottom: 10px;">
-                        📝 My Notes
-                    </h1>
-                    <p style="color: #555; margin: 15px 0 20px 0; font-size: 1rem;">
-                        <strong>ID:</strong> ${currentUser.id} &nbsp;|&nbsp; 
-                        <strong>Name:</strong> ${currentUser.name} &nbsp;|&nbsp; 
-                        <strong>Date:</strong> ${new Date().toLocaleDateString()}
-                    </p>
-                    <hr style="margin: 20px 0; border-color: #eef2f6;">
-                    <table style="width:100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem;">
-                        <thead>
-                            <tr style="background: #1a2634; color: white; text-align: left;">
-                                <th style="padding: 12px 15px; text-align:center;">क्र.स.</th>
-                                <th style="padding: 12px 15px;">वस्तु</th>
-                                <th style="padding: 12px 15px; text-align:right;">रकम (रु.)</th>
-                                <th style="padding: 12px 15px; text-align:center;">मिति / समय</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableRows}
-                        </tbody>
-                    </table>
-                    ${totalHTML}
-                    <p style="margin-top: 30px; text-align: center; color: #999; font-size: 0.75rem; border-top: 2px solid #eef2f6; padding-top: 20px;">
-                        Generated by Nabin Note App | © 2025 Nabin Phuyal
-                    </p>
-                </div>
-            </div>
-        `;
-
-        const element = document.createElement('div');
-        element.innerHTML = content;
-        document.body.appendChild(element);
-
-        const opt = {
-            margin: [0.5, 0.5, 0.5, 0.5],
-            filename: `notes_${currentUser.id}_${new Date().toISOString().slice(0,10)}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, letterRendering: true },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(element).save().then(() => {
-            document.body.removeChild(element);
-            showToast('✅ PDF Downloaded!');
-        }).catch(err => {
-            document.body.removeChild(element);
-            showToast('❌ PDF Error!');
-            console.error(err);
-        });
-    }
-
-    // ==================== AUTO LOGIN CHECK ====================
-    window.onload = function() {
-        showLogin();
-    };
+// Keep session after refresh, but never auto-login a different person.
+auth.onAuthStateChanged(async user=>{
+ if(!user){showLogin();return}
+ if(!user.emailVerified){await auth.signOut();showLogin();return}
+ try{
+   const snap=await database.ref('users/'+user.uid).once('value');
+   if(!snap.exists()){await auth.signOut();showLogin();return}
+   const d=snap.val();
+   currentUser={uid:user.uid,id:d.id,name:d.name,email:d.email};
+   currentNotes=Array.isArray(d.notes)?d.notes:[];
+   document.getElementById('loginPage').classList.add('hidden');
+   document.getElementById('createPage').classList.add('hidden');
+   document.getElementById('notePage').classList.remove('hidden');
+   document.getElementById('displayName').textContent=d.name;
+   document.getElementById('displayId').textContent=d.id;
+   renderNotes();
+ }catch(e){console.error(e)}
+});
 </script>
-
 </body>
 </html>
