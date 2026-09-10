@@ -1,343 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Famous Quotes - Nabin Phuyal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Poppins', sans-serif; 
             background-color: #f8fbff; 
             color: #333; 
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            padding: 20px;
         }
-
-        /* Header / Navigation */
         header { 
             background: linear-gradient(90deg, #1a2634, #2c3e50); 
             color: white; 
-            padding: 20px 30px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+            padding: 25px; 
+            text-align: center; 
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
+        header h1 {
+            font-size: 28px;
+            color: #ffd700;
+        }
         .back-btn {
-            background: rgba(255, 255, 255, 0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #1a2634;
             color: white;
             padding: 10px 20px;
             border-radius: 30px;
             text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 600;
             transition: 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .back-btn:hover {
-            background: #ffd700;
-            color: #1a2634;
+            background: #2c3e50;
             transform: translateX(-3px);
         }
-
-        .page-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffd700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Hero Banner */
-        .hero-banner {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #ffffff, #f0f5fa);
-            margin: 30px auto 20px auto;
-            max-width: 1000px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            width: 90%;
-        }
-
-        .hero-banner h1 {
-            color: #1a2634;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        .hero-banner p {
-            color: #666;
-            font-size: 1.05rem;
-        }
-
-        /* Filter Controls */
-        .filter-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            max-width: 1000px;
-            margin: 0 auto 35px auto;
-            padding: 0 20px;
-        }
-
-        .filter-btn {
-            background: white;
-            color: #1a2634;
-            border: 2px solid #1a2634;
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: linear-gradient(90deg, #1a2634, #2c3e50);
-            color: #ffd700;
-            border-color: #1a2634;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(26, 38, 52, 0.25);
-        }
-
-        /* Quote Grid */
         .quotes-container {
-            max-width: 1100px;
-            margin: 0 auto 50px auto;
-            padding: 0 20px;
+            max-width: 900px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
-
-        .quote-card {
+        .quote-box {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             border-left: 6px solid #1a2634;
-            transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             position: relative;
-            overflow: hidden;
-            opacity: 1;
-            transform: scale(1);
+            transition: 0.3s;
         }
-
-        .quote-card.hide {
-            display: none;
-            opacity: 0;
-            transform: scale(0.9);
+        .quote-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
-
-        .quote-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.12);
-            border-left-color: #ffd700;
+        .quote-box i {
+            font-size: 24px;
+            color: #ffd700;
+            margin-bottom: 10px;
+            display: block;
         }
-
-        .quote-card i.quote-icon {
-            font-size: 2rem;
-            color: rgba(26, 38, 52, 0.1);
-            position: absolute;
-            top: 15px;
-            right: 20px;
-        }
-
-        .quote-tag {
-            align-self: flex-start;
-            background: #f0f5fa;
-            color: #1a2634;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .quote-text {
-            font-size: 1.1rem;
+        .quote-box p {
+            font-size: 16px;
             font-weight: 500;
             color: #2c3e50;
-            margin-bottom: 20px;
-            line-height: 1.7;
-            position: relative;
-            z-index: 1;
-        }
-
-        .quote-author {
-            font-weight: 700;
-            color: #d32f2f;
-            font-size: 0.95rem;
-            text-align: right;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 12px;
-        }
-
-        .quote-author span {
-            display: block;
-            font-weight: 400;
-            font-size: 0.8rem;
-            color: #777;
-        }
-
-        /* Footer */
-        footer { 
-            background: linear-gradient(90deg, #1a2634, #0f1a24); 
-            color: white; 
-            padding: 25px 0; 
-            margin-top: auto; 
-            text-align: center; 
-        }
-
-        @media (max-width: 600px) {
-            .hero-banner h1 { font-size: 1.6rem; }
-            header { padding: 15px 20px; }
-            .page-title { font-size: 1.1rem; }
-            .filter-btn { padding: 8px 16px; font-size: 0.85rem; }
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
 
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
+
     <header>
-        <a href="index.html" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i> Home
-        </a>
-        <div class="page-title">
-            <i class="fa-solid fa-quote-left"></i> Famous Quotes
-        </div>
+        <h1><i class="fa-solid fa-quote-left"></i> थप लोकप्रिय भनाइहरु (Famous Quotes)</h1>
     </header>
 
-    <div class="hero-banner">
-        <h1>उत्कृष्ट व्यक्तिहरूका प्रेरणादायी भनाइहरू</h1>
-        <p>Words of Wisdom & Inspiration from Great Personalities</p>
-    </div>
-
-    <!-- Category Filter Buttons -->
-    <div class="filter-container">
-        <button class="filter-btn active" onclick="filterQuotes('all')">All</button>
-        <button class="filter-btn" onclick="filterQuotes('motivation')">Motivation</button>
-        <button class="filter-btn" onclick="filterQuotes('success')">Success</button>
-        <button class="filter-btn" onclick="filterQuotes('life')">Life</button>
-        <button class="filter-btn" onclick="filterQuotes('leadership')">Leadership</button>
-    </div>
-
     <div class="quotes-container">
-        
-        <!-- Quote Card 1 -->
-        <div class="quote-card" data-category="motivation">
-            <i class="fa-solid fa-quote-right quote-icon"></i>
-            <span class="quote-tag">Motivation</span>
-            <p class="quote-text">"सफलता भनेको असफलताबाट उत्साह नगुमाई अघि बढ्नु हो।"</p>
-            <div class="quote-author">
-                - विन्स्टन चर्चिल
-                <span>Former Prime Minister of UK</span>
-            </div>
+        <div class="quote-box">
+            <i class="fa-solid fa-quote-left"></i>
+            <p>एउटै गन्तव्यको लागि विविध बाटोहरू, चाहे सानो होस् या ठुलो।</p>
         </div>
 
-        <!-- Quote Card 2 -->
-        <div class="quote-card" data-category="life">
-            <i class="fa-solid fa-quote-right quote-icon"></i>
-            <span class="quote-tag">Life</span>
-            <p class="quote-text">"तपाईंको समय सीमित छ, त्यसैले कसैको जीवन जिउँदै यसलाई खेर नफाल्नुहोस्।"</p>
-            <div class="quote-author">
-                - स्टीभ जोब्स
-                <span>Co-founder of Apple Inc.</span>
-            </div>
+        <div class="quote-box">
+            <i class="fa-solid fa-quote-left"></i>
+            <p>सफलताको कुनै सर्टकट हुँदैन, कडा परिश्रम नै एक मात्र विकल्प हो।</p>
         </div>
 
-        <!-- Quote Card 3 -->
-        <div class="quote-card" data-category="motivation">
-            <i class="fa-solid fa-quote-right quote-icon"></i>
-            <span class="quote-tag">Motivation</span>
-            <p class="quote-text">"सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।"</p>
-            <div class="quote-author">
-                - एपीजे अब्दुल कलाम
-                <span>Former President of India & Scientist</span>
-            </div>
+        <div class="quote-box">
+            <i class="fa-solid fa-quote-left"></i>
+            <p>नयाँ भाषा सिक्नु भनेको संसारलाई हेर्ने नयाँ दृष्टिकोण पाउनु हो।</p>
         </div>
 
-        <!-- Quote Card 4 -->
-        <div class="quote-card" data-category="success">
-            <i class="fa-solid fa-quote-right quote-icon"></i>
-            <span class="quote-tag">Success</span>
-            <p class="quote-text">"The greatest glory in living lies not in never falling, but in rising every time we fall."</p>
-            <div class="quote-author">
-                - Nelson Mandela
-                <span>Former President of South Africa</span>
-            </div>
+        <div class="quote-box">
+            <i class="fa-solid fa-quote-left"></i>
+            <p>समय र परिस्थिति जस्तोसुकै रहोस्, आफ्नो सपना पछ्याउन कहिल्यै नछाड्नुहोस्।</p>
         </div>
 
-        <!-- Quote Card 5 -->
-        <div class="quote-card" data-category="life">
-            <i class="fa-solid fa-quote-right quote-icon"></i>
-            <span class="quote-tag">Life</span>
-            <p class="quote-text">"ज्ञान नै सबैभन्दा ठूलो शक्ति हो, जसले मानिसलाई हरेक बाधा पार गर्न मद्दत गर्दछ।"</p>
-            <div class="quote-author">
-                - गौतम बुद्ध
-                <span>Light of Asia</span>
-            </div>
+        <div class="quote-box">
+            <i class="fa-solid fa-quote-left"></i>
+            <p>जिन्दगीमा गल्ती हुनु सामान्य कुरा हो, तर गल्तीबाट नसिक्नु ठूलो भुल हो।</p>
         </div>
 
-        <!-- Quote Card 6 -->
-        <div class="quote-card" data-category="leadership">
-            <i class="fa-solid fa-quote-right quote-icon"></i>
-            <span class="quote-tag">Leadership</span>
-            <p class="quote-text">"It always seems impossible until it’s done."</p>
-            <div class="quote-author">
-                - Nelson Mandela
-                <span>Anti-Apartheid Activist</span>
-            </div>
+        <div class="quote-box">
+            <i class="fa-solid fa-quote-left"></i>
+            <p>सपना ती होइनन् जुन हामी सुतेर देख्छौँ, सपना ती हुन् जसले हामीलाई सुत्न दिँदैनन्।</p>
         </div>
-
     </div>
-
-    <footer>
-        <p>© 2025 Nabin Phuyal. All rights reserved.</p>
-    </footer>
-
-    <script>
-        function filterQuotes(category) {
-            const cards = document.querySelectorAll('.quote-card');
-            const buttons = document.querySelectorAll('.filter-btn');
-
-            buttons.forEach(btn => {
-                if (btn.innerText.toLowerCase() === category || (category === 'all' && btn.innerText === 'All')) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            cards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
-                if (category === 'all' || cardCategory === category) {
-                    card.classList.remove('hide');
-                } else {
-                    card.classList.add('hide');
-                }
-            });
-        }
-    </script>
 
 </body>
 </html>
