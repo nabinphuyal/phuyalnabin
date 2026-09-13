@@ -247,7 +247,6 @@
 </head>
 <body>
 
-    <!-- Home Link Updated without .html -->
     <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
 
     <header>
@@ -429,7 +428,6 @@
 मेरी आमा हुनुभयो ।
             </div>
 
-            <!-- Author link with custom styling -->
             <div style="text-align: right;">
                 <a href="https://baburamphuyal.com.np" target="_blank" class="brp-link" title="Click to visit website">
                     <img src="babu.png" alt="BRP Mailo" class="author-img">
@@ -437,8 +435,6 @@
                 </a>
             </div>
         </div>
-
-        <!-- Dynamic Approved Poems Will Appear Here -->
     </div>
 
     <!-- Submission Form Section -->
@@ -455,20 +451,22 @@
         <div id="form-msg"></div>
     </div>
 
-    <!-- Script to Handle Submission and Fetching -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXVy3V4WrcPxo7NNhS2rYw1tmicljK2gi9PjSOgtlK2EGilDHECFznbKJeykBEhnLq/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWP5ONKPBIqfgSd4t5zrTw9l6nW8DuwCU7pa_ZCREOeMtrMCOAEb29fXRGBYVRN9zV/exec";
 
-        // 1. Google Sheet बाट Approved भएका कविताहरू तान्ने फङ्क्सन
+        // 1. Approved कविताहरू Google Sheet बाट तान्ने
         async function fetchApprovedPoems() {
             try {
                 const res = await fetch(SCRIPT_URL);
                 const poems = await res.json();
                 
                 const container = document.getElementById('poemContainer');
+                const dynamicCards = container.querySelectorAll('.dynamic-poem');
+                dynamicCards.forEach(el => el.remove());
+
                 poems.forEach(item => {
                     const card = document.createElement('div');
-                    card.className = 'poem-card';
+                    card.className = 'poem-card dynamic-poem';
                     card.innerHTML = `
                         <h3 class="poem-title">${item.title}</h3>
                         <div class="poem-content">${item.poem}</div>
@@ -483,39 +481,45 @@
             }
         }
 
-        // 2. Form को डाटा Google Sheet मा पठाउने फङ्क्सन
-        document.getElementById('poemForm').addEventListener('submit', async function(e) {
+        // 2. Form Submit गर्दा डाटा पठाउने
+        document.getElementById('poemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('form-msg');
             
             btn.disabled = true;
             btn.innerText = "पठाउँदैछ...";
+            msg.innerText = "";
 
-            const payload = {
-                author: document.getElementById('author').value,
-                title: document.getElementById('title').value,
-                poem: document.getElementById('poem').value
-            };
+            const formData = new URLSearchParams();
+            formData.append("author", document.getElementById('author').value);
+            formData.append("title", document.getElementById('title').value);
+            formData.append("poem", document.getElementById('poem').value);
 
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+            })
+            .then(() => {
                 msg.style.color = "#ffd700";
                 msg.innerText = "धन्यवाद! तपाईंको कविता प्राप्त भयो। समीक्षा पछि प्रकाशित गरिनेछ।";
                 document.getElementById('poemForm').reset();
-            } catch (err) {
+            })
+            .catch(err => {
+                console.error(err);
                 msg.style.color = "#ff6b6b";
                 msg.innerText = "माफ गर्नुहोला, समस्या आयो। पुनः प्रयास गर्नुहोस्।";
-            } finally {
+            })
+            .finally(() => {
                 btn.disabled = false;
                 btn.innerText = "कविता पठाउनुहोस्";
-            }
+            });
         });
 
-        // पेज लोड हुने बित्तिकै कविता तान्ने
         fetchApprovedPoems();
     </script>
 </body>
