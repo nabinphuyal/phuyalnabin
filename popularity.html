@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Famous Quotes - Nabin Phuyal</title>
+    <title>Famous Quotes & Poems - Nabin Phuyal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <style>
@@ -44,6 +44,22 @@
             background: #2c3e50;
             transform: translateX(-3px);
         }
+
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px 0;
+            font-size: 24px;
+            color: #1a2634;
+            border-bottom: 3px solid #ffd700;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .center-wrapper {
+            text-align: center;
+        }
+
+        /* Quotes Styling */
         .quotes-container {
             max-width: 900px;
             margin: 0 auto;
@@ -59,6 +75,9 @@
             border-left: 6px solid #1a2634;
             position: relative;
             transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .quote-box:hover {
             transform: translateY(-5px);
@@ -71,10 +90,125 @@
             display: block;
         }
         .quote-box p {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
             color: #2c3e50;
             line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        .author-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffd700;
+        }
+        .author-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1a2634;
+        }
+
+        /* Poem Section Styling */
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+        .poem-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-top: 5px solid #1a2634;
+        }
+        .poem-title {
+            font-size: 22px;
+            color: #1a2634;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .poem-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #444;
+            white-space: pre-line;
+            margin-bottom: 25px;
+            background: #fdfdfd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 3px solid #ffd700;
+        }
+        
+        /* Interactive Author Link */
+        .brp-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            background: #f0f4f8;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 2px solid #1a2634;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .brp-link:hover {
+            background: #1a2634;
+            color: white;
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(26, 38, 52, 0.3);
+        }
+        .brp-link:hover .author-name-btn {
+            color: #ffd700;
+        }
+        .author-name-btn {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a2634;
+            transition: 0.3s;
+        }
+
+        /* Submission Section */
+        .submit-section {
+            max-width: 800px;
+            margin: 40px auto;
+            background: linear-gradient(135deg, #1a2634, #2c3e50);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .submit-section h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .submit-section p {
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        .mail-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffd700;
+            color: #1a2634;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .mail-btn:hover {
+            background: white;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -83,39 +217,191 @@
     <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
 
     <header>
-        <h1><i class="fa-solid fa-quote-left"></i> थप लोकप्रिय भनाइहरु (Famous Quotes)</h1>
+        <h1><i class="fa-solid fa-quote-left"></i> थप लोकप्रिय भनाइ तथा कविताहरू</h1>
     </header>
+
+    <!-- Quotes Section -->
+    <div class="center-wrapper">
+        <h2 class="section-title"><i class="fa-solid fa-quote-right"></i> लोकप्रिय भनाइहरू (Famous Quotes)</h2>
+    </div>
 
     <div class="quotes-container">
         <div class="quote-box">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>एउटै गन्तव्यको लागि विविध बाटोहरू, चाहे सानो होस् या ठुलो।</p>
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>एउटै गन्तव्यको लागि विविध बाटोहरू, चाहे सानो होस् या ठुलो।</p>
+            </div>
+            <div class="author-info">
+                <img src="brp.png" alt="BRP Mailo" class="author-img">
+                <span class="author-name">बिआरपी माइलो</span>
+            </div>
         </div>
 
         <div class="quote-box">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>सफलताको कुनै सर्टकट हुँदैन, कडा परिश्रम नै एक मात्र विकल्प हो।</p>
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>सफलताको कुनै सर्टकट हुँदैन, कडा परिश्रम नै एक मात्र विकल्प हो।</p>
+            </div>
+            <div class="author-info">
+                <img src="brp.png" alt="BRP Mailo" class="author-img">
+                <span class="author-name">बिआरपी माइलो</span>
+            </div>
         </div>
 
         <div class="quote-box">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>नयाँ भाषा सिक्नु भनेको संसारलाई हेर्ने नयाँ दृष्टिकोण पाउनु हो।</p>
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>नयाँ भाषा सिक्नु भनेको संसारलाई हेर्ने नयाँ दृष्टिकोण पाउनु हो।</p>
+            </div>
+            <div class="author-info">
+                <img src="brp.png" alt="BRP Mailo" class="author-img">
+                <span class="author-name">बिआरपी माइलो</span>
+            </div>
         </div>
 
         <div class="quote-box">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>समय र परिस्थिति जस्तोसुकै रहोस्, आफ्नो सपना पछ्याउन कहिल्यै नछाड्नुहोस्।</p>
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>समय र परिस्थिति जस्तोसुकै रहोस्, आफ्नो सपना पछ्याउन कहिल्यै नछाड्नुहोस्।</p>
+            </div>
+            <div class="author-info">
+                <img src="brp.png" alt="BRP Mailo" class="author-img">
+                <span class="author-name">बिआरपी माइलो</span>
+            </div>
         </div>
 
         <div class="quote-box">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>जिन्दगीमा गल्ती हुनु सामान्य कुरा हो, तर गल्तीबाट नसिक्नु ठूलो भुल हो।</p>
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>जिन्दगीमा गल्ती हुनु सामान्य कुरा हो, तर गल्तीबाट नसिक्नु ठूलो भुल हो।</p>
+            </div>
+            <div class="author-info">
+                <img src="brp.png" alt="BRP Mailo" class="author-img">
+                <span class="author-name">बिआरपी माइलो</span>
+            </div>
         </div>
 
         <div class="quote-box">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>सपना ती होइनन् जुन हामी सुतेर देख्छौँ, सपना ती हुन् जसले हामीलाई सुत्न दिँदैनन्।</p>
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>सपना ती होइनन् जुन हामी सुतेर देख्छौँ, सपना ती हुन् जसले हामीलाई सुत्न दिँदैनन्।</p>
+            </div>
+            <div class="author-info">
+                <img src="brp.png" alt="BRP Mailo" class="author-img">
+                <span class="author-name">बिआरपी माइलो</span>
+            </div>
         </div>
+    </div>
+
+    <!-- Poem Section -->
+    <div class="center-wrapper">
+        <h2 class="section-title"><i class="fa-solid fa-book-open"></i> उत्कृष्ट कविता</h2>
+    </div>
+
+    <div class="poem-container">
+        <div class="poem-card">
+            <h3 class="poem-title">मेरी आमा!</h3>
+            <div class="poem-content">
+परिपक्व छोरी हुन नपाउँदै
+मेरी आमा,
+एउटा घरकी बुहारी हुनुभयो
+र
+त्यो घरलाई चम्काउनुभयो ।
+
+मस्त जवानी हुन नपाउँदै
+मेरी आमा,
+मेरा बा' की स्वास्नी हुनुभयो
+र
+मलाई जन्माउनुभयो ।
+
+भर्खरै तरुनी हुन नपाउँदै
+मेरी आमा,
+मेरा बा' की श्रीमती हुनुभयो
+र
+मेरी आमा हुनुभयो ।
+
+म जन्मिएँ
+मेरी आमाले अस्पताल देख्नुभएन
+म जन्मिदा
+मेरी आमालाई अरु कसैले देखेन
+मलाई हातैले टिपी
+बर्कीले बेह्रेर
+घाँसको भारीसँगै
+मेरी आमाले घरमा बिसाउनुभयो ।
+
+सुत्केरीलाई छुनुहुदैन भन्दै
+मेरी हजुरआमाले
+चिसो कुनामा बस्न भन्नुभयो ।
+सुत्केरीले धेरै खानुहुन्न भन्दै
+आधा बटुको ज्वानाको झोल दिनुभयो ।
+
+मेरी आमाले ठसठसी कन्दै
+नानीले फोहोर पारेका थाङ्ना धुनुभयो ।
+कहिले घाँसको भारीमाथी राखेर
+कहिले आफ्नो अगाडि कोक्रो झुन्ड्याएर
+मलाई जङ्गल घुमाउनुभयो,
+भिर देखाउनुभयो ।
+
+दिनैभरी अर्काको मेलामा गएर
+खाजामा दिएको एकमुठी मकै जम्मा गरी
+मलाई सातु बनाइदिनुभयो ।
+मैले सातु खाँदै तपाईं पनि खानु न भन्दा
+उतै खाएर आएकी समेत भन्न भ्याउनु भयो ।
+
+मेरी आमा तरुनी हुन नपाउँदै
+मेरा बा' की श्रीमती हुनुभयो
+र
+मेरी आमा हुनुभयो ।
+
+म सानो छउन्जेल त आमाले
+कोक्रामा झुन्ड्याउनुभयो
+बोक्नुभयो, खेलाउनुभयो, खुवाउनुभयो
+म सानो भइन्जेल खासै डर लागेन अरे ।
+
+भन्नुहुन्छ अचेल,
+बाबू!!
+म न तँलाई बोक्न सक्छु
+न केही खेलाउन नै सक्छु
+मायाले एकदुई गाँस
+बरु खुवाउन त सकूँला,
+देख्नेहरुले नाटक पारी भन्छन् ।
+त्यसैले,
+मलाई अचेल खुब डर लाग्न थालेको छ ।
+
+कतै मेरो छोरो बिग्रेने पो हो कि?
+कतै मेरो सन्तान कुटिने पो हो कि?
+कतै मेरो सन्तानले बाटो बिराउने पो हो कि?
+बिहान ब्युँझिएदेखि
+राती ननिदाएसम्म
+यिनै कुरा मनमा खेलिरहन्छन् ।
+भन्नुहुन्छ,
+बाबू!
+तेरो रक्षक म बन्न सक्दिन
+आफ्नो रक्षा अब आफैँ गर्नु ।
+
+मेरी आमा, तरुनी हुन नपाउँदै
+मेरा बा' कि श्रीमती हुनुभयो
+र
+मेरी आमा हुनुभयो ।
+            </div>
+
+            <!-- Author link with custom styling -->
+            <div style="text-align: right;">
+                <a href="https://baburamphuyal.com.np" target="_blank" class="brp-link" title="Click to visit website">
+                    <img src="babu.png" alt="BRP Mailo" class="author-img">
+                    <span class="author-name-btn">- बिआरपी माइलो <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mail Submission Section -->
+    <div class="submit-section">
+        <h3><i class="fa-solid fa-paper-plane"></i> आफ्नो कविता प्रकाशित गराउनुहोस्</h3>
+        <p>के तपाईं पनि आफ्ना सिर्जनाहरू यहाँ राख्न चाहनुहुन्छ? आफ्नो कविता र परिचय हामीलाई ईमेल पठाउनुहोस्।</p>
+        <a href="mailto:nabinkanxo5@gmail.com?subject=कविता%20प्रकाशन%20सम्बन्धमा" class="mail-btn">
+            <i class="fa-solid fa-envelope"></i> कविता पठाउनुहोस्
+        </a>
     </div>
 
 </body>
