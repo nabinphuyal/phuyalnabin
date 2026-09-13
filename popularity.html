@@ -55,9 +55,7 @@
             padding-bottom: 5px;
         }
 
-        .center-wrapper {
-            text-align: center;
-        }
+        .center-wrapper { text-align: center; }
 
         /* Quotes Styling */
         .quotes-container {
@@ -73,7 +71,6 @@
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             border-left: 6px solid #1a2634;
-            position: relative;
             transition: 0.3s;
             display: flex;
             flex-direction: column;
@@ -83,46 +80,14 @@
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
-        .quote-box i {
-            font-size: 24px;
-            color: #ffd700;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .quote-box p {
-            font-size: 15px;
-            font-weight: 500;
-            color: #2c3e50;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .author-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 10px;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-        }
-        .author-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #ffd700;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .author-name {
-            font-weight: 600;
-            font-size: 14px;
-            color: #1a2634;
-        }
+        .quote-box i { font-size: 24px; color: #ffd700; margin-bottom: 10px; display: block; }
+        .quote-box p { font-size: 15px; font-weight: 500; color: #2c3e50; line-height: 1.6; margin-bottom: 15px; }
+        .author-info { display: flex; align-items: center; gap: 12px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+        .author-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #ffd700; }
+        .author-name { font-weight: 600; font-size: 14px; color: #1a2634; }
 
         /* Poem Section Styling */
-        .poem-container {
-            max-width: 800px;
-            margin: 0 auto 40px auto;
-        }
+        .poem-container { max-width: 800px; margin: 0 auto 40px auto; }
         .poem-card {
             background: white;
             padding: 30px;
@@ -130,13 +95,9 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             border-top: 5px solid #1a2634;
             margin-bottom: 25px;
+            position: relative;
         }
-        .poem-title {
-            font-size: 22px;
-            color: #1a2634;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        .poem-title { font-size: 22px; color: #1a2634; margin-bottom: 15px; text-align: center; }
         .poem-content {
             font-size: 16px;
             line-height: 1.8;
@@ -149,7 +110,14 @@
             border-left: 3px solid #ffd700;
         }
         
-        /* Interactive Author Link */
+        .poem-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
         .brp-link {
             display: inline-flex;
             align-items: center;
@@ -159,31 +127,30 @@
             padding: 8px 16px;
             border-radius: 30px;
             border: 2px solid #1a2634;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .brp-link:hover {
-            background: #1a2634;
-            color: white;
-            transform: scale(1.03);
-            box-shadow: 0 5px 15px rgba(26, 38, 52, 0.3);
-        }
-        .brp-link:hover .author-name-btn {
-            color: #ffd700;
-        }
-        .author-name-btn {
-            font-weight: 700;
-            font-size: 16px;
-            color: #1a2634;
             transition: 0.3s;
         }
-        .author-name-text {
-            font-weight: 700;
-            font-size: 16px;
-            color: #1a2634;
-        }
+        .brp-link:hover { background: #1a2634; color: white; }
+        .author-name-btn { font-weight: 700; font-size: 14px; color: #1a2634; }
+        .brp-link:hover .author-name-btn { color: #ffd700; }
 
-        /* Submission Section & Form Styling */
+        /* More Poems Button */
+        .more-poems-btn {
+            background: #1a2634;
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .more-poems-btn:hover { background: #2c3e50; transform: translateY(-2px); }
+
+        /* Form Styling */
         .submit-section {
             max-width: 800px;
             margin: 40px auto;
@@ -192,57 +159,96 @@
             padding: 30px;
             border-radius: 20px;
         }
-        .submit-section h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .submit-section p {
-            margin-bottom: 20px;
-            font-size: 15px;
-            text-align: center;
-        }
-        .poem-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .submit-section h3 { color: #ffd700; margin-bottom: 10px; text-align: center; }
+        .submit-section p { margin-bottom: 20px; font-size: 15px; text-align: center; }
+        .poem-form { display: flex; flex-direction: column; gap: 15px; }
         .poem-form input, .poem-form textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-        }
-        .poem-form input:focus, .poem-form textarea:focus {
-            border-color: #ffd700;
-        }
-        .poem-form textarea {
-            height: 140px;
-            resize: vertical;
+            width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-family: inherit; font-size: 14px; outline: none;
         }
         .submit-btn {
-            background: #ffd700;
-            color: #1a2634;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 700;
+            background: #ffd700; color: #1a2634; padding: 12px 25px; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:hover { background: white; }
+
+        /* MODAL STYLING (Popup Windows) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            color: #888;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 16px;
         }
-        .submit-btn:hover {
-            background: white;
-            transform: translateY(-2px);
-        }
-        #form-msg {
+        .close-btn:hover { color: #ff4757; }
+        .modal-title {
+            font-size: 20px;
+            color: #1a2634;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
             text-align: center;
-            font-weight: 600;
-            margin-top: 15px;
         }
+
+        /* List Items inside Modal */
+        .poem-list-item {
+            background: #f8fbff;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid #e1e8ed;
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .poem-list-item:hover {
+            background: #1a2634;
+            color: white;
+            transform: translateX(5px);
+        }
+        .poem-list-item:hover .item-author { color: #ffd700; }
+        .item-title { font-weight: 600; font-size: 16px; }
+        .item-author { font-size: 13px; color: #666; font-weight: 500; }
+
+        /* Beautiful Poem Reading View Modal */
+        .poem-view-box {
+            background: linear-gradient(to bottom, #ffffff, #fdfbf7);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #ffd700;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+        .poem-view-title { font-size: 24px; color: #1a2634; text-align: center; margin-bottom: 10px; font-weight: 700; }
+        .poem-view-author { text-align: center; color: #777; font-size: 14px; font-weight: 600; margin-bottom: 20px; }
+        .poem-view-body { font-size: 16px; line-height: 2; color: #2c3e50; white-space: pre-line; text-align: center; }
     </style>
 </head>
 <body>
@@ -259,12 +265,10 @@
     </div>
 
     <div class="quotes-container">
-        <!-- BRP Mailo Quote -->
         <div class="quote-box">
             <div>
                 <i class="fa-solid fa-quote-left"></i>
-                <p>"खोज्दा नभेटिनु नै हराउनु भने हैन,
-यो त केवल खोज्नेहरुका लागि एकछिन काम दिने मेलो मात्र हो ।"</p>
+                <p>"खोज्दा नभेटिनु नै हराउनु भने हैन, यो त केवल खोज्नेहरुका लागि एकछिन काम दिने मेलो मात्र हो ।"</p>
             </div>
             <a href="https://baburamphuyal.com.np" target="_blank" style="text-decoration: none;">
                 <div class="author-info">
@@ -273,8 +277,6 @@
                 </div>
             </a>
         </div>
-
-        <!-- Nelson Mandela -->
         <div class="quote-box">
             <div>
                 <i class="fa-solid fa-quote-left"></i>
@@ -285,8 +287,6 @@
                 <span class="author-name">नेल्सन मण्डेला</span>
             </div>
         </div>
-
-        <!-- Albert Einstein -->
         <div class="quote-box">
             <div>
                 <i class="fa-solid fa-quote-left"></i>
@@ -297,42 +297,6 @@
                 <span class="author-name">अल्बर्ट आइन्स्टाइन</span>
             </div>
         </div>
-
-        <!-- Steve Jobs -->
-        <div class="quote-box">
-            <div>
-                <i class="fa-solid fa-quote-left"></i>
-                <p>समय र परिस्थिति जस्तोसुकै रहोस्, आफ्नो सपना पछ्याउन कहिल्यै नछाड्नुहोस्।</p>
-            </div>
-            <div class="author-info">
-                <img src="stevejobs.png" alt="Steve Jobs" class="author-img">
-                <span class="author-name">स्टिभ जोब्स</span>
-            </div>
-        </div>
-
-        <!-- APJ Abdul Kalam -->
-        <div class="quote-box">
-            <div>
-                <i class="fa-solid fa-quote-left"></i>
-                <p>सपना ती होइनन् जुन हामी सुतेर देख्छौँ, सपना ती हुन् जसले हामीलाई सुत्न दिँदैनन्।</p>
-            </div>
-            <div class="author-info">
-                <img src="apj.png" alt="APJ Abdul Kalam" class="author-img">
-                <span class="author-name">डा. ए.पि.जे. अब्दुल कलाम</span>
-            </div>
-        </div>
-
-        <!-- Gautam Buddha -->
-        <div class="quote-box">
-            <div>
-                <i class="fa-solid fa-quote-left"></i>
-                <p>मन सबैथोक हो। जसरी तिमी सोच्छौ, त्यस्तै बन्छौ।</p>
-            </div>
-            <div class="author-info">
-                <img src="buddha.png" alt="Gautam Buddha" class="author-img">
-                <span class="author-name">गौतम बुद्ध</span>
-            </div>
-        </div>
     </div>
 
     <!-- Poem Section -->
@@ -340,8 +304,8 @@
         <h2 class="section-title"><i class="fa-solid fa-book-open"></i> उत्कृष्ट कविता</h2>
     </div>
 
-    <div class="poem-container" id="poemContainer">
-        <!-- Default Poem -->
+    <div class="poem-container">
+        <!-- Main Default Poem -->
         <div class="poem-card">
             <h3 class="poem-title">मेरी आमा!</h3>
             <div class="poem-content">
@@ -428,11 +392,17 @@
 मेरी आमा हुनुभयो ।
             </div>
 
-            <div style="text-align: right;">
+            <!-- Footer Buttons -->
+            <div class="poem-footer">
                 <a href="https://baburamphuyal.com.np" target="_blank" class="brp-link" title="Click to visit website">
                     <img src="babu.png" alt="BRP Mailo" class="author-img">
                     <span class="author-name-btn">- बिआरपी माइलो <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
                 </a>
+
+                <!-- Right Side Option Button -->
+                <button class="more-poems-btn" onclick="openPoemListModal()">
+                    <i class="fa-solid fa-bars"></i> थप कविताहरू (More Poems)
+                </button>
             </div>
         </div>
     </div>
@@ -448,40 +418,87 @@
             <textarea id="poem" placeholder="यहाँ कविता लेख्नुहोस्..." required></textarea>
             <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> कविता पठाउनुहोस्</button>
         </form>
-        <div id="form-msg"></div>
+        <div id="form-msg" style="text-align:center; font-weight:600; margin-top:15px;"></div>
+    </div>
+
+    <!-- 1. MODAL: POEM LIST WINDOW -->
+    <div class="modal-overlay" id="listModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeListModal()">&times;</span>
+            <h3 class="modal-title"><i class="fa-solid fa-scroll"></i> स्वीकृत कविता संग्रह</h3>
+            <div id="poemListContainer">
+                <p style="text-align: center; color: #888;">लोड हुँदैछ...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MODAL: FULL POEM DISPLAY WINDOW -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeViewModal()">&times;</span>
+            <div class="poem-view-box">
+                <div class="poem-view-title" id="fullTitle">...</div>
+                <div class="poem-view-author" id="fullAuthor">...</div>
+                <hr style="border: none; border-top: 1px dashed #ccc; margin-bottom: 20px;">
+                <div class="poem-view-body" id="fullBody">...</div>
+            </div>
+        </div>
     </div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWP5ONKPBIqfgSd4t5zrTw9l6nW8DuwCU7pa_ZCREOeMtrMCOAEb29fXRGBYVRN9zV/exec";
+        let globalPoemsData = [];
 
-        // 1. Approved कविताहरू Google Sheet बाट तान्ने
+        // Fetch Approved Poems
         async function fetchApprovedPoems() {
             try {
                 const res = await fetch(SCRIPT_URL);
-                const poems = await res.json();
-                
-                const container = document.getElementById('poemContainer');
-                const dynamicCards = container.querySelectorAll('.dynamic-poem');
-                dynamicCards.forEach(el => el.remove());
-
-                poems.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'poem-card dynamic-poem';
-                    card.innerHTML = `
-                        <h3 class="poem-title">${item.title}</h3>
-                        <div class="poem-content">${item.poem}</div>
-                        <div style="text-align: right;">
-                            <span class="author-name-text">- ${item.author}</span>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
+                globalPoemsData = await res.json();
+                renderPoemList();
             } catch (err) {
-                console.error("कविता लोड गर्दा त्रुटि भयो:", err);
+                console.error("त्रुटि भयो:", err);
+                document.getElementById('poemListContainer').innerHTML = "<p style='text-align:center; color:red;'>कविता लोड गर्न सकिएन।</p>";
             }
         }
 
-        // 2. Form Submit गर्दा डाटा पठाउने
+        // Render List inside Modal
+        function renderPoemList() {
+            const container = document.getElementById('poemListContainer');
+            if(globalPoemsData.length === 0) {
+                container.innerHTML = "<p style='text-align: center; color: #888;'>हाल कुनै अतिरिक्त स्वीकृत कविता छैनन्।</p>";
+                return;
+            }
+            
+            container.innerHTML = "";
+            globalPoemsData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'poem-list-item';
+                div.onclick = () => showFullPoem(index);
+                div.innerHTML = `
+                    <span class="item-title"><i class="fa-solid fa-feather"></i> ${item.title}</span>
+                    <span class="item-author">- ${item.author}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Show Full Poem Screen
+        function showFullPoem(index) {
+            const item = globalPoemsData[index];
+            document.getElementById('fullTitle').innerText = item.title;
+            document.getElementById('fullAuthor').innerText = "- " + item.author;
+            document.getElementById('fullBody').innerText = item.poem;
+            
+            closeListModal();
+            document.getElementById('viewModal').style.display = 'flex';
+        }
+
+        // Modal Controls
+        function openPoemListModal() { document.getElementById('listModal').style.display = 'flex'; }
+        function closeListModal() { document.getElementById('listModal').style.display = 'none'; }
+        function closeViewModal() { document.getElementById('viewModal').style.display = 'none'; }
+
+        // Form Submit Handler
         document.getElementById('poemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -499,9 +516,7 @@
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
             })
             .then(() => {
@@ -510,9 +525,8 @@
                 document.getElementById('poemForm').reset();
             })
             .catch(err => {
-                console.error(err);
                 msg.style.color = "#ff6b6b";
-                msg.innerText = "माफ गर्नुहोला, समस्या आयो। पुनः प्रयास गर्नुहोस्।";
+                msg.innerText = "समस्या आयो। पुनः प्रयास गर्नुहोस्।";
             })
             .finally(() => {
                 btn.disabled = false;
@@ -520,6 +534,7 @@
             });
         });
 
+        // Initialize
         fetchApprovedPoems();
     </script>
 </body>
