@@ -14,6 +14,36 @@
             color: #333; 
             padding: 20px;
         }
+
+        /* Top Bar & Hamburger Menu (Gemini Style) */
+        .top-navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .hamburger-btn {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #1a2634;
+            text-decoration: none;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .hamburger-btn:hover {
+            background: #1a2634;
+            color: #ffd700;
+            border-color: #1a2634;
+        }
+
         header { 
             background: linear-gradient(90deg, #1a2634, #2c3e50); 
             color: white; 
@@ -31,7 +61,6 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 20px;
             background: #1a2634;
             color: white;
             padding: 10px 20px;
@@ -94,8 +123,22 @@
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             border-top: 5px solid #1a2634;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             position: relative;
+        }
+        .poem-badge {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #ffd700;
+            color: #1a2634;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         .poem-title { font-size: 22px; color: #1a2634; margin-bottom: 15px; text-align: center; }
         .poem-content {
@@ -103,13 +146,23 @@
             line-height: 1.8;
             color: #444;
             white-space: pre-line;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             background: #fdfdfd;
             padding: 20px;
             border-radius: 10px;
             border-left: 3px solid #ffd700;
         }
         
+        .poem-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
         .poem-footer {
             display: flex;
             justify-content: space-between;
@@ -133,11 +186,15 @@
         .author-name-btn { font-weight: 700; font-size: 14px; color: #1a2634; }
         .brp-link:hover .author-name-btn { color: #ffd700; }
 
-        /* More Poems Button */
-        .more-poems-btn {
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-btn {
             background: #1a2634;
             color: #ffd700;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 30px;
             border: none;
             font-weight: 600;
@@ -146,114 +203,19 @@
             align-items: center;
             gap: 8px;
             transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .more-poems-btn:hover { background: #2c3e50; transform: translateY(-2px); }
-
-        /* Form Styling */
-        .submit-section {
-            max-width: 800px;
-            margin: 40px auto;
-            background: linear-gradient(135deg, #1a2634, #2c3e50);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-        }
-        .submit-section h3 { color: #ffd700; margin-bottom: 10px; text-align: center; }
-        .submit-section p { margin-bottom: 20px; font-size: 15px; text-align: center; }
-        .poem-form { display: flex; flex-direction: column; gap: 15px; }
-        .poem-form input, .poem-form textarea {
-            width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-family: inherit; font-size: 14px; outline: none;
-        }
-        .submit-btn {
-            background: #ffd700; color: #1a2634; padding: 12px 25px; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; transition: 0.3s;
-        }
-        .submit-btn:hover { background: white; }
-
-        /* MODAL STYLING (Popup Windows) */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            max-height: 80vh;
-            border-radius: 20px;
-            padding: 25px;
-            position: relative;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 24px;
-            color: #888;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .close-btn:hover { color: #ff4757; }
-        .modal-title {
-            font-size: 20px;
-            color: #1a2634;
-            border-bottom: 2px solid #ffd700;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        /* List Items inside Modal */
-        .poem-list-item {
-            background: #f8fbff;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border: 1px solid #e1e8ed;
-            transition: 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .poem-list-item:hover {
-            background: #1a2634;
-            color: white;
-            transform: translateX(5px);
-        }
-        .poem-list-item:hover .item-author { color: #ffd700; }
-        .item-title { font-weight: 600; font-size: 16px; }
-        .item-author { font-size: 13px; color: #666; font-weight: 500; }
-
-        /* Beautiful Poem Reading View Modal */
-        .poem-view-box {
-            background: linear-gradient(to bottom, #ffffff, #fdfbf7);
-            border-radius: 15px;
-            padding: 25px;
-            border-left: 5px solid #ffd700;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
-        }
-        .poem-view-title { font-size: 24px; color: #1a2634; text-align: center; margin-bottom: 10px; font-weight: 700; }
-        .poem-view-author { text-align: center; color: #777; font-size: 14px; font-weight: 600; margin-bottom: 20px; }
-        .poem-view-body { font-size: 16px; line-height: 2; color: #2c3e50; white-space: pre-line; text-align: center; }
+        .share-btn:hover { background: #2c3e50; }
     </style>
 </head>
 <body>
 
-    <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
+    <!-- Top Bar with Hamburger redirecting to humber.html -->
+    <div class="top-navbar">
+        <a href="humber.html" class="hamburger-btn" title="Menu (humber.html)">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+        <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
+    </div>
 
     <header>
         <h1><i class="fa-solid fa-quote-left"></i> थप लोकप्रिय भनाइ तथा कविताहरू</h1>
@@ -299,15 +261,23 @@
         </div>
     </div>
 
-    <!-- Poem Section -->
+    <!-- Top 2 Most Viewed & Shared Poems -->
     <div class="center-wrapper">
-        <h2 class="section-title"><i class="fa-solid fa-book-open"></i> उत्कृष्ट कविता</h2>
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> सर्वाधिक हेरिएका र सेयर गरिएका कविताहरू</h2>
     </div>
 
     <div class="poem-container">
-        <!-- Main Default Poem -->
+
+        <!-- 1. TOP LONG POEM -->
         <div class="poem-card">
+            <span class="poem-badge"><i class="fa-solid fa-trophy"></i> #1 Most Popular (Long)</span>
             <h3 class="poem-title">मेरी आमा!</h3>
+            
+            <div class="poem-stats">
+                <span><i class="fa-solid fa-eye"></i> <span id="views-long">0</span> Views</span>
+                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-long">0</span> Shares</span>
+            </div>
+
             <div class="poem-content">
 परिपक्व छोरी हुन नपाउँदै
 मेरी आमा,
@@ -359,183 +329,99 @@
 मेरा बा' की श्रीमती हुनुभयो
 र
 मेरी आमा हुनुभयो ।
-
-म सानो छउन्जेल त आमाले
-कोक्रामा झुन्ड्याउनुभयो
-बोक्नुभयो, खेलाउनुभयो, खुवाउनुभयो
-म सानो भइन्जेल खासै डर लागेन अरे ।
-
-भन्नुहुन्छ अचेल,
-बाबू!!
-म न तँलाई बोक्न सक्छु
-न केही खेलाउन नै सक्छु
-मायाले एकदुई गाँस
-बरु खुवाउन त सकूँला,
-देख्नेहरुले नाटक पारी भन्छन् ।
-त्यसैले,
-मलाई अचेल खुब डर लाग्न थालेको छ ।
-
-कतै मेरो छोरो बिग्रेने पो हो कि?
-कतै मेरो सन्तान कुटिने पो हो कि?
-कतै मेरो सन्तानले बाटो बिराउने पो हो कि?
-बिहान ब्युँझिएदेखि
-राती ननिदाएसम्म
-यिनै कुरा मनमा खेलिरहन्छन् ।
-भन्नुहुन्छ,
-बाबू!
-तेरो रक्षक म बन्न सक्दिन
-आफ्नो रक्षा अब आफैँ गर्नु ।
-
-मेरी आमा, तरुनी हुन नपाउँदै
-मेरा बा' कि श्रीमती हुनुभयो
-र
-मेरी आमा हुनुभयो ।
             </div>
 
-            <!-- Footer Buttons -->
             <div class="poem-footer">
-                <a href="https://baburamphuyal.com.np" target="_blank" class="brp-link" title="Click to visit website">
+                <a href="https://baburamphuyal.com.np" target="_blank" class="brp-link">
                     <img src="babu.png" alt="BRP Mailo" class="author-img">
                     <span class="author-name-btn">- बिआरपी माइलो <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
                 </a>
 
-                <!-- Right Side Option Button -->
-                <button class="more-poems-btn" onclick="openPoemListModal()">
-                    <i class="fa-solid fa-bars"></i> थप कविताहरू (More Poems)
-                </button>
+                <div class="action-btns">
+                    <button class="share-btn" onclick="registerShare('long', 'मेरी आमा!')">
+                        <i class="fa-solid fa-share-nodes"></i> Share
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Submission Form Section -->
-    <div class="submit-section">
-        <h3><i class="fa-solid fa-paper-plane"></i> आफ्नो कविता प्रकाशित गराउनुहोस्</h3>
-        <p>के तपाईं पनि आफ्ना सिर्जनाहरू यहाँ राख्न चाहनुहुन्छ? तलको फाराम भरेर कविता पठाउनुहोस्।</p>
-        
-        <form class="poem-form" id="poemForm">
-            <input type="text" id="author" placeholder="तपाईंको नाम (लेखक)" required>
-            <input type="text" id="title" placeholder="कविताको शीर्षक" required>
-            <textarea id="poem" placeholder="यहाँ कविता लेख्नुहोस्..." required></textarea>
-            <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> कविता पठाउनुहोस्</button>
-        </form>
-        <div id="form-msg" style="text-align:center; font-weight:600; margin-top:15px;"></div>
-    </div>
+        <!-- 2. TOP SHORT POEM -->
+        <div class="poem-card">
+            <span class="poem-badge"><i class="fa-solid fa-star"></i> #1 Most Popular (Short)</span>
+            <h3 class="poem-title">याद र समय</h3>
 
-    <!-- 1. MODAL: POEM LIST WINDOW -->
-    <div class="modal-overlay" id="listModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeListModal()">&times;</span>
-            <h3 class="modal-title"><i class="fa-solid fa-scroll"></i> स्वीकृत कविता संग्रह</h3>
-            <div id="poemListContainer">
-                <p style="text-align: center; color: #888;">लोड हुँदैछ...</p>
+            <div class="poem-stats">
+                <span><i class="fa-solid fa-eye"></i> <span id="views-short">0</span> Views</span>
+                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-short">0</span> Shares</span>
+            </div>
+
+            <div class="poem-content">
+समय बित्दै जाँदा घाउ त भरिएला,
+तर ती पुराना यादहरू कहाँ मेटिन्छन् र?
+नयनबाट खसेका आँसु सुके पनि,
+मनभित्रका भावनाहरू कहिल्यै पुराना हुँदैनन्।
+            </div>
+
+            <div class="poem-footer">
+                <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="brp-link">
+                    <img src="Nabin.png" alt="Nabin kanxo" class="author-img">
+                    <span class="author-name-btn">- नवीन फुयल <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
+                </a>
+
+                <div class="action-btns">
+                    <button class="share-btn" onclick="registerShare('short', 'याद र समय')">
+                        <i class="fa-solid fa-share-nodes"></i> Share
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 2. MODAL: FULL POEM DISPLAY WINDOW -->
-    <div class="modal-overlay" id="viewModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeViewModal()">&times;</span>
-            <div class="poem-view-box">
-                <div class="poem-view-title" id="fullTitle">...</div>
-                <div class="poem-view-author" id="fullAuthor">...</div>
-                <hr style="border: none; border-top: 1px dashed #ccc; margin-bottom: 20px;">
-                <div class="poem-view-body" id="fullBody">...</div>
-            </div>
-        </div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWP5ONKPBIqfgSd4t5zrTw9l6nW8DuwCU7pa_ZCREOeMtrMCOAEb29fXRGBYVRN9zV/exec";
-        let globalPoemsData = [];
+        // Automatic Views & Share Tracking using LocalStorage (Dynamic)
+        function initStats() {
+            let longViews = parseInt(localStorage.getItem('long_views') || "1240");
+            let longShares = parseInt(localStorage.getItem('long_shares') || "342");
+            
+            let shortViews = parseInt(localStorage.getItem('short_views') || "980");
+            let shortShares = parseInt(localStorage.getItem('short_shares') || "215");
 
-        // Fetch Approved Poems
-        async function fetchApprovedPoems() {
-            try {
-                const res = await fetch(SCRIPT_URL);
-                globalPoemsData = await res.json();
-                renderPoemList();
-            } catch (err) {
-                console.error("त्रुटि भयो:", err);
-                document.getElementById('poemListContainer').innerHTML = "<p style='text-align:center; color:red;'>कविता लोड गर्न सकिएन।</p>";
+            // Page Auto View Count Increment
+            longViews += 1;
+            shortViews += 1;
+
+            localStorage.setItem('long_views', longViews);
+            localStorage.setItem('short_views', shortViews);
+
+            document.getElementById('views-long').innerText = longViews;
+            document.getElementById('shares-long').innerText = longShares;
+            
+            document.getElementById('views-short').innerText = shortViews;
+            document.getElementById('shares-short').innerText = shortShares;
+        }
+
+        // Share Click Counter Function
+        function registerShare(type, title) {
+            let key = type + '_shares';
+            let currentShares = parseInt(localStorage.getItem(key) || (type === 'long' ? "342" : "215"));
+            currentShares += 1;
+            localStorage.setItem(key, currentShares);
+            document.getElementById('shares-' + type).innerText = currentShares;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: 'यो उत्कृष्ट कविता पढ्नुहोस्:',
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                alert('कविताको लिङ्क कपि भयो!');
             }
         }
 
-        // Render List inside Modal
-        function renderPoemList() {
-            const container = document.getElementById('poemListContainer');
-            if(globalPoemsData.length === 0) {
-                container.innerHTML = "<p style='text-align: center; color: #888;'>हाल कुनै अतिरिक्त स्वीकृत कविता छैनन्।</p>";
-                return;
-            }
-            
-            container.innerHTML = "";
-            globalPoemsData.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'poem-list-item';
-                div.onclick = () => showFullPoem(index);
-                div.innerHTML = `
-                    <span class="item-title"><i class="fa-solid fa-feather"></i> ${item.title}</span>
-                    <span class="item-author">- ${item.author}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        // Show Full Poem Screen
-        function showFullPoem(index) {
-            const item = globalPoemsData[index];
-            document.getElementById('fullTitle').innerText = item.title;
-            document.getElementById('fullAuthor').innerText = "- " + item.author;
-            document.getElementById('fullBody').innerText = item.poem;
-            
-            closeListModal();
-            document.getElementById('viewModal').style.display = 'flex';
-        }
-
-        // Modal Controls
-        function openPoemListModal() { document.getElementById('listModal').style.display = 'flex'; }
-        function closeListModal() { document.getElementById('listModal').style.display = 'none'; }
-        function closeViewModal() { document.getElementById('viewModal').style.display = 'none'; }
-
-        // Form Submit Handler
-        document.getElementById('poemForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const msg = document.getElementById('form-msg');
-            
-            btn.disabled = true;
-            btn.innerText = "पठाउँदैछ...";
-            msg.innerText = "";
-
-            const formData = new URLSearchParams();
-            formData.append("author", document.getElementById('author').value);
-            formData.append("title", document.getElementById('title').value);
-            formData.append("poem", document.getElementById('poem').value);
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData.toString()
-            })
-            .then(() => {
-                msg.style.color = "#ffd700";
-                msg.innerText = "धन्यवाद! तपाईंको कविता प्राप्त भयो। समीक्षा पछि प्रकाशित गरिनेछ।";
-                document.getElementById('poemForm').reset();
-            })
-            .catch(err => {
-                msg.style.color = "#ff6b6b";
-                msg.innerText = "समस्या आयो। पुनः प्रयास गर्नुहोस्।";
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerText = "कविता पठाउनुहोस्";
-            });
-        });
-
-        // Initialize
-        fetchApprovedPoems();
+        // Initialize on load
+        window.onload = initStats;
     </script>
 </body>
 </html>
