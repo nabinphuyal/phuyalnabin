@@ -207,6 +207,7 @@
         .share-btn:hover { background: #2c3e50; }
     </style>
 </head>
+
 <body>
 
     <!-- Top Bar with Hamburger redirecting to humber.html -->
@@ -274,8 +275,8 @@
             <h3 class="poem-title">मेरी आमा!</h3>
             
             <div class="poem-stats">
-                <span><i class="fa-solid fa-eye"></i> <span id="views-long">0</span> Views</span>
-                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-long">0</span> Shares</span>
+                <span><i class="fa-solid fa-eye"></i> <span id="views-long">...</span> Real Views</span>
+                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-long">...</span> Real Shares</span>
             </div>
 
             <div class="poem-content">
@@ -338,7 +339,7 @@
                 </a>
 
                 <div class="action-btns">
-                    <button class="share-btn" onclick="registerShare('long', 'मेरी आमा!')">
+                    <button class="share-btn" onclick="realShare('long', 'मेरी आमा!')">
                         <i class="fa-solid fa-share-nodes"></i> Share
                     </button>
                 </div>
@@ -351,8 +352,8 @@
             <h3 class="poem-title">याद र समय</h3>
 
             <div class="poem-stats">
-                <span><i class="fa-solid fa-eye"></i> <span id="views-short">0</span> Views</span>
-                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-short">0</span> Shares</span>
+                <span><i class="fa-solid fa-eye"></i> <span id="views-short">...</span> Real Views</span>
+                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-short">...</span> Real Shares</span>
             </div>
 
             <div class="poem-content">
@@ -364,12 +365,12 @@
 
             <div class="poem-footer">
                 <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="brp-link">
-                    <img src="Nabin.png" alt="Nabin kanxo" class="author-img">
+                    <img src="Kanxo.png" alt="Nabin kanxo" class="author-img">
                     <span class="author-name-btn">- नवीन फुयल <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
                 </a>
 
                 <div class="action-btns">
-                    <button class="share-btn" onclick="registerShare('short', 'याद र समय')">
+                    <button class="share-btn" onclick="realShare('short', 'याद र समय')">
                         <i class="fa-solid fa-share-nodes"></i> Share
                     </button>
                 </div>
@@ -379,49 +380,44 @@
     </div>
 
     <script>
-        // Automatic Views & Share Tracking using LocalStorage (Dynamic)
-        function initStats() {
-            let longViews = parseInt(localStorage.getItem('long_views') || "1240");
-            let longShares = parseInt(localStorage.getItem('long_shares') || "342");
-            
-            let shortViews = parseInt(localStorage.getItem('short_views') || "980");
-            let shortShares = parseInt(localStorage.getItem('short_shares') || "215");
+        // 👇 यहाँ तपाईंको GOOGLE APPS SCRIPT WEB APP URL PASTE गर्नुहोस 👇
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9WCx9sxWS9mUFNJs3-IA5U7Clnf0MizmxXHJB8wMj8Gwcnw1Ad7QXU9BYLphNXioTFQ/exec";
 
-            // Page Auto View Count Increment
-            longViews += 1;
-            shortViews += 1;
+        // Load Real View Count On Page Load
+        async function recordViewAndFetchData() {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=view&id=long`);
+                const data = await res.json();
 
-            localStorage.setItem('long_views', longViews);
-            localStorage.setItem('short_views', shortViews);
-
-            document.getElementById('views-long').innerText = longViews;
-            document.getElementById('shares-long').innerText = longShares;
-            
-            document.getElementById('views-short').innerText = shortViews;
-            document.getElementById('shares-short').innerText = shortShares;
+                document.getElementById('views-long').innerText = data.long_views;
+                document.getElementById('shares-long').innerText = data.long_shares;
+                document.getElementById('views-short').innerText = data.short_views;
+                document.getElementById('shares-short').innerText = data.short_shares;
+            } catch (err) {
+                console.error("Data Load Error:", err);
+            }
         }
 
-        // Share Click Counter Function
-        function registerShare(type, title) {
-            let key = type + '_shares';
-            let currentShares = parseInt(localStorage.getItem(key) || (type === 'long' ? "342" : "215"));
-            currentShares += 1;
-            localStorage.setItem(key, currentShares);
-            document.getElementById('shares-' + type).innerText = currentShares;
+        // Real Share Counter Update
+        async function realShare(type, title) {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=share&id=${type}`);
+                const data = await res.json();
 
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: 'यो उत्कृष्ट कविता पढ्नुहोस्:',
-                    url: window.location.href
-                }).catch(() => {});
-            } else {
-                alert('कविताको लिङ्क कपि भयो!');
+                document.getElementById('shares-' + type).innerText = (type === 'long') ? data.long_shares : data.short_shares;
+
+                if (navigator.share) {
+                    navigator.share({ title: title, url: window.location.href });
+                } else {
+                    alert('लिङ्क कपि भयो!');
+                }
+            } catch (err) {
+                console.error("Share Increment Error:", err);
             }
         }
 
         // Initialize on load
-        window.onload = initStats;
+        window.onload = recordViewAndFetchData;
     </script>
 </body>
 </html>
