@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #1a2634, #2c3e50); 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+        }
+
+        .menu-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .menu-header h2 {
+            font-size: 20px;
+            color: #1a2634;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: #f1f5f9;
+            color: #1a2634;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .close-btn:hover {
+            background: #e2e8f0;
+            transform: rotate(90deg);
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            text-decoration: none;
+            color: #1a2634;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s ease;
+        }
+
+        .menu-item i.icon {
+            font-size: 18px;
+            color: #ffd700;
+            background: #1a2634;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .menu-item span { flex: 1; }
+
+        .menu-item i.arrow {
+            font-size: 14px;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #1a2634;
+            color: #ffffff;
+            border-color: #1a2634;
+            transform: translateY(-2px);
+        }
+
+        .menu-item:hover i.icon {
+            background: #ffffff;
+            color: #1a2634;
+        }
+
+        .menu-item:hover i.arrow {
+            color: #ffd700;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <div class="menu-header">
+            <h2><i class="fa-solid fa-compass" style="color: #ffd700;"></i> मेनु अप्सनहरू</h2>
+            <a href="index.html" class="close-btn" title="Close"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+
+        <div class="menu-list">
+            <!-- 1. Home Link -->
+            <a href="index.html" class="menu-item">
+                <i class="fa-solid fa-house icon"></i>
+                <span>Home (मुख्य पाना)</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+
+            <!-- 2. All Poems Link -->
+            <a href="index.html#poems-section" class="menu-item">
+                <i class="fa-solid fa-book-open icon"></i>
+                <span>All Poems (सबै कविताहरू)</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+
+            <!-- 3. Popular Quotes Link -->
+            <a href="index.html#quotes-section" class="menu-item">
+                <i class="fa-solid fa-quote-left icon"></i>
+                <span>Popular Quotes (भनाइहरू)</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+
+            <!-- 4. About Us Link -->
+            <a href="https://baburamphuyal.com.np" target="_blank" class="menu-item">
+                <i class="fa-solid fa-user icon"></i>
+                <span>About Author (लेखक परिचय)</span>
+                <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+            </a>
+
+            <!-- 5. Contact Link -->
+            <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="menu-item">
+                <i class="fa-solid fa-envelope icon"></i>
+                <span>Contact Us (सम्पर्क)</span>
+                <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
