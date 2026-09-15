@@ -40,31 +40,32 @@
             overflow-x: hidden;
             overflow-y: auto;
             min-height: 100vh;
+            padding-bottom: 70px; /* Space for fixed social bar */
         }
 
-        /* ----- HIGHLY PROFESSIONAL & MODERN MOBILE 3-LINE MENU ----- */
+        /* ----- GEMINI STYLE HAMBURGER 3-LINE MENU ----- */
         .hamburger-menu-container {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 18px;
+            left: 18px;
             z-index: 1001;
         }
         
         .hamburger-btn { 
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.85);
             color: var(--text-light); 
-            border-radius: 14px;
-            width: 46px;
-            height: 46px;
+            border-radius: 12px;
+            width: 44px;
+            height: 44px;
             cursor: pointer; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
@@ -72,61 +73,52 @@
         .hamburger-btn:hover { 
             background: rgba(99, 102, 241, 0.3);
             border-color: rgba(99, 102, 241, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.35);
         }
 
-        .hamburger-btn:active {
-            transform: scale(0.95);
-        }
-        
         .hamburger-line {
-            width: 20px;
+            width: 22px;
             height: 2px;
-            background: linear-gradient(90deg, #ffffff, var(--text-dim));
+            background: #ffffff;
             border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
 
         .hamburger-btn.active .hamburger-line:nth-child(1) {
             transform: translateY(7px) rotate(45deg);
-            background: #ffffff;
         }
         .hamburger-btn.active .hamburger-line:nth-child(2) {
             opacity: 0;
-            transform: translateX(-10px);
         }
         .hamburger-btn.active .hamburger-line:nth-child(3) {
             transform: translateY(-7px) rotate(-45deg);
-            background: #ffffff;
         }
 
         .menu-options {
             display: none;
             position: absolute;
-            top: 58px;
+            top: 55px;
             left: 0;
-            background: rgba(15, 23, 42, 0.92);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            width: 250px;
-            border-radius: 20px;
+            width: 240px;
+            border-radius: 16px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
             overflow: hidden;
             z-index: 1002;
-            animation: menuSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: menuSlideIn 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.15);
             padding: 8px 0;
         }
 
         @keyframes menuSlideIn {
-            0% { opacity: 0; transform: translateY(-12px) scale(0.96); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .menu-options button { 
             width: 100%; 
-            padding: 13px 20px;
+            padding: 12px 18px;
             border: none; 
             background: transparent; 
             cursor: pointer; 
@@ -136,31 +128,23 @@
             font-family: inherit;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             color: var(--text-light);
             font-weight: 600;
-            position: relative;
         }
 
         .menu-options button:hover { 
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.25), transparent);
+            background: rgba(99, 102, 241, 0.25);
             color: #ffffff; 
-            padding-left: 24px;
+            padding-left: 22px;
         }
 
         .menu-options button i {
             font-size: 16px;
-            width: 22px;
+            width: 20px;
             text-align: center;
-            transition: transform 0.25s ease;
         }
 
-        .menu-options button:hover i {
-            transform: scale(1.15);
-        }
-
-        .hidden { display: none !important; }
-        
         /* ----- HEADER ----- */
         header { 
             background: rgba(15, 23, 42, 0.7); 
@@ -338,7 +322,7 @@
             letter-spacing: 3px; 
         }
 
-        /* ----- QUOTES CAROUSEL STYLES WITH AUTHOR NAME ----- */
+        /* ----- QUOTES CAROUSEL STYLES ----- */
         .quotes-slider-section {
             max-width: 850px;
             margin: -10px auto 40px auto;
@@ -438,33 +422,44 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .social-links { 
-            display: flex; 
-            justify-content: center; 
-            gap: 20px; 
-            font-size: 24px; 
-            margin-top: 25px; 
-            flex-wrap: wrap;
+        /* ----- FIXED BOTTOM SOCIAL LINKS (VISIBLE ON EVERY SCREEN) ----- */
+        .fixed-social-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            padding: 10px 0;
+            z-index: 999;
+            border-top: var(--glass-border);
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
         }
 
-        .social-links a { 
+        .fixed-social-bar a { 
             color: var(--text-light); 
-            width: 50px;
-            height: 50px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             border: var(--glass-border);
             transition: all 0.3s ease; 
             text-decoration: none;
+            font-size: 18px;
         }
 
-        .social-links a:hover { 
+        .fixed-social-bar a:hover { 
             background: var(--primary);
             color: #ffffff; 
-            transform: translateY(-4px); 
+            transform: translateY(-3px); 
         }
 
         .contact-info { 
@@ -525,8 +520,8 @@
         footer { 
             background: rgba(15, 23, 42, 0.9); 
             color: var(--text-dim); 
-            padding: 25px 0; 
-            margin-top: 60px; 
+            padding: 20px 0 25px 0; 
+            margin-top: 40px; 
             text-align: center; 
             border-top: var(--glass-border);
             font-size: 14px;
@@ -535,7 +530,7 @@
         /* ----- CHATBOT ----- */
         #nbn-chat-wrapper {
             position: fixed;
-            bottom: 25px;
+            bottom: 75px;
             right: 25px;
             z-index: 1000;
             opacity: 0;
@@ -553,24 +548,24 @@
         #nbn-chat-btn {
             background: var(--gradient-1);
             color: white; 
-            padding: 14px 24px; 
+            padding: 12px 20px; 
             border-radius: 50px;
             cursor: pointer; 
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
             font-weight: 600; 
-            font-size: 14px;
+            font-size: 13px;
             display: flex; 
             align-items: center; 
-            gap: 10px;
+            gap: 8px;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
         #nbn-chat-window {
             position: fixed; 
-            bottom: 85px; 
+            bottom: 135px; 
             right: 25px;
             width: 320px; 
-            height: 480px; 
+            height: 450px; 
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px; 
@@ -698,7 +693,7 @@
 </head>
 <body>
 
-<!-- ADVANCED HIGH-END PROFESSIONAL 3-LINE MENU -->
+<!-- GEMINI STYLE HAMBURGER MENU -->
 <div class="hamburger-menu-container" id="menuContainer">
     <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu(event)">
         <div class="hamburger-line"></div>
@@ -717,7 +712,7 @@
             <i class="fa-solid fa-calculator" style="color: #4ade80;"></i> Calculate
         </button>
         <button onclick="window.location.href='about.html'">
-            <i class="fa-solid fa-user-gear" style="color: #ec4899;"></i> Designer About
+            <i class="fa-solid fa-user" style="color: #ec4899;"></i> About Me
         </button>
     </div>
 </div>
@@ -735,8 +730,8 @@
     <nav>
         <ul>
             <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="popularity">Quotes</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="popularity.html">Quotes</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -790,27 +785,6 @@
         थप भनाइहरु <i class="fa-solid fa-arrow-right"></i>
     </button>
 </div>
-
-<!-- ABOUT ME SECTION (Cleaned Version) -->
-<section id="about">
-    <h2>About Me</h2>
-    <div style="background: rgba(15, 23, 42, 0.5); border: var(--glass-border); padding: 30px; border-radius: 20px; max-width: 600px; margin: 20px auto 0 auto; text-align: center;">
-        <i class="fa-solid fa-circle-user" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
-        <h3 style="color: var(--text-light); font-size: 22px; margin-bottom: 10px;">Nabin Phuyal</h3>
-        <p style="color: var(--text-dim); font-size: 15px; line-height: 1.6;">
-            Welcome to my official portfolio website. Feel free to explore my content, quotes, and web design projects.
-        </p>
-    </div>
-
-    <h3 style="color: var(--text-light); margin-top: 35px; font-size: 20px;">Social Links</h3>
-    <div class="social-links">
-        <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="https://instagram.com/phuyalnabin28" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank" title="CapCut"><i class="fa-solid fa-video"></i></a>
-    </div>
-</section>
 
 <section id="contact">
     <h2>Contact Me</h2>
@@ -868,6 +842,15 @@
     <p>© 2025 Nabin Phuyal. All rights reserved.</p>
     <p style="margin-top: 4px; font-size: 12px;">Website Design by 🚀 Nabin Kanxo</p>
 </footer>
+
+<!-- FIXED SOCIAL MEDIA LINKS (VISIBLE ON ALL SCREENS AT THE BOTTOM) -->
+<div class="fixed-social-bar">
+    <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+    <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+    <a href="https://instagram.com/phuyalnabin28" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank" title="CapCut"><i class="fa-solid fa-video"></i></a>
+</div>
 
 <script>
     // AUTO SLIDER SCRIPT
