@@ -61,8 +61,7 @@
             transform: rotate(90deg);
         }
 
-        /* Form Styling */
-        .form-title {
+        .section-title {
             font-size: 16px;
             font-weight: 600;
             color: #1a2634;
@@ -70,6 +69,52 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        /* SECTION 1: PUBLIC APPROVED POSTS STYLING */
+        .public-posts-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .post-card {
+            background: #f8fafc;
+            border-left: 4px solid #ffd700;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        .post-type {
+            font-size: 11px;
+            background: #1a2634;
+            color: #ffd700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .post-text {
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.5;
+            white-space: pre-line;
+            margin-bottom: 8px;
+        }
+
+        .post-author {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a2634;
+            text-align: right;
+        }
+
+        /* SECTION 2: SUBMISSION FORM STYLING */
+        .submission-form-wrapper {
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 25px;
         }
 
         .form-group {
@@ -125,47 +170,6 @@
             background: #2c3e50;
         }
 
-        /* User Posts Live Public Display Section */
-        .public-posts-wrapper {
-            margin-top: 30px;
-            border-top: 2px dashed #e2e8f0;
-            padding-top: 20px;
-        }
-
-        .post-card {
-            background: #f8fafc;
-            border-left: 4px solid #ffd700;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        .post-type {
-            font-size: 11px;
-            background: #1a2634;
-            color: #ffd700;
-            padding: 2px 8px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .post-text {
-            font-size: 14px;
-            color: #334155;
-            line-height: 1.5;
-            white-space: pre-line;
-            margin-bottom: 8px;
-        }
-
-        .post-author {
-            font-size: 12px;
-            font-weight: 700;
-            color: #1a2634;
-            text-align: right;
-        }
-
         #status-msg {
             text-align: center;
             font-size: 13px;
@@ -179,104 +183,67 @@
     <div class="main-container">
         <!-- Header -->
         <div class="header">
-            <h2><i class="fa-solid fa-bars-staggered" style="color: #ffd700;"></i> मेनु र पोस्ट पठाउनुहोस्</h2>
+            <h2><i class="fa-solid fa-bars-staggered" style="color: #ffd700;"></i> मेनु र पोस्टहरू</h2>
             <a href="index.html" class="close-btn" title="Close"><i class="fa-solid fa-xmark"></i></a>
         </div>
 
-        <!-- Submission Form -->
-        <div class="form-title">
-            <i class="fa-solid fa-pen-to-square" style="color: #1a2634;"></i>
-            आफ्नो कविता वा भनाइ पेस गर्नुहोस्
-        </div>
-
-        <form id="submissionForm">
-            <div class="form-group">
-                <label>तपाईंको नाम *</label>
-                <input type="text" id="userName" placeholder="तपाईंको पूरा नाम लेख्नुहोस्" required>
-            </div>
-
-            <div class="form-group">
-                <label>प्रकार छान्नुहोस् *</label>
-                <select id="contentType" required>
-                    <option value="कविता">कविता (Poem)</option>
-                    <option value="भनाइ">भनाइ (Quote)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>शीर्षक (यदि कविता भएमा)</label>
-                <input type="text" id="contentTitle" placeholder="कविताको शीर्षक (वैकल्पिक)">
-            </div>
-
-            <div class="form-group">
-                <label>सामग्री (कविता वा भनाइ) *</label>
-                <textarea id="contentBody" rows="4" placeholder="यहाँ आफ्नो कविता वा भनाइ लेख्नुहोस्..." required></textarea>
-            </div>
-
-            <button type="submit" class="submit-btn" id="submitBtn">
-                <i class="fa-solid fa-paper-plane"></i> पोस्ट पठाउनुहोस्
-            </button>
-            
-            <div id="status-msg"></div>
-        </form>
-
-        <!-- APPROVED POSTS SECTION (Automatic Public Section) -->
+        <!-- 1ST SECTION: APPROVED POSTS (पब्लिक देखिने ठाउँ) -->
         <div class="public-posts-wrapper">
-            <div class="form-title">
+            <div class="section-title">
                 <i class="fa-solid fa-circle-check" style="color: #16a34a;"></i>
-                स्वीकृत (Approved) कविता तथा भनाइहरू
+                १. स्वीकृत (Approved) कविता तथा भनाइहरू
             </div>
 
             <div id="approvedPostsContainer">
                 <p style="text-align: center; font-size: 12px; color: #64748b;">लोड हुँदैछ...</p>
             </div>
         </div>
+
+        <!-- 2ND SECTION: SUBMISSION FORM (पेस गर्ने ठाउँ) -->
+        <div class="submission-form-wrapper">
+            <div class="section-title">
+                <i class="fa-solid fa-pen-to-square" style="color: #1a2634;"></i>
+                २. आफ्ना कविता वा भनाइ पेस गर्नुहोस्
+            </div>
+
+            <form id="submissionForm">
+                <div class="form-group">
+                    <label>तपाईंको नाम *</label>
+                    <input type="text" id="userName" placeholder="तपाईंको पूरा नाम लेख्नुहोस्" required>
+                </div>
+
+                <div class="form-group">
+                    <label>प्रकार छान्नुहोस् *</label>
+                    <select id="contentType" required>
+                        <option value="कविता">कविता (Poem)</option>
+                        <option value="भनाइ">भनाइ (Quote)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>शीर्षक (यदि कविता भएमा)</label>
+                    <input type="text" id="contentTitle" placeholder="कविताको शीर्षक (वैकल्पिक)">
+                </div>
+
+                <div class="form-group">
+                    <label>सामग्री (कविता वा भनाइ) *</label>
+                    <textarea id="contentBody" rows="4" placeholder="यहाँ आफ्नो कविता वा भनाइ लेख्नुहोस्..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fa-solid fa-paper-plane"></i> पोस्ट पठाउनुहोस्
+                </button>
+                
+                <div id="status-msg"></div>
+            </form>
+        </div>
     </div>
 
     <script>
-        // 👇 Google Apps Script Deployment URL यहाँ राख्नुहोस् 👇
+        // 👇 Google Apps Script Deployment Web App URL यहाँ राख्नुहोस् 👇
         const SCRIPT_URL = "तपाईंको_GOOGLE_APPS_SCRIPT_WEB_APP_URL_यहाँ_हाल्नुहोस्";
 
-        // 1. Submit Form Data to Google Sheet
-        document.getElementById('submissionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const btn = document.getElementById('submitBtn');
-            const msg = document.getElementById('status-msg');
-            
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> पठाउँदैछ...';
-            msg.innerText = '';
-
-            const payload = {
-                action: 'submit',
-                name: document.getElementById('userName').value,
-                type: document.getElementById('contentType').value,
-                title: document.getElementById('contentTitle').value,
-                content: document.getElementById('contentBody').value
-            };
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                msg.style.color = '#16a34a';
-                msg.innerText = '✓ सफलतापूर्वक पठाइयो! स्वीकृत (Approved) भएपछि यहाँ देखिनेछ।';
-                document.getElementById('submissionForm').reset();
-            } catch (err) {
-                msg.style.color = '#dc2626';
-                msg.innerText = 'त्रुटि भयो, कृपया पुनः प्रयास गर्नुहोस्।';
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> पोस्ट पठाउनुहोस्';
-            }
-        });
-
-        // 2. Fetch and Display "APPROVED" Posts Automatically
+        // 1. Load and Display Approved Posts First
         async function loadApprovedPosts() {
             const container = document.getElementById('approvedPostsContainer');
             try {
@@ -305,7 +272,46 @@
             }
         }
 
-        // Initialize fetching approved posts on page load
+        // 2. Submit Form Data to Google Sheet
+        document.getElementById('submissionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('status-msg');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> पठाउँदैछ...';
+            msg.innerText = '';
+
+            const payload = {
+                action: 'submit',
+                name: document.getElementById('userName').value,
+                type: document.getElementById('contentType').value,
+                title: document.getElementById('contentTitle').value,
+                content: document.getElementById('contentBody').value
+            };
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                msg.style.color = '#16a34a';
+                msg.innerText = '✓ सफलतापूर्वक पठाइयो! स्वीकृत (APPROVED) भएपछि माथिल्लो १st Section मा देखिनेछ।';
+                document.getElementById('submissionForm').reset();
+            } catch (err) {
+                msg.style.color = '#dc2626';
+                msg.innerText = 'त्रुटि भयो, कृपया पुनः प्रयास गर्नुहोस्।';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> पोस्ट पठाउनुहोस्';
+            }
+        });
+
+        // Initialize on page load
         window.onload = loadApprovedPosts;
     </script>
 </body>
