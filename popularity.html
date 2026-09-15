@@ -37,11 +37,85 @@
             text-decoration: none;
             transition: 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
         }
         .hamburger-btn:hover {
             background: #1a2634;
             color: #ffd700;
             border-color: #1a2634;
+        }
+
+        /* Bottom Sheet Drawer Overlay (Down-to-Up Slide) */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bottom-drawer {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            padding: 25px 20px 35px 20px;
+            transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+            max-width: 600px;
+            margin: 0 auto;
+            right: 0;
+        }
+        .bottom-drawer.active {
+            bottom: 0;
+        }
+
+        .drawer-handle {
+            width: 45px;
+            height: 5px;
+            background: #cbd5e1;
+            border-radius: 10px;
+            margin: 0 auto 20px auto;
+        }
+
+        .drawer-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #1a2634;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .drawer-menu-item:hover {
+            background: #1a2634;
+            color: #ffd700;
+            border-color: #1a2634;
+            transform: translateY(-2px);
+        }
+        .drawer-menu-item i {
+            font-size: 18px;
         }
 
         header { 
@@ -210,12 +284,29 @@
 
 <body>
 
-    <!-- Top Bar with Hamburger redirecting to humber.html -->
+    <!-- Top Bar with Hamburger opening Down-to-Up Drawer -->
     <div class="top-navbar">
-        <a href="humber.html" class="hamburger-btn" title="Menu (humber.html)">
+        <div class="hamburger-btn" title="Menu" onclick="toggleBottomDrawer()">
             <i class="fa-solid fa-bars"></i>
-        </a>
+        </div>
         <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
+    </div>
+
+    <!-- Down to Up Slide Drawer & Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleBottomDrawer()"></div>
+    
+    <div class="bottom-drawer" id="bottomDrawer">
+        <div class="drawer-handle"></div>
+        
+        <a href="mailto:nabinkanxo5@gmail.com?subject=Submission%20of%20Poem/Quote" class="drawer-menu-item">
+            <span><i class="fa-solid fa-paper-plane" style="color: #6366f1; margin-right: 10px;"></i> के तपाईंको पनि कुनै कविता वा भनाइ यहाँ राख्न चाहनुहुन्छ? पेश गर्नुहोस्</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <a href="poetry.html" class="drawer-menu-item">
+            <span><i class="fa-solid fa-book-open" style="color: #f59e0b; margin-right: 10px;"></i> सबै भनाइ तथा कविता हेर्नुहोस्</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
     </div>
 
     <header>
@@ -382,6 +473,14 @@
     <script>
         // 👇 यहाँ तपाईंको GOOGLE APPS SCRIPT WEB APP URL PASTE गर्नुहोस 👇
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9WCx9sxWS9mUFNJs3-IA5U7Clnf0MizmxXHJB8wMj8Gwcnw1Ad7QXU9BYLphNXioTFQ/exec";
+
+        // Toggle Down to Up Drawer Menu
+        function toggleBottomDrawer() {
+            const drawer = document.getElementById('bottomDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
 
         // Load Real View Count On Page Load
         async function recordViewAndFetchData() {
