@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nabin Phuyal | Web Designer</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#03060d;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== CODING BACKGROUND ===== */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-3;
+
+    background:
+    radial-gradient(circle at 80% 20%,#0066ff30,transparent 30%),
+    radial-gradient(circle at 10% 80%,#00eaff20,transparent 30%),
+    #03060d;
+}
+
+.code-bg{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    opacity:.08;
+    color:#00eaff;
+    font-family:monospace;
+    font-size:15px;
+    line-height:2;
+    white-space:pre;
+    overflow:hidden;
+}
+
+.code-bg::before{
+    content:
+    "<html>\A"
+    "  <head>\A"
+    "    const developer = 'Nabin Phuyal';\A"
+    "    Web Designer();\A"
+    "    Computer Operator();\A"
+    "  </head>\A"
+    "  <body>\A"
+    "    HTML + CSS + JavaScript\A"
+    "    GitHub Portfolio\A"
+    "    01010101 01001110 01000001\A"
+    "    createWebsite();\A"
+    "  </body>\A"
+    "</html>\A"
+    "\A"
+    ".portfolio { premium: true; }\A"
+    "responsive-design: true;\A"
+    "NABIN_PHUYAL";
+    
+    position:absolute;
+    width:100%;
+    animation:codeMove 25s linear infinite;
+}
+
+@keyframes codeMove{
+    from{
+        transform:translateY(0);
+    }
+    to{
+        transform:translateY(-400px);
+    }
+}
+
+
+/* ===== NAVBAR ===== */
+
+nav{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:100;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 7%;
+
+    background:rgba(3,6,13,.72);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid #ffffff12;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#00eaff;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:28px;
+}
+
+nav ul a{
+    text-decoration:none;
+    color:#ddd;
+    font-size:14px;
+    transition:.3s;
+}
+
+nav ul a:hover{
+    color:#00eaff;
+}
+
+.language{
+    color:#00eaff;
+    border:1px solid #00eaff80;
+    border-radius:30px;
+    padding:8px 13px;
+    font-size:12px;
+    cursor:pointer;
+}
+
+
+/* ===== HERO ===== */
+
+.hero{
+    min-height:100vh;
+
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+
+    align-items:center;
+    gap:60px;
+
+    padding:120px 8% 70px;
+}
+
+.welcome{
+    color:#00eaff;
+    font-size:12px;
+    letter-spacing:4px;
+    margin-bottom:20px;
+}
+
+h1{
+    font-size:clamp(50px,8vw,95px);
+    line-height:.9;
+    letter-spacing:-5px;
+}
+
+h1 span{
+    color:transparent;
+    -webkit-text-stroke:1px #00eaff;
+}
+
+.role{
+    font-size:22px;
+    margin:25px 0 15px;
+    color:#e8edf5;
+}
+
+.role span{
+    color:#00eaff;
+}
+
+.description{
+    max-width:600px;
+    color:#9faabd;
+    line-height:1.8;
+}
+
+.buttons{
+    display:flex;
+    gap:14px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 23px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:14px;
+    transition:.3s;
+}
+
+.primary{
+    background:#00eaff;
+    color:#001014;
+}
+
+.secondary{
+    border:1px solid #344054;
+    color:white;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px #00eaff25;
+}
+
+
+/* ===== PROFILE PHOTO ===== */
+
+.profile-box{
+    width:min(390px,85vw);
+    height:500px;
+
+    margin:auto;
+
+    position:relative;
+}
+
+.profile-box::before{
+    content:"";
+
+    position:absolute;
+    inset:-3px;
+
+    border-radius:32px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #00eaff,
+        #146bff,
+        #9d00ff
+    );
+
+    animation:rotateColor 6s linear infinite;
+}
+
+@keyframes rotateColor{
+    to{
+        filter:hue-rotate(360deg);
+    }
+}
+
+.profile-box img{
+    position:absolute;
+
+    inset:5px;
+
+    width:calc(100% - 10px);
+    height:calc(100% - 10px);
+
+    object-fit:cover;
+    object-position:center top;
+
+    border-radius:28px;
+}
+
+.experience-badge{
+    position:absolute;
+    right:-20px;
+    bottom:35px;
+
+    background:#07101de8;
+
+    border:1px solid #00eaff55;
+
+    padding:15px 18px;
+
+    border-radius:16px;
+
+    backdrop-filter:blur(15px);
+}
+
+.experience-badge strong{
+    display:block;
+    color:#00eaff;
+    font-size:20px;
+}
+
+.experience-badge small{
+    color:#adb7c8;
+}
+
+
+/* ===== SECTION ===== */
+
+section{
+    padding:100px 8%;
+    max-width:1250px;
+    margin:auto;
+}
+
+.section-title{
+    font-size:40px;
+    margin-bottom:40px;
+}
+
+.section-title span{
+    color:#00eaff;
+}
+
+
+/* ===== ABOUT ===== */
+
+.about{
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    align-items:center;
+    gap:60px;
+}
+
+.about img{
+    width:100%;
+    max-width:420px;
+
+    border-radius:25px;
+
+    border:1px solid #263247;
+}
+
+.about-text{
+    color:#a7b1c2;
+    line-height:1.9;
+}
+
+.info{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-top:25px;
+}
+
+.info-box{
+    padding:17px;
+
+    background:#ffffff08;
+
+    border:1px solid #ffffff12;
+
+    border-radius:15px;
+}
+
+.info-box b{
+    display:block;
+    color:#00eaff;
+    font-size:12px;
+    margin-bottom:6px;
+}
+
+.info-box span{
+    color:#e1e6ee;
+}
+
+
+/* ===== SKILLS ===== */
+
+.skills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:13px;
+}
+
+.skill{
+    padding:13px 19px;
+
+    background:#ffffff07;
+
+    border:1px solid #263247;
+
+    border-radius:30px;
+
+    color:#dce3ed;
+
+    transition:.3s;
+}
+
+.skill:hover{
+    border-color:#00eaff;
+    color:#00eaff;
+    transform:translateY(-3px);
+}
+
+
+/* ===== CARDS ===== */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.card{
+    padding:28px;
+
+    background:#ffffff07;
+
+    border:1px solid #ffffff12;
+
+    border-radius:21px;
+
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+    border-color:#00eaff80;
+}
+
+.card .icon{
+    font-size:30px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    color:#00eaff;
+    margin-bottom:12px;
+}
+
+.card p{
+    color:#a4afc0;
+    line-height:1.7;
+}
+
+
+/* ===== GALLERY ===== */
+
+.gallery{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:18px;
+}
+
+.gallery img{
+    width:100%;
+    height:400px;
+
+    object-fit:cover;
+
+    border-radius:22px;
+
+    border:1px solid #263247;
+}
+
+
+/* ===== SOCIAL ===== */
+
+.socials{
+    display:flex;
+    flex-wrap:wrap;
+    gap:13px;
+}
+
+.social{
+    text-decoration:none;
+    color:white;
+
+    padding:14px 20px;
+
+    background:#ffffff07;
+
+    border:1px solid #263247;
+
+    border-radius:15px;
+
+    transition:.3s;
+}
+
+.social:hover{
+    color:#00eaff;
+    border-color:#00eaff;
+    transform:translateY(-3px);
+}
+
+
+/* ===== FOOTER ===== */
+
+footer{
+    text-align:center;
+
+    padding:35px;
+
+    color:#718096;
+
+    border-top:1px solid #ffffff10;
+
+    font-size:13px;
+}
+
+footer span{
+    color:#00eaff;
+}
+
+
+/* ===== MOBILE ===== */
+
+@media(max-width:800px){
+
+    nav ul{
+        display:none;
+    }
+
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .description{
+        margin:auto;
+    }
+
+    .buttons{
+        justify-content:center;
+    }
+
+    .profile-box{
+        height:430px;
+    }
+
+    .about{
+        grid-template-columns:1fr;
+    }
+
+    .about img{
+        margin:auto;
+        display:block;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .gallery{
+        grid-template-columns:1fr;
+    }
+
+    .gallery img{
+        height:420px;
+    }
+
+    .info{
+        grid-template-columns:1fr;
+    }
+
+    h1{
+        letter-spacing:-3px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="code-bg"></div>
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <div class="logo">
+        NABIN<span>.</span>
+    </div>
+
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="language" onclick="changeLanguage()">
+        नेपाली / EN
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+    <div>
+
+        <div class="welcome" id="welcome">
+            WELCOME TO MY DIGITAL SPACE
+        </div>
+
+        <h1>
+            NABIN<br>
+            <span>PHUYAL</span>
+        </h1>
+
+        <div class="role" id="role">
+            Web Designer <span>|</span> Computer Operator
+        </div>
+
+        <p class="description" id="intro">
+
+            A creative Web Designer and Computer Operator
+            from Bhojpur, Nepal. Passionate about technology,
+            digital design and building clean, modern and
+            responsive web experiences.
+
+        </p>
+
+
+        <div class="buttons">
+
+            <a href="#about" class="btn primary">
+                Explore My Profile ↓
+            </a>
+
+            <a href="#contact" class="btn secondary">
+                Let's Connect
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN PHOTO -->
+
+    <div class="profile-box">
+
+        <img
+            src="images/profile.jpg"
+            alt="Nabin Phuyal"
+        >
+
+        <div class="experience-badge">
+
+            <strong>2+ Years</strong>
+
+            <small>
+                Computer Operator
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ABOUT -->
+
+<section id="about">
+
+    <h2 class="section-title">
+        About <span>Me</span>
+    </h2>
+
+
+    <div class="about">
+
+        <img
+            src="images/about.jpg"
+            alt="Nabin Phuyal"
+        >
+
+
+        <div>
+
+            <p class="about-text" id="aboutText">
+
+                I am Nabin Phuyal, a passionate Web Designer
+                and Computer Operator from Bhojpur, Nepal.
+                I have completed Class 12 and have 2 years
+                of professional experience as a Computer Operator.
+
+                I enjoy learning new technology, creating
+                digital experiences and turning ideas into
+                clean, useful and modern websites.
+
+            </p>
+
+
+            <div class="info">
+
+                <div class="info-box">
+
+                    <b>LOCATION</b>
+
+                    <span>
+                        Bhojpur, Nepal
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <b>EDUCATION</b>
+
+                    <span>
+                        Class 12 Passed
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <b>EXPERIENCE</b>
+
+                    <span>
+                        Computer Operator — 2 Years
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <b>PROFESSION</b>
+
+                    <span>
+                        Web Designer
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- SKILLS -->
+
+<section id="skills">
+
+    <h2 class="section-title">
+        My <span>Skills</span>
+    </h2>
+
+
+    <div class="skills">
+
+        <div class="skill">HTML</div>
+        <div class="skill">CSS</div>
+        <div class="skill">JavaScript</div>
+
+        <div class="skill">Web Design</div>
+
+        <div class="skill">MS Word</div>
+        <div class="skill">MS Excel</div>
+        <div class="skill">PowerPoint</div>
+
+        <div class="skill">Photoshop</div>
+
+        <div class="skill">Typing</div>
+
+        <div class="skill">
+            Computer Operation
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- EXPERIENCE -->
+
+<section id="experience">
+
+    <h2 class="section-title">
+        Experience & <span>Journey</span>
+    </h2>
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="icon">
+                💻
+            </div>
+
+            <h3>
+                Computer Operator
+            </h3>
+
+            <p>
+
+                2 years of professional experience
+                in computer operation, typing,
+                documentation and office-related
+                digital work.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🌐
+            </div>
+
+            <h3>
+                Web Designer
+            </h3>
+
+            <p>
+
+                Interested in creating modern,
+                responsive and user-friendly websites
+                using HTML, CSS and JavaScript.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🎓
+            </div>
+
+            <h3>
+                Education
+            </h3>
+
+            <p>
+
+                Successfully completed Class 12
+                with a strong interest in computer
+                technology and digital skills.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- PHOTO GALLERY -->
+
+<section>
+
+    <h2 class="section-title">
+        A Glimpse of <span>Me</span>
+    </h2>
+
+
+    <div class="gallery">
+
+        <img
+            src="images/gallery.jpg"
+            alt="Nabin Phuyal"
+        >
+
+        <img
+            src="images/profile.jpg"
+            alt="Nabin Phuyal"
+        >
+
+    </div>
+
+</section>
+
+
+
+<!-- CONTACT -->
+
+<section id="contact">
+
+    <h2 class="section-title">
+        Let's <span>Connect</span>
+    </h2>
+
+
+    <div class="socials">
+
+
+        <a
+            class="social"
+            href="https://www.youtube.com/@nabinvlogdream"
+            target="_blank"
+        >
+            ▶ YouTube · nabinvlogdream
+        </a>
+
+
+        <a
+            class="social"
+            href="https://www.tiktok.com/@nabinkanxophuyal"
+            target="_blank"
+        >
+            ♪ TikTok · nabinkanxophuyal
+        </a>
+
+
+        <a
+            class="social"
+            href="https://www.facebook.com/nabinkanxophuyal"
+            target="_blank"
+        >
+            f Facebook · nabinkanxophuyal
+        </a>
+
+
+        <a
+            class="social"
+            href="https://www.instagram.com/nabinphuyal28"
+            target="_blank"
+        >
+            ◎ Instagram · nabinphuyal28
+        </a>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    © 2026
+
+    <span>
+        Nabin Phuyal
+    </span>
+
+    · Web Designer & Computer Operator
+    · Bhojpur, Nepal
+
+</footer>
+
+
+
+<!-- LANGUAGE SWITCH -->
+
+<script>
+
+let nepali = false;
+
+function changeLanguage(){
+
+    nepali = !nepali;
+
+
+    if(nepali){
+
+        document.getElementById("welcome").innerText =
+        "मेरो डिजिटल पोर्टफोलियोमा स्वागत छ";
+
+
+        document.getElementById("role").innerHTML =
+        "वेब डिजाइनर <span>|</span> कम्प्युटर अपरेटर";
+
+
+        document.getElementById("intro").innerText =
+        "म भोजपुर, नेपालका सिर्जनशील वेब डिजाइनर तथा कम्प्युटर अपरेटर हुँ। प्रविधि, डिजिटल डिजाइन र आधुनिक वेबसाइट निर्माणमा मेरो रुचि छ।";
+
+
+        document.getElementById("aboutText").innerText =
+        "म नबिन फुयाल, भोजपुर नेपालका एक उत्साही वेब डिजाइनर तथा कम्प्युटर अपरेटर हुँ। मैले कक्षा १२ उत्तीर्ण गरेको छु र कम्प्युटर अपरेटरको रूपमा २ वर्षको व्यावसायिक अनुभव छ। मलाई नयाँ प्रविधि सिक्न, डिजिटल डिजाइन गर्न र आधुनिक वेबसाइट बनाउन मन पर्छ।";
+
+    }
+
+
+    else{
+
+        document.getElementById("welcome").innerText =
+        "WELCOME TO MY DIGITAL SPACE";
+
+
+        document.getElementById("role").innerHTML =
+        "Web Designer <span>|</span> Computer Operator";
+
+
+        document.getElementById("intro").innerText =
+        "A creative Web Designer and Computer Operator from Bhojpur, Nepal. Passionate about technology, digital design and building clean, modern and responsive web experiences.";
+
+
+        document.getElementById("aboutText").innerText =
+        "I am Nabin Phuyal, a passionate Web Designer and Computer Operator from Bhojpur, Nepal. I have completed Class 12 and have 2 years of professional experience as a Computer Operator. I enjoy learning new technology, creating digital experiences and turning ideas into clean, useful and modern websites.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
