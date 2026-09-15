@@ -22,6 +22,21 @@ body{
     background:#03060d;
     color:white;
     overflow-x:hidden;
+    position: relative;
+}
+
+/* ===== BLURRED BACKGROUND IMAGE ===== */
+
+.bg-blur-image {
+    position: fixed;
+    inset: 0;
+    z-index: -4;
+    background-image: url('profile.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(20px) brightness(0.25);
+    transform: scale(1.1); /* Prevents white blurred edges */
 }
 
 /* ===== CODING BACKGROUND ===== */
@@ -33,9 +48,9 @@ body::before{
     z-index:-3;
 
     background:
-    radial-gradient(circle at 80% 20%,#0066ff30,transparent 30%),
-    radial-gradient(circle at 10% 80%,#00eaff20,transparent 30%),
-    #03060d;
+    radial-gradient(circle at 80% 20%,#0066ff25,transparent 30%),
+    radial-gradient(circle at 10% 80%,#00eaff15,transparent 30%),
+    rgba(3, 6, 13, 0.75);
 }
 
 .code-bg{
@@ -141,6 +156,7 @@ nav ul a:hover{
     padding:8px 13px;
     font-size:12px;
     cursor:pointer;
+    user-select: none;
 }
 
 
@@ -328,7 +344,6 @@ section{
     align-items: center;
 }
 
-/* Photo Wrapper & Glow Effect */
 .about-img-wrapper {
     position: relative;
     width: 100%;
@@ -361,7 +376,6 @@ section{
     object-fit: cover;
 }
 
-/* Floating Status Tag */
 .floating-tag {
     position: absolute;
     bottom: -15px;
@@ -416,7 +430,6 @@ section{
     color: #ffffff;
 }
 
-/* Glass Cards Grid */
 .info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -663,6 +676,9 @@ footer span{
 
 <body>
 
+<!-- BLURRED BACKGROUND PHOTO -->
+<div class="bg-blur-image"></div>
+
 <div class="code-bg"></div>
 
 
@@ -670,16 +686,16 @@ footer span{
 
 <nav>
 
-    <div class="logo">
+    <div class="logo" id="logo">
         NABIN<span>.</span>
     </div>
 
     <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#home" id="navHome">Home</a></li>
+        <li><a href="#about" id="navAbout">About</a></li>
+        <li><a href="#skills" id="navSkills">Skills</a></li>
+        <li><a href="#experience" id="navExp">Experience</a></li>
+        <li><a href="#contact" id="navContact">Contact</a></li>
     </ul>
 
     <div class="language" onclick="changeLanguage()">
@@ -699,7 +715,7 @@ footer span{
             WELCOME TO MY DIGITAL SPACE
         </div>
 
-        <h1>
+        <h1 id="heroName">
             NABIN<br>
             <span>PHUYAL</span>
         </h1>
@@ -709,22 +725,20 @@ footer span{
         </div>
 
         <p class="description" id="intro">
-
             A creative Web Designer and Computer Operator
             from Bhojpur, Nepal. Passionate about technology,
             digital design and building clean, modern and
             responsive web experiences.
-
         </p>
 
 
         <div class="buttons">
 
-            <a href="#about" class="btn primary">
+            <a href="#about" class="btn primary" id="btnExplore">
                 Explore My Profile ↓
             </a>
 
-            <a href="#contact" class="btn secondary">
+            <a href="#contact" class="btn secondary" id="btnConnect">
                 Let's Connect
             </a>
 
@@ -744,9 +758,9 @@ footer span{
 
         <div class="experience-badge">
 
-            <strong>2+ Years</strong>
+            <strong id="badgeExp">2+ Years</strong>
 
-            <small>
+            <small id="badgeRole">
                 Computer Operator
             </small>
 
@@ -758,63 +772,60 @@ footer span{
 
 
 
-<!-- ABOUT (PREMIUM DESIGN) -->
+<!-- ABOUT -->
 
 <section id="about">
 
     <div class="about-container">
         
-        <!-- Left Side: Interactive Profile Frame -->
         <div class="about-img-wrapper">
             <div class="glow-backdrop"></div>
             <img src="about.jpg" alt="Nabin Phuyal" class="about-img">
             <div class="floating-tag">
-                <span class="pulse-dot"></span> Available for Projects
+                <span class="pulse-dot"></span> <span id="statusTag">Available for Projects</span>
             </div>
         </div>
 
-        <!-- Right Side: Content & Glass Cards -->
         <div class="about-content">
             
-            <div class="sub-heading">GET TO KNOW ME</div>
-            <h2 class="section-title">About <span>Me</span></h2>
+            <div class="sub-heading" id="subAbout">GET TO KNOW ME</div>
+            <h2 class="section-title" id="titleAbout">About <span>Me</span></h2>
 
             <p class="about-text" id="aboutText">
                 I am <b>Nabin Phuyal</b>, a passionate Web Designer and Computer Operator based in Bhojpur, Nepal. With 2 years of professional hands-on experience and a strong foundation in digital tools, I blend technical efficiency with visual aesthetics to build modern, responsive, and high-performing websites.
             </p>
 
-            <!-- Key Highlights Grid -->
             <div class="info-grid">
 
                 <div class="glass-card">
                     <div class="card-icon">📍</div>
                     <div class="card-details">
-                        <b>LOCATION</b>
-                        <span>Bhojpur, Nepal</span>
+                        <b id="lblLoc">LOCATION</b>
+                        <span id="valLoc">Bhojpur, Nepal</span>
                     </div>
                 </div>
 
                 <div class="glass-card">
                     <div class="card-icon">🎓</div>
                     <div class="card-details">
-                        <b>EDUCATION</b>
-                        <span>Class 12 Passed</span>
+                        <b id="lblEdu">EDUCATION</b>
+                        <span id="valEdu">Class 12 Passed</span>
                     </div>
                 </div>
 
                 <div class="glass-card">
                     <div class="card-icon">⏳</div>
                     <div class="card-details">
-                        <b>EXPERIENCE</b>
-                        <span>2+ Years Experience</span>
+                        <b id="lblExp">EXPERIENCE</b>
+                        <span id="valExp">2+ Years Experience</span>
                     </div>
                 </div>
 
                 <div class="glass-card">
                     <div class="card-icon">💻</div>
                     <div class="card-details">
-                        <b>PRIMARY ROLE</b>
-                        <span>Web Designer & Operator</span>
+                        <b id="lblRole">PRIMARY ROLE</b>
+                        <span id="valRole">Web Designer & Operator</span>
                     </div>
                 </div>
 
@@ -832,7 +843,7 @@ footer span{
 
 <section id="skills">
 
-    <h2 class="section-title">
+    <h2 class="section-title" id="titleSkills">
         My <span>Skills</span>
     </h2>
 
@@ -843,7 +854,7 @@ footer span{
         <div class="skill">CSS</div>
         <div class="skill">JavaScript</div>
 
-        <div class="skill">Web Design</div>
+        <div class="skill" id="skWeb">Web Design</div>
 
         <div class="skill">MS Word</div>
         <div class="skill">MS Excel</div>
@@ -851,9 +862,9 @@ footer span{
 
         <div class="skill">Photoshop</div>
 
-        <div class="skill">Typing</div>
+        <div class="skill" id="skType">Typing</div>
 
-        <div class="skill">
+        <div class="skill" id="skOp">
             Computer Operation
         </div>
 
@@ -867,7 +878,7 @@ footer span{
 
 <section id="experience">
 
-    <h2 class="section-title">
+    <h2 class="section-title" id="titleExp">
         Experience & <span>Journey</span>
     </h2>
 
@@ -881,17 +892,15 @@ footer span{
                 💻
             </div>
 
-            <h3>
+            <h3 id="card1Title">
                 Computer Operator
             </h3>
 
-            <p>
-
+            <p id="card1Desc">
                 2 years of professional experience
                 in computer operation, typing,
                 documentation and office-related
                 digital work.
-
             </p>
 
         </div>
@@ -903,16 +912,14 @@ footer span{
                 🌐
             </div>
 
-            <h3>
+            <h3 id="card2Title">
                 Web Designer
             </h3>
 
-            <p>
-
+            <p id="card2Desc">
                 Interested in creating modern,
                 responsive and user-friendly websites
                 using HTML, CSS and JavaScript.
-
             </p>
 
         </div>
@@ -924,16 +931,14 @@ footer span{
                 🎓
             </div>
 
-            <h3>
+            <h3 id="card3Title">
                 Education
             </h3>
 
-            <p>
-
+            <p id="card3Desc">
                 Successfully completed Class 12
                 with a strong interest in computer
                 technology and digital skills.
-
             </p>
 
         </div>
@@ -949,7 +954,7 @@ footer span{
 
 <section>
 
-    <h2 class="section-title">
+    <h2 class="section-title" id="titleGallery">
         A Glimpse of <span>Me</span>
     </h2>
 
@@ -976,7 +981,7 @@ footer span{
 
 <section id="contact">
 
-    <h2 class="section-title">
+    <h2 class="section-title" id="titleContact">
         Let's <span>Connect</span>
     </h2>
 
@@ -1028,22 +1033,13 @@ footer span{
 
 <!-- FOOTER -->
 
-<footer>
-
-    © 2026
-
-    <span>
-        Nabin Phuyal
-    </span>
-
-    · Web Designer & Computer Operator
-    · Bhojpur, Nepal
-
+<footer id="footerText">
+    © 2026 <span>Nabin Phuyal</span> · Web Designer & Computer Operator · Bhojpur, Nepal
 </footer>
 
 
 
-<!-- LANGUAGE SWITCH -->
+<!-- COMPLETE LANGUAGE SWITCH SCRIPT -->
 
 <script>
 
@@ -1053,43 +1049,117 @@ function changeLanguage(){
 
     nepali = !nepali;
 
-
     if(nepali){
+        // Nav Menu
+        document.getElementById("logo").innerHTML = "नबिन<span>.</span>";
+        document.getElementById("navHome").innerText = "गृहपृष्ठ";
+        document.getElementById("navAbout").innerText = "मेरो बारेमा";
+        document.getElementById("navSkills").innerText = "दक्षता";
+        document.getElementById("navExp").innerText = "अनुभव";
+        document.getElementById("navContact").innerText = "सम्पर्क";
 
-        document.getElementById("welcome").innerText =
-        "मेरो डिजिटल पोर्टफोलियोमा स्वागत छ";
+        // Hero Section
+        document.getElementById("welcome").innerText = "मेरो डिजिटल पोर्टफोलियोमा स्वागत छ";
+        document.getElementById("heroName").innerHTML = "नबिन<br><span>फुयाल</span>";
+        document.getElementById("role").innerHTML = "वेब डिजाइनर <span>|</span> कम्प्युटर अपरेटर";
+        document.getElementById("intro").innerText = "म भोजपुर, नेपालका सिर्जनशील वेब डिजाइनर तथा कम्प्युटर अपरेटर हुँ। प्रविधि, डिजिटल डिजाइन र आधुनिक वेबसाइट निर्माणमा मेरो रुचि छ।";
+        document.getElementById("btnExplore").innerText = "मेरो प्रोफाइल हेर्नुहोस् ↓";
+        document.getElementById("btnConnect").innerText = "सम्पर्क गरौँ";
+        document.getElementById("badgeExp").innerText = "२+ वर्ष";
+        document.getElementById("badgeRole").innerText = "कम्प्युटर अपरेटर";
 
+        // About Section
+        document.getElementById("statusTag").innerText = "प्रोजेक्टका लागि उपलब्ध";
+        document.getElementById("subAbout").innerText = "मेरो परिचय";
+        document.getElementById("titleAbout").innerHTML = "मेरो <span>बारेमा</span>";
+        document.getElementById("aboutText").innerHTML = "म <b>नबिन फुयाल</b>, भोजपुर नेपालका एक उत्साही वेब डिजाइनर तथा कम्प्युटर अपरेटर हुँ। २ वर्षको व्यावसायिक अनुभवका साथ म डिजिटल प्रविधि र आधुनिक डिजाइनलाई संयोजन गरी आकर्षक र उपयोगी वेबसाइट निर्माण गर्छु।";
+        
+        document.getElementById("lblLoc").innerText = "स्थान";
+        document.getElementById("valLoc").innerText = "भोजपुर, नेपाल";
+        document.getElementById("lblEdu").innerText = "शिक्षा";
+        document.getElementById("valEdu").innerText = "कक्षा १२ उत्तीर्ण";
+        document.getElementById("lblExp").innerText = "अनुभव";
+        document.getElementById("valExp").innerText = "२+ वर्ष अनुभव";
+        document.getElementById("lblRole").innerText = "मुख्य भूमिका";
+        document.getElementById("valRole").innerText = "वेब डिजाइनर र अपरेटर";
 
-        document.getElementById("role").innerHTML =
-        "वेब डिजाइनर <span>|</span> कम्प्युटर अपरेटर";
+        // Skills Section
+        document.getElementById("titleSkills").innerHTML = "मेरो <span>दक्षता</span>";
+        document.getElementById("skWeb").innerText = "वेब डिजाइन";
+        document.getElementById("skType").innerText = "टाइपिङ";
+        document.getElementById("skOp").innerText = "कम्प्युटर सञ्चालन";
 
+        // Experience Section
+        document.getElementById("titleExp").innerHTML = "अनुभव र <span>यात्रा</span>";
+        document.getElementById("card1Title").innerText = "कम्प्युटर अपरेटर";
+        document.getElementById("card1Desc").innerText = "कम्प्युटर सञ्चालन, टाइपिङ, कागजात तयारी र कार्यालय सम्बन्धी काममा २ वर्षको अनुभव।";
+        document.getElementById("card2Title").innerText = "वेब डिजाइनर";
+        document.getElementById("card2Desc").innerText = "HTML, CSS र JavaScript को प्रयोग गरी आधुनिक र रेस्पोन्सिभ वेबसाइट बनाउन रुचि।";
+        document.getElementById("card3Title").innerText = "शिक्षा";
+        document.getElementById("card3Desc").innerText = "कम्प्युटर प्रविधिमा विशेष रुचिका साथ सफलतापूर्वक कक्षा १२ उत्तीर्ण।";
 
-        document.getElementById("intro").innerText =
-        "म भोजपुर, नेपालका सिर्जनशील वेब डिजाइनर तथा कम्प्युटर अपरेटर हुँ। प्रविधि, डिजिटल डिजाइन र आधुनिक वेबसाइट निर्माणमा मेरो रुचि छ।";
+        // Gallery & Contact
+        document.getElementById("titleGallery").innerHTML = "मेरो <span>झलक</span>";
+        document.getElementById("titleContact").innerHTML = "सम्पर्क <span>गरौँ</span>";
 
+        // Footer
+        document.getElementById("footerText").innerHTML = "© २०२६ <span>नबिन फुयाल</span> · वेब डिजाइनर र कम्प्युटर अपरेटर · भोजपुर, नेपाल";
 
-        document.getElementById("aboutText").innerHTML =
-        "म <b>नबिन फुयाल</b>, भोजपुर नेपालका एक उत्साही वेब डिजाइनर तथा कम्प्युटर अपरेटर हुँ। २ वर्षको व्यावसायिक अनुभवका साथ म डिजिटल प्रविधि र आधुनिक डिजाइनलाई संयोजन गरी आकर्षक र उपयोगी वेबसाइट निर्माण गर्छु।";
+    } else {
+        // Nav Menu
+        document.getElementById("logo").innerHTML = "NABIN<span>.</span>";
+        document.getElementById("navHome").innerText = "Home";
+        document.getElementById("navAbout").innerText = "About";
+        document.getElementById("navSkills").innerText = "Skills";
+        document.getElementById("navExp").innerText = "Experience";
+        document.getElementById("navContact").innerText = "Contact";
 
-    }
+        // Hero Section
+        document.getElementById("welcome").innerText = "WELCOME TO MY DIGITAL SPACE";
+        document.getElementById("heroName").innerHTML = "NABIN<br><span>PHUYAL</span>";
+        document.getElementById("role").innerHTML = "Web Designer <span>|</span> Computer Operator";
+        document.getElementById("intro").innerText = "A creative Web Designer and Computer Operator from Bhojpur, Nepal. Passionate about technology, digital design and building clean, modern and responsive web experiences.";
+        document.getElementById("btnExplore").innerText = "Explore My Profile ↓";
+        document.getElementById("btnConnect").innerText = "Let's Connect";
+        document.getElementById("badgeExp").innerText = "2+ Years";
+        document.getElementById("badgeRole").innerText = "Computer Operator";
 
+        // About Section
+        document.getElementById("statusTag").innerText = "Available for Projects";
+        document.getElementById("subAbout").innerText = "GET TO KNOW ME";
+        document.getElementById("titleAbout").innerHTML = "About <span>Me</span>";
+        document.getElementById("aboutText").innerHTML = "I am <b>Nabin Phuyal</b>, a passionate Web Designer and Computer Operator based in Bhojpur, Nepal. With 2 years of professional hands-on experience and a strong foundation in digital tools, I blend technical efficiency with visual aesthetics to build modern, responsive, and high-performing websites.";
+        
+        document.getElementById("lblLoc").innerText = "LOCATION";
+        document.getElementById("valLoc").innerText = "Bhojpur, Nepal";
+        document.getElementById("lblEdu").innerText = "EDUCATION";
+        document.getElementById("valEdu").innerText = "Class 12 Passed";
+        document.getElementById("lblExp").innerText = "EXPERIENCE";
+        document.getElementById("valExp").innerText = "2+ Years Experience";
+        document.getElementById("lblRole").innerText = "PRIMARY ROLE";
+        document.getElementById("valRole").innerText = "Web Designer & Operator";
 
-    else{
+        // Skills Section
+        document.getElementById("titleSkills").innerHTML = "My <span>Skills</span>";
+        document.getElementById("skWeb").innerText = "Web Design";
+        document.getElementById("skType").innerText = "Typing";
+        document.getElementById("skOp").innerText = "Computer Operation";
 
-        document.getElementById("welcome").innerText =
-        "WELCOME TO MY DIGITAL SPACE";
+        // Experience Section
+        document.getElementById("titleExp").innerHTML = "Experience & <span>Journey</span>";
+        document.getElementById("card1Title").innerText = "Computer Operator";
+        document.getElementById("card1Desc").innerText = "2 years of professional experience in computer operation, typing, documentation and office-related digital work.";
+        document.getElementById("card2Title").innerText = "Web Designer";
+        document.getElementById("card2Desc").innerText = "Interested in creating modern, responsive and user-friendly websites using HTML, CSS and JavaScript.";
+        document.getElementById("card3Title").innerText = "Education";
+        document.getElementById("card3Desc").innerText = "Successfully completed Class 12 with a strong interest in computer technology and digital skills.";
 
+        // Gallery & Contact
+        document.getElementById("titleGallery").innerHTML = "A Glimpse of <span>Me</span>";
+        document.getElementById("titleContact").innerHTML = "Let's <span>Connect</span>";
 
-        document.getElementById("role").innerHTML =
-        "Web Designer <span>|</span> Computer Operator";
-
-
-        document.getElementById("intro").innerText =
-        "A creative Web Designer and Computer Operator from Bhojpur, Nepal. Passionate about technology, digital design and building clean, modern and responsive web experiences.";
-
-
-        document.getElementById("aboutText").innerHTML =
-        "I am <b>Nabin Phuyal</b>, a passionate Web Designer and Computer Operator based in Bhojpur, Nepal. With 2 years of professional hands-on experience and a strong foundation in digital tools, I blend technical efficiency with visual aesthetics to build modern, responsive, and high-performing websites.";
+        // Footer
+        document.getElementById("footerText").innerHTML = "© 2026 <span>Nabin Phuyal</span> · Web Designer & Computer Operator · Bhojpur, Nepal";
 
     }
 
