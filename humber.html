@@ -3,170 +3,580 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigation Menu</title>
+    <title>Famous Quotes & Poems - Nabin Phuyal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(135deg, #1a2634, #2c3e50); 
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 20px; 
+            background-color: #f8fbff; 
+            color: #333; 
+            padding: 20px;
         }
 
-        .menu-container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 420px;
-            border-radius: 24px;
-            padding: 30px 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .menu-header {
+        /* Top Bar */
+        .top-navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        .menu-header h2 {
-            font-size: 20px;
-            color: #1a2634;
-            font-weight: 700;
+        header { 
+            background: linear-gradient(90deg, #1a2634, #2c3e50); 
+            color: white; 
+            padding: 25px; 
+            text-align: center; 
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
-        .close-btn {
-            background: #f1f5f9;
-            color: #1a2634;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
+        header h1 {
+            font-size: 28px;
+            color: #ffd700;
+        }
+        .back-btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            background: #1a2634;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
             text-decoration: none;
-            font-size: 18px;
+            font-weight: 600;
             transition: 0.3s;
         }
-        .close-btn:hover {
-            background: #e2e8f0;
-            transform: rotate(90deg);
+        .back-btn:hover {
+            background: #2c3e50;
+            transform: translateX(-3px);
         }
 
-        .menu-list {
-            list-style: none;
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px 0;
+            font-size: 24px;
+            color: #1a2634;
+            border-bottom: 3px solid #ffd700;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .center-wrapper { text-align: center; }
+
+        /* Quotes Styling */
+        .quotes-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .quote-box {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-left: 6px solid #1a2634;
+            transition: 0.3s;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            justify-content: space-between;
+        }
+        .quote-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .quote-box i { font-size: 24px; color: #ffd700; margin-bottom: 10px; display: block; }
+        .quote-box p { font-size: 15px; font-weight: 500; color: #2c3e50; line-height: 1.6; margin-bottom: 15px; }
+        .author-info { display: flex; align-items: center; gap: 12px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+        .author-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #ffd700; }
+        .author-name { font-weight: 600; font-size: 14px; color: #1a2634; }
+
+        /* Poem Section Styling */
+        .poem-container { max-width: 800px; margin: 0 auto 20px auto; }
+        .poem-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-top: 5px solid #1a2634;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .poem-badge {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #ffd700;
+            color: #1a2634;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .poem-title { font-size: 22px; color: #1a2634; margin-bottom: 15px; text-align: center; }
+        .poem-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #444;
+            white-space: pre-line;
+            margin-bottom: 20px;
+            background: #fdfdfd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 3px solid #ffd700;
+        }
+        
+        .poem-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e2e8f0;
         }
 
-        .menu-item {
+        .poem-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brp-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            background: #f0f4f8;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 2px solid #1a2634;
+            transition: 0.3s;
+        }
+        .brp-link:hover { background: #1a2634; color: white; }
+        .author-name-btn { font-weight: 700; font-size: 14px; color: #1a2634; }
+        .brp-link:hover .author-name-btn { color: #ffd700; }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-btn {
+            background: #1a2634;
+            color: #ffd700;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .share-btn:hover { background: #2c3e50; }
+
+        /* Bottom Hamburger 3-Line Button */
+        .bottom-hamburger-wrapper {
+            text-align: center;
+            margin: 30px 0 50px 0;
+        }
+        .bottom-hamburger-btn {
+            background: #1a2634;
+            color: #ffd700;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .bottom-hamburger-btn:hover {
+            transform: scale(1.1);
+            background: #2c3e50;
+        }
+
+        /* Half Screen Bottom Sheet Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+        .half-screen-modal {
+            background: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            height: 50vh; /* Half Screen */
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: 20px;
+        }
+        .modal-header h3 {
+            font-size: 18px;
+            color: #1a2634;
+        }
+        .close-modal-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            color: #1a2634;
+        }
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-opt-btn {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 18px;
+            padding: 15px;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 16px;
+            border-radius: 15px;
             text-decoration: none;
             color: #1a2634;
             font-weight: 600;
-            font-size: 15px;
-            transition: 0.3s ease;
+            font-size: 14px;
+            transition: 0.3s;
         }
-
-        .menu-item i.icon {
-            font-size: 18px;
-            color: #ffd700;
+        .modal-opt-btn:hover {
             background: #1a2634;
-            width: 36px;
-            height: 36px;
+            color: #ffffff;
+            border-color: #1a2634;
+        }
+        .modal-opt-btn i.icon-box {
+            background: #ffd700;
+            color: #1a2634;
+            width: 35px;
+            height: 35px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.3s;
-        }
-
-        .menu-item span { flex: 1; }
-
-        .menu-item i.arrow {
-            font-size: 14px;
-            color: #94a3b8;
-            transition: 0.3s;
-        }
-
-        .menu-item:hover {
-            background: #1a2634;
-            color: #ffffff;
-            border-color: #1a2634;
-            transform: translateY(-2px);
-        }
-
-        .menu-item:hover i.icon {
-            background: #ffffff;
-            color: #1a2634;
-        }
-
-        .menu-item:hover i.arrow {
-            color: #ffd700;
-            transform: translateX(4px);
         }
     </style>
 </head>
+
 <body>
 
-    <div class="menu-container">
-        <div class="menu-header">
-            <h2><i class="fa-solid fa-compass" style="color: #ffd700;"></i> मेनु अप्सनहरू</h2>
-            <a href="index.html" class="close-btn" title="Close"><i class="fa-solid fa-xmark"></i></a>
+    <!-- Top Bar -->
+    <div class="top-navbar">
+        <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
+    </div>
+
+    <header>
+        <h1><i class="fa-solid fa-quote-left"></i> थप लोकप्रिय भनाइ तथा कविताहरू</h1>
+    </header>
+
+    <!-- Quotes Section -->
+    <div class="center-wrapper" id="quotes-section">
+        <h2 class="section-title"><i class="fa-solid fa-quote-right"></i> लोकप्रिय भनाइहरू (Famous Quotes)</h2>
+    </div>
+
+    <div class="quotes-container">
+        <!-- 1. BRP Mailo -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>"खोज्दा नभेटिनु नै हराउनु भने हैन, यो त केवल खोज्नेहरुका लागि एकछिन काम दिने मेलो मात्र हो ।"</p>
+            </div>
+            <a href="https://baburamphuyal.com.np" target="_blank" style="text-decoration: none;">
+                <div class="author-info">
+                    <img src="babu.png" alt="BRP Mailo" class="author-img">
+                    <span class="author-name">बिआरपी माइलो</span>
+                </div>
+            </a>
         </div>
 
-        <div class="menu-list">
-            <!-- 1. Home Link -->
-            <a href="index.html" class="menu-item">
-                <i class="fa-solid fa-house icon"></i>
-                <span>Home (मुख्य पाना)</span>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
+        <!-- 2. Gautam Buddha -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>मन शान्त भयो भने जीवन आफैँ सुन्दर बन्छ, घृणाले घृणा हट्दैन दयाले मात्र हटाउँछ।</p>
+            </div>
+            <div class="author-info">
+                <img src="buddha.png" alt="Gautam Buddha" class="author-img">
+                <span class="author-name">गौतम बुद्ध</span>
+            </div>
+        </div>
 
-            <!-- 2. All Poems Link -->
-            <a href="index.html#poems-section" class="menu-item">
-                <i class="fa-solid fa-book-open icon"></i>
-                <span>All Poems (सबै कविताहरू)</span>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
+        <!-- 3. Nelson Mandela -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>सफलताको कुनै सर्टकट हुँदैन, कडा परिश्रम नै एक मात्र विकल्प हो।</p>
+            </div>
+            <div class="author-info">
+                <img src="mandela.png" alt="Nelson Mandela" class="author-img">
+                <span class="author-name">नेल्सन मण्डेला</span>
+            </div>
+        </div>
 
-            <!-- 3. Popular Quotes Link -->
-            <a href="index.html#quotes-section" class="menu-item">
-                <i class="fa-solid fa-quote-left icon"></i>
-                <span>Popular Quotes (भनाइहरू)</span>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
+        <!-- 4. Albert Einstein -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>जिन्दगीमा गल्ती हुनु सामान्य कुरा हो, तर गल्तीबाट नसिक्नु ठूलो भुल हो।</p>
+            </div>
+            <div class="author-info">
+                <img src="einstein.png" alt="Albert Einstein" class="author-img">
+                <span class="author-name">अल्बर्ट आइन्स्टाइन</span>
+            </div>
+        </div>
 
-            <!-- 4. About Us Link -->
-            <a href="about.html" target="_blank" class="menu-item">
-                <i class="fa-solid fa-user icon"></i>
-                <span>About Author (लेखक परिचय)</span>
-                <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
-            </a>
-
-            <!-- 5. Contact Link -->
-            <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="menu-item">
-                <i class="fa-solid fa-envelope icon"></i>
-                <span>Contact Us (सम्पर्क)</span>
-                <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
-            </a>
+        <!-- 5. Steve Jobs -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>तपाईंको समय सीमित छ, त्यसैले यसलाई कसै अरूको जिन्दगी जिउनमा खेर नफाल्नुहोस्।</p>
+            </div>
+            <div class="author-info">
+                <img src="stevejobs.png" alt="Steve Jobs" class="author-img">
+                <span class="author-name">स्टीभ जोब्स</span>
+            </div>
         </div>
     </div>
 
+    <!-- Top 2 Most Viewed & Shared Poems -->
+    <div class="center-wrapper" id="poems-section">
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> सर्वाधिक हेरिएका र सेयर गरिएका कविताहरू</h2>
+    </div>
+
+    <div class="poem-container">
+
+        <!-- 1. TOP LONG POEM -->
+        <div class="poem-card">
+            <span class="poem-badge"><i class="fa-solid fa-trophy"></i> #1 Most Popular (Long)</span>
+            <h3 class="poem-title">मेरी आमा!</h3>
+            
+            <div class="poem-stats">
+                <span><i class="fa-solid fa-eye"></i> <span id="views-long">...</span> Real Views</span>
+                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-long">...</span> Real Shares</span>
+            </div>
+
+            <div class="poem-content">
+परिपक्व छोरी हुन नपाउँदै
+मेरी आमा,
+एउटा घरकी बुहारी हुनुभयो
+र
+त्यो घरलाई चम्काउनुभयो ।
+
+मस्त जवानी हुन नपाउँदै
+मेरी आमा,
+मेरा बा' की स्वास्नी हुनुभयो
+र
+मलाई जन्माउनुभयो ।
+
+भर्खरै तरुनी हुन नपाउँदै
+मेरी आमा,
+मेरा बा' की श्रीमती हुनुभयो
+र
+मेरी आमा हुनुभयो ।
+
+म जन्मिएँ
+मेरी आमाले अस्पताल देख्नुभएन
+म जन्मिदा
+मेरी आमालाई अरु कसैले देखेन
+मलाई हातैले टिपी
+बर्कीले बेह्रेर
+घाँसको भारीसँगै
+मेरी आमाले घरमा बिसाउनुभयो ।
+
+सुत्केरीलाई छुनुहुदैन भन्दै
+मेरी हजुरआमाले
+चिसो कुनामा बस्न भन्नुभयो ।
+सुत्केरीले धेरै खानुहुन्न भन्दै
+आधा बटुको ज्वानाको झोल दिनुभयो ।
+
+मेरी आमाले ठसठसी कन्दै
+नानीले फोहोर पारेका थाङ्ना धुनुभयो ।
+कहिले घाँसको भारीमाथी राखेर
+कहिले आफ्नो अगाडि कोक्रो झुन्ड्याएर
+मलाई जङ्गल घुमाउनुभयो,
+भिर देखाउनुभयो ।
+
+दिनैभरी अर्काको मेलामा गएर
+खाजामा दिएको एकमुठी मकै जम्मा गरी
+मलाई सातु बनाइदिनुभयो ।
+मैले सातु खाँदै तपाईं पनि खानु न भन्दा
+उतै खाएर आएकी समेत भन्न भ्याउनु भयो ।
+
+मेरी आमा तरुनी हुन नपाउँदै
+मेरा बा' की श्रीमती हुनुभयो
+र
+मेरी आमा हुनुभयो ।
+            </div>
+
+            <div class="poem-footer">
+                <a href="https://brpmailo.baburamphuyal.com.np/" target="_blank" class="brp-link">
+                    <img src="babu.png" alt="BRP Mailo" class="author-img">
+                    <span class="author-name-btn">- बिआरपी माइलो <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
+                </a>
+
+                <div class="action-btns">
+                    <button class="share-btn" onclick="realShare('long', 'मेरी आमा!')">
+                        <i class="fa-solid fa-share-nodes"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. TOP SHORT POEM (Nabin Phuyal) -->
+        <div class="poem-card">
+            <span class="poem-badge"><i class="fa-solid fa-star"></i> #1 Most Popular (Short)</span>
+            <h3 class="poem-title">याद र समय</h3>
+
+            <div class="poem-stats">
+                <span><i class="fa-solid fa-eye"></i> <span id="views-short">...</span> Real Views</span>
+                <span><i class="fa-solid fa-share-nodes"></i> <span id="shares-short">...</span> Real Shares</span>
+            </div>
+
+            <div class="poem-content">
+समय बित्दै जाँदा घाउ त भरिएला,
+तर ती पुराना यादहरू कहाँ मेटिन्छन् र?
+नयनबाट खसेका आँसु सुके पनि,
+मनभित्रका भावनाहरू कहिल्यै पुराना हुँदैनन्।
+            </div>
+
+            <div class="poem-footer">
+                <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="brp-link">
+                    <img src="Kanxo.png" alt="Nabin kanxo" class="author-img">
+                    <span class="author-name-btn">- नवीन फुयल <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
+                </a>
+
+                <div class="action-btns">
+                    <button class="share-btn" onclick="realShare('short', 'याद र समय')">
+                        <i class="fa-solid fa-share-nodes"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3 Line Hamburger Button Right Below Nabin Phuyal's Poem -->
+    <div class="bottom-hamburger-wrapper">
+        <button class="bottom-hamburger-btn" onclick="openHalfModal()" title="अप्सनहरू हेर्नुहोस्">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Half Screen Popup Modal -->
+    <div class="modal-overlay" id="halfModal" onclick="closeHalfModal(event)">
+        <div class="half-screen-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-list" style="color: #ffd700;"></i> अप्सनहरू छान्नुहोस्</h3>
+                <button class="close-modal-btn" onclick="toggleModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-options">
+                <!-- Option 1: Links to humber.html -->
+                <a href="humber.html" class="modal-opt-btn">
+                    <i class="fa-solid fa-book-open icon-box"></i>
+                    <span>यहाँ राखिएका सबै कविता र भनाइहरू हेर्नुहोस्</span>
+                </a>
+
+                <!-- Option 2: Contact/Submit Link -->
+                <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="modal-opt-btn">
+                    <i class="fa-solid fa-pen-nib icon-box"></i>
+                    <span>के तपाईं पनि आफ्ना कविता तथा भनाइ राख्न चाहनुहुन्छ?</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 👇 यहाँ तपाईंको GOOGLE APPS SCRIPT WEB APP URL PASTE गर्नुहोस 👇
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9WCx9sxWS9mUFNJs3-IA5U7Clnf0MizmxXHJB8wMj8Gwcnw1Ad7QXU9BYLphNXioTFQ/exec";
+
+        // Load Real View Count On Page Load
+        async function recordViewAndFetchData() {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=view&id=long`);
+                const data = await res.json();
+
+                document.getElementById('views-long').innerText = data.long_views;
+                document.getElementById('shares-long').innerText = data.long_shares;
+                document.getElementById('views-short').innerText = data.short_views;
+                document.getElementById('shares-short').innerText = data.short_shares;
+            } catch (err) {
+                console.error("Data Load Error:", err);
+            }
+        }
+
+        // Real Share Counter Update
+        async function realShare(type, title) {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=share&id=${type}`);
+                const data = await res.json();
+
+                document.getElementById('shares-' + type).innerText = (type === 'long') ? data.long_shares : data.short_shares;
+
+                if (navigator.share) {
+                    navigator.share({ title: title, url: window.location.href });
+                } else {
+                    alert('लिङ्क कपि भयो!');
+                }
+            } catch (err) {
+                console.error("Share Increment Error:", err);
+            }
+        }
+
+        // Half Screen Modal Logic
+        function openHalfModal() {
+            document.getElementById('halfModal').style.display = 'flex';
+        }
+
+        function toggleModal(show) {
+            document.getElementById('halfModal').style.display = show ? 'flex' : 'none';
+        }
+
+        function closeHalfModal(event) {
+            if (event.target.id === 'halfModal') {
+                toggleModal(false);
+            }
+        }
+
+        // Initialize on load
+        window.onload = recordViewAndFetchData;
+    </script>
 </body>
 </html>
