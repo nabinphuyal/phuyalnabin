@@ -42,36 +42,38 @@
             min-height: 100vh;
         }
 
-        /* ----- ADVANCED MOBILE COMPATIBLE 3-LINE MENU ----- */
+        /* ----- HIGHLY PROFESSIONAL & MODERN MOBILE 3-LINE MENU ----- */
         .hamburger-menu-container {
             position: fixed;
-            top: 18px;
-            left: 18px;
+            top: 20px;
+            left: 20px;
             z-index: 1001;
         }
         
         .hamburger-btn { 
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(15, 23, 42, 0.75);
             color: var(--text-light); 
-            border-radius: 16px;
-            width: 48px;
-            height: 48px;
+            border-radius: 14px;
+            width: 46px;
+            height: 46px;
             cursor: pointer; 
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 5px;
-            border: var(--glass-border);
-            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         .hamburger-btn:hover { 
-            background: var(--primary);
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.5);
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.35);
         }
 
         .hamburger-btn:active {
@@ -79,81 +81,84 @@
         }
         
         .hamburger-line {
-            width: 22px;
-            height: 2.5px;
-            background-color: var(--text-light);
+            width: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, var(--text-dim));
             border-radius: 4px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hamburger-btn.active .hamburger-line:nth-child(1) {
-            transform: translateY(7.5px) rotate(45deg);
+            transform: translateY(7px) rotate(45deg);
             background: #ffffff;
         }
         .hamburger-btn.active .hamburger-line:nth-child(2) {
             opacity: 0;
-            transform: scale(0);
+            transform: translateX(-10px);
         }
         .hamburger-btn.active .hamburger-line:nth-child(3) {
-            transform: translateY(-7.5px) rotate(-45deg);
+            transform: translateY(-7px) rotate(-45deg);
             background: #ffffff;
         }
 
         .menu-options {
             display: none;
             position: absolute;
-            top: 60px;
+            top: 58px;
             left: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            width: 240px;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            width: 250px;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
             overflow: hidden;
             z-index: 1002;
-            animation: menuSlideIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            border: var(--glass-border);
+            animation: menuSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 0;
         }
 
         @keyframes menuSlideIn {
-            0% { opacity: 0; transform: translateY(-15px) scale(0.95); }
+            0% { opacity: 0; transform: translateY(-12px) scale(0.96); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .menu-options button { 
             width: 100%; 
-            padding: 14px 18px;
+            padding: 13px 20px;
             border: none; 
-            background: none; 
+            background: transparent; 
             cursor: pointer; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
             text-align: left; 
-            font-size: 14px; 
-            transition: all 0.3s ease; 
+            font-size: 14.5px; 
+            transition: all 0.25s ease; 
             font-family: inherit;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             color: var(--text-light);
-            font-weight: 500;
+            font-weight: 600;
+            position: relative;
         }
 
         .menu-options button:hover { 
-            background: rgba(99, 102, 241, 0.2);
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.25), transparent);
             color: #ffffff; 
-            padding-left: 22px;
+            padding-left: 24px;
         }
 
         .menu-options button i {
             font-size: 16px;
-            width: 20px;
-            color: var(--secondary);
+            width: 22px;
+            text-align: center;
+            transition: transform 0.25s ease;
         }
 
-        .menu-options button:last-child {
-            border-bottom: none;
+        .menu-options button:hover i {
+            transform: scale(1.15);
         }
-        
+
         .hidden { display: none !important; }
         
         /* ----- HEADER ----- */
@@ -433,36 +438,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .info-box { 
-            text-align: left; 
-            margin-top: 25px; 
-            padding: 25px; 
-            border-left: 4px solid var(--primary); 
-            background: rgba(15, 23, 42, 0.5); 
-            border-radius: 0 18px 18px 0; 
-            border-top: var(--glass-border);
-            border-right: var(--glass-border);
-            border-bottom: var(--glass-border);
-        }
-
-        button { 
-            margin: 6px; 
-            background: rgba(255,255,255,0.08); 
-            color: white; 
-            padding: 12px 24px; 
-            border: var(--glass-border); 
-            border-radius: 50px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: 0.3s; 
-            font-size: 14px; 
-        }
-
-        button:hover { 
-            background: var(--primary); 
-            transform: translateY(-2px); 
-        }
-
         .social-links { 
             display: flex; 
             justify-content: center; 
@@ -490,16 +465,6 @@
             background: var(--primary);
             color: #ffffff; 
             transform: translateY(-4px); 
-        }
-
-        .qual-item { 
-            margin-bottom: 10px; 
-            display: flex; 
-            align-items: center;
-            gap: 8px;
-            font-weight: 500; 
-            font-size: 15px; 
-            color: var(--text-light);
         }
 
         .contact-info { 
@@ -696,7 +661,7 @@
             border-radius: 20px; 
             outline: none; 
             font-size: 13px; 
-        }
+        } 
         
         #nbn-chat-footer button { 
             background: var(--primary); 
@@ -733,7 +698,7 @@
 </head>
 <body>
 
-<!-- ADVANCED COMPACT 3-LINE HAMBURGER MENU -->
+<!-- ADVANCED HIGH-END PROFESSIONAL 3-LINE MENU -->
 <div class="hamburger-menu-container" id="menuContainer">
     <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu(event)">
         <div class="hamburger-line"></div>
@@ -743,13 +708,16 @@
     
     <div class="menu-options" id="menu-options">
         <button onclick="window.location.href='poetry.html'">
-            <i class="fa-solid fa-feather-pointed"></i> Poetry/vault
+            <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> Poetry / Vault
         </button>
         <button onclick="window.location.href='popularity.html'">
             <i class="fa-solid fa-quote-left" style="color: var(--accent);"></i> Famous Quotes
         </button>
         <button onclick="window.location.href='calculate.html'">
             <i class="fa-solid fa-calculator" style="color: #4ade80;"></i> Calculate
+        </button>
+        <button onclick="window.location.href='about.html'">
+            <i class="fa-solid fa-user-gear" style="color: #ec4899;"></i> Designer About
         </button>
     </div>
 </div>
@@ -823,36 +791,18 @@
     </button>
 </div>
 
+<!-- ABOUT ME SECTION (Cleaned Version) -->
 <section id="about">
     <h2>About Me</h2>
-    <div>
-        <button onclick="showEnglish()">Read in English</button>
-        <button onclick="showNepali()">नेपालीमा पढ्नुहोस्</button>
+    <div style="background: rgba(15, 23, 42, 0.5); border: var(--glass-border); padding: 30px; border-radius: 20px; max-width: 600px; margin: 20px auto 0 auto; text-align: center;">
+        <i class="fa-solid fa-circle-user" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
+        <h3 style="color: var(--text-light); font-size: 22px; margin-bottom: 10px;">Nabin Phuyal</h3>
+        <p style="color: var(--text-dim); font-size: 15px; line-height: 1.6;">
+            Welcome to my official portfolio website. Feel free to explore my content, quotes, and web design projects.
+        </p>
     </div>
 
-    <div id="english-info" class="hidden info-box">
-        <p>My name is <b><span style="color: var(--secondary);">Nabin Phuyal.</span></b> I was born on 2006-07-02 AD (2063-03-18 BS). I am originally from Sakela Rural Municipality – Ward No. 2, Khotang District, and currently residing permanently in Temkemaiyung Rural Municipality – Ward No. 7, Bhojpur District, Nepal. I am a dedicated learner with a strong academic background, having successfully completed my +2. I am particularly passionate about language learning, and I have been a committed and skilled student of the Korean language. I have also worked as a Computer Operator. My dream is to become a successful YouTuber. Thank you for visiting my profile!</p>
-        <h3 style="color: #ec4899; margin-top: 15px;">My Qualifications</h3>
-        <div style="margin-top: 8px;">
-            <span class="qual-item">✅ Plus 2 in Education</span>
-            <span class="qual-item">✅ Certified Advanced Computer Operator</span>
-            <span class="qual-item">✅ Can talk normally Nepali, Hindi, English And Korean Language</span>
-        </div>
-    </div>
-
-    <div id="nepali-info" class="hidden info-box">
-        <p>मेरो नाम <b><span style="color: var(--secondary);">नवीन फुयल</span></b> हो। म २०६३ साल असार १८ गते जन्मिएको हुँ। मेरो स्थायी ठेगाना भोजपुर जिल्ला, टेम्केमैयुङ गाउँपालिका वडा नं. ७ हो र म हाल सोही स्थानमा बसोबास गरिरहेको छु।</p>
-        <p>मैले उच्च माध्यमिक तह (+2) शिक्षामा पुरा गरिसकेको छु। मलाई भाषा सिक्ने ठूलो रुचि छ। विशेषगरी कोरियन भाषा सिक्न चाहान्छु।</p>
-        <p>त्यसका साथै म कम्प्युटर अपरेटरको रूपमा पनि काम गरिसकेको छु। म YouTube मा सफल बन्न चाहन्छु। मेरो प्रोफाइल हेररिदिनु भएकोमा धन्यवाद!</p>
-        <h3 style="color: #ec4899; margin-top: 15px;">मेरो योग्यता</h3>
-        <div style="margin-top: 8px;">
-            <span class="qual-item">✅ शिक्षामा प्लस २</span>
-            <span class="qual-item">✅ प्रमाणित कम्प्युटर अपरेटर</span>
-            <span class="qual-item">✅ नेपाली, कोरिएन, हिन्दी, अङ्ग्रेजी भाषामा सामान्य कुरा गर्न सक्ने</span>
-        </div>
-    </div>
-
-    <h3 style="color: var(--text-light); margin-top: 30px; font-size: 20px;">Social Links</h3>
+    <h3 style="color: var(--text-light); margin-top: 35px; font-size: 20px;">Social Links</h3>
     <div class="social-links">
         <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
         <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
@@ -933,15 +883,6 @@
         if (slideIndex > slides.length) { slideIndex = 1; }
         slides[slideIndex - 1].classList.add("active");
         setTimeout(autoSlideQuotes, 4000);
-    }
-
-    function showEnglish() {
-        document.getElementById("english-info").classList.remove("hidden");
-        document.getElementById("nepali-info").classList.add("hidden");
-    }
-    function showNepali() {
-        document.getElementById("nepali-info").classList.remove("hidden");
-        document.getElementById("english-info").classList.add("hidden");
     }
 
     function toggleLoc() {
