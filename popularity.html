@@ -15,7 +15,7 @@
             padding: 20px;
         }
 
-        /* Top Bar & Hamburger Menu (Gemini Style) */
+        /* Top Bar & Hamburger Menu */
         .top-navbar {
             display: flex;
             align-items: center;
@@ -37,85 +37,11 @@
             text-decoration: none;
             transition: 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            cursor: pointer;
         }
         .hamburger-btn:hover {
             background: #1a2634;
             color: #ffd700;
             border-color: #1a2634;
-        }
-
-        /* Bottom Sheet Drawer Overlay (Down-to-Up Slide) */
-        .drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 9998;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        .drawer-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .bottom-drawer {
-            position: fixed;
-            bottom: -100%;
-            left: 0;
-            width: 100%;
-            background: #ffffff;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
-            z-index: 9999;
-            padding: 25px 20px 35px 20px;
-            transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1);
-            max-width: 600px;
-            margin: 0 auto;
-            right: 0;
-        }
-        .bottom-drawer.active {
-            bottom: 0;
-        }
-
-        .drawer-handle {
-            width: 45px;
-            height: 5px;
-            background: #cbd5e1;
-            border-radius: 10px;
-            margin: 0 auto 20px auto;
-        }
-
-        .drawer-menu-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f8fafc;
-            border: 1.5px solid #e2e8f0;
-            padding: 16px 20px;
-            border-radius: 16px;
-            margin-bottom: 15px;
-            text-decoration: none;
-            color: #1a2634;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-        }
-        .drawer-menu-item:hover {
-            background: #1a2634;
-            color: #ffd700;
-            border-color: #1a2634;
-            transform: translateY(-2px);
-        }
-        .drawer-menu-item i {
-            font-size: 18px;
         }
 
         header { 
@@ -284,29 +210,12 @@
 
 <body>
 
-    <!-- Top Bar with Hamburger opening Down-to-Up Drawer -->
+    <!-- Top Bar with Hamburger redirecting to humber.html -->
     <div class="top-navbar">
-        <div class="hamburger-btn" title="Menu" onclick="toggleBottomDrawer()">
+        <a href="humber.html" class="hamburger-btn" title="Menu (humber.html)">
             <i class="fa-solid fa-bars"></i>
-        </div>
+        </a>
         <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Home मा फर्कनुहोस्</a>
-    </div>
-
-    <!-- Down to Up Slide Drawer & Overlay -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleBottomDrawer()"></div>
-    
-    <div class="bottom-drawer" id="bottomDrawer">
-        <div class="drawer-handle"></div>
-        
-        <a href="mailto:nabinkanxo5@gmail.com?subject=Submission%20of%20Poem/Quote" class="drawer-menu-item">
-            <span><i class="fa-solid fa-paper-plane" style="color: #6366f1; margin-right: 10px;"></i> के तपाईंको पनि कुनै कविता वा भनाइ यहाँ राख्न चाहनुहुन्छ? पेश गर्नुहोस्</span>
-            <i class="fa-solid fa-chevron-right"></i>
-        </a>
-
-        <a href="poetry.html" class="drawer-menu-item">
-            <span><i class="fa-solid fa-book-open" style="color: #f59e0b; margin-right: 10px;"></i> सबै भनाइ तथा कविता हेर्नुहोस्</span>
-            <i class="fa-solid fa-chevron-right"></i>
-        </a>
     </div>
 
     <header>
@@ -314,11 +223,12 @@
     </header>
 
     <!-- Quotes Section -->
-    <div class="center-wrapper">
+    <div class="center-wrapper" id="quotes-section">
         <h2 class="section-title"><i class="fa-solid fa-quote-right"></i> लोकप्रिय भनाइहरू (Famous Quotes)</h2>
     </div>
 
     <div class="quotes-container">
+        <!-- 1. BRP Mailo -->
         <div class="quote-box">
             <div>
                 <i class="fa-solid fa-quote-left"></i>
@@ -331,6 +241,20 @@
                 </div>
             </a>
         </div>
+
+        <!-- 2. Gautam Buddha -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>मन शान्त भयो भने जीवन आफैँ सुन्दर बन्छ, घृणाले घृणा हट्दैन दयाले मात्र हटाउँछ।</p>
+            </div>
+            <div class="author-info">
+                <img src="buddha.png" alt="Gautam Buddha" class="author-img">
+                <span class="author-name">गौतम बुद्ध</span>
+            </div>
+        </div>
+
+        <!-- 3. Nelson Mandela -->
         <div class="quote-box">
             <div>
                 <i class="fa-solid fa-quote-left"></i>
@@ -341,6 +265,8 @@
                 <span class="author-name">नेल्सन मण्डेला</span>
             </div>
         </div>
+
+        <!-- 4. Albert Einstein -->
         <div class="quote-box">
             <div>
                 <i class="fa-solid fa-quote-left"></i>
@@ -351,10 +277,22 @@
                 <span class="author-name">अल्बर्ट आइन्स्टाइन</span>
             </div>
         </div>
+
+        <!-- 5. Steve Jobs -->
+        <div class="quote-box">
+            <div>
+                <i class="fa-solid fa-quote-left"></i>
+                <p>तपाईंको समय सीमित छ, त्यसैले यसलाई कसै अरूको जिन्दगी जिउनमा खेर नफाल्नुहोस्।</p>
+            </div>
+            <div class="author-info">
+                <img src="stevejobs.png" alt="Steve Jobs" class="author-img">
+                <span class="author-name">स्टीभ जोब्स</span>
+            </div>
+        </div>
     </div>
 
     <!-- Top 2 Most Viewed & Shared Poems -->
-    <div class="center-wrapper">
+    <div class="center-wrapper" id="poems-section">
         <h2 class="section-title"><i class="fa-solid fa-fire"></i> सर्वाधिक हेरिएका र सेयर गरिएका कविताहरू</h2>
     </div>
 
@@ -424,7 +362,7 @@
             </div>
 
             <div class="poem-footer">
-                <a href="https://baburamphuyal.com.np" target="_blank" class="brp-link">
+                <a href="https://brpmailo.baburamphuyal.com.np/" target="_blank" class="brp-link">
                     <img src="babu.png" alt="BRP Mailo" class="author-img">
                     <span class="author-name-btn">- बिआरपी माइलो <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
                 </a>
@@ -455,8 +393,8 @@
             </div>
 
             <div class="poem-footer">
-                <a href="https://phuyalnabin.com.np/#about" target="_blank" class="brp-link">
-                    <img src="Kanxo.png" alt="Nabin kanxo" class="author-img">
+                <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="brp-link">
+                    <img src="Nabin.png" alt="Nabin kanxo" class="author-img">
                     <span class="author-name-btn">- नवीन फुयल <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
                 </a>
 
@@ -472,15 +410,7 @@
 
     <script>
         // 👇 यहाँ तपाईंको GOOGLE APPS SCRIPT WEB APP URL PASTE गर्नुहोस 👇
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9WCx9sxWS9mUFNJs3-IA5U7Clnf0MizmxXHJB8wMj8Gwcnw1Ad7QXU9BYLphNXioTFQ/exec";
-
-        // Toggle Down to Up Drawer Menu
-        function toggleBottomDrawer() {
-            const drawer = document.getElementById('bottomDrawer');
-            const overlay = document.getElementById('drawerOverlay');
-            drawer.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
+        const SCRIPT_URL = "तपाईंको_WEB_APP_URL_यहाँ_PASTE_गर्नुहोस्";
 
         // Load Real View Count On Page Load
         async function recordViewAndFetchData() {
