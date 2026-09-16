@@ -4,493 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popularity - Nabin Phuyal</title>
-    <!-- Google Fonts: Poppins & Mukta for Nepali Text -->
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root {
-            --primary-bg: #111827;
-            --accent-yellow: #fbc02d;
+            --primary: #1a2634;
+            --accent: #ffd700;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --body-bg: #f8fafc;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --radius-lg: 20px;
-            --radius-md: 12px;
+            --text: #334155;
+            --border: #e2e8f0;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Poppins', 'Mukta', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Mukta', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 15px; }
 
-        body { 
-            background: var(--body-bg); 
-            color: var(--text-color); 
-            min-height: 100vh;
-            padding: 16px;
-        }
-
-        /* Navbar Styling */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #ffffff;
-            padding: 14px 20px;
-            border-radius: var(--radius-md);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            border: 1px solid var(--border-color);
-            margin-bottom: 24px;
-        }
-
-        .navbar h1 { 
-            font-size: 1.1rem; 
-            font-weight: 700;
-            color: var(--primary-bg); 
-            letter-spacing: 0.5px;
-        }
-
-        .menu-btn {
-            background: var(--primary-bg);
-            color: var(--accent-yellow);
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, background-color 0.2s;
-            box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
-        }
-
-        .menu-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* Bottom Sheet Modal Overlay */
-        .modal-overlay {
-            position: fixed;
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
-            display: none;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active { 
-            display: flex; 
-            opacity: 1;
-        }
-
-        /* Modal Box Container */
-        .modal-box {
-            background: #ffffff;
-            width: 100%;
-            max-width: 480px;
-            border-top-left-radius: var(--radius-lg);
-            border-top-right-radius: var(--radius-lg);
-            padding: 24px 20px 32px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-
-        .modal-overlay.active .modal-box {
-            transform: translateY(0);
-        }
-
-        /* Header inside Modal */
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .modal-header h3 { 
-            font-size: 1rem; 
-            font-weight: 700;
-            color: var(--primary-bg); 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-        }
-
-        .close-modal-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 32px; 
-            height: 32px;
-            border-radius: 50%;
-            color: var(--text-muted);
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .close-modal-btn:hover {
-            background: #e2e8f0;
-            color: var(--primary-bg);
-        }
-
-        /* Navigation Buttons inside Modal */
-        .option-btn {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: var(--primary-bg);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
-            margin-bottom: 12px;
-            text-align: left;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        }
-
-        .option-btn i {
-            font-size: 1.1rem;
-            color: #d97706;
-            background: #fef3c7;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .option-btn:active, .option-btn:hover { 
-            background: #f8fafc; 
-            border-color: #cbd5e1;
-            transform: translateY(-1px);
-        }
-
-        /* Modal Views Control */
-        .modal-content-section { display: none; }
-        .modal-content-section.active { display: block; }
-
-        .back-to-opts {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin-bottom: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: color 0.2s;
-        }
-
-        .back-to-opts:hover {
-            color: var(--primary-bg);
-        }
-
-        /* Card list inside Option 1 */
+        /* Card Layout */
         .post-card {
-            background: #ffffff;
-            border-left: 4px solid var(--accent-yellow);
-            border-radius: var(--radius-md);
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent);
+            border-radius: 14px;
             padding: 16px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border-top: 1px solid #f1f5f9;
-            border-right: 1px solid #f1f5f9;
-            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+            border-left-width: 4px;
         }
 
-        .post-header-badge {
-            display: inline-block;
-            font-size: 0.72rem;
-            background: var(--primary-bg);
-            color: var(--accent-yellow);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: 600;
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 8px;
         }
 
-        .post-text { 
-            font-size: 0.95rem; 
-            line-height: 1.7;
-            color: #334155; 
-            margin: 8px 0; 
-            white-space: pre-line; 
+        .post-badge {
+            background: var(--primary);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
         }
 
-        .post-author { 
-            font-size: 0.8rem; 
-            font-weight: 700; 
-            text-align: right; 
-            color: var(--primary-bg); 
-            margin-top: 8px;
+        .post-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #64748b;
         }
+
+        .post-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin: 6px 0;
+        }
+
+        .post-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            white-space: pre-line;
+            color: #475569;
+            margin-bottom: 12px;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 10px;
+        }
+
+        .author-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .share-btn {
+            background: var(--primary);
+            color: var(--accent);
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .share-btn:active { transform: scale(0.95); }
 
         /* Form Controls */
-        .form-group { 
-            margin-bottom: 14px; 
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none;
         }
-
-        .form-group label { 
-            display: block; 
-            font-size: 0.8rem; 
-            font-weight: 600; 
-            margin-bottom: 6px; 
-            color: #475569; 
-        }
-
-        .form-group input, 
-        .form-group select, 
-        .form-group textarea {
-            width: 100%; 
-            padding: 12px 14px; 
-            border: 1px solid var(--border-color); 
-            border-radius: var(--radius-md); 
-            font-size: 0.9rem; 
-            outline: none;
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-
-        .form-group input:focus, 
-        .form-group select:focus, 
-        .form-group textarea:focus {
-            border-color: var(--primary-bg);
-            background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
-        }
-
         .submit-btn {
-            width: 100%; 
-            background: var(--primary-bg); 
-            color: var(--accent-yellow); 
-            border: none; 
-            padding: 14px; 
-            border-radius: var(--radius-md); 
-            font-size: 0.95rem;
-            font-weight: 700; 
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-            box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
-        }
-
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        #status-msg {
-            text-align: center; 
-            font-size: 0.85rem; 
-            margin-top: 10px;
-            font-weight: 600;
+            width: 100%; background: var(--primary); color: var(--accent); border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- Sample Navbar -->
-    <div class="navbar">
-        <h1>Popularity</h1>
-        <button class="menu-btn" onclick="openModal()" aria-label="Open Menu">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </div>
-
-    <!-- MAIN BOTTOM SHEET MODAL -->
-    <div class="modal-overlay" id="customModal" onclick="closeModalOnOverlay(event)">
-        <div class="modal-box">
-            
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-layer-group" style="color: #d97706;"></i> अप्सनहरू छान्नुहोस्</h3>
-                <button class="close-modal-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <!-- STEP 1: Main Menu Options -->
-            <div id="optionsView">
-                <button class="option-btn" onclick="showSection('approvedView')">
-                    <i class="fa-solid fa-book-open"></i>
-                    <span>यहाँ राखिएका सबै कविता र भनाइहरू हेर्नुहोस्</span>
-                </button>
-
-                <button class="option-btn" onclick="showSection('submitView')">
-                    <i class="fa-solid fa-pen-nib"></i>
-                    <span>के तपाईं पनि आफ्ना कविता तथा भनाइ राख्न चाहनुहुन्छ?</span>
-                </button>
-            </div>
-
-            <!-- STEP 2: Option 1 - Approved Content Section -->
-            <div id="approvedView" class="modal-content-section">
-                <button class="back-to-opts" onclick="showSection('optionsView')">
-                    <i class="fa-solid fa-arrow-left"></i> पछाडि फर्कनुहोस्
-                </button>
-                <div id="approvedContainer">
-                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); padding: 20px 0;">
-                        <i class="fa-solid fa-circle-notch fa-spin"></i> डाटा लोड हुँदैछ...
-                    </p>
-                </div>
-            </div>
-
-            <!-- STEP 3: Option 2 - Submit Form Section -->
-            <div id="submitView" class="modal-content-section">
-                <button class="back-to-opts" onclick="showSection('optionsView')">
-                    <i class="fa-solid fa-arrow-left"></i> पछाडि फर्कनुहोस्
-                </button>
-                <form id="submissionForm">
-                    <div class="form-group">
-                        <label>तपाईंको नाम *</label>
-                        <input type="text" id="userName" required placeholder="पूरा नाम लेख्नुहोस्">
-                    </div>
-                    <div class="form-group">
-                        <label>प्रकार छान्नुहोस् *</label>
-                        <select id="contentType" required>
-                            <option value="कविता">कविता</option>
-                            <option value="भनाइ">भनाइ</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>शीर्षक (वैकल्पिक)</label>
-                        <input type="text" id="contentTitle" placeholder="शीर्षक दिनुहोस्">
-                    </div>
-                    <div class="form-group">
-                        <label>सामग्री *</label>
-                        <textarea id="contentBody" rows="3" required placeholder="यहाँ आफ्ना भनाइ वा कविता लेख्नुहोस्..."></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">पठाउनुहोस्</button>
-                    <div id="status-msg"></div>
-                </form>
-            </div>
-
-        </div>
-    </div>
+    <!-- App Container -->
+    <div id="postsContainer"></div>
 
     <script>
-        // Correct Google Apps Script Web App URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWP5ONKPBIqfgSd4t5zrTw9l6nW8DuwCU7pa_ZCREOeMtrMCOAEb29fXRGBYVRN9zV/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxP5Eu6vCrsUYjVuBiYRh-V6EhcSHaWeZ-i-lin6OOZBYlts0rgfauldsmDN9nYKCsJ/exec"; // तपाईंको Script URL यहाँ राख्नुहोस्
 
-        function openModal() {
-            const modal = document.getElementById('customModal');
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 10);
-            showSection('optionsView');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('customModal');
-            modal.classList.remove('active');
-            setTimeout(() => { modal.style.display = 'none'; }, 300);
-        }
-
-        function closeModalOnOverlay(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                closeModal();
-            }
-        }
-
-        function showSection(sectionId) {
-            document.getElementById('optionsView').style.display = 'none';
-            document.querySelectorAll('.modal-content-section').forEach(sec => sec.classList.remove('active'));
-
-            if(sectionId === 'optionsView') {
-                document.getElementById('optionsView').style.display = 'block';
-            } else {
-                document.getElementById(sectionId).classList.add('active');
-                if(sectionId === 'approvedView') loadApprovedPosts();
-            }
-        }
-
+        // १. Approved पोष्टहरू ल्याउने र Views र Shares सहित देखाउने
         async function loadApprovedPosts() {
-            const container = document.getElementById('approvedContainer');
+            const container = document.getElementById('postsContainer');
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=getApproved`);
                 const posts = await res.json();
+                
                 if (!posts || posts.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); padding: 20px 0;">कुनै पनि स्वीकृत पोस्ट भेटिएन।</p>';
+                    container.innerHTML = '<p style="text-align:center;">कुनै पनि स्वीकृत सामग्री भेटिएन।</p>';
                     return;
                 }
+
                 let html = '';
                 posts.forEach(post => {
                     html += `
-                        <div class="post-card">
-                            <span class="post-header-badge">${post.type} ${post.title ? '• ' + post.title : ''}</span>
+                        <div class="post-card" id="card-${post.id}">
+                            <div class="post-header">
+                                <span class="post-badge">${post.type}</span>
+                                <div class="post-stats">
+                                    <span><i class="fa-solid fa-eye"></i> <span id="view-${post.id}">${post.views}</span> Views</span>
+                                    <span><i class="fa-solid fa-share-nodes"></i> <span id="share-${post.id}">${post.shares}</span> Shares</span>
+                                </div>
+                            </div>
+                            ${post.title ? `<div class="post-title">${post.title}</div>` : ''}
                             <div class="post-text">${post.content}</div>
-                            <div class="post-author">- ${post.name}</div>
+                            <div class="post-footer">
+                                <div class="author-pill">
+                                    <i class="fa-solid fa-user-pen"></i> - ${post.author}
+                                </div>
+                                <button class="share-btn" onclick="sharePost('${post.id}', '${post.title || post.type}', '${post.author}')">
+                                    <i class="fa-solid fa-share"></i> Share
+                                </button>
+                            </div>
                         </div>
                     `;
+                    
+                    // स्क्रोल गरेर कार्ड हेर्दा Automatic View Count गर्ने Logic
+                    trackView(post.id);
                 });
                 container.innerHTML = html;
             } catch (err) {
-                container.innerHTML = '<p style="text-align: center; font-size: 0.85rem; color: #ef4444; padding: 20px 0;">डाटा लोड गर्दा समस्या आयो।</p>';
+                container.innerHTML = '<p style="text-align:center; color:red;">डाटा लोड गर्न सकिएन।</p>';
             }
         }
 
-        document.getElementById('submissionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const msg = document.getElementById('status-msg');
-            
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> पठाउँदैछ...';
-            msg.innerText = '';
+        // २. Real View Tracker
+        function trackView(postId) {
+            fetch(`${SCRIPT_URL}?action=incrementView&id=${postId}`);
+        }
 
-            const payload = {
-                action: 'submit',
-                name: document.getElementById('userName').value,
-                type: document.getElementById('contentType').value,
-                title: document.getElementById('contentTitle').value,
-                content: document.getElementById('contentBody').value
+        // ३. Dynamic Share Tracker & Native Share Popup
+        async function sharePost(postId, title, author) {
+            const shareData = {
+                title: title,
+                text: `"${title}" - ${author} को उत्कृष्ट रचना पढ्नुहोस्।`,
+                url: window.location.href
             };
 
             try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                msg.style.color = '#16a34a';
-                msg.innerText = '✓ सफलतापूर्वक पठाइयो!';
-                document.getElementById('submissionForm').reset();
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert("Link Copied to Clipboard!");
+                }
+                
+                // Share Count बढाउने API Call
+                fetch(`${SCRIPT_URL}?action=incrementShare&id=${postId}`);
+                
+                // UI मा सँगै संख्या बढाउने
+                const shareElem = document.getElementById(`share-${postId}`);
+                if (shareElem) shareElem.innerText = parseInt(shareElem.innerText) + 1;
+
             } catch (err) {
-                msg.style.color = '#ef4444';
-                msg.innerText = 'त्रुटि भयो! पुनः प्रयास गर्नुहोस्।';
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'पठाउनुहोस्';
+                console.log('Share canceled');
             }
-        });
+        }
+
+        // ४. Form Submission Logic (माथिको Form बाट डाटा पठाउन)
+        async function submitPoetry(formData) {
+            const payload = {
+                action: 'submit',
+                type: formData.type, // कविता, भनाइ, गजल, मुक्तक आदि
+                title: formData.title,
+                author: formData.author,
+                content: formData.content
+            };
+
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            alert('तपाईंको रचना समीक्षाका लागि पठाइयो। स्वीकृत भएपछि यहाँ प्रकाशित हुनेछ!');
+        }
+
+        // लोड हुँदा पोष्टहरू देखाउने
+        loadApprovedPosts();
     </script>
 </body>
 </html>
