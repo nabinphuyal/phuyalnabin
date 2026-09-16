@@ -478,7 +478,7 @@
             </div>
 
             <div class="poem-footer">
-                <a href="https://phuyalnabin.com.np/#contact" target="_blank" class="brp-link">
+                <a href="https://phuyalnabin.com.np/#about" target="_blank" class="brp-link">
                     <img src="Kanxo.png" alt="Nabin kanxo" class="author-img">
                     <span class="author-name-btn">- नवीन फुयल <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></span>
                 </a>
@@ -508,7 +508,7 @@
                 <button class="close-modal-btn" onclick="toggleModal(false)"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-options">
-                <!-- Option 1: Links to humber.html -->
+                <!-- Option 1: Links to humber.html (यहाँ हुनुहोस् को लागि) -->
                 <a href="humber.html" class="modal-opt-btn">
                     <i class="fa-solid fa-book-open icon-box"></i>
                     <span>यहाँ राखिएका सबै कविता र भनाइहरू हेर्नुहोस्</span>
@@ -527,28 +527,43 @@
         // 👇 यहाँ तपाईंको GOOGLE APPS SCRIPT WEB APP URL PASTE गर्नुहोस 👇
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9WCx9sxWS9mUFNJs3-IA5U7Clnf0MizmxXHJB8wMj8Gwcnw1Ad7QXU9BYLphNXioTFQ/exec";
 
-        // Load Real View Count On Page Load
+        // Load Real View Count On Page Load (दुवै कविताको लागि)
         async function recordViewAndFetchData() {
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=view&id=long`);
-                const data = await res.json();
+                // Long poem view count
+                const resLong = await fetch(`${SCRIPT_URL}?action=view&id=long`);
+                const dataLong = await resLong.json();
+                document.getElementById('views-long').innerText = dataLong.long_views;
+                document.getElementById('shares-long').innerText = dataLong.long_shares;
 
-                document.getElementById('views-long').innerText = data.long_views;
-                document.getElementById('shares-long').innerText = data.long_shares;
-                document.getElementById('views-short').innerText = data.short_views;
-                document.getElementById('shares-short').innerText = data.short_shares;
+                // Short poem view count
+                const resShort = await fetch(`${SCRIPT_URL}?action=view&id=short`);
+                const dataShort = await resShort.json();
+                document.getElementById('views-short').innerText = dataShort.short_views;
+                document.getElementById('shares-short').innerText = dataShort.short_shares;
+
             } catch (err) {
                 console.error("Data Load Error:", err);
+                // यदि API ले काम गरेन भने ० देखाउने
+                document.getElementById('views-long').innerText = "0";
+                document.getElementById('shares-long').innerText = "0";
+                document.getElementById('views-short').innerText = "0";
+                document.getElementById('shares-short').innerText = "0";
             }
         }
 
-        // Real Share Counter Update
+        // Real Share Counter Update (दुवैको लागि)
         async function realShare(type, title) {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=share&id=${type}`);
                 const data = await res.json();
 
-                document.getElementById('shares-' + type).innerText = (type === 'long') ? data.long_shares : data.short_shares;
+                // अपडेट गरिएको सेयर काउन्ट देखाउने
+                if (type === 'long') {
+                    document.getElementById('shares-long').innerText = data.long_shares;
+                } else {
+                    document.getElementById('shares-short').innerText = data.short_shares;
+                }
 
                 if (navigator.share) {
                     navigator.share({ title: title, url: window.location.href });
