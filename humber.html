@@ -4,146 +4,317 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popularity - Nabin Phuyal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <!-- Google Fonts: Poppins & Mukta for Nepali Text -->
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: #f1f5f9; 
-            color: #333; 
-            min-height: 100vh;
-            padding: 15px;
+        :root {
+            --primary-bg: #111827;
+            --accent-yellow: #fbc02d;
+            --card-bg: #ffffff;
+            --body-bg: #f8fafc;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius-lg: 20px;
+            --radius-md: 12px;
         }
 
-        /* Demo Header with Hamburger Icon */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', 'Mukta', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body { 
+            background: var(--body-bg); 
+            color: var(--text-color); 
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        /* Navbar Styling */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #ffffff;
-            padding: 15px 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
         }
-        .navbar h1 { font-size: 18px; color: #1a2634; }
+
+        .navbar h1 { 
+            font-size: 1.1rem; 
+            font-weight: 700;
+            color: var(--primary-bg); 
+            letter-spacing: 0.5px;
+        }
+
         .menu-btn {
-            background: #1a2634;
-            color: #ffd700;
+            background: var(--primary-bg);
+            color: var(--accent-yellow);
             border: none;
-            padding: 8px 14px;
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
             cursor: pointer;
             font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+        }
+
+        .menu-btn:active {
+            transform: scale(0.92);
         }
 
         /* Bottom Sheet Modal Overlay */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
             display: none;
             justify-content: center;
             align-items: flex-end;
             z-index: 1000;
-            transition: 0.3s;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .modal-overlay.active { display: flex; }
 
-        /* Modal Container */
+        .modal-overlay.active { 
+            display: flex; 
+            opacity: 1;
+        }
+
+        /* Modal Box Container */
         .modal-box {
             background: #ffffff;
             width: 100%;
-            max-width: 500px;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            padding: 20px 20px 30px;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.2);
-            animation: slideUp 0.3s ease-out;
+            max-width: 480px;
+            border-top-left-radius: var(--radius-lg);
+            border-top-right-radius: var(--radius-lg);
+            padding: 24px 20px 32px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 85vh;
             overflow-y: auto;
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
         }
 
+        /* Header inside Modal */
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #f1f5f9;
-            margin-bottom: 15px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
-        .modal-header h3 { font-size: 16px; color: #1a2634; display: flex; align-items: center; gap: 8px; }
+
+        .modal-header h3 { 
+            font-size: 1rem; 
+            font-weight: 700;
+            color: var(--primary-bg); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+
         .close-modal-btn {
             background: #f1f5f9;
             border: none;
-            width: 32px; height: 32px;
+            width: 32px; 
+            height: 32px;
             border-radius: 50%;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        /* Modal Options (Photo Style) */
-        .option-btn {
-            width: 100%;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 14px 16px;
-            border-radius: 14px;
+            color: var(--text-muted);
             font-size: 14px;
-            font-weight: 600;
-            color: #1a2634;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            text-align: left;
-            transition: 0.2s;
+            justify-content: center;
+            transition: background 0.2s;
         }
-        .option-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
 
-        /* Content Sections inside Modal */
+        .close-modal-btn:hover {
+            background: #e2e8f0;
+            color: var(--primary-bg);
+        }
+
+        /* Navigation Buttons inside Modal */
+        .option-btn {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-align: left;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .option-btn i {
+            font-size: 1.1rem;
+            color: #d97706;
+            background: #fef3c7;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .option-btn:active, .option-btn:hover { 
+            background: #f8fafc; 
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        /* Modal Views Control */
         .modal-content-section { display: none; }
         .modal-content-section.active { display: block; }
 
         .back-to-opts {
             background: none;
             border: none;
-            color: #1a2634;
+            color: var(--text-muted);
             font-weight: 600;
-            font-size: 13px;
+            font-size: 0.85rem;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            transition: color 0.2s;
         }
 
-        /* Post Card & Form */
+        .back-to-opts:hover {
+            color: var(--primary-bg);
+        }
+
+        /* Card list inside Option 1 */
         .post-card {
-            background: #f8fafc;
-            border-left: 4px solid #ffd700;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            background: #ffffff;
+            border-left: 4px solid var(--accent-yellow);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-top: 1px solid #f1f5f9;
+            border-right: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .post-type { font-size: 11px; background: #1a2634; color: #ffd700; padding: 2px 6px; border-radius: 6px; font-weight: 600; }
-        .post-text { font-size: 13px; color: #334155; margin: 6px 0; white-space: pre-line; }
-        .post-author { font-size: 11px; font-weight: 700; text-align: right; color: #1a2634; }
 
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none;
+        .post-header-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            background: var(--primary-bg);
+            color: var(--accent-yellow);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
+
+        .post-text { 
+            font-size: 0.95rem; 
+            line-height: 1.7;
+            color: #334155; 
+            margin: 8px 0; 
+            white-space: pre-line; 
+        }
+
+        .post-author { 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            text-align: right; 
+            color: var(--primary-bg); 
+            margin-top: 8px;
+        }
+
+        /* Form Controls */
+        .form-group { 
+            margin-bottom: 14px; 
+        }
+
+        .form-group label { 
+            display: block; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: #475569; 
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%; 
+            padding: 12px 14px; 
+            border: 1px solid var(--border-color); 
+            border-radius: var(--radius-md); 
+            font-size: 0.9rem; 
+            outline: none;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--primary-bg);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
+        }
+
         .submit-btn {
-            width: 100%; background: #1a2634; color: #ffd700; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+            width: 100%; 
+            background: var(--primary-bg); 
+            color: var(--accent-yellow); 
+            border: none; 
+            padding: 14px; 
+            border-radius: var(--radius-md); 
+            font-size: 0.95rem;
+            font-weight: 700; 
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #status-msg {
+            text-align: center; 
+            font-size: 0.85rem; 
+            margin-top: 10px;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -152,20 +323,22 @@
     <!-- Sample Navbar -->
     <div class="navbar">
         <h1>Popularity</h1>
-        <button class="menu-btn" onclick="openModal()"><i class="fa-solid fa-bars"></i></button>
+        <button class="menu-btn" onclick="openModal()" aria-label="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </div>
 
     <!-- MAIN BOTTOM SHEET MODAL -->
-    <div class="modal-overlay" id="customModal">
+    <div class="modal-overlay" id="customModal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box">
             
             <!-- Modal Header -->
             <div class="modal-header">
-                <h3><i class="fa-solid fa-list-check" style="color: #ffd700;"></i> अप्सनहरू छान्नुहोस्</h3>
+                <h3><i class="fa-solid fa-layer-group" style="color: #d97706;"></i> अप्सनहरू छान्नुहोस्</h3>
                 <button class="close-modal-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- STEP 1: Main Menu Options (Like your Screenshot) -->
+            <!-- STEP 1: Main Menu Options -->
             <div id="optionsView">
                 <button class="option-btn" onclick="showSection('approvedView')">
                     <i class="fa-solid fa-book-open"></i>
@@ -180,15 +353,21 @@
 
             <!-- STEP 2: Option 1 - Approved Content Section -->
             <div id="approvedView" class="modal-content-section">
-                <button class="back-to-opts" onclick="showSection('optionsView')"><i class="fa-solid fa-arrow-left"></i> पछाडि फर्कनुहोस्</button>
+                <button class="back-to-opts" onclick="showSection('optionsView')">
+                    <i class="fa-solid fa-arrow-left"></i> पछाडि फर्कनुहोस्
+                </button>
                 <div id="approvedContainer">
-                    <p style="text-align: center; font-size: 12px; color: #64748b;">लोड हुँदैछ...</p>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); padding: 20px 0;">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> डाटा लोड हुँदैछ...
+                    </p>
                 </div>
             </div>
 
             <!-- STEP 3: Option 2 - Submit Form Section -->
             <div id="submitView" class="modal-content-section">
-                <button class="back-to-opts" onclick="showSection('optionsView')"><i class="fa-solid fa-arrow-left"></i> पछाडि फर्कनुहोस्</button>
+                <button class="back-to-opts" onclick="showSection('optionsView')">
+                    <i class="fa-solid fa-arrow-left"></i> पछाडि फर्कनुहोस्
+                </button>
                 <form id="submissionForm">
                     <div class="form-group">
                         <label>तपाईंको नाम *</label>
@@ -203,14 +382,14 @@
                     </div>
                     <div class="form-group">
                         <label>शीर्षक (वैकल्पिक)</label>
-                        <input type="text" id="contentTitle" placeholder="शीर्षक">
+                        <input type="text" id="contentTitle" placeholder="शीर्षक दिनुहोस्">
                     </div>
                     <div class="form-group">
                         <label>सामग्री *</label>
-                        <textarea id="contentBody" rows="3" required placeholder="यहाँ लेख्नुहोस्..."></textarea>
+                        <textarea id="contentBody" rows="3" required placeholder="यहाँ आफ्ना भनाइ वा कविता लेख्नुहोस्..."></textarea>
                     </div>
                     <button type="submit" class="submit-btn" id="submitBtn">पठाउनुहोस्</button>
-                    <div id="status-msg" style="text-align: center; font-size: 12px; margin-top: 8px;"></div>
+                    <div id="status-msg"></div>
                 </form>
             </div>
 
@@ -218,16 +397,26 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWP5ONKPBIqfgSd4t5zrTw9l6nW8DuwCU7pa_ZCREOeMtrMCOAEb29fXRGBYVRN9zV/exec";
-";
+        // Correct Google Apps Script Web App URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWP5ONKPBIqfgSd4t5zrTw9l6nW8DuwCU7pa_ZCREOeMtrMCOAEb29fXRGBYVRN9zV/exec";
 
         function openModal() {
-            document.getElementById('customModal').classList.add('active');
+            const modal = document.getElementById('customModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
             showSection('optionsView');
         }
 
         function closeModal() {
-            document.getElementById('customModal').classList.remove('active');
+            const modal = document.getElementById('customModal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                closeModal();
+            }
         }
 
         function showSection(sectionId) {
@@ -248,14 +437,14 @@
                 const res = await fetch(`${SCRIPT_URL}?action=getApproved`);
                 const posts = await res.json();
                 if (!posts || posts.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; font-size: 12px; color: #94a3b8;">कुनै पनि स्वीकृत पोस्ट छैन।</p>';
+                    container.innerHTML = '<p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); padding: 20px 0;">कुनै पनि स्वीकृत पोस्ट भेटिएन।</p>';
                     return;
                 }
                 let html = '';
                 posts.forEach(post => {
                     html += `
                         <div class="post-card">
-                            <span class="post-type">${post.type} ${post.title ? '- ' + post.title : ''}</span>
+                            <span class="post-header-badge">${post.type} ${post.title ? '• ' + post.title : ''}</span>
                             <div class="post-text">${post.content}</div>
                             <div class="post-author">- ${post.name}</div>
                         </div>
@@ -263,7 +452,7 @@
                 });
                 container.innerHTML = html;
             } catch (err) {
-                container.innerHTML = '<p style="text-align: center; font-size: 12px; color: #dc2626;">डाटा लोड भएन।</p>';
+                container.innerHTML = '<p style="text-align: center; font-size: 0.85rem; color: #ef4444; padding: 20px 0;">डाटा लोड गर्दा समस्या आयो।</p>';
             }
         }
 
@@ -271,8 +460,10 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('status-msg');
+            
             btn.disabled = true;
-            btn.innerText = 'पठाउँदैछ...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> पठाउँदैछ...';
+            msg.innerText = '';
 
             const payload = {
                 action: 'submit',
@@ -293,8 +484,8 @@
                 msg.innerText = '✓ सफलतापूर्वक पठाइयो!';
                 document.getElementById('submissionForm').reset();
             } catch (err) {
-                msg.style.color = '#dc2626';
-                msg.innerText = 'त्रुटि भयो!';
+                msg.style.color = '#ef4444';
+                msg.innerText = 'त्रुटि भयो! पुनः प्रयास गर्नुहोस्।';
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'पठाउनुहोस्';
@@ -303,4 +494,3 @@
     </script>
 </body>
 </html>
-        
