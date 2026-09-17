@@ -4,12 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Nabin Phuyal" />
+    <meta name="description" content="Nabin Phuyal - Nepali poet, writer and web designer from Bhojpur, Nepal. Explore poetry, famous quotes and connect." />
+    <meta name="keywords" content="Nabin Phuyal, Nabin Kanxo, Nepali poet, Bhojpur, Sahitya, Quotes" />
+    <meta property="og:title" content="Nabin Phuyal - Official Website" />
+    <meta property="og:description" content="Welcome to the official website of Nabin Phuyal." />
+    <meta property="og:type" content="website" />
     <title>Nabin Phuyal - Official Website</title>
-    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
-    
+
     <style>
         :root {
             --primary: #6366f1;
@@ -17,312 +23,427 @@
             --secondary: #0ea5e9;
             --accent: #f59e0b;
             --bg-dark: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-card: rgba(30, 41, 59, 0.65);
             --text-light: #f8fafc;
             --text-dim: #94a3b8;
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
             --gradient-bg: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
             --glass-border: 1px solid rgba(255, 255, 255, 0.125);
+            --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.5);
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            scroll-behavior: smooth; 
+        body.light-mode {
+            --bg-dark: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --text-light: #0f172a;
+            --text-dim: #475569;
+            --gradient-bg: linear-gradient(180deg, #e0e7ff 0%, #f8fafc 50%, #e0e7ff 100%);
+            --glass-border: 1px solid rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 20px 45px rgba(99, 102, 241, 0.15);
         }
 
-        body { 
-            font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif; 
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        html { scroll-padding-top: 90px; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
             background: var(--gradient-bg);
-            color: var(--text-light); 
-            line-height: 1.7; 
+            background-attachment: fixed;
+            color: var(--text-light);
+            line-height: 1.7;
             overflow-x: hidden;
-            overflow-y: auto;
             min-height: 100vh;
-            padding-bottom: 70px; /* Space for fixed social bar */
+            padding-bottom: 70px;
+            transition: background 0.5s ease, color 0.5s ease;
         }
 
-        /* ----- GEMINI STYLE HAMBURGER 3-LINE MENU ----- */
-        .hamburger-menu-container {
-            position: fixed;
-            top: 18px;
-            left: 18px;
-            z-index: 1001;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 9px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #6366f1, #ec4899);
+            border-radius: 10px;
         }
-        
-        .hamburger-btn { 
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #4f46e5, #db2777); }
+
+        /* Aurora background */
+        .aurora {
+            position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .aurora span {
+            position: absolute; border-radius: 50%;
+            filter: blur(90px); opacity: 0.35;
+            animation: floatAurora 18s ease-in-out infinite;
+        }
+        .aurora span:nth-child(1) { width: 380px; height: 380px; background: #6366f1; top: -80px; left: -80px; }
+        .aurora span:nth-child(2) { width: 420px; height: 420px; background: #ec4899; bottom: -100px; right: -100px; animation-delay: -6s; }
+        .aurora span:nth-child(3) { width: 320px; height: 320px; background: #0ea5e9; top: 40%; left: 45%; animation-delay: -12s; }
+        body.light-mode .aurora span { opacity: 0.22; }
+
+        @keyframes floatAurora {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.1); }
+            66% { transform: translate(-40px, 60px) scale(0.95); }
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed; inset: 0; z-index: 10000;
+            background: #0f172a;
+            display: grid; place-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; }
+        .loader-ring {
+            width: 60px; height: 60px; border-radius: 50%;
+            border: 4px solid rgba(99, 102, 241, 0.2);
+            border-top-color: #6366f1; border-right-color: #ec4899;
+            animation: spin 0.9s linear infinite;
+        }
+        .loader-text {
+            position: absolute; margin-top: 100px;
+            font-size: 13px; letter-spacing: 4px; color: #94a3b8;
+            text-transform: uppercase; animation: pulseText 1.5s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulseText { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+        /* ---------- PRO HAMBURGER MENU ---------- */
+        .hamburger-menu-container {
+            position: fixed; top: 18px; left: 18px; z-index: 1001;
+        }
+
+        .hamburger-btn {
             background: rgba(15, 23, 42, 0.85);
-            color: var(--text-light); 
-            border-radius: 12px;
-            width: 44px;
-            height: 44px;
-            cursor: pointer; 
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
+            border-radius: 14px;
+            width: 48px; height: 48px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 5px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
+            position: relative;
+        }
+        body.light-mode .hamburger-btn { background: rgba(255, 255, 255, 0.9); border-color: rgba(15,23,42,0.1); }
+        body.light-mode .hamburger-line { background: #0f172a; }
+
+        .hamburger-btn:hover {
+            background: rgba(99, 102, 241, 0.35);
+            border-color: rgba(99, 102, 241, 0.6);
+            transform: scale(1.05);
         }
 
-        .hamburger-btn:hover { 
-            background: rgba(99, 102, 241, 0.3);
-            border-color: rgba(99, 102, 241, 0.5);
+        .hamburger-btn::after {
+            content: ''; position: absolute; inset: -4px;
+            border-radius: 18px; border: 2px solid transparent;
+            background: var(--gradient-1) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: opacity 0.4s;
         }
+        .hamburger-btn:hover::after { opacity: 0.6; }
 
         .hamburger-line {
-            width: 22px;
-            height: 2px;
-            background: #ffffff;
+            width: 22px; height: 2px; background: #ffffff;
             border-radius: 4px;
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .hamburger-btn.active .hamburger-line:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
+        .hamburger-btn.active { background: rgba(99, 102, 241, 0.4); }
+        .hamburger-btn.active .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger-btn.active .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Pro menu panel */
+        .menu-backdrop {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            opacity: 0; visibility: hidden;
+            transition: all 0.4s ease;
         }
-        .hamburger-btn.active .hamburger-line:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger-btn.active .hamburger-line:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
+        .menu-backdrop.show { opacity: 1; visibility: visible; }
 
         .menu-options {
             display: none;
-            position: absolute;
-            top: 55px;
-            left: 0;
-            background: rgba(15, 23, 42, 0.95);
+            position: absolute; top: 62px; left: 0;
+            background: rgba(15, 23, 42, 0.96);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            width: 240px;
-            border-radius: 16px;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+            width: 280px;
+            border-radius: 20px;
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.65);
             overflow: hidden;
             z-index: 1002;
-            animation: menuSlideIn 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 8px 0;
+            padding: 10px;
+            transform-origin: top left;
+        }
+        body.light-mode .menu-options { background: rgba(255,255,255,0.98); border-color: rgba(15,23,42,0.08); }
+
+        .menu-options.show {
+            display: block;
+            animation: menuPop 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes menuPop {
+            0% { opacity: 0; transform: scale(0.9) translateY(-10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        @keyframes menuSlideIn {
-            0% { opacity: 0; transform: translateY(-10px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .menu-header {
+            padding: 12px 14px 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 6px;
         }
+        body.light-mode .menu-header { border-bottom-color: rgba(15,23,42,0.06); }
 
-        .menu-options button { 
-            width: 100%; 
-            padding: 12px 18px;
-            border: none; 
-            background: transparent; 
-            cursor: pointer; 
-            text-align: left; 
-            font-size: 14.5px; 
-            transition: all 0.25s ease; 
+        .menu-options button {
+            width: 100%;
+            padding: 13px 16px;
+            border: none; background: transparent;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14.5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 14px;
             color: var(--text-light);
             font-weight: 600;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .menu-options button:hover { 
-            background: rgba(99, 102, 241, 0.25);
-            color: #ffffff; 
-            padding-left: 22px;
+        .menu-options button .menu-icon {
+            width: 34px; height: 34px;
+            display: grid; place-items: center;
+            border-radius: 10px;
+            font-size: 15px;
+            background: rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
-        .menu-options button i {
-            font-size: 16px;
-            width: 20px;
+        .menu-options button:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateX(4px);
+        }
+        .menu-options button:hover .menu-icon {
+            background: var(--gradient-1);
+            transform: rotate(-8deg) scale(1.05);
+        }
+        .menu-options button:hover .menu-icon i { color: #fff !important; }
+
+        .menu-options button .menu-label {
+            display: flex; flex-direction: column; gap: 1px;
+        }
+        .menu-options button .menu-label small {
+            font-size: 11px; color: var(--text-dim); font-weight: 500;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed; top: 18px; right: 18px; z-index: 1001;
+            width: 48px; height: 48px; border-radius: 14px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            cursor: pointer;
+            display: grid; place-items: center;
+            font-size: 18px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.35s ease;
+        }
+        .theme-toggle:hover { transform: rotate(20deg) scale(1.05); background: rgba(99,102,241,0.4); }
+        body.light-mode .theme-toggle { background: rgba(255,255,255,0.9); color: #0f172a; border-color: rgba(15,23,42,0.1); }
+
+        /* ---------- HEADER ---------- */
+        header {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            color: white;
+            padding: 18px 10px;
             text-align: center;
-        }
-
-        /* ----- HEADER ----- */
-        header { 
-            background: rgba(15, 23, 42, 0.7); 
-            backdrop-filter: blur(15px);
-            color: white; 
-            padding: 15px 10px; 
-            text-align: center; 
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3); 
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            position: sticky; top: 0; z-index: 900;
             border-bottom: var(--glass-border);
         }
+        body.light-mode header { background: rgba(255,255,255,0.75); color: #0f172a; }
 
-        .header-container { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 15px; 
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
+        .header-container {
+            display: flex; align-items: center; justify-content: center;
+            gap: 15px; flex-wrap: wrap;
+            max-width: 1200px; margin: 0 auto;
         }
 
         .interesting-text {
-            font-size: 1.8rem;
+            font-size: clamp(1rem, 2.4vw, 1.7rem);
             font-weight: 800;
-            background: var(--gradient-1);
+            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1);
+            background-size: 300% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: 1px;
+            animation: gradientMove 5s linear infinite;
+            min-height: 1.4em;
         }
+        @keyframes gradientMove { to { background-position: 300% center; } }
+
+        .cursor-blink {
+            display: inline-block; width: 3px; height: 1em;
+            background: var(--accent);
+            margin-left: 3px; vertical-align: middle;
+            animation: blink 0.9s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
 
         .flag-wrapper { perspective: 1000px; }
-
         .animated-flag {
-            width: 38px;
-            height: auto;
-            display: block;
+            width: 38px; height: auto; display: block;
             animation: waveFlag 3s infinite ease-in-out;
             transform-origin: left center;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
         }
-
         @keyframes waveFlag {
             0%, 100% { transform: rotate(0deg) skewY(0deg); }
             25% { transform: rotate(5deg) skewY(3deg); }
             75% { transform: rotate(-5deg) skewY(-3deg); }
         }
 
-        .national-simbol { 
-            width: 70px; 
-            height: auto; 
-            display: block;
-        }
+        .national-simbol { width: 70px; height: auto; display: block; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
 
-        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 12px; gap: 10px; flex-wrap: wrap; }
-        nav ul li a { 
-            color: var(--text-dim); 
-            text-decoration: none; 
-            font-size: 15px; 
-            font-weight: 600; 
-            transition: 0.3s; 
-            padding: 6px 14px; 
-            border-radius: 20px; 
+        nav ul {
+            display: flex; justify-content: center; list-style: none;
+            margin-top: 12px; gap: 6px; flex-wrap: wrap;
         }
-        nav ul li a:hover { 
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1); 
+        nav ul li a {
+            color: var(--text-dim); text-decoration: none;
+            font-size: 14.5px; font-weight: 600;
+            transition: 0.3s; padding: 6px 16px;
+            border-radius: 20px; position: relative;
         }
+        body.light-mode nav ul li a { color: #475569; }
+        nav ul li a:hover {
+            color: var(--text-light);
+            background: rgba(99, 102, 241, 0.15);
+        }
+        body.light-mode nav ul li a:hover { color: #0f172a; }
 
-        /* ----- HERO SECTION ----- */
-        .hero { 
-            min-height: 70vh; 
+        /* ---------- HERO ---------- */
+        .hero {
+            min-height: 70vh;
             background: var(--bg-card);
             backdrop-filter: blur(16px);
-            margin: 25px auto; 
+            margin: 25px auto;
             max-width: 1100px;
-            border-radius: 30px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-around; 
-            padding: 40px 20px; 
-            flex-wrap: wrap; 
-            gap: 30px;
+            border-radius: 30px;
+            display: flex; align-items: center; justify-content: space-around;
+            padding: 40px 20px; flex-wrap: wrap; gap: 30px;
             border: var(--glass-border);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
         }
 
-        .overtake-wrapper { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            flex-wrap: wrap; 
-            justify-content: center; 
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(99,102,241,0.35), transparent 70%);
+            border-radius: 50%; pointer-events: none;
+            animation: pulseGlow 6s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .overtake-wrapper {
+            display: flex; align-items: center; gap: 8px;
+            flex-wrap: wrap; justify-content: center;
             margin-top: 15px;
             background: rgba(15, 23, 42, 0.6);
-            padding: 10px 20px;
-            border-radius: 50px;
+            padding: 10px 20px; border-radius: 50px;
             border: var(--glass-border);
+            backdrop-filter: blur(10px);
         }
+        body.light-mode .overtake-wrapper { background: rgba(255,255,255,0.7); }
         .speech { font-size: 16px; font-weight: 600; color: #4ade80; }
         .s { font-size: 16px; font-weight: 800; color: #facc15; }
         .d { font-size: 16px; font-weight: 800; color: #f87171; }
 
-        .flag-container { display: flex; flex-direction: column; align-items: center; }
-        .nepal-flag { 
-            width: 180px; 
-            height: auto; 
-            margin-bottom: 10px; 
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); 
+        .flag-container { display: flex; flex-direction: column; align-items: center; z-index: 1; }
+        .nepal-flag {
+            width: 180px; height: auto; margin-bottom: 10px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            animation: floatMap 5s ease-in-out infinite;
+        }
+        @keyframes floatMap {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
         }
 
-        .hero-image-container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            position: relative;
-            width: 100%;
-            max-width: 320px;
+        .hero-image-container {
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; width: 100%; max-width: 320px; z-index: 1;
         }
 
         .profile-wrapper {
             position: relative;
-            width: 100%;
-            max-width: 280px;
-            aspect-ratio: 1 / 1;
-            border-radius: 26px;
-            overflow: hidden;
+            width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
+            border-radius: 26px; overflow: hidden;
             border: 3px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .profile-wrapper:hover {
+            box-shadow: 0 25px 55px rgba(99,102,241,0.5);
+            border-color: rgba(99,102,241,0.6);
         }
 
         .profile-wrapper .bg-blur {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; inset: 0;
             background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&h=800&fit=crop');
-            background-size: cover;
-            background-position: center;
-            filter: blur(5px);
-            transform: scale(1.1);
-            z-index: 0;
+            background-size: cover; background-position: center;
+            filter: blur(5px); transform: scale(1.1); z-index: 0;
         }
 
         .profile-wrapper .profile-pic {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-            border-radius: 22px;
+            position: relative; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1; border-radius: 22px;
         }
 
         .profile-wrapper .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: absolute; bottom: 0; left: 0; right: 0;
             height: 35%;
             background: linear-gradient(to top, rgba(15,23,42,0.8), transparent);
-            z-index: 2;
-            pointer-events: none;
+            z-index: 2; pointer-events: none;
         }
 
-        .hero-author-name { 
-            margin-top: 20px; 
-            font-size: 24px; 
-            font-weight: 800; 
-            background: linear-gradient(90deg, #ffffff, var(--text-dim));
+        .hero-author-name {
+            margin-top: 20px;
+            font-size: 24px; font-weight: 800;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
-        /* ----- QUOTES CAROUSEL STYLES ----- */
+        /* ---------- QUOTES CAROUSEL ---------- */
         .quotes-slider-section {
             max-width: 850px;
             margin: -10px auto 40px auto;
@@ -330,402 +451,430 @@
             background: var(--bg-card);
             backdrop-filter: blur(16px);
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: var(--shadow-lg);
             border: var(--glass-border);
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
+
         .quotes-slider-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent);
+            font-size: 16px; font-weight: 700; color: var(--accent);
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-transform: uppercase;
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
+        .quotes-slider-title i { animation: starPulse 2s ease-in-out infinite; }
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
         .quote-card-container {
-            min-height: 110px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
+            min-height: 130px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px; position: relative;
         }
+
         .quote-slide {
-            display: none;
-            animation: fadeInQuote 0.8s ease-in-out;
+            display: none; position: relative;
         }
-        .quote-slide.active {
-            display: block;
-        }
+        .quote-slide.active { display: block; animation: fadeInQuote 0.8s ease-in-out; }
+
         .quote-text {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--text-light);
-            line-height: 1.6;
-            font-style: italic;
+            font-size: 18px; font-weight: 500;
+            color: var(--text-light); line-height: 1.7;
+            font-style: italic; position: relative;
         }
+        .quote-text::before, .quote-text::after {
+            content: '"'; font-size: 32px; color: var(--primary);
+            font-family: Georgia, serif; line-height: 0;
+            position: absolute; opacity: 0.6;
+        }
+        .quote-text::before { left: -12px; top: 6px; }
+        .quote-text::after { right: -12px; bottom: -12px; }
+
         .quote-author {
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--secondary);
-            text-transform: uppercase;
+            margin-top: 12px; font-size: 14px; font-weight: 700;
+            color: var(--secondary); text-transform: uppercase;
             letter-spacing: 1px;
         }
         @keyframes fadeInQuote {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .more-quotes-btn {
+
+        .quote-dots {
+            display: flex; justify-content: center; gap: 8px;
             margin-top: 15px;
+        }
+        .quote-dots span {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.4s ease; cursor: pointer;
+        }
+        body.light-mode .quote-dots span { background: rgba(15,23,42,0.15); }
+        .quote-dots span.active {
+            width: 24px; border-radius: 6px;
             background: var(--gradient-1);
+        }
+
+        .more-quotes-btn {
+            margin-top: 18px;
+            background: var(--gradient-1);
+            background-size: 200% auto;
             color: #ffffff;
-            padding: 10px 24px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s;
+            padding: 11px 26px; border: none;
+            border-radius: 50px; cursor: pointer;
+            font-weight: 600; font-size: 13px;
+            transition: all 0.4s ease;
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            display: inline-flex; align-items: center; gap: 8px;
         }
         .more-quotes-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.5);
+            background-position: right center;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(236, 72, 153, 0.5);
         }
+        .more-quotes-btn:hover i { transform: translateX(4px); }
+        .more-quotes-btn i { transition: transform 0.3s ease; }
 
-        /* ----- SECTIONS GENERAL ----- */
-        section { 
-            max-width: 950px; 
-            margin: 40px auto; 
-            padding: 40px 25px; 
-            background: var(--bg-card); 
+        /* ---------- SECTIONS ---------- */
+        section {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 40px 25px;
+            background: var(--bg-card);
             backdrop-filter: blur(16px);
-            border-radius: 30px; 
-            text-align: center; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
             border: var(--glass-border);
+            opacity: 0; transform: translateY(35px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        section.reveal { opacity: 1; transform: translateY(0); }
 
         section h2 {
-            font-size: 28px;
-            font-weight: 800;
+            font-size: 28px; font-weight: 800;
             margin-bottom: 15px;
-            background: linear-gradient(90deg, #ffffff, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(90deg, #6366f1, #0ea5e9);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* ----- FIXED BOTTOM SOCIAL LINKS (VISIBLE ON EVERY SCREEN) ----- */
+        /* ---------- FIXED SOCIAL BAR ---------- */
         .fixed-social-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            position: fixed; bottom: 0; left: 0; width: 100%;
             background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 18px;
-            padding: 10px 0;
-            z-index: 999;
+            display: flex; justify-content: center; align-items: center;
+            gap: 18px; padding: 10px 0; z-index: 999;
             border-top: var(--glass-border);
             box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
         }
+        body.light-mode .fixed-social-bar { background: rgba(255,255,255,0.95); box-shadow: 0 -5px 25px rgba(99,102,241,0.15); }
 
-        .fixed-social-bar a { 
-            color: var(--text-light); 
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
+        .fixed-social-bar a {
+            color: var(--text-light);
+            width: 42px; height: 42px; border-radius: 50%;
             background: rgba(255,255,255,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             border: var(--glass-border);
-            transition: all 0.3s ease; 
-            text-decoration: none;
-            font-size: 18px;
+            transition: all 0.3s ease;
+            text-decoration: none; font-size: 18px;
+            position: relative;
+        }
+        body.light-mode .fixed-social-bar a { color: #0f172a; background: rgba(15,23,42,0.05); }
+
+        .fixed-social-bar a:hover {
+            background: var(--primary); color: #ffffff;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 22px rgba(99,102,241,0.5);
         }
 
-        .fixed-social-bar a:hover { 
-            background: var(--primary);
-            color: #ffffff; 
-            transform: translateY(-3px); 
-        }
-
-        .contact-info { 
-            text-align: left; 
-            display: inline-block; 
-            margin-top: 15px; 
-            width: 100%; 
-            max-width: 450px; 
+        /* Contact */
+        .contact-info {
+            text-align: left; display: inline-block; margin-top: 15px;
+            width: 100%; max-width: 450px;
             background: rgba(15, 23, 42, 0.5);
-            padding: 25px;
-            border-radius: 20px;
+            padding: 25px; border-radius: 20px;
             border: var(--glass-border);
         }
+        body.light-mode .contact-info { background: rgba(255,255,255,0.7); }
 
-        .contact-info p {
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
+        .contact-info p { margin-bottom: 12px; font-size: 15px; }
+        .contact-info p i { color: var(--primary); margin-right: 6px; }
 
         .location-wrapper { margin-top: 12px; position: relative; }
-        .loc-trigger { 
-            color: var(--secondary); 
-            font-weight: 700; 
-            cursor: pointer; 
-            text-decoration: underline; 
+        .loc-trigger {
+            color: var(--secondary); font-weight: 700; cursor: pointer;
+            text-decoration: underline; text-decoration-style: dotted;
+            text-underline-offset: 3px;
+            transition: color 0.3s;
         }
-        
-        .loc-modal { 
-            display: none; 
-            background: rgba(15, 23, 42, 0.95); 
-            border: var(--glass-border); 
-            padding: 15px; 
-            border-radius: 16px; 
+        .loc-trigger:hover { color: var(--accent); }
+
+        .loc-modal {
+            display: none;
+            background: rgba(15, 23, 42, 0.95);
+            border: var(--glass-border);
+            padding: 15px; border-radius: 16px;
             margin-top: 12px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            animation: menuPop 0.35s ease;
         }
+        body.light-mode .loc-modal { background: rgba(255,255,255,0.98); }
         .loc-modal a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: flex; align-items: center; gap: 8px;
             background: rgba(255,255,255,0.05);
-            margin: 8px 0;
-            padding: 10px 14px;
-            text-decoration: none;
-            color: var(--text-light);
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            border: var(--glass-border);
+            margin: 8px 0; padding: 10px 14px;
+            text-decoration: none; color: var(--text-light);
+            border-radius: 10px; font-weight: 600;
+            font-size: 14px; border: var(--glass-border);
+            transition: all 0.3s ease;
         }
-        .loc-modal a:hover { 
-            background: var(--primary); 
-            color: white; 
-        }
+        body.light-mode .loc-modal a { background: rgba(15,23,42,0.04); }
+        .loc-modal a:hover { background: var(--primary); color: white; transform: translateX(4px); }
         .credit-text { font-size: 12px; color: var(--text-dim); font-style: italic; margin-top: 8px; }
 
-        /* ----- FOOTER ----- */
-        footer { 
-            background: rgba(15, 23, 42, 0.9); 
-            color: var(--text-dim); 
-            padding: 20px 0 25px 0; 
-            margin-top: 40px; 
-            text-align: center; 
-            border-top: var(--glass-border);
-            font-size: 14px;
+        /* ---------- FOOTER ---------- */
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-dim);
+            padding: 20px 0 25px 0;
+            margin-top: 40px; text-align: center;
+            border-top: var(--glass-border); font-size: 14px;
         }
+        body.light-mode footer { background: rgba(255,255,255,0.85); }
 
-        /* ----- CHATBOT ----- */
+        /* ---------- CHATBOT ---------- */
         #nbn-chat-wrapper {
-            position: fixed;
-            bottom: 75px;
-            right: 25px;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(15px);
+            position: fixed; bottom: 75px; right: 25px; z-index: 1000;
+            opacity: 0; visibility: hidden; transform: translateY(15px);
             transition: all 0.4s ease;
         }
-        
-        #nbn-chat-wrapper.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
+        #nbn-chat-wrapper.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
         #nbn-chat-btn {
             background: var(--gradient-1);
-            color: white; 
-            padding: 12px 20px; 
-            border-radius: 50px;
-            cursor: pointer; 
+            background-size: 200% auto;
+            color: white; padding: 12px 20px;
+            border-radius: 50px; cursor: pointer;
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-            font-weight: 600; 
-            font-size: 13px;
-            display: flex; 
-            align-items: center; 
-            gap: 8px;
+            font-weight: 600; font-size: 13px;
+            display: flex; align-items: center; gap: 8px;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.35s ease;
+            animation: glowPulse 2.5s ease-in-out infinite;
+        }
+        #nbn-chat-btn:hover { background-position: right center; transform: translateY(-3px) scale(1.03); }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
+            50% { box-shadow: 0 8px 35px rgba(236,72,153,0.6); }
         }
 
         #nbn-chat-window {
-            position: fixed; 
-            bottom: 135px; 
-            right: 25px;
-            width: 320px; 
-            height: 450px; 
+            position: fixed; bottom: 135px; right: 25px;
+            width: 320px; height: 450px;
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
-            border-radius: 24px; 
+            border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            display: none; 
-            flex-direction: column; 
-            z-index: 1000; 
-            overflow: hidden;
-            border: var(--glass-border); 
-            font-family: inherit;
+            display: none; flex-direction: column;
+            z-index: 1000; overflow: hidden;
+            border: var(--glass-border); font-family: inherit;
         }
+        body.light-mode #nbn-chat-window { background: rgba(255,255,255,0.98); }
 
-        #nbn-chat-header { 
-            background: rgba(30, 41, 59, 0.8); 
-            color: white; 
-            padding: 15px 18px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+        #nbn-chat-header {
+            background: rgba(30, 41, 59, 0.8);
+            color: white; padding: 15px 18px;
+            display: flex; justify-content: space-between; align-items: center;
             border-bottom: var(--glass-border);
         }
-        
-        #nbn-chat-body { 
-            flex: 1; 
-            padding: 15px; 
-            overflow-y: auto; 
-            background: rgba(15, 23, 42, 0.6); 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
+        body.light-mode #nbn-chat-header { background: rgba(99,102,241,0.1); color: #0f172a; }
+
+        #nbn-chat-body {
+            flex: 1; padding: 15px; overflow-y: auto;
+            background: rgba(15, 23, 42, 0.6);
+            display: flex; flex-direction: column; gap: 10px;
         }
-        
-        .msg { 
-            padding: 10px 14px; 
-            border-radius: 16px; 
-            font-size: 13px; 
-            max-width: 85%; 
-            line-height: 1.5; 
+        body.light-mode #nbn-chat-body { background: rgba(248,250,252,0.7); }
+
+        .msg {
+            padding: 10px 14px; border-radius: 16px;
+            font-size: 13px; max-width: 85%; line-height: 1.5;
+            animation: msgIn 0.35s ease;
         }
-        
-        .user-msg { 
-            background: var(--primary); 
-            color: white; 
-            align-self: flex-end; 
-            border-bottom-right-radius: 3px; 
+        @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .user-msg {
+            background: var(--primary); color: white;
+            align-self: flex-end; border-bottom-right-radius: 3px;
         }
-        
-        .ai-msg { 
-            background: rgba(255, 255, 255, 0.1); 
-            color: var(--text-light); 
-            align-self: flex-start; 
-            border-bottom-left-radius: 3px; 
+        .ai-msg {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            align-self: flex-start; border-bottom-left-radius: 3px;
             border: var(--glass-border);
         }
+        body.light-mode .ai-msg { background: rgba(99,102,241,0.1); }
 
-        #trans-control { 
-            padding: 8px; 
-            background: rgba(30, 41, 59, 0.6); 
-            text-align: center; 
-            border-top: var(--glass-border); 
+        #trans-control {
+            padding: 8px; background: rgba(30, 41, 59, 0.6);
+            text-align: center; border-top: var(--glass-border);
         }
-        
-        #trans-btn { 
-            background: rgba(255,255,255,0.05); 
-            color: var(--text-light); 
-            padding: 5px 14px; 
-            font-size: 11px; 
-            border: var(--glass-border); 
-            border-radius: 20px; 
-            cursor: pointer; 
-            margin: 0;
-        }
+        body.light-mode #trans-control { background: rgba(99,102,241,0.08); }
 
-        #nbn-chat-footer { 
-            padding: 12px; 
-            display: flex; 
-            gap: 8px; 
-            background: rgba(30, 41, 59, 0.8); 
-            border-top: var(--glass-border); 
+        #trans-btn {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-light);
+            padding: 5px 14px; font-size: 11px;
+            border: var(--glass-border); border-radius: 20px;
+            cursor: pointer; margin: 0;
+            transition: all 0.3s ease;
         }
-        
-        #nbn-input { 
-            flex: 1; 
-            background: rgba(15, 23, 42, 0.8);
-            border: var(--glass-border); 
-            color: white;
-            padding: 8px 14px; 
-            border-radius: 20px; 
-            outline: none; 
-            font-size: 13px; 
-        } 
-        
-        #nbn-chat-footer button { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            width: 36px; 
-            height: 36px; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            display: grid; 
-            place-items: center; 
-            margin: 0; 
-            padding: 0; 
+        #trans-btn:hover { background: var(--primary); color: #fff; }
+
+        #nbn-chat-footer {
+            padding: 12px; display: flex; gap: 8px;
+            background: rgba(30, 41, 59, 0.8);
+            border-top: var(--glass-border);
         }
+        body.light-mode #nbn-chat-footer { background: rgba(99,102,241,0.08); }
+
+        #nbn-input {
+            flex: 1; background: rgba(15, 23, 42, 0.8);
+            border: var(--glass-border); color: white;
+            padding: 8px 14px; border-radius: 20px;
+            outline: none; font-size: 13px;
+            font-family: inherit;
+        }
+        body.light-mode #nbn-input { background: rgba(255,255,255,0.9); color: #0f172a; }
+        #nbn-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.2); }
+
+        #nbn-chat-footer button {
+            background: var(--primary); color: white;
+            border: none; width: 36px; height: 36px;
+            border-radius: 50%; cursor: pointer;
+            display: grid; place-items: center;
+            margin: 0; padding: 0;
+            transition: all 0.3s ease;
+        }
+        #nbn-chat-footer button:hover { background: var(--primary-dark); transform: scale(1.08); }
 
         .success-message {
-            background: #10b981;
-            color: white;
-            padding: 8px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 8px;
+            background: #10b981; color: white;
+            padding: 8px; border-radius: 10px;
+            text-align: center; margin-top: 8px;
         }
 
+        /* ---------- BACK TO TOP ---------- */
+        #back-top {
+            position: fixed; bottom: 75px; left: 25px;
+            width: 46px; height: 46px; border-radius: 50%;
+            background: var(--gradient-1);
+            background-size: 200% auto;
+            color: white; border: none;
+            cursor: pointer;
+            display: grid; place-items: center;
+            font-size: 16px; z-index: 998;
+            box-shadow: 0 8px 25px rgba(99,102,241,0.5);
+            opacity: 0; visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.4s ease;
+        }
+        #back-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        #back-top:hover { background-position: right center; transform: translateY(-4px) scale(1.08); }
+
+        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 768px) {
             .profile-wrapper { max-width: 220px; }
             .hero-author-name { font-size: 20px; }
-            .interesting-text { font-size: 1.4rem; }
             .hero { padding: 25px 15px; margin: 15px 10px; }
             .quote-text { font-size: 16px; }
+            .quote-text::before, .quote-text::after { display: none; }
             section { margin: 20px 10px; padding: 25px 15px; }
+            .nepal-flag { width: 140px; }
+            #nbn-chat-window { width: calc(100vw - 30px); right: 15px; bottom: 130px; }
+            #nbn-chat-btn { font-size: 12px; padding: 10px 16px; }
+            #nbn-chat-wrapper { right: 15px; }
+            #back-top { left: 15px; }
+            .fixed-social-bar { gap: 12px; }
+            .fixed-social-bar a { width: 38px; height: 38px; font-size: 16px; }
         }
     </style>
 </head>
 <body>
 
-<!-- GEMINI STYLE HAMBURGER MENU -->
+<!-- Aurora BG -->
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<!-- Preloader -->
+<div id="preloader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">LOADING</div>
+</div>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <i class="fa-solid fa-moon" id="theme-icon"></i>
+</button>
+
+<!-- PRO HAMBURGER MENU -->
 <div class="hamburger-menu-container" id="menuContainer">
-    <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu(event)">
+    <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu(event)" role="button" aria-label="Open menu" tabindex="0">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
     </div>
-    
+
     <div class="menu-options" id="menu-options">
+        <div class="menu-header">Explore</div>
+
         <button onclick="window.location.href='Sahitya'">
-            <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> Poetry 
+            <span class="menu-icon"><i class="fa-solid fa-feather-pointed" style="color:#a855f7;"></i></span>
+            <span class="menu-label">Poetry <small>कविता संग्रह</small></span>
         </button>
         <button onclick="window.location.href='popularity'">
-            <i class="fa-solid fa-quote-left" style="color: var(--accent);"></i> Famous Quotes
+            <span class="menu-icon"><i class="fa-solid fa-quote-left" style="color:var(--accent);"></i></span>
+            <span class="menu-label">Famous Quotes <small>प्रसिद्ध भनाइहरू</small></span>
         </button>
         <button onclick="window.location.href='calculate'">
-            <i class="fa-solid fa-calculator" style="color: #4ade80;"></i> Calculate
+            <span class="menu-icon"><i class="fa-solid fa-calculator" style="color:#4ade80;"></i></span>
+            <span class="menu-label">Calculate <small>गणना गर्नुहोस्</small></span>
         </button>
         <button onclick="window.location.href='about'">
-            <i class="fa-solid fa-user" style="color: #ec4899;"></i> About Me
+            <span class="menu-icon"><i class="fa-solid fa-user" style="color:#ec4899;"></i></span>
+            <span class="menu-label">About Me <small>मेरो बारेमा</small></span>
+        </button>
+
+        <div class="menu-header" style="margin-top:8px;">Quick Links</div>
+        <button onclick="document.getElementById('home').scrollIntoView(); closeMenu();">
+            <span class="menu-icon"><i class="fa-solid fa-house" style="color:#0ea5e9;"></i></span>
+            <span class="menu-label">Home <small>गृहपृष्ठ</small></span>
+        </button>
+        <button onclick="document.getElementById('contact').scrollIntoView(); closeMenu();">
+            <span class="menu-icon"><i class="fa-solid fa-envelope" style="color:#f59e0b;"></i></span>
+            <span class="menu-label">Contact <small>सम्पर्क</small></span>
         </button>
     </div>
 </div>
 
+<div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
+
 <header>
     <div class="header-container">
         <div class="flag-wrapper">
-            <img src="nepal flag.png" alt="Nepal Flag" class="animated-flag">
+            <img src="nepal flag.png" alt="Nepal Flag" class="animated-flag" onerror="this.style.display='none'">
         </div>
-        
-        <h1 class="interesting-text">WELCOME TO MY PERSONAL WEB</h1>
-        
-        <img src="national simbol.png" alt="national simbol" class="national-simbol">
+
+        <h1 class="interesting-text" id="typeTitle"></h1>
+
+        <img src="national simbol.png" alt="National Symbol" class="national-simbol" onerror="this.style.display='none'">
     </div>
     <nav>
         <ul>
@@ -739,7 +888,7 @@
 
 <div class="hero" id="home">
     <div class="flag-container">
-        <img src="nepal.png" alt="Nepal Map" class="nepal-flag">
+        <img src="nepal.png" alt="Nepal Map" class="nepal-flag" onerror="this.style.display='none'">
         <div class="overtake-wrapper">
             <span class="speech">Over take is interesting</span>
             <span class="s">BUT</span>
@@ -748,9 +897,9 @@
     </div>
 
     <div class="hero-image-container">
-        <div class="profile-wrapper">
+        <div class="profile-wrapper" id="tiltCard">
             <div class="bg-blur"></div>
-            <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic">
+            <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
             <div class="overlay"></div>
         </div>
         <div class="hero-author-name">NABIN PHUYAL</div>
@@ -767,20 +916,23 @@
     <div class="quote-card-container">
         <!-- Quote 1: Custom Web Designer Credit -->
         <div class="quote-slide active">
-            <div class="quote-text">"तिम्रो सपना गाह्रो छ थाहा छ, तर असम्भव भने छैन ।"</div>
+            <div class="quote-text">तिम्रो सपना गाह्रो छ थाहा छ, तर असम्भव भने छैन ।</div>
             <div class="quote-author">— Nabin Kanxo (Web Designer)</div>
         </div>
         <!-- Quote 2: Famous Person Quote -->
         <div class="quote-slide">
-            <div class="quote-text">"महान काम गर्ने एउटै तरिका हो, आफूले गरिरहेको कामलाई माया गर्नु।"</div>
+            <div class="quote-text">महान काम गर्ने एउटै तरिका हो, आफूले गरिरहेको कामलाई माया गर्नु।</div>
             <div class="quote-author">— Steve Jobs</div>
         </div>
         <!-- Quote 3: Famous Person Quote -->
         <div class="quote-slide">
-            <div class="quote-text">"पहिले उनीहरूले तिमीलाई बेवास्ता गर्छन्, त्यसपछि हाँस्छन्, त्यसपछि लड्छन्, र अनि तिमी जित्छौ।"</div>
+            <div class="quote-text">पहिले उनीहरूले तिमीलाई बेवास्ता गर्छन्, त्यसपछि हाँस्छन्, त्यसपछि लड्छन्, र अनि तिमी जित्छौ।</div>
             <div class="quote-author">— Mahatma Gandhi</div>
         </div>
     </div>
+
+    <div class="quote-dots" id="quoteDots"></div>
+
     <button class="more-quotes-btn" onclick="window.location.href='popularity'">
         थप भनाइहरु <i class="fa-solid fa-arrow-right"></i>
     </button>
@@ -789,18 +941,20 @@
 <section id="contact">
     <h2>Contact Me</h2>
     <div class="contact-info">
-        <p>📞 <b>Phone:</b> +977-9762509382</p>
-        <p>📧 <b>Email:</b> nabinkanxo5@gmail.com</p>
-        
+        <p><i class="fa-solid fa-phone"></i> <b>Phone:</b> +977-9762509382</p>
+        <p><i class="fa-solid fa-envelope"></i> <b>Email:</b> nabinkanxo5@gmail.com</p>
+
         <div class="location-wrapper">
-            <p>📍 <b>Location:</b> <span class="loc-trigger" onclick="toggleLoc()">Bhojpur, Nepal (Touch for Details)</span></p>
-            
+            <p><i class="fa-solid fa-location-dot"></i> <b>Location:</b>
+                <span class="loc-trigger" onclick="toggleLoc()">Bhojpur, Nepal (Touch for Details)</span>
+            </p>
+
             <div id="locModal" class="loc-modal">
-                <a href="https://maps.app.goo.gl/khZSfETTHKguxF128" target="_blank">
+                <a href="https://maps.app.goo.gl/khZSfETTHKguxF128" target="_blank" rel="noopener">
                     <i class="fa-solid fa-map-marked-alt"></i> View on Google Maps
                 </a>
-                
-                <a href="https://www.facebook.com/share/r/1Bvb5yA2eG/" target="_blank">
+
+                <a href="https://www.facebook.com/share/r/1Bvb5yA2eG/" target="_blank" rel="noopener">
                     <i class="fa-solid fa-play-circle"></i> Watch Location Video
                 </a>
                 <p class="credit-text">Video Credit: Prabin Rai Koyu</p>
@@ -808,6 +962,11 @@
         </div>
     </div>
 </section>
+
+<!-- Back to top -->
+<button id="back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
 
 <div id="nbn-chat-wrapper">
     <div id="nbn-chat-btn" onclick="toggleNbnChat()">
@@ -822,7 +981,7 @@
             </div>
             <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:20px;">×</span>
         </div>
-        
+
         <div id="nbn-chat-body">
             <div class="msg ai-msg" id="nbn-welcome-msg">वेबसाईट प्रति केहि सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।</div>
         </div>
@@ -843,129 +1002,211 @@
     <p style="margin-top: 4px; font-size: 12px;">Website Design by 🚀 Nabin Kanxo</p>
 </footer>
 
-<!-- FIXED SOCIAL MEDIA LINKS (VISIBLE ON ALL SCREENS AT THE BOTTOM) -->
+<!-- FIXED SOCIAL MEDIA LINKS -->
 <div class="fixed-social-bar">
-    <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-    <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
-    <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-    <a href="https://instagram.com/phuyalnabin28" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank" title="CapCut"><i class="fa-solid fa-video"></i></a>
+    <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" rel="noopener" title="TikTok"><i class="fab fa-tiktok"></i></a>
+    <a href="https://facebook.com/nabin.kanxo.phuyal" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook"></i></a>
+    <a href="https://instagram.com/phuyalnabin28" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://mobile.capcutshare.com/s/Zs8Ph6Rkh" target="_blank" rel="noopener" title="CapCut"><i class="fa-solid fa-video"></i></a>
 </div>
 
 <script>
-    // AUTO SLIDER SCRIPT
-    let slideIndex = 0;
-    autoSlideQuotes();
+/* ---------- PRELOADER ---------- */
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('preloader').classList.add('hide');
+    }, 500);
+});
 
-    function autoSlideQuotes() {
-        let slides = document.getElementsByClassName("quote-slide");
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].classList.remove("active");
+/* ---------- TYPING EFFECT ---------- */
+(function typeTitle() {
+    const el = document.getElementById('typeTitle');
+    const text = "WELCOME TO MY PERSONAL WEB";
+    let i = 0;
+    function type() {
+        if (i < text.length) {
+            el.textContent += text.charAt(i++);
+            setTimeout(type, 70);
         }
-        slideIndex++;
-        if (slideIndex > slides.length) { slideIndex = 1; }
-        slides[slideIndex - 1].classList.add("active");
-        setTimeout(autoSlideQuotes, 4000);
     }
+    setTimeout(type, 900);
+})();
 
-    function toggleLoc() {
-        var modal = document.getElementById("locModal");
-        modal.style.display = (modal.style.display === "block") ? "none" : "block";
+/* ---------- THEME TOGGLE ---------- */
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    const icon = document.getElementById('theme-icon');
+    const isLight = document.body.classList.contains('light-mode');
+    icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+(function loadTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-icon').className = 'fa-solid fa-sun';
     }
+})();
 
-    let isNepali = true;
-    const languages = {
-        np: {
-            welcome: "वेबसाईट प्रति केहि सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।",
-            placeholder: "यहाँ लेख्नुहोस्...",
-            btn: "English मा हेर्नुहोस्",
-            reply: "धन्यवाद मेरो वेबमा आएर सल्लाह, सुझाव तथा प्रश्न गर्नुभएकोमा। म नवीन फुयल, प्रत्यक्ष रूपमा तपाइँको यही Gmail मार्फत तपाईंको प्रश्न तथा सल्लाहको गहन रूपमा रिप्लाई दिनेछु। धन्यवाद!"
-        },
-        en: {
-            welcome: "Hello! If you have any advice or suggestions, please write them here.",
-            placeholder: "Write here...",
-            btn: "नेपालीमा हेर्नुहोस्",
-            reply: "Thank you for visiting my website and sharing your suggestions or questions. I am Nabin Phuyal, and I will provide a detailed reply when I am online. Thank you!"
-        }
-    };
+/* ---------- PRO MENU ---------- */
+let menuOpen = false;
+function toggleMenu(event) {
+    event.stopPropagation();
+    menuOpen ? closeMenu() : openMenu();
+}
+function openMenu() {
+    menuOpen = true;
+    document.getElementById('hamburgerBtn').classList.add('active');
+    document.getElementById('menu-options').classList.add('show');
+    document.getElementById('menuBackdrop').classList.add('show');
+}
+function closeMenu() {
+    menuOpen = false;
+    document.getElementById('hamburgerBtn').classList.remove('active');
+    document.getElementById('menu-options').classList.remove('show');
+    document.getElementById('menuBackdrop').classList.remove('show');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+document.addEventListener('click', e => {
+    const c = document.getElementById('menuContainer');
+    if (c && !c.contains(e.target) && menuOpen) closeMenu();
+});
 
-    window.addEventListener('scroll', function() {
-        const chatWrapper = document.getElementById('nbn-chat-wrapper');
-        const scrollPosition = window.scrollY + window.innerHeight;
-        const pageHeight = document.documentElement.scrollHeight;
-        
-        if (pageHeight - scrollPosition < 100) {
-            chatWrapper.classList.add('show');
-        } else {
-            chatWrapper.classList.remove('show');
-        }
+/* ---------- QUOTE CAROUSEL ---------- */
+let slideIndex = 0;
+const slides = document.getElementsByClassName('quote-slide');
+const dotsContainer = document.getElementById('quoteDots');
+
+for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement('span');
+    if (i === 0) dot.classList.add('active');
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+}
+
+function goToSlide(idx) {
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove('active');
+        dotsContainer.children[i].classList.remove('active');
+    }
+    slideIndex = idx;
+    slides[slideIndex].classList.add('active');
+    dotsContainer.children[slideIndex].classList.add('active');
+}
+
+function autoSlideQuotes() {
+    slideIndex = (slideIndex + 1) % slides.length;
+    goToSlide(slideIndex);
+    setTimeout(autoSlideQuotes, 4500);
+}
+setTimeout(autoSlideQuotes, 4500);
+
+/* ---------- SCROLL REVEAL ---------- */
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('reveal');
     });
+}, { threshold: 0.12 });
+document.querySelectorAll('section').forEach(el => observer.observe(el));
 
-    function toggleNbnChat() {
-        const win = document.getElementById('nbn-chat-window');
-        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+/* ---------- BACK TO TOP + CHAT WRAPPER ---------- */
+window.addEventListener('scroll', () => {
+    const chatWrapper = document.getElementById('nbn-chat-wrapper');
+    const backTop = document.getElementById('back-top');
+    const scrollPosition = window.scrollY + window.innerHeight;
+    const pageHeight = document.documentElement.scrollHeight;
+
+    if (pageHeight - scrollPosition < 100) {
+        chatWrapper.classList.add('show');
+    } else {
+        chatWrapper.classList.remove('show');
     }
 
-    function translateAll() {
-        isNepali = !isNepali;
-        const lang = isNepali ? 'np' : 'en';
-        document.getElementById('nbn-welcome-msg').innerText = languages[lang].welcome;
-        document.getElementById('nbn-input').placeholder = languages[lang].placeholder;
-        document.getElementById('trans-btn').innerText = languages[lang].btn;
-    }
+    if (window.scrollY > 500) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+});
 
-    function sendNbnMessage() {
-        const input = document.getElementById('nbn-input');
-        const body = document.getElementById('nbn-chat-body');
-        const text = input.value.trim();
-        if (text === "") return;
-        
-        body.innerHTML += `<div class="msg user-msg">${text}</div>`;
-        
-        const subject = encodeURIComponent("Question/Suggestion from Website Visitor");
-        const bodyText = encodeURIComponent(`New message from website:\n\n${text}\n\n---\nSent from Nabin Phuyal's website`);
-        window.location.href = `mailto:nabinkanxo5@gmail.com?subject=${subject}&body=${bodyText}`;
-        
-        input.value = "";
-        
-        setTimeout(() => {
-            body.innerHTML += `<div class="msg ai-msg success-message">✓ तपाईंको सन्देश पठाइएको छ! (nabinkanxo5@gmail.com)</div>`;
-            body.scrollTop = body.scrollHeight;
-        }, 500);
-        
+/* ---------- LOCATION TOGGLE ---------- */
+function toggleLoc() {
+    const modal = document.getElementById('locModal');
+    modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+}
+
+/* ---------- 3D TILT ---------- */
+(function tilt() {
+    const card = document.getElementById('tiltCard');
+    if (!card) return;
+    card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        card.style.transform = `perspective(700px) rotateY(${x / 22}deg) rotateX(${-y / 22}deg) scale(1.02)`;
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(700px) rotateY(0) rotateX(0) scale(1)';
+    });
+})();
+
+/* ---------- CHATBOT ---------- */
+let isNepali = true;
+const languages = {
+    np: {
+        welcome: "वेबसाईट प्रति केहि सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।",
+        placeholder: "यहाँ लेख्नुहोस्...",
+        btn: "English मा हेर्नुहोस्",
+        reply: "धन्यवाद मेरो वेबमा आएर सल्लाह, सुझाव तथा प्रश्न गर्नुभएकोमा। म नवीन फुयल, प्रत्यक्ष रूपमा तपाइँको यही Gmail मार्फत तपाईंको प्रश्न तथा सल्लाहको गहन रूपमा रिप्लाई दिनेछु। धन्यवाद!"
+    },
+    en: {
+        welcome: "Hello! If you have any advice or suggestions, please write them here.",
+        placeholder: "Write here...",
+        btn: "नेपालीमा हेर्नुहोस्",
+        reply: "Thank you for visiting my website and sharing your suggestions or questions. I am Nabin Phuyal, and I will provide a detailed reply when I am online. Thank you!"
+    }
+};
+
+function toggleNbnChat() {
+    const win = document.getElementById('nbn-chat-window');
+    win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+}
+
+function translateAll() {
+    isNepali = !isNepali;
+    const lang = isNepali ? 'np' : 'en';
+    document.getElementById('nbn-welcome-msg').innerText = languages[lang].welcome;
+    document.getElementById('nbn-input').placeholder = languages[lang].placeholder;
+    document.getElementById('trans-btn').innerText = languages[lang].btn;
+}
+
+function sendNbnMessage() {
+    const input = document.getElementById('nbn-input');
+    const body = document.getElementById('nbn-chat-body');
+    const text = input.value.trim();
+    if (text === "") return;
+
+    body.innerHTML += `<div class="msg user-msg">${text}</div>`;
+
+    const subject = encodeURIComponent("Question/Suggestion from Website Visitor");
+    const bodyText = encodeURIComponent(`New message from website:\n\n${text}\n\n---\nSent from Nabin Phuyal's website`);
+    window.location.href = `mailto:nabinkanxo5@gmail.com?subject=${subject}&body=${bodyText}`;
+
+    input.value = "";
+    body.scrollTop = body.scrollHeight;
+
+    setTimeout(() => {
+        body.innerHTML += `<div class="msg ai-msg success-message">✓ तपाईंको सन्देश पठाइएको छ! (nabinkanxo5@gmail.com)</div>`;
         body.scrollTop = body.scrollHeight;
-    }
+    }, 500);
+}
 
-    let menuOpen = false;
-
-    function toggleMenu(event) {
-        event.stopPropagation();
-        menuOpen = !menuOpen;
-        const btn = document.getElementById('hamburgerBtn');
-        const options = document.getElementById('menu-options');
-        
-        if (menuOpen) {
-            btn.classList.add('active');
-            options.style.display = 'block';
-        } else {
-            btn.classList.remove('active');
-            options.style.display = 'none';
-        }
-    }
-
-    document.addEventListener('click', function(event) {
-        const menuContainer = document.getElementById('menuContainer');
-        const menuOptions = document.getElementById('menu-options');
-        const btn = document.getElementById('hamburgerBtn');
-        
-        if (menuContainer && !menuContainer.contains(event.target)) {
-            if (menuOptions && menuOptions.style.display === 'block') {
-                menuOptions.style.display = 'none';
-                btn.classList.remove('active');
-                menuOpen = false;
-            }
-        }
+/* Smooth scroll for nav links */
+document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
     });
+});
 </script>
 
 </body>
