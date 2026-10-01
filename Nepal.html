@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Nepal - नेपालको परिचय</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #dc3545, #0056b3);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .lang-btn {
+            background-color: #ffffff;
+            color: #333;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background-color: #ffdd57;
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200') center/cover;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+        }
+
+        /* Container Section */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #0056b3;
+            position: relative;
+        }
+
+        /* Features Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #dc3545;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        /* Language Toggle Display Rules */
+        .lang-en { display: none; }
+        .lang-ne { display: block; }
+
+        body.en .lang-ne { display: none; }
+        body.en .lang-en { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <span class="lang-ne">🇳🇵 नेपालको बारेमा</span>
+            <span class="lang-en">🇳🇵 About Nepal</span>
+        </div>
+        <button class="lang-btn" onclick="toggleLanguage()">
+            <span class="lang-ne">English</span>
+            <span class="lang-en">नेपाली</span>
+        </button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="lang-ne">सुन्दर शान्त विशाल नेपाल</h1>
+        <h1 class="lang-en">Beautiful & Peaceful Nepal</h1>
+        <p class="lang-ne">संसारको सर्वोच्च शिखर सगरमाथा र भगवान् बुद्धको जन्मभूमिमा तपाईंलाई स्वागत छ।</p>
+        <p class="lang-en">Welcome to the land of Mount Everest and the birthplace of Lord Buddha.</p>
+    </section>
+
+    <!-- Popular Highlights Section -->
+    <div class="container">
+        <h2 class="section-title lang-ne">नेपालका प्रमुख आकर्षणहरू</h2>
+        <h2 class="section-title lang-en">Popular Highlights of Nepal</h2>
+
+        <div class="grid">
+            <!-- Mt. Everest -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title lang-ne">🏔️ सगरमाथा (Mt. Everest)</h3>
+                    <h3 class="card-title lang-en">🏔️ Mount Everest</h3>
+                    <p class="lang-ne">संसारको सबैभन्दा अग्लो हिमशिखर (८,८४८.८६ मिटर) नेपालको सोलुखुम्बु जिल्लामा अवस्थित छ।</p>
+                    <p class="lang-en">The world's highest peak (8,848.86m) is located in the Solukhumbu district of Nepal.</p>
+                </div>
+            </div>
+
+            <!-- Lord Buddha -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title lang-ne">☸️ लुम्बिनी (Lord Buddha)</h3>
+                    <h3 class="card-title lang-en">☸️ Lumbini</h3>
+                    <p class="lang-ne">शान्तिका प्रतीक भगवान् गौतम बुद्धको जन्मस्थल लुम्बिनी विश्वभरका मानिसहरूका लागि पवित्र तीर्थस्थल हो।</p>
+                    <p class="lang-en">The birthplace of Lord Buddha, Lumbini is a sacred pilgrimage site for people worldwide.</p>
+                </div>
+            </div>
+
+            <!-- Culture & Diversity -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title lang-ne">🎭 बहुसांस्कृतिक एकता</h3>
+                    <h3 class="card-title lang-en">🎭 Cultural Diversity</h3>
+                    <p class="lang-ne">नेपालमा १२५ भन्दा बढी जातजाति र १२३ भन्दा बढी भाषाभाषीहरू आपसमा मेलमिलापका साथ बसोबास गर्छन्।</p>
+                    <p class="lang-en">Nepal is home to over 125 ethnic groups and 123 languages living in harmony.</p>
+                </div>
+            </div>
+
+            <!-- Lakes & Nature -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title lang-ne">🌊 ताल र प्राकृतिक सौन्दर्य</h3>
+                    <h3 class="card-title lang-en">🌊 Lakes & Natural Beauty</h3>
+                    <p class="lang-ne">फेवा ताल, रारा ताल, र सेफोक्सुण्डो जस्ता प्राकृतिक सुन्दर तालहरूले नेपालको सुन्दरता बढाएका छन्।</p>
+                    <p class="lang-en">Scenic lakes like Phewa, Rara, and Shey Phoksundo enhance the natural charm of Nepal.</p>
+                </div>
+            </div>
+
+            <!-- Heritage Sites -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title lang-ne">🛕 युनेस्को विश्व सम्पदा</h3>
+                    <h3 class="card-title lang-en">🛕 UNESCO World Heritage</h3>
+                    <p class="lang-ne">पशुपतिनाथ, स्वयम्भूनाथ, र काठमाडौँ उपत्यकाका दरबार क्षेत्रहरू ऐतिहासिक र धार्मिक दृष्टिकोणले प्रसिद्ध छन्।</p>
+                    <p class="lang-en">Pashupatinath, Swayambhunath, and Kathmandu Valley Durbar Squares hold deep heritage value.</p>
+                </div>
+            </div>
+
+            <!-- Wildlife & National Parks -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title lang-ne">🦏 वन्यजन्तु र राष्ट्रिय निकुञ्ज</h3>
+                    <h3 class="card-title lang-en">🦏 Wildlife & National Parks</h3>
+                    <p class="lang-ne">चितवन राष्ट्रिय निकुञ्जमा एकसिङ्गे गैँडा, पाटेबाघ र अन्य दुर्लभ वन्यजन्तुहरू अवलोकन गर्न सकिन्छ।</p>
+                    <p class="lang-en">Chitwan National Park is famous for the rare one-horned rhino and Bengal tigers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="lang-ne">&copy; २०२६ नेपालको परिचय | सर्वाधिकार सुरक्षित</p>
+        <p class="lang-en">&copy; 2026 About Nepal | All Rights Reserved</p>
+    </footer>
+
+    <!-- JavaScript for Language Switcher -->
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('en');
+        }
+    </script>
+</body>
+</html>
