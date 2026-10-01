@@ -287,6 +287,24 @@
         section.reveal { opacity: 1; transform: translateY(0); }
         section h2 { font-size: 28px; font-weight: 800; margin-bottom: 15px; background: linear-gradient(90deg, #6366f1, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
+        /* Nepal Section (Iframe Container) */
+        .nepal-iframe-container {
+            width: 100%;
+            height: 650px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: var(--glass-border);
+            margin-top: 20px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            background: rgba(15, 23, 42, 0.4);
+        }
+        .nepal-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
         /* Social Bar */
         .fixed-social-bar {
             position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.92);
@@ -381,6 +399,7 @@
             #back-top { left: 15px; }
             .fixed-social-bar { gap: 12px; }
             .fixed-social-bar a { width: 38px; height: 38px; font-size: 16px; }
+            .nepal-iframe-container { height: 480px; }
         }
     </style>
 </head>
@@ -437,6 +456,10 @@
             <span class="menu-icon"><i class="fa-solid fa-envelope" style="color:#f59e0b;"></i></span>
             <span class="menu-label">Contact <small>सम्पर्क</small></span>
         </button>
+        <button onclick="document.getElementById('nepal-section').scrollIntoView(); closeMenu();">
+            <span class="menu-icon"><i class="fa-solid fa-mountain-sun" style="color:#ef4444;"></i></span>
+            <span class="menu-label">Nepal <small>नेपाल विशेष</small></span>
+        </button>
     </div>
 </div>
 
@@ -458,6 +481,7 @@
             <li><a href="about">About</a></li>
             <li><a href="popularity">Quotes</a></li>
             <li><a href="#contact">Contact</a></li>
+            <li><a href="#nepal-section">Nepal</a></li>
         </ul>
     </nav>
 </header>
@@ -533,6 +557,14 @@
                 <p class="credit-text">Video Credit: Prabin Rai Koyu</p>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- Nepal Section (Scroll गर्दा अन्तिममा देखिने) -->
+<section id="nepal-section">
+    <h2>Nepal Special</h2>
+    <div class="nepal-iframe-container">
+        <iframe src="Nepal.html" title="Nepal Project" loading="lazy"></iframe>
     </div>
 </section>
 
