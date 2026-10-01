@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Nabin Phuyal" />
     <meta name="description" content="Nabin Phuyal - Nepali poet, writer and web designer from Bhojpur, Nepal. Explore poetry, famous quotes and connect." />
-    <meta name="keywords" content="Nabin Phuyal, Nabin Kanxo, Nepali poet, Bhojpur, Sahitya, Quotes" />
+    <meta name="keywords" content="Nabin Phuyal, Nabin Kanxo, Nepali poet, Bhojpur, Sahitya, Quotes, Web Designer" />
+    
+    <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Nabin Phuyal - Official Website" />
     <meta property="og:description" content="Welcome to the official website of Nabin Phuyal." />
     <meta property="og:type" content="website" />
+    
     <title>Nabin Phuyal - Official Website</title>
 
+    <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
 
     <style>
         :root {
@@ -43,7 +47,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-
         html { scroll-padding-top: 90px; }
 
         body {
@@ -58,7 +61,7 @@
             transition: background 0.5s ease, color 0.5s ease;
         }
 
-        /* Custom scrollbar */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 9px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
@@ -67,10 +70,8 @@
         }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #4f46e5, #db2777); }
 
-        /* Aurora background */
-        .aurora {
-            position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
-        }
+        /* Aurora Background */
+        .aurora { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
         .aurora span {
             position: absolute; border-radius: 50%;
             filter: blur(90px); opacity: 0.35;
@@ -90,8 +91,7 @@
         /* Preloader */
         #preloader {
             position: fixed; inset: 0; z-index: 10000;
-            background: #0f172a;
-            display: grid; place-items: center;
+            background: #0f172a; display: grid; place-items: center;
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
         #preloader.hide { opacity: 0; visibility: hidden; }
@@ -109,274 +109,118 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes pulseText { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* ---------- PRO HAMBURGER MENU ---------- */
-        .hamburger-menu-container {
-            position: fixed; top: 18px; left: 18px; z-index: 1001;
-        }
-
+        /* Hamburger Menu */
+        .hamburger-menu-container { position: fixed; top: 18px; left: 18px; z-index: 1001; }
         .hamburger-btn {
-            background: rgba(15, 23, 42, 0.85);
-            border-radius: 14px;
-            width: 48px; height: 48px;
-            cursor: pointer;
+            background: rgba(15, 23, 42, 0.85); border-radius: 14px;
+            width: 48px; height: 48px; cursor: pointer;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 5px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             position: relative;
         }
         body.light-mode .hamburger-btn { background: rgba(255, 255, 255, 0.9); border-color: rgba(15,23,42,0.1); }
         body.light-mode .hamburger-line { background: #0f172a; }
+        .hamburger-btn:hover { background: rgba(99, 102, 241, 0.35); border-color: rgba(99, 102, 241, 0.6); transform: scale(1.05); }
 
-        .hamburger-btn:hover {
-            background: rgba(99, 102, 241, 0.35);
-            border-color: rgba(99, 102, 241, 0.6);
-            transform: scale(1.05);
-        }
-
-        .hamburger-btn::after {
-            content: ''; position: absolute; inset: -4px;
-            border-radius: 18px; border: 2px solid transparent;
-            background: var(--gradient-1) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
-            opacity: 0; transition: opacity 0.4s;
-        }
-        .hamburger-btn:hover::after { opacity: 0.6; }
-
-        .hamburger-line {
-            width: 22px; height: 2px; background: #ffffff;
-            border-radius: 4px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
+        .hamburger-line { width: 22px; height: 2px; background: #ffffff; border-radius: 4px; transition: all 0.35s ease; }
         .hamburger-btn.active { background: rgba(99, 102, 241, 0.4); }
         .hamburger-btn.active .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
         .hamburger-btn.active .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* Pro menu panel */
         .menu-backdrop {
             position: fixed; inset: 0; z-index: 1000;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(6px);
-            opacity: 0; visibility: hidden;
-            transition: all 0.4s ease;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(6px);
+            opacity: 0; visibility: hidden; transition: all 0.4s ease;
         }
         .menu-backdrop.show { opacity: 1; visibility: visible; }
 
         .menu-options {
-            display: none;
-            position: absolute; top: 62px; left: 0;
-            background: rgba(15, 23, 42, 0.96);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            width: 280px;
-            border-radius: 20px;
-            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.65);
-            overflow: hidden;
-            z-index: 1002;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px;
-            transform-origin: top left;
+            display: none; position: absolute; top: 62px; left: 0;
+            background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            width: 280px; border-radius: 20px; box-shadow: 0 25px 55px rgba(0, 0, 0, 0.65);
+            overflow: hidden; z-index: 1002; border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px; transform-origin: top left;
         }
         body.light-mode .menu-options { background: rgba(255,255,255,0.98); border-color: rgba(15,23,42,0.08); }
-
-        .menu-options.show {
-            display: block;
-            animation: menuPop 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes menuPop {
-            0% { opacity: 0; transform: scale(0.9) translateY(-10px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        .menu-options.show { display: block; animation: menuPop 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes menuPop { 0% { opacity: 0; transform: scale(0.9) translateY(-10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
         .menu-header {
-            padding: 12px 14px 10px;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-dim);
-            font-weight: 700;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            margin-bottom: 6px;
+            padding: 12px 14px 10px; font-size: 11px; text-transform: uppercase;
+            letter-spacing: 2px; color: var(--text-dim); font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 6px;
         }
         body.light-mode .menu-header { border-bottom-color: rgba(15,23,42,0.06); }
 
         .menu-options button {
-            width: 100%;
-            padding: 13px 16px;
-            border: none; background: transparent;
-            cursor: pointer;
-            text-align: left;
-            font-size: 14.5px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: inherit;
-            display: flex; align-items: center; gap: 14px;
-            color: var(--text-light);
-            font-weight: 600;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
+            width: 100%; padding: 13px 16px; border: none; background: transparent; cursor: pointer;
+            text-align: left; font-size: 14.5px; transition: all 0.3s ease; font-family: inherit;
+            display: flex; align-items: center; gap: 14px; color: var(--text-light); font-weight: 600; border-radius: 12px;
         }
-
         .menu-options button .menu-icon {
-            width: 34px; height: 34px;
-            display: grid; place-items: center;
-            border-radius: 10px;
-            font-size: 15px;
-            background: rgba(255,255,255,0.06);
-            transition: all 0.3s ease;
-            flex-shrink: 0;
+            width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px;
+            font-size: 15px; background: rgba(255,255,255,0.06); transition: all 0.3s ease; flex-shrink: 0;
         }
-
-        .menu-options button:hover {
-            background: rgba(99, 102, 241, 0.2);
-            transform: translateX(4px);
-        }
-        .menu-options button:hover .menu-icon {
-            background: var(--gradient-1);
-            transform: rotate(-8deg) scale(1.05);
-        }
+        .menu-options button:hover { background: rgba(99, 102, 241, 0.2); transform: translateX(4px); }
+        .menu-options button:hover .menu-icon { background: var(--gradient-1); transform: rotate(-8deg) scale(1.05); }
         .menu-options button:hover .menu-icon i { color: #fff !important; }
+        .menu-options button .menu-label { display: flex; flex-direction: column; gap: 1px; }
+        .menu-options button .menu-label small { font-size: 11px; color: var(--text-dim); font-weight: 500; }
 
-        .menu-options button .menu-label {
-            display: flex; flex-direction: column; gap: 1px;
-        }
-        .menu-options button .menu-label small {
-            font-size: 11px; color: var(--text-dim); font-weight: 500;
-        }
-
-        /* Theme toggle */
+        /* Theme Toggle */
         .theme-toggle {
             position: fixed; top: 18px; right: 18px; z-index: 1001;
             width: 48px; height: 48px; border-radius: 14px;
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
-            cursor: pointer;
-            display: grid; place-items: center;
-            font-size: 18px;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            transition: all 0.35s ease;
+            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff; cursor: pointer; display: grid; place-items: center; font-size: 18px;
+            backdrop-filter: blur(16px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); transition: all 0.35s ease;
         }
         .theme-toggle:hover { transform: rotate(20deg) scale(1.05); background: rgba(99,102,241,0.4); }
         body.light-mode .theme-toggle { background: rgba(255,255,255,0.9); color: #0f172a; border-color: rgba(15,23,42,0.1); }
 
-        /* ---------- HEADER ---------- */
+        /* Header */
         header {
-            background: rgba(15, 23, 42, 0.55);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            color: white;
-            padding: 18px 10px;
-            text-align: center;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-            position: sticky; top: 0; z-index: 900;
-            border-bottom: var(--glass-border);
+            background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            color: white; padding: 18px 10px; text-align: center; box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            position: sticky; top: 0; z-index: 900; border-bottom: var(--glass-border);
         }
         body.light-mode header { background: rgba(255,255,255,0.75); color: #0f172a; }
-
-        .header-container {
-            display: flex; align-items: center; justify-content: center;
-            gap: 15px; flex-wrap: wrap;
-            max-width: 1200px; margin: 0 auto;
-        }
+        .header-container { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
 
         .interesting-text {
-            font-size: clamp(1rem, 2.4vw, 1.7rem);
-            font-weight: 800;
-            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 1px;
-            animation: gradientMove 5s linear infinite;
-            min-height: 1.4em;
+            font-size: clamp(1rem, 2.4vw, 1.7rem); font-weight: 800;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1); background-size: 300% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: 1px; animation: gradientMove 5s linear infinite; min-height: 1.4em;
         }
         @keyframes gradientMove { to { background-position: 300% center; } }
 
-        .cursor-blink {
-            display: inline-block; width: 3px; height: 1em;
-            background: var(--accent);
-            margin-left: 3px; vertical-align: middle;
-            animation: blink 0.9s step-end infinite;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .flag-wrapper { perspective: 1000px; }
-        .animated-flag {
-            width: 38px; height: auto; display: block;
-            animation: waveFlag 3s infinite ease-in-out;
-            transform-origin: left center;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
-        }
-        @keyframes waveFlag {
-            0%, 100% { transform: rotate(0deg) skewY(0deg); }
-            25% { transform: rotate(5deg) skewY(3deg); }
-            75% { transform: rotate(-5deg) skewY(-3deg); }
-        }
-
+        .animated-flag { width: 38px; height: auto; display: block; animation: waveFlag 3s infinite ease-in-out; transform-origin: left center; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
+        @keyframes waveFlag { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(5deg); } }
         .national-simbol { width: 70px; height: auto; display: block; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
 
-        nav ul {
-            display: flex; justify-content: center; list-style: none;
-            margin-top: 12px; gap: 6px; flex-wrap: wrap;
-        }
-        nav ul li a {
-            color: var(--text-dim); text-decoration: none;
-            font-size: 14.5px; font-weight: 600;
-            transition: 0.3s; padding: 6px 16px;
-            border-radius: 20px; position: relative;
-        }
+        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 12px; gap: 6px; flex-wrap: wrap; }
+        nav ul li a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; font-weight: 600; transition: 0.3s; padding: 6px 16px; border-radius: 20px; }
         body.light-mode nav ul li a { color: #475569; }
-        nav ul li a:hover {
-            color: var(--text-light);
-            background: rgba(99, 102, 241, 0.15);
-        }
+        nav ul li a:hover { color: var(--text-light); background: rgba(99, 102, 241, 0.15); }
         body.light-mode nav ul li a:hover { color: #0f172a; }
 
-        /* ---------- HERO ---------- */
+        /* Hero */
         .hero {
-            min-height: 70vh;
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            margin: 25px auto;
-            max-width: 1100px;
-            border-radius: 30px;
+            min-height: 70vh; background: var(--bg-card); backdrop-filter: blur(16px);
+            margin: 25px auto; max-width: 1100px; border-radius: 30px;
             display: flex; align-items: center; justify-content: space-around;
             padding: 40px 20px; flex-wrap: wrap; gap: 30px;
-            border: var(--glass-border);
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: ''; position: absolute; top: -50%; right: -20%;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(99,102,241,0.35), transparent 70%);
-            border-radius: 50%; pointer-events: none;
-            animation: pulseGlow 6s ease-in-out infinite;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+            border: var(--glass-border); box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
         }
 
         .overtake-wrapper {
-            display: flex; align-items: center; gap: 8px;
-            flex-wrap: wrap; justify-content: center;
-            margin-top: 15px;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 10px 20px; border-radius: 50px;
-            border: var(--glass-border);
-            backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 15px;
+            background: rgba(15, 23, 42, 0.6); padding: 10px 20px; border-radius: 50px; border: var(--glass-border); backdrop-filter: blur(10px);
         }
         body.light-mode .overtake-wrapper { background: rgba(255,255,255,0.7); }
         .speech { font-size: 16px; font-weight: 600; color: #4ade80; }
@@ -384,419 +228,151 @@
         .d { font-size: 16px; font-weight: 800; color: #f87171; }
 
         .flag-container { display: flex; flex-direction: column; align-items: center; z-index: 1; }
-        .nepal-flag {
-            width: 180px; height: auto; margin-bottom: 10px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-            animation: floatMap 5s ease-in-out infinite;
-        }
-        @keyframes floatMap {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
+        .nepal-flag { width: 180px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); animation: floatMap 5s ease-in-out infinite; }
+        @keyframes floatMap { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-        .hero-image-container {
-            display: flex; flex-direction: column; align-items: center;
-            position: relative; width: 100%; max-width: 320px; z-index: 1;
-        }
-
+        .hero-image-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; max-width: 320px; z-index: 1; }
         .profile-wrapper {
-            position: relative;
-            width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
-            border-radius: 26px; overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-            transform-style: preserve-3d;
+            position: relative; width: 100%; max-width: 280px; aspect-ratio: 1 / 1; border-radius: 26px; overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
-        .profile-wrapper:hover {
-            box-shadow: 0 25px 55px rgba(99,102,241,0.5);
-            border-color: rgba(99,102,241,0.6);
-        }
-
+        .profile-wrapper:hover { box-shadow: 0 25px 55px rgba(99,102,241,0.5); border-color: rgba(99,102,241,0.6); }
         .profile-wrapper .bg-blur {
-            position: absolute; inset: 0;
-            background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&h=800&fit=crop');
-            background-size: cover; background-position: center;
-            filter: blur(5px); transform: scale(1.1); z-index: 0;
+            position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&h=800&fit=crop');
+            background-size: cover; background-position: center; filter: blur(5px); transform: scale(1.1); z-index: 0;
         }
-
-        .profile-wrapper .profile-pic {
-            position: relative; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1; border-radius: 22px;
-        }
-
-        .profile-wrapper .overlay {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            height: 35%;
-            background: linear-gradient(to top, rgba(15,23,42,0.8), transparent);
-            z-index: 2; pointer-events: none;
-        }
+        .profile-wrapper .profile-pic { position: relative; width: 100%; height: 100%; object-fit: cover; z-index: 1; border-radius: 22px; }
+        .profile-wrapper .overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 35%; background: linear-gradient(to top, rgba(15,23,42,0.8), transparent); z-index: 2; pointer-events: none; }
 
         .hero-author-name {
-            margin-top: 20px;
-            font-size: 24px; font-weight: 800;
-            background: linear-gradient(90deg, #6366f1, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            margin-top: 20px; font-size: 24px; font-weight: 800; background: linear-gradient(90deg, #6366f1, #ec4899);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            text-transform: uppercase; letter-spacing: 3px;
         }
 
-        /* ---------- QUOTES CAROUSEL ---------- */
+        /* Quotes Slider */
         .quotes-slider-section {
-            max-width: 850px;
-            margin: -10px auto 40px auto;
-            padding: 30px 20px;
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            border-radius: 25px;
-            box-shadow: var(--shadow-lg);
-            border: var(--glass-border);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            max-width: 850px; margin: -10px auto 40px auto; padding: 30px 20px; background: var(--bg-card);
+            backdrop-filter: blur(16px); border-radius: 25px; box-shadow: var(--shadow-lg); border: var(--glass-border);
+            text-align: center; position: relative; overflow: hidden;
         }
+        .quotes-slider-title { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-        .quotes-slider-title {
-            font-size: 16px; font-weight: 700; color: var(--accent);
-            margin-bottom: 15px;
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-        .quotes-slider-title i { animation: starPulse 2s ease-in-out infinite; }
-        @keyframes starPulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        .quote-card-container {
-            min-height: 130px;
-            display: flex; align-items: center; justify-content: center;
-            padding: 10px; position: relative;
-        }
-
-        .quote-slide {
-            display: none; position: relative;
-        }
+        .quote-card-container { min-height: 130px; display: flex; align-items: center; justify-content: center; padding: 10px; position: relative; }
+        .quote-slide { display: none; position: relative; }
         .quote-slide.active { display: block; animation: fadeInQuote 0.8s ease-in-out; }
 
-        .quote-text {
-            font-size: 18px; font-weight: 500;
-            color: var(--text-light); line-height: 1.7;
-            font-style: italic; position: relative;
-        }
-        .quote-text::before, .quote-text::after {
-            content: '"'; font-size: 32px; color: var(--primary);
-            font-family: Georgia, serif; line-height: 0;
-            position: absolute; opacity: 0.6;
-        }
-        .quote-text::before { left: -12px; top: 6px; }
-        .quote-text::after { right: -12px; bottom: -12px; }
+        .quote-text { font-size: 18px; font-weight: 500; color: var(--text-light); line-height: 1.7; font-style: italic; position: relative; }
+        .quote-author { margin-top: 12px; font-size: 14px; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; }
+        @keyframes fadeInQuote { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .quote-author {
-            margin-top: 12px; font-size: 14px; font-weight: 700;
-            color: var(--secondary); text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        @keyframes fadeInQuote {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .quote-dots {
-            display: flex; justify-content: center; gap: 8px;
-            margin-top: 15px;
-        }
-        .quote-dots span {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            transition: all 0.4s ease; cursor: pointer;
-        }
+        .quote-dots { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
+        .quote-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.4s ease; cursor: pointer; }
         body.light-mode .quote-dots span { background: rgba(15,23,42,0.15); }
-        .quote-dots span.active {
-            width: 24px; border-radius: 6px;
-            background: var(--gradient-1);
-        }
+        .quote-dots span.active { width: 24px; border-radius: 6px; background: var(--gradient-1); }
 
         .more-quotes-btn {
-            margin-top: 18px;
-            background: var(--gradient-1);
-            background-size: 200% auto;
-            color: #ffffff;
-            padding: 11px 26px; border: none;
-            border-radius: 50px; cursor: pointer;
-            font-weight: 600; font-size: 13px;
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 18px; background: var(--gradient-1); background-size: 200% auto; color: #ffffff;
+            padding: 11px 26px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 13px;
+            transition: all 0.4s ease; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); display: inline-flex; align-items: center; gap: 8px;
         }
-        .more-quotes-btn:hover {
-            background-position: right center;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(236, 72, 153, 0.5);
-        }
-        .more-quotes-btn:hover i { transform: translateX(4px); }
-        .more-quotes-btn i { transition: transform 0.3s ease; }
+        .more-quotes-btn:hover { background-position: right center; transform: translateY(-3px); box-shadow: 0 12px 28px rgba(236, 72, 153, 0.5); }
 
-        /* ---------- SECTIONS ---------- */
+        /* Sections */
         section {
-            max-width: 950px;
-            margin: 40px auto;
-            padding: 40px 25px;
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            border-radius: 30px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            border: var(--glass-border);
-            opacity: 0; transform: translateY(35px);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 950px; margin: 40px auto; padding: 40px 25px; background: var(--bg-card);
+            backdrop-filter: blur(16px); border-radius: 30px; text-align: center; box-shadow: var(--shadow-lg);
+            border: var(--glass-border); opacity: 0; transform: translateY(35px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         section.reveal { opacity: 1; transform: translateY(0); }
+        section h2 { font-size: 28px; font-weight: 800; margin-bottom: 15px; background: linear-gradient(90deg, #6366f1, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-        section h2 {
-            font-size: 28px; font-weight: 800;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #6366f1, #0ea5e9);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* ---------- FIXED SOCIAL BAR ---------- */
+        /* Social Bar */
         .fixed-social-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            display: flex; justify-content: center; align-items: center;
-            gap: 18px; padding: 10px 0; z-index: 999;
-            border-top: var(--glass-border);
-            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
+            position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center;
+            gap: 18px; padding: 10px 0; z-index: 999; border-top: var(--glass-border); box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
         }
         body.light-mode .fixed-social-bar { background: rgba(255,255,255,0.95); box-shadow: 0 -5px 25px rgba(99,102,241,0.15); }
-
         .fixed-social-bar a {
-            color: var(--text-light);
-            width: 42px; height: 42px; border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            display: flex; align-items: center; justify-content: center;
-            border: var(--glass-border);
-            transition: all 0.3s ease;
-            text-decoration: none; font-size: 18px;
-            position: relative;
+            color: var(--text-light); width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: center; border: var(--glass-border); transition: all 0.3s ease; text-decoration: none; font-size: 18px;
         }
         body.light-mode .fixed-social-bar a { color: #0f172a; background: rgba(15,23,42,0.05); }
+        .fixed-social-bar a:hover { background: var(--primary); color: #ffffff; transform: translateY(-5px) scale(1.1); box-shadow: 0 10px 22px rgba(99,102,241,0.5); }
 
-        .fixed-social-bar a:hover {
-            background: var(--primary); color: #ffffff;
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 10px 22px rgba(99,102,241,0.5);
-        }
-
-        /* Contact */
-        .contact-info {
-            text-align: left; display: inline-block; margin-top: 15px;
-            width: 100%; max-width: 450px;
-            background: rgba(15, 23, 42, 0.5);
-            padding: 25px; border-radius: 20px;
-            border: var(--glass-border);
-        }
+        /* Contact Info */
+        .contact-info { text-align: left; display: inline-block; margin-top: 15px; width: 100%; max-width: 450px; background: rgba(15, 23, 42, 0.5); padding: 25px; border-radius: 20px; border: var(--glass-border); }
         body.light-mode .contact-info { background: rgba(255,255,255,0.7); }
-
         .contact-info p { margin-bottom: 12px; font-size: 15px; }
         .contact-info p i { color: var(--primary); margin-right: 6px; }
 
         .location-wrapper { margin-top: 12px; position: relative; }
-        .loc-trigger {
-            color: var(--secondary); font-weight: 700; cursor: pointer;
-            text-decoration: underline; text-decoration-style: dotted;
-            text-underline-offset: 3px;
-            transition: color 0.3s;
-        }
+        .loc-trigger { color: var(--secondary); font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; transition: color 0.3s; }
         .loc-trigger:hover { color: var(--accent); }
 
-        .loc-modal {
-            display: none;
-            background: rgba(15, 23, 42, 0.95);
-            border: var(--glass-border);
-            padding: 15px; border-radius: 16px;
-            margin-top: 12px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-            animation: menuPop 0.35s ease;
-        }
+        .loc-modal { display: none; background: rgba(15, 23, 42, 0.95); border: var(--glass-border); padding: 15px; border-radius: 16px; margin-top: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: menuPop 0.35s ease; }
         body.light-mode .loc-modal { background: rgba(255,255,255,0.98); }
-        .loc-modal a {
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.05);
-            margin: 8px 0; padding: 10px 14px;
-            text-decoration: none; color: var(--text-light);
-            border-radius: 10px; font-weight: 600;
-            font-size: 14px; border: var(--glass-border);
-            transition: all 0.3s ease;
-        }
+        .loc-modal a { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); margin: 8px 0; padding: 10px 14px; text-decoration: none; color: var(--text-light); border-radius: 10px; font-weight: 600; font-size: 14px; border: var(--glass-border); transition: all 0.3s ease; }
         body.light-mode .loc-modal a { background: rgba(15,23,42,0.04); }
         .loc-modal a:hover { background: var(--primary); color: white; transform: translateX(4px); }
         .credit-text { font-size: 12px; color: var(--text-dim); font-style: italic; margin-top: 8px; }
 
-        /* ---------- FOOTER ---------- */
-        footer {
-            background: rgba(15, 23, 42, 0.9);
-            color: var(--text-dim);
-            padding: 20px 0 25px 0;
-            margin-top: 40px; text-align: center;
-            border-top: var(--glass-border); font-size: 14px;
-        }
+        footer { background: rgba(15, 23, 42, 0.9); color: var(--text-dim); padding: 20px 0 25px 0; margin-top: 40px; text-align: center; border-top: var(--glass-border); font-size: 14px; }
         body.light-mode footer { background: rgba(255,255,255,0.85); }
 
-        /* ---------- CHATBOT ---------- */
-        #nbn-chat-wrapper {
-            position: fixed; bottom: 75px; right: 25px; z-index: 1000;
-            opacity: 0; visibility: hidden; transform: translateY(15px);
-            transition: all 0.4s ease;
-        }
+        /* Chatbot */
+        #nbn-chat-wrapper { position: fixed; bottom: 75px; right: 25px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.4s ease; }
         #nbn-chat-wrapper.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        #nbn-chat-btn {
-            background: var(--gradient-1);
-            background-size: 200% auto;
-            color: white; padding: 12px 20px;
-            border-radius: 50px; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-            font-weight: 600; font-size: 13px;
-            display: flex; align-items: center; gap: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.35s ease;
-            animation: glowPulse 2.5s ease-in-out infinite;
-        }
-        #nbn-chat-btn:hover { background-position: right center; transform: translateY(-3px) scale(1.03); }
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
-            50% { box-shadow: 0 8px 35px rgba(236,72,153,0.6); }
-        }
+        #nbn-chat-btn { background: var(--gradient-1); color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.35s ease; }
+        #nbn-chat-btn:hover { transform: translateY(-3px) scale(1.03); }
 
-        #nbn-chat-window {
-            position: fixed; bottom: 135px; right: 25px;
-            width: 320px; height: 450px;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            display: none; flex-direction: column;
-            z-index: 1000; overflow: hidden;
-            border: var(--glass-border); font-family: inherit;
-        }
+        #nbn-chat-window { position: fixed; bottom: 135px; right: 25px; width: 320px; height: 450px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: var(--glass-border); }
         body.light-mode #nbn-chat-window { background: rgba(255,255,255,0.98); }
 
-        #nbn-chat-header {
-            background: rgba(30, 41, 59, 0.8);
-            color: white; padding: 15px 18px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: var(--glass-border);
-        }
+        #nbn-chat-header { background: rgba(30, 41, 59, 0.8); color: white; padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: var(--glass-border); }
         body.light-mode #nbn-chat-header { background: rgba(99,102,241,0.1); color: #0f172a; }
 
-        #nbn-chat-body {
-            flex: 1; padding: 15px; overflow-y: auto;
-            background: rgba(15, 23, 42, 0.6);
-            display: flex; flex-direction: column; gap: 10px;
-        }
+        #nbn-chat-body { flex: 1; padding: 15px; overflow-y: auto; background: rgba(15, 23, 42, 0.6); display: flex; flex-direction: column; gap: 10px; }
         body.light-mode #nbn-chat-body { background: rgba(248,250,252,0.7); }
 
-        .msg {
-            padding: 10px 14px; border-radius: 16px;
-            font-size: 13px; max-width: 85%; line-height: 1.5;
-            animation: msgIn 0.35s ease;
-        }
+        .msg { padding: 10px 14px; border-radius: 16px; font-size: 13px; max-width: 85%; line-height: 1.5; animation: msgIn 0.35s ease; }
         @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .user-msg {
-            background: var(--primary); color: white;
-            align-self: flex-end; border-bottom-right-radius: 3px;
-        }
-        .ai-msg {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
-            align-self: flex-start; border-bottom-left-radius: 3px;
-            border: var(--glass-border);
-        }
+        .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
+        .ai-msg { background: rgba(255, 255, 255, 0.1); color: var(--text-light); align-self: flex-start; border-bottom-left-radius: 3px; border: var(--glass-border); }
         body.light-mode .ai-msg { background: rgba(99,102,241,0.1); }
 
-        #trans-control {
-            padding: 8px; background: rgba(30, 41, 59, 0.6);
-            text-align: center; border-top: var(--glass-border);
-        }
-        body.light-mode #trans-control { background: rgba(99,102,241,0.08); }
-
-        #trans-btn {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-light);
-            padding: 5px 14px; font-size: 11px;
-            border: var(--glass-border); border-radius: 20px;
-            cursor: pointer; margin: 0;
-            transition: all 0.3s ease;
-        }
+        #trans-control { padding: 8px; background: rgba(30, 41, 59, 0.6); text-align: center; border-top: var(--glass-border); }
+        #trans-btn { background: rgba(255,255,255,0.05); color: var(--text-light); padding: 5px 14px; font-size: 11px; border: var(--glass-border); border-radius: 20px; cursor: pointer; transition: all 0.3s ease; }
         #trans-btn:hover { background: var(--primary); color: #fff; }
 
-        #nbn-chat-footer {
-            padding: 12px; display: flex; gap: 8px;
-            background: rgba(30, 41, 59, 0.8);
-            border-top: var(--glass-border);
-        }
-        body.light-mode #nbn-chat-footer { background: rgba(99,102,241,0.08); }
-
-        #nbn-input {
-            flex: 1; background: rgba(15, 23, 42, 0.8);
-            border: var(--glass-border); color: white;
-            padding: 8px 14px; border-radius: 20px;
-            outline: none; font-size: 13px;
-            font-family: inherit;
-        }
+        #nbn-chat-footer { padding: 12px; display: flex; gap: 8px; background: rgba(30, 41, 59, 0.8); border-top: var(--glass-border); }
+        #nbn-input { flex: 1; background: rgba(15, 23, 42, 0.8); border: var(--glass-border); color: white; padding: 8px 14px; border-radius: 20px; outline: none; font-size: 13px; }
         body.light-mode #nbn-input { background: rgba(255,255,255,0.9); color: #0f172a; }
-        #nbn-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.2); }
 
-        #nbn-chat-footer button {
-            background: var(--primary); color: white;
-            border: none; width: 36px; height: 36px;
-            border-radius: 50%; cursor: pointer;
-            display: grid; place-items: center;
-            margin: 0; padding: 0;
-            transition: all 0.3s ease;
-        }
+        #nbn-chat-footer button { background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; transition: all 0.3s ease; }
         #nbn-chat-footer button:hover { background: var(--primary-dark); transform: scale(1.08); }
 
-        .success-message {
-            background: #10b981; color: white;
-            padding: 8px; border-radius: 10px;
-            text-align: center; margin-top: 8px;
-        }
+        .success-message { background: #10b981; color: white; padding: 8px; border-radius: 10px; text-align: center; margin-top: 8px; }
 
-        /* ---------- BACK TO TOP ---------- */
+        /* Back to top */
         #back-top {
-            position: fixed; bottom: 75px; left: 25px;
-            width: 46px; height: 46px; border-radius: 50%;
-            background: var(--gradient-1);
-            background-size: 200% auto;
-            color: white; border: none;
-            cursor: pointer;
-            display: grid; place-items: center;
-            font-size: 16px; z-index: 998;
-            box-shadow: 0 8px 25px rgba(99,102,241,0.5);
-            opacity: 0; visibility: hidden;
-            transform: translateY(15px);
-            transition: all 0.4s ease;
+            position: fixed; bottom: 75px; left: 25px; width: 46px; height: 46px; border-radius: 50%;
+            background: var(--gradient-1); color: white; border: none; cursor: pointer; display: grid; place-items: center;
+            font-size: 16px; z-index: 998; box-shadow: 0 8px 25px rgba(99,102,241,0.5); opacity: 0; visibility: hidden;
+            transform: translateY(15px); transition: all 0.4s ease;
         }
         #back-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        #back-top:hover { background-position: right center; transform: translateY(-4px) scale(1.08); }
+        #back-top:hover { transform: translateY(-4px) scale(1.08); }
 
-        /* ---------- RESPONSIVE ---------- */
+        /* Responsive */
         @media (max-width: 768px) {
             .profile-wrapper { max-width: 220px; }
             .hero-author-name { font-size: 20px; }
             .hero { padding: 25px 15px; margin: 15px 10px; }
             .quote-text { font-size: 16px; }
-            .quote-text::before, .quote-text::after { display: none; }
             section { margin: 20px 10px; padding: 25px 15px; }
             .nepal-flag { width: 140px; }
             #nbn-chat-window { width: calc(100vw - 30px); right: 15px; bottom: 130px; }
@@ -819,14 +395,14 @@
     <div class="loader-text">LOADING</div>
 </div>
 
-<!-- Theme toggle -->
+<!-- Theme Toggle -->
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
     <i class="fa-solid fa-moon" id="theme-icon"></i>
 </button>
 
 <!-- PRO HAMBURGER MENU -->
 <div class="hamburger-menu-container" id="menuContainer">
-    <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu(event)" role="button" aria-label="Open menu" tabindex="0">
+    <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu(event)" role="button" aria-expanded="false" aria-label="Open navigation menu" tabindex="0">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
@@ -890,7 +466,7 @@
     <div class="flag-container">
         <img src="nepal.png" alt="Nepal Map" class="nepal-flag" onerror="this.style.display='none'">
         <div class="overtake-wrapper">
-            <span class="speech">Over take is interesting</span>
+            <span class="speech">Overtake is interesting</span>
             <span class="s">BUT</span>
             <span class="d">DANGEROUS</span>
         </div>
@@ -906,7 +482,7 @@
     </div>
 </div>
 
-<!-- POPULAR QUOTES WITH AUTHORS & CUSTOM DESIGNER CREDIT -->
+<!-- Quotes Carousel -->
 <div class="quotes-slider-section">
     <div class="quotes-slider-title">
         <i class="fa-solid fa-star"></i>
@@ -914,17 +490,14 @@
         <i class="fa-solid fa-star"></i>
     </div>
     <div class="quote-card-container">
-        <!-- Quote 1: Custom Web Designer Credit -->
         <div class="quote-slide active">
-            <div class="quote-text">तिम्रो सपना गाह्रो छ थाहा छ, तर असम्भव भने छैन ।</div>
+            <div class="quote-text">तिम्रो सपना गाह्रो छ थाहा छ, तर असम्भव भने छैन।</div>
             <div class="quote-author">— Nabin Kanxo (Web Designer)</div>
         </div>
-        <!-- Quote 2: Famous Person Quote -->
         <div class="quote-slide">
             <div class="quote-text">महान काम गर्ने एउटै तरिका हो, आफूले गरिरहेको कामलाई माया गर्नु।</div>
             <div class="quote-author">— Steve Jobs</div>
         </div>
-        <!-- Quote 3: Famous Person Quote -->
         <div class="quote-slide">
             <div class="quote-text">पहिले उनीहरूले तिमीलाई बेवास्ता गर्छन्, त्यसपछि हाँस्छन्, त्यसपछि लड्छन्, र अनि तिमी जित्छौ।</div>
             <div class="quote-author">— Mahatma Gandhi</div>
@@ -938,6 +511,7 @@
     </button>
 </div>
 
+<!-- Contact Section -->
 <section id="contact">
     <h2>Contact Me</h2>
     <div class="contact-info">
@@ -953,7 +527,6 @@
                 <a href="https://maps.app.goo.gl/khZSfETTHKguxF128" target="_blank" rel="noopener">
                     <i class="fa-solid fa-map-marked-alt"></i> View on Google Maps
                 </a>
-
                 <a href="https://www.facebook.com/share/r/1Bvb5yA2eG/" target="_blank" rel="noopener">
                     <i class="fa-solid fa-play-circle"></i> Watch Location Video
                 </a>
@@ -968,6 +541,7 @@
     <i class="fa-solid fa-arrow-up"></i>
 </button>
 
+<!-- Chatbot Wrapper -->
 <div id="nbn-chat-wrapper">
     <div id="nbn-chat-btn" onclick="toggleNbnChat()">
         <i class="fa-solid fa-comment-dots"></i> <span>Question / Suggestion</span>
@@ -976,8 +550,8 @@
     <div id="nbn-chat-window">
         <div id="nbn-chat-header">
             <div style="display:flex; align-items:center; gap:8px;">
-                <img src="Nabin.png" style="width:30px; height:30px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
-                <strong>Nabin Phuyal (AI)</strong>
+                <img src="Nabin.png" alt="Nabin Avatar" style="width:30px; height:30px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                <strong>Nabin Phuyal (Suggestion)</strong>
             </div>
             <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:20px;">×</span>
         </div>
@@ -992,17 +566,17 @@
 
         <div id="nbn-chat-footer">
             <input type="text" id="nbn-input" placeholder="यहाँ लेख्नुहोस्..." onkeypress="if(event.key === 'Enter') sendNbnMessage()">
-            <button onclick="sendNbnMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            <button onclick="sendNbnMessage()" aria-label="Send Message"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>© 2025 Nabin Phuyal. All rights reserved.</p>
-    <p style="margin-top: 4px; font-size: 12px;">Website Design by 🚀 Nabin Kanxo</p>
+    <p>© 2026 Nabin Phuyal. All rights reserved.</p>
+    <p style="margin-top: 4px; font-size: 12px;">Website Design by 🚀 Nabin Phuyal </p>
 </footer>
 
-<!-- FIXED SOCIAL MEDIA LINKS -->
+<!-- Social Bar -->
 <div class="fixed-social-bar">
     <a href="http://www.youtube.com/@nabinvlogdream" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a>
     <a href="http://www.tiktok.com/@nabinkanxophuyal" target="_blank" rel="noopener" title="TikTok"><i class="fab fa-tiktok"></i></a>
@@ -1012,14 +586,15 @@
 </div>
 
 <script>
-/* ---------- PRELOADER ---------- */
+/* ---------- Preloader ---------- */
 window.addEventListener('load', () => {
     setTimeout(() => {
-        document.getElementById('preloader').classList.add('hide');
-    }, 500);
+        const preloader = document.getElementById('preloader');
+        if (preloader) preloader.classList.add('hide');
+    }, 400);
 });
 
-/* ---------- TYPING EFFECT ---------- */
+/* ---------- Typing Effect ---------- */
 (function typeTitle() {
     const el = document.getElementById('typeTitle');
     const text = "WELCOME TO MY PERSONAL WEB";
@@ -1030,10 +605,10 @@ window.addEventListener('load', () => {
             setTimeout(type, 70);
         }
     }
-    setTimeout(type, 900);
+    setTimeout(type, 800);
 })();
 
-/* ---------- THEME TOGGLE ---------- */
+/* ---------- Theme Toggle ---------- */
 function toggleTheme() {
     document.body.classList.toggle('light-mode');
     const icon = document.getElementById('theme-icon');
@@ -1045,25 +620,32 @@ function toggleTheme() {
     const saved = localStorage.getItem('theme');
     if (saved === 'light') {
         document.body.classList.add('light-mode');
-        document.getElementById('theme-icon').className = 'fa-solid fa-sun';
+        const icon = document.getElementById('theme-icon');
+        if (icon) icon.className = 'fa-solid fa-sun';
     }
 })();
 
-/* ---------- PRO MENU ---------- */
+/* ---------- Pro Menu ---------- */
 let menuOpen = false;
 function toggleMenu(event) {
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     menuOpen ? closeMenu() : openMenu();
 }
 function openMenu() {
     menuOpen = true;
-    document.getElementById('hamburgerBtn').classList.add('active');
+    const btn = document.getElementById('hamburgerBtn');
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
     document.getElementById('menu-options').classList.add('show');
     document.getElementById('menuBackdrop').classList.add('show');
 }
 function closeMenu() {
     menuOpen = false;
-    document.getElementById('hamburgerBtn').classList.remove('active');
+    const btn = document.getElementById('hamburgerBtn');
+    if (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+    }
     document.getElementById('menu-options').classList.remove('show');
     document.getElementById('menuBackdrop').classList.remove('show');
 }
@@ -1073,36 +655,41 @@ document.addEventListener('click', e => {
     if (c && !c.contains(e.target) && menuOpen) closeMenu();
 });
 
-/* ---------- QUOTE CAROUSEL ---------- */
+/* ---------- Quote Carousel ---------- */
 let slideIndex = 0;
 const slides = document.getElementsByClassName('quote-slide');
 const dotsContainer = document.getElementById('quoteDots');
 
-for (let i = 0; i < slides.length; i++) {
-    const dot = document.createElement('span');
-    if (i === 0) dot.classList.add('active');
-    dot.onclick = () => goToSlide(i);
-    dotsContainer.appendChild(dot);
+if (dotsContainer && slides.length > 0) {
+    for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('span');
+        if (i === 0) dot.classList.add('active');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
 }
 
 function goToSlide(idx) {
+    if (!slides.length) return;
     for (let i = 0; i < slides.length; i++) {
         slides[i].classList.remove('active');
-        dotsContainer.children[i].classList.remove('active');
+        if (dotsContainer.children[i]) dotsContainer.children[i].classList.remove('active');
     }
     slideIndex = idx;
     slides[slideIndex].classList.add('active');
-    dotsContainer.children[slideIndex].classList.add('active');
+    if (dotsContainer.children[slideIndex]) dotsContainer.children[slideIndex].classList.add('active');
 }
 
 function autoSlideQuotes() {
-    slideIndex = (slideIndex + 1) % slides.length;
-    goToSlide(slideIndex);
+    if (slides.length > 0) {
+        slideIndex = (slideIndex + 1) % slides.length;
+        goToSlide(slideIndex);
+    }
     setTimeout(autoSlideQuotes, 4500);
 }
 setTimeout(autoSlideQuotes, 4500);
 
-/* ---------- SCROLL REVEAL ---------- */
+/* ---------- Scroll Reveal ---------- */
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('reveal');
@@ -1110,30 +697,31 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('section').forEach(el => observer.observe(el));
 
-/* ---------- BACK TO TOP + CHAT WRAPPER ---------- */
+/* ---------- Scroll Events ---------- */
 window.addEventListener('scroll', () => {
     const chatWrapper = document.getElementById('nbn-chat-wrapper');
     const backTop = document.getElementById('back-top');
     const scrollPosition = window.scrollY + window.innerHeight;
     const pageHeight = document.documentElement.scrollHeight;
 
-    if (pageHeight - scrollPosition < 100) {
-        chatWrapper.classList.add('show');
-    } else {
-        chatWrapper.classList.remove('show');
+    if (chatWrapper) {
+        if (pageHeight - scrollPosition < 100) chatWrapper.classList.add('show');
+        else chatWrapper.classList.remove('show');
     }
 
-    if (window.scrollY > 500) backTop.classList.add('show');
-    else backTop.classList.remove('show');
+    if (backTop) {
+        if (window.scrollY > 400) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+    }
 });
 
-/* ---------- LOCATION TOGGLE ---------- */
+/* ---------- Location Toggle ---------- */
 function toggleLoc() {
     const modal = document.getElementById('locModal');
-    modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+    if (modal) modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
 }
 
-/* ---------- 3D TILT ---------- */
+/* ---------- 3D Tilt ---------- */
 (function tilt() {
     const card = document.getElementById('tiltCard');
     if (!card) return;
@@ -1148,26 +736,24 @@ function toggleLoc() {
     });
 })();
 
-/* ---------- CHATBOT ---------- */
+/* ---------- Chatbot ---------- */
 let isNepali = true;
 const languages = {
     np: {
         welcome: "वेबसाईट प्रति केहि सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।",
         placeholder: "यहाँ लेख्नुहोस्...",
-        btn: "English मा हेर्नुहोस्",
-        reply: "धन्यवाद मेरो वेबमा आएर सल्लाह, सुझाव तथा प्रश्न गर्नुभएकोमा। म नवीन फुयल, प्रत्यक्ष रूपमा तपाइँको यही Gmail मार्फत तपाईंको प्रश्न तथा सल्लाहको गहन रूपमा रिप्लाई दिनेछु। धन्यवाद!"
+        btn: "English मा हेर्नुहोस्"
     },
     en: {
         welcome: "Hello! If you have any advice or suggestions, please write them here.",
         placeholder: "Write here...",
-        btn: "नेपालीमा हेर्नुहोस्",
-        reply: "Thank you for visiting my website and sharing your suggestions or questions. I am Nabin Phuyal, and I will provide a detailed reply when I am online. Thank you!"
+        btn: "नेपालीमा हेर्नुहोस्"
     }
 };
 
 function toggleNbnChat() {
     const win = document.getElementById('nbn-chat-window');
-    win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+    if (win) win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
 }
 
 function translateAll() {
@@ -1199,7 +785,7 @@ function sendNbnMessage() {
     }, 500);
 }
 
-/* Smooth scroll for nav links */
+/* Smooth Scroll for Anchors */
 document.querySelectorAll('nav a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
         e.preventDefault();
