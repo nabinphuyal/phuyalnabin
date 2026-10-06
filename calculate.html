@@ -10,6 +10,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- Chart.js for Pro Visual Analytics -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 :root {
   --bg-color: #f0f4f8;
@@ -18,6 +21,8 @@
   --text-sub: #666666;
   --border-color: #eef2f6;
   --primary-gradient: linear-gradient(135deg, #1a2634, #2c3e50);
+  --success-color: #2e7d32;
+  --danger-color: #d32f2f;
 }
 
 body.dark-theme {
@@ -31,7 +36,7 @@ body.dark-theme {
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;transition:background-color 0.3s, color 0.3s}
 body{background:var(--bg-color);min-height:100vh;padding:20px;color:var(--text-main)}
-.container{max-width:950px;margin:auto}
+.container{max-width:1000px;margin:auto}
 .card{background:var(--card-bg);padding:30px;border-radius:25px;box-shadow:0 10px 40px rgba(0,0,0,.08);margin-top:20px}
 h2, h3{color:var(--text-main);margin-bottom:15px}
 p{color:var(--text-sub)}
@@ -44,10 +49,10 @@ p{color:var(--text-sub)}
 .password-wrapper input{width:100%;padding-right:50px}
 .toggle-password{position:absolute;right:15px;background:none;border:0;cursor:pointer;color:var(--text-sub);font-size:1.1rem}
 
-.btn{padding:12px 24px;border:0;border-radius:50px;font-weight:600;cursor:pointer;font-size:.95rem;display:inline-flex;align-items:center;gap:8px}
+.btn{padding:12px 24px;border:0;border-radius:50px;font-weight:600;cursor:pointer;font-size:.95rem;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary{background:var(--primary-gradient);color:#fff}
-.btn-success{background:#2e7d32;color:#fff}
-.btn-danger{background:#d32f2f;color:#fff}
+.btn-success{background:var(--success-color);color:#fff}
+.btn-danger{background:var(--danger-color);color:#fff}
 .btn-warning{background:#f9a825;color:#1a2634}
 .btn-secondary{background:var(--border-color);color:var(--text-main)}
 .btn-sm{padding:6px 14px;font-size:.8rem}
@@ -55,7 +60,6 @@ p{color:var(--text-sub)}
 .hidden{display:none!important}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a2634;color:#fff;padding:15px 30px;border-radius:15px;z-index:9999;display:none;box-shadow:0 5px 20px rgba(0,0,0,0.3);text-align:center}
 
-/* Header & Menu */
 .user-header{display:flex;justify-content:space-between;align-items:center;background:var(--border-color);padding:12px 20px;border-radius:15px;margin-bottom:20px}
 .menu-container{position:relative}
 .menu-btn{background:none;border:none;font-size:1.4rem;color:var(--text-main);cursor:pointer;padding:5px 10px}
@@ -63,24 +67,35 @@ p{color:var(--text-sub)}
 .dropdown-menu button{padding:12px 20px;border:none;background:none;text-align:left;color:var(--text-main);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:10px}
 .dropdown-menu button:hover{background:var(--border-color)}
 
-/* Summary Cards */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:15px;margin:15px 0}
-.stat-card{background:var(--border-color);padding:15px 20px;border-radius:15px;text-align:center}
+/* Enhanced Summary Cards */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:15px;margin:15px 0}
+.stat-card{background:var(--border-color);padding:18px 20px;border-radius:18px;text-align:center;box-shadow: 0 4px 12px rgba(0,0,0,0.03)}
 .stat-card h4{font-size:0.85rem;color:var(--text-sub)}
-.stat-card p{font-size:1.3rem;font-weight:700;color:var(--text-main);margin-top:5px}
+.stat-card p{font-size:1.4rem;font-weight:700;margin-top:5px}
+.stat-card.income p{color:var(--success-color)}
+.stat-card.expense p{color:var(--danger-color)}
+.stat-card.balance p{color:#0284c7}
 
-.note-item{display:flex;flex-wrap:wrap;align-items:center;gap:10px 15px;padding:12px 18px;background:var(--border-color);border-radius:12px;margin-bottom:8px;border-left:4px solid #1a2634}
-.note-item .sn{font-weight:700;min-width:30px}
-.item-name{flex:2;min-width:120px;font-weight:500}
-.item-amount{flex:1;font-weight:600;text-align:right}
+.note-item{display:flex;flex-wrap:wrap;align-items:center;gap:10px 15px;padding:14px 18px;background:var(--border-color);border-radius:14px;margin-bottom:10px;border-left:5px solid #1a2634}
+.note-item.type-income{border-left-color: var(--success-color)}
+.note-item.type-expense{border-left-color: var(--danger-color)}
+
+.note-item .sn{font-weight:700;min-width:25px}
+.item-category{font-size:1.1rem}
+.item-name{flex:2;min-width:130px;font-weight:500}
+.item-amount{flex:1;font-weight:700;text-align:right}
+.item-amount.income-text{color:var(--success-color)}
+.item-amount.expense-text{color:var(--danger-color)}
 .item-datetime{flex:1.5;font-size:.75rem;opacity:0.8;text-align:center}
 .action-btns button{background:none;border:0;cursor:pointer;padding:5px 8px;font-size:1rem}
 .edit-btn{color:#f9a825}.delete-btn{color:#d32f2f}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center}
 .modal-box{background:var(--card-bg);padding:30px;border-radius:25px;max-width:450px;width:90%}
-.modal-box input{width:100%;margin:8px 0}
+.modal-box input, .modal-box select{width:100%;margin:8px 0}
 .modal-box .btn-group{display:flex;gap:12px;margin-top:15px}
+
+.chart-container{position:relative;margin:20px 0;max-height:280px;display:flex;justify-content:center}
 
 @media(max-width:600px){.note-item{flex-direction:column;align-items:flex-start}.item-amount,.item-datetime{text-align:left}.input-group{flex-direction:column}}
 </style>
@@ -92,8 +107,21 @@ p{color:var(--text-sub)}
 <!-- EDIT NOTE MODAL -->
 <div class="modal-overlay" id="editModal">
 <div class="modal-box">
-<h3>✏️ Edit Note</h3>
-<input type="text" id="editName" placeholder="सामान/विषयको नाम">
+<h3>✏️ Edit Record</h3>
+<select id="editType">
+  <option value="expense">📉 खर्च (Expense)</option>
+  <option value="income">📈 आम्दानी (Income)</option>
+</select>
+<select id="editCategory">
+  <option value="🍔 खाना/खाजा">🍔 खाना/खाजा</option>
+  <option value="🏠 कोठा भाडा">🏠 कोठा भाडा</option>
+  <option value="🚌 यात्रा/गाडी">🚌 यात्रा/गाडी</option>
+  <option value="📱 रिचार्ज/इन्टरनेट">📱 रिचार्ज/इन्टरनेट</option>
+  <option value="💼 तलब/इन्कम">💼 तलब/इन्कम</option>
+  <option value="🛒 किनमेल">🛒 किनमेल</option>
+  <option value="📌 अन्य">📌 अन्य</option>
+</select>
+<input type="text" id="editName" placeholder="विवरणको नाम">
 <input type="number" id="editAmount" placeholder="रकम (रु.)" step="0.01">
 <div class="btn-group">
 <button class="btn btn-success" onclick="saveEdit()">💾 Save Changes</button>
@@ -182,33 +210,32 @@ p{color:var(--text-sub)}
 <button class="menu-btn" onclick="toggleDropdown()"><i class="fa-solid fa-bars"></i></button>
 <div class="dropdown-menu" id="dropdownMenu">
 <button onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</button>
+<button onclick="exportDataJSON()"><i class="fa-solid fa-file-export"></i> Export Backup (JSON)</button>
 <button onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
 </div>
 </div>
 </div>
 </div>
 
-<!-- Month / Year Selector Bar (English Year AD) -->
+<!-- Month / Year Selector Bar -->
 <div style="background:var(--border-color);padding:15px;border-radius:15px;margin-bottom:20px;">
 <h4 style="margin-bottom:8px;font-size:0.9rem;">📅 Filter by Year & Month</h4>
 <div class="input-group" style="margin:0;">
-<select id="selectYear" onchange="filterNotes()">
+<select id="selectYear" onchange="renderNotes()">
 <option value="2024">2024</option>
 <option value="2025">2025</option>
 <option value="2026" selected>2026</option>
 <option value="2027">2027</option>
 <option value="2028">2028</option>
-<option value="2029">2029</option>
-<option value="2030">2030</option>
 </select>
-<select id="selectMonth" onchange="filterNotes()">
+<select id="selectMonth" onchange="renderNotes()">
 <option value="ALL">-- ALL MONTHS (सबै महिना) --</option>
 <option value="बैशाख">बैशाख</option>
 <option value="जेठ">जेठ</option>
 <option value="असार">असार</option>
 <option value="साउन">साउन</option>
 <option value="भदौ">भदौ</option>
-<option value="असोज">असोज</option>
+<option value="असोज" selected>असोज</option>
 <option value="कात्तिक">कात्तिक</option>
 <option value="मंसिर">मंसिर</option>
 <option value="पुस">पुस</option>
@@ -219,23 +246,42 @@ p{color:var(--text-sub)}
 </div>
 </div>
 
-<!-- Quick Statistics -->
+<!-- Quick Statistics Overview -->
 <div class="stats-grid">
-<div class="stat-card"><h4>नोट संख्या</h4><p id="statCount">0</p></div>
-<div class="stat-card"><h4>जम्मा खर्च रकम</h4><p id="statTotal">रु. 0.00</p></div>
+<div class="stat-card income"><h4>कुल आम्दानी</h4><p id="statIncome">रु. 0.00</p></div>
+<div class="stat-card expense"><h4>कुल खर्च</h4><p id="statExpense">रु. 0.00</p></div>
+<div class="stat-card balance"><h4>मासिक बचत (Balance)</h4><p id="statBalance">रु. 0.00</p></div>
 </div>
 
-<h2>📝 Add New Note</h2>
+<!-- Pro Visual Chart -->
+<div class="chart-container">
+  <canvas id="expenseChart"></canvas>
+</div>
+
+<h2>➕ Add New Transaction</h2>
 <div class="input-group">
-<input type="text" id="noteName" placeholder="सामान/विषयको नाम">
+<select id="noteType" style="flex:0.8;min-width:130px;">
+  <option value="expense">📉 खर्च</option>
+  <option value="income">📈 आम्दानी</option>
+</select>
+<select id="noteCategory" style="flex:1;min-width:140px;">
+  <option value="🍔 खाना/खाजा">🍔 खाना/खाजा</option>
+  <option value="🏠 कोठा भाडा">🏠 कोठा भाडा</option>
+  <option value="🚌 यात्रा/गाडी">🚌 यात्रा/गाडी</option>
+  <option value="📱 रिचार्ज/इन्टरनेट">📱 रिचार्ज/इन्टरनेट</option>
+  <option value="💼 तलब/इन्कम">💼 तलब/इन्कम</option>
+  <option value="🛒 किनमेल">🛒 किनमेल</option>
+  <option value="📌 अन्य">📌 अन्य</option>
+</select>
+<input type="text" id="noteName" placeholder="विवरण (उदा: खाजा/सुपरमार्केट)">
 <input type="number" id="noteAmount" placeholder="रकम (रु.)" step="0.01">
-<button class="btn btn-primary" onclick="addNote()">➕ Add Note</button>
+<button class="btn btn-primary" onclick="addNote()">➕ Add</button>
 </div>
 
 <!-- Search & PDF Download -->
 <div class="input-group" style="margin-top:20px;">
-<input type="text" id="searchInput" placeholder="🔍 नामबाट खोज्नुहोस्..." onkeyup="filterNotes()">
-<button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📥 Export PDF Statement</button>
+<input type="text" id="searchInput" placeholder="🔍 नाम वा क्याटेगोरीबाट खोज्नुहोस्..." onkeyup="renderNotes()">
+<button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📥 Export Statement (PDF)</button>
 </div>
 
 <div id="noteList" style="margin-top:15px"></div>
@@ -258,7 +304,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
 
-let currentUser=null, currentNotes=[], editIndex=null;
+let currentUser=null, currentNotes=[], editIndex=null, chartInstance=null;
 
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
 function togglePassword(id, btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
@@ -279,8 +325,6 @@ function openSettings(){
 }
 function closeSettings(){
   document.getElementById('settingsModal').style.display='none';
-  document.getElementById('oldPassword').value = '';
-  document.getElementById('newPassword').value = '';
 }
 
 async function updateProfileName(){
@@ -311,11 +355,7 @@ async function changePassword(){
     closeSettings();
     showToast('🔐 Password सफलतापूर्वक फेरियो!');
   }catch(e){
-    if(e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-      showToast('❌ पुरानो पासवर्ड मिलेन! कृपया सही पासवर्ड हाल्नुहोस्।');
-    } else {
-      showToast('❌ पासवर्ड फेर्न सकिएन: ' + e.message);
-    }
+    showToast('❌ पासवर्ड फेर्न सकिएन। सही पुरानो पासवर्ड हाल्नुहोस्।');
   }
 }
 
@@ -323,26 +363,18 @@ async function loginUser(){
   const id=document.getElementById('loginId').value.trim().toLowerCase();
   const pass=document.getElementById('loginPassword').value;
 
-  if(!id){showToast('⚠️ Username राख्नुहोस्!'); return;}
-  if(!pass){showToast('⚠️ Password राख्नुहोस्!'); return;}
+  if(!id || !pass){showToast('⚠️ Username र Password राख्नुहोस्!'); return;}
 
   try{
     const snap=await database.ref('idIndex/'+id).once('value');
     if(!snap.exists()){
-      showToast('❌ Username भेटिएन! सही Username हाल्नुहोस् वा नयाँ Account बनाउनुहोस्।');
+      showToast('❌ Username भेटिएन!');
       return;
     }
     const indexData = snap.val();
     await auth.signInWithEmailAndPassword(indexData.email, pass);
   }catch(e){
-    console.error(e);
-    if(e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential'){
-      showToast('❌ पासवर्ड मिलेन! बिर्सिनुभएको भए "Forgot Password?" मा थिच्नुहोस्।');
-    } else if(e.code === 'auth/invalid-email'){
-      showToast('❌ ईमेल फारम्याट मिलेन!');
-    } else {
-      showToast('❌ लगइन हुन सकेन! पासवर्ड वा युजरनेम चेक गर्नुहोस्।');
-    }
+    showToast('❌ लगइन सफल हुन सकेन! पासवर्ड वा युजरनेम चेक गर्नुहोस्।');
   }
 }
 
@@ -365,8 +397,7 @@ async function createAccount(){
     showToast('✅ Account सफलतापूर्वक बन्यो!');
     showLogin();
   }catch(e){
-    if(e.code==='auth/email-already-in-use') showToast('❌ यो Email पहिले नै प्रयोग भइसकेको छ!');
-    else showToast('❌ Account बनाउन सकिएन: '+e.message);
+    showToast('❌ Account बनाउन सकिएन: '+e.message);
   }
 }
 
@@ -375,19 +406,40 @@ async function sendRecovery(){
   if(!email){showToast('⚠️ Recovery Email राख्नुहोस्!');return}
   try{
     await auth.sendPasswordResetEmail(email);
-    document.getElementById('recoveryResult').innerHTML='<div style="color:#2e7d32">✅ Email पठाइयो! Inbox/Spam चेक गरेर Password Reset गर्नुहोस्।</div>';
-    showToast('📨 Reset Email पठाइयो!');
+    document.getElementById('recoveryResult').innerHTML='<div style="color:#2e7d32">✅ Email पठाइयो! Inbox/Spam चेक गर्नुहोस्।</div>';
   }catch(e){
-    document.getElementById('recoveryResult').innerHTML='<div style="color:#d32f2f">❌ Email पठाउन सकिएन। सही Email हाल्नुहोस्।</div>';
+    document.getElementById('recoveryResult').innerHTML='<div style="color:#d32f2f">❌ Email पठाउन सकिएन।</div>';
   }
 }
 
 function logoutUser(){
   auth.signOut();
-  document.getElementById('loginId').value='';
-  document.getElementById('loginPassword').value='';
   showLogin();
   showToast('🚪 Logged out!');
+}
+
+function renderChart(income, expense){
+  const ctx = document.getElementById('expenseChart').getContext('2d');
+  if(chartInstance) chartInstance.destroy();
+
+  chartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['कुल आम्दानी', 'कुल खर्च'],
+      datasets: [{
+        data: [income, expense],
+        backgroundColor: ['#2e7d32', '#d32f2f'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
 }
 
 function renderNotes(){
@@ -402,26 +454,35 @@ function renderNotes(){
 
     const matchYear = (noteYear == selYear);
     const matchMonth = (selMonth === "ALL" || noteMonth === selMonth);
-    const matchSearch = n.name.toLowerCase().includes(searchQ);
+    const matchSearch = n.name.toLowerCase().includes(searchQ) || (n.category && n.category.toLowerCase().includes(searchQ));
 
     return matchYear && matchMonth && matchSearch;
   });
 
   if(!displayNotes.length){
-    container.innerHTML='<p style="text-align:center;padding:25px;color:var(--text-sub);">यो Filter मा कुनै नोट फेला परेन।</p>';
-    document.getElementById('statCount').textContent = '0';
-    document.getElementById('statTotal').textContent = 'रु. 0.00';
+    container.innerHTML='<p style="text-align:center;padding:25px;color:var(--text-sub);">यो Filter मा कुनै रेकर्ड फेला परेन।</p>';
+    document.getElementById('statIncome').textContent = 'रु. 0.00';
+    document.getElementById('statExpense').textContent = 'रु. 0.00';
+    document.getElementById('statBalance').textContent = 'रु. 0.00';
+    renderChart(0,0);
     return;
   }
 
-  let html='', total=0;
+  let html='', totalExpense=0, totalIncome=0;
   displayNotes.forEach((n,i)=>{
-    total += Number(n.amount);
+    const amt = Number(n.amount);
+    const isIncome = n.type === 'income';
+    
+    if(isIncome) totalIncome += amt;
+    else totalExpense += amt;
+
     const originalIndex = currentNotes.indexOf(n);
-    html += `<div class="note-item">
+    
+    html += `<div class="note-item ${isIncome ? 'type-income' : 'type-expense'}">
       <span class="sn">${i+1}</span>
+      <span class="item-category">${n.category || '📌'}</span>
       <span class="item-name">${escapeHTML(n.name)}</span>
-      <span class="item-amount">रु. ${Number(n.amount).toFixed(2)}</span>
+      <span class="item-amount ${isIncome ? 'income-text' : 'expense-text'}">${isIncome ? '+' : '-'} रु. ${amt.toFixed(2)}</span>
       <span class="item-datetime">${escapeHTML(n.datetime || '—')}</span>
       <div class="action-btns">
         <button class="edit-btn" onclick="openEditModal(${originalIndex})"><i class="fa-solid fa-pen"></i></button>
@@ -431,25 +492,36 @@ function renderNotes(){
   });
 
   container.innerHTML = html;
-  document.getElementById('statCount').textContent = displayNotes.length;
-  document.getElementById('statTotal').textContent = 'रु. ' + total.toFixed(2);
+  document.getElementById('statIncome').textContent = 'रु. ' + totalIncome.toFixed(2);
+  document.getElementById('statExpense').textContent = 'रु. ' + totalExpense.toFixed(2);
+  
+  const balance = totalIncome - totalExpense;
+  const balanceEl = document.getElementById('statBalance');
+  balanceEl.textContent = 'रु. ' + balance.toFixed(2);
+  balanceEl.style.color = balance >= 0 ? 'var(--success-color)' : 'var(--danger-color)';
+
+  renderChart(totalIncome, totalExpense);
 }
 
 function addNote(){
-  const name=document.getElementById('noteName').value.trim();
-  const amount=document.getElementById('noteAmount').value.trim();
-  const year=document.getElementById('selectYear').value;
-  let month=document.getElementById('selectMonth').value;
+  const type = document.getElementById('noteType').value;
+  const category = document.getElementById('noteCategory').value;
+  const name = document.getElementById('noteName').value.trim();
+  const amount = document.getElementById('noteAmount').value.trim();
+  const year = document.getElementById('selectYear').value;
+  let month = document.getElementById('selectMonth').value;
 
   if(month === "ALL") month = "असोज";
 
-  if(!name){showToast('⚠️ सामान वा विषयको नाम लेख्नुहोस्!'); return;}
-  if(!amount || isNaN(amount)){showToast('⚠️ सही रकम लेख्नुहोस्!'); return;}
+  if(!name){showToast('⚠️ विवरणको नाम लेख्नुहोस्!'); return;}
+  if(!amount || isNaN(amount) || amount <= 0){showToast('⚠️ सही रकम लेख्नुहोस्!'); return;}
 
   const now = new Date();
   const timeStr = now.toLocaleTimeString('ne-NP', {hour:'2-digit', minute:'2-digit'});
 
   currentNotes.push({
+    type: type,
+    category: category,
     name: name,
     amount: parseFloat(amount),
     year: year,
@@ -461,21 +533,21 @@ function addNote(){
   saveNotesToFirebase();
   document.getElementById('noteName').value='';
   document.getElementById('noteAmount').value='';
-  renderNotes();
-  showToast('✅ Note added!');
+  showToast('✅ Record Added!');
 }
 
 function deleteNote(i){
-  if(confirm('के तपाईं यो नोट मेटाउन चाहनुहुन्छ?')){
+  if(confirm('के तपाईं यो रेकर्ड मेटाउन चाहनुहुन्छ?')){
     currentNotes.splice(i,1);
     saveNotesToFirebase();
-    renderNotes();
-    showToast('🗑️ Note Deleted!');
+    showToast('🗑️ Record Deleted!');
   }
 }
 
 function openEditModal(i){
   editIndex = i;
+  document.getElementById('editType').value = currentNotes[i].type || 'expense';
+  document.getElementById('editCategory').value = currentNotes[i].category || '📌 अन्य';
   document.getElementById('editName').value = currentNotes[i].name;
   document.getElementById('editAmount').value = currentNotes[i].amount;
   document.getElementById('editModal').style.display='flex';
@@ -483,24 +555,35 @@ function openEditModal(i){
 function closeEditModal(){document.getElementById('editModal').style.display='none'; editIndex=null;}
 
 function saveEdit(){
+  const type = document.getElementById('editType').value;
+  const category = document.getElementById('editCategory').value;
   const name = document.getElementById('editName').value.trim();
   const amount = document.getElementById('editAmount').value.trim();
-  if(!name || !amount || isNaN(amount)) {showToast('⚠️ विवरण र रकम सही हाल्नुहोस्!'); return;}
+  
+  if(!name || !amount || isNaN(amount)) {showToast('⚠️️ विवरण र रकम सही हाल्नुहोस्!'); return;}
 
+  currentNotes[editIndex].type = type;
+  currentNotes[editIndex].category = category;
   currentNotes[editIndex].name = name;
   currentNotes[editIndex].amount = parseFloat(amount);
   
   saveNotesToFirebase();
-  renderNotes();
   closeEditModal();
-  showToast('✅ Note Updated!');
+  showToast('✅ Record Updated!');
 }
 
 function saveNotesToFirebase(){
   if(currentUser) database.ref('users/'+currentUser.uid+'/notes').set(currentNotes);
 }
 
-function filterNotes(){ renderNotes(); }
+function exportDataJSON(){
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentNotes, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `NabinNote_Backup_${currentUser.id}.json`);
+  dlAnchorElem.click();
+  showToast('📦 Data Backup Downloaded!');
+}
 
 function escapeHTML(str){
   const d = document.createElement('div');
@@ -508,7 +591,6 @@ function escapeHTML(str){
   return d.innerHTML;
 }
 
-/* Clear, Large & High Visibility PDF with Center Light Watermark */
 function downloadPDF(){
   const selYear = document.getElementById('selectYear').value;
   const selMonth = document.getElementById('selectMonth').value;
@@ -519,80 +601,75 @@ function downloadPDF(){
     return (nY == selYear) && (selMonth === "ALL" || nM === selMonth);
   });
 
-  if(!displayNotes.length){showToast('⚠️ छानेको अवधिमा नोटहरू छैनन्!'); return;}
+  if(!displayNotes.length){showToast('⚠️ छानेको अवधिमा कुनै रेकर्ड छैन!'); return;}
 
-  let total = displayNotes.reduce((s,n)=> s + Number(n.amount), 0);
+  let totalIncome = 0, totalExpense = 0;
   let rows = '';
   displayNotes.forEach((n,i)=>{
+    const amt = Number(n.amount);
+    if(n.type === 'income') totalIncome += amt;
+    else totalExpense += amt;
+
     rows += `<tr style="border-bottom:1px solid #ddd; height:40px;">
-      <td style="padding:12px;border:1px solid #cbd5e1;text-align:center;font-size:15px;font-weight:bold;color:#334155">${i+1}</td>
-      <td style="padding:12px;border:1px solid #cbd5e1;font-size:16px;font-weight:600;color:#0f172a">${escapeHTML(n.name)}</td>
-      <td style="padding:12px;border:1px solid #cbd5e1;text-align:right;font-size:16px;font-weight:700;color:#1e293b">रु. ${Number(n.amount).toFixed(2)}</td>
-      <td style="padding:12px;border:1px solid #cbd5e1;text-align:center;font-size:14px;color:#475569">${escapeHTML(n.datetime||'—')}</td>
+      <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;">${i+1}</td>
+      <td style="padding:10px;border:1px solid #cbd5e1;">${n.category || '📌'} ${escapeHTML(n.name)}</td>
+      <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;font-weight:bold;color:${n.type === 'income'?'#2e7d32':'#d32f2f'}">${n.type === 'income' ? 'आम्दानी' : 'खर्च'}</td>
+      <td style="padding:10px;border:1px solid #cbd5e1;text-align:right;font-weight:bold;">रु. ${amt.toFixed(2)}</td>
+      <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;font-size:12px;">${escapeHTML(n.datetime||'—')}</td>
     </tr>`;
   });
 
   const pdfContainer = document.createElement('div');
-  pdfContainer.style.position = 'relative';
-  pdfContainer.style.padding = '35px 30px';
+  pdfContainer.style.padding = '30px';
   pdfContainer.style.fontFamily = "'Poppins', Arial, sans-serif";
-  pdfContainer.style.backgroundColor = '#ffffff';
-  pdfContainer.style.overflow = 'hidden';
 
   pdfContainer.innerHTML = `
-    <!-- Full-screen Light Watermark -->
-    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%) rotate(-30deg);font-size:75px;font-weight:900;color:rgba(0, 0, 0, 0.05);white-space:nowrap;user-select:none;pointer-events:none;z-index:0;text-transform:lowercase;">
-      nabin phuyal
+    <div style="text-align:center;margin-bottom:20px;border-bottom:2px solid #1a2634;padding-bottom:10px">
+      <h1 style="margin:0;color:#1a2634;">Nabin Note - Pro Account Statement</h1>
+      <p style="margin:5px 0;">वर्ष: <b>${selYear}</b> | महिना: <b>${selMonth}</b> | युजर: <b>${escapeHTML(currentUser.id)}</b></p>
+    </div>
+    
+    <table style="width:100%;border-collapse:collapse;margin-top:15px;">
+      <thead>
+        <tr style="background:#1a2634;color:#ffffff;">
+          <th style="padding:10px;border:1px solid #1a2634;">S.N.</th>
+          <th style="padding:10px;border:1px solid #1a2634;text-align:left">विवरण (Category & Name)</th>
+          <th style="padding:10px;border:1px solid #1a2634;">प्रकार</th>
+          <th style="padding:10px;border:1px solid #1a2634;text-align:right">रकम (रु.)</th>
+          <th style="padding:10px;border:1px solid #1a2634;">मिति र समय</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+
+    <div style="margin-top:20px;text-align:right;background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #cbd5e1">
+      <p style="margin:3px 0;color:#2e7d32;font-size:16px;"><b>कुल आम्दानी: रु. ${totalIncome.toFixed(2)}</b></p>
+      <p style="margin:3px 0;color:#d32f2f;font-size:16px;"><b>कुल खर्च: रु. ${totalExpense.toFixed(2)}</b></p>
+      <hr style="margin:8px 0;">
+      <h2 style="margin:0;color:#0284c7;font-size:20px;">बचत (Balance): रु. ${(totalIncome - totalExpense).toFixed(2)}</h2>
     </div>
 
-    <!-- Main Content -->
-    <div style="position:relative;z-index:1;">
-      <div style="text-align:center;margin-bottom:25px;border-bottom:2px solid #1a2634;padding-bottom:15px">
-        <h1 style="margin:0;color:#1a2634;font-size:28px;letter-spacing:0.5px">Nabin Note - Account Statement</h1>
-        <p style="margin:8px 0 0 0;color:#475569;font-size:16px;font-weight:500">वर्ष: <b style="color:#0f172a">${selYear}</b> | महिना: <b style="color:#0f172a">${selMonth}</b></p>
-        <p style="margin:4px 0;color:#64748b;font-size:14px">प्रयोगकर्ता (Username): <b style="color:#0f172a">${escapeHTML(currentUser.id)}</b></p>
-      </div>
-      
-      <table style="width:100%;border-collapse:collapse;margin-top:20px;background:rgba(255,255,255,0.9)">
-        <thead>
-          <tr style="background:#1a2634;color:#ffffff;font-size:16px">
-            <th style="padding:14px;border:1px solid #1a2634;width:8%">क्र.स.</th>
-            <th style="padding:14px;border:1px solid #1a2634;width:45%;text-align:left">सामान / विषयको नाम</th>
-            <th style="padding:14px;border:1px solid #1a2634;width:22%;text-align:right">रकम (रु.)</th>
-            <th style="padding:14px;border:1px solid #1a2634;width:25%">मिति र समय</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-
-      <div style="margin-top:25px;text-align:right;background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #e2e8f0">
-        <h2 style="margin:0;color:#2e7d32;font-size:22px;font-weight:700">कुल जम्मा खर्च: रु. ${total.toFixed(2)}</h2>
-      </div>
-
-      <hr style="margin-top:50px;border:0;border-top:1.5px dashed #cbd5e1;">
-      <div style="text-align:center;margin-top:20px;color:#475569;font-size:13px;line-height:1.6">
-        <p style="font-size:14px;font-weight:500;color:#334155">धन्यवाद <b>nabinphuyal</b> को वेब भिजिट गर्नुभएकोमा! अरू पनि तपाईंलाई काम लाग्ने कुराहरू छन् यो वेबमा, त्यसैले चेक गर्नुहोस्:</p>
-        <p style="margin-top:6px"><a href="https://phuyalnabin.com.np" target="_blank" style="color:#1a2634;font-size:15px;font-weight:bold;text-decoration:underline">phuyalnabin.com.np</a></p>
-      </div>
+    <div style="text-align:center;margin-top:30px;color:#64748b;font-size:13px;">
+      <p>Official Website: <a href="https://phuyalnabin.com.np" target="_blank" style="color:#1a2634;font-weight:bold;">phuyalnabin.com.np</a></p>
     </div>
   `;
 
   document.body.appendChild(pdfContainer);
   html2pdf().set({
     margin: 0.4,
-    filename: `NabinNote_${selYear}_${selMonth}_${currentUser.id}.pdf`,
-    html2canvas: {scale: 2, useCORS: true},
+    filename: `NabinNote_Statement_${selYear}_${selMonth}.pdf`,
+    html2canvas: {scale: 2},
     jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'}
   }).from(pdfContainer).save().then(()=>{
     pdfContainer.remove();
-    showToast('✅ Clear PDF with Watermark Downloaded!');
+    showToast('✅ PDF Statement Downloaded!');
   });
 }
 
-auth.onAuthStateChanged(async user=>{
+// REALTIME FIREBASE SYNC (Pro Feature)
+auth.onAuthStateChanged(user=>{
   if(user){
-    try{
-      const snap=await database.ref('users/'+user.uid).once('value');
+    database.ref('users/'+user.uid).on('value', snap=>{
       if(snap.exists()){
         const d=snap.val();
         currentUser={uid:user.uid, id:d.id, email:d.email};
@@ -603,7 +680,7 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('notePage').classList.remove('hidden');
         renderNotes();
       }
-    }catch(e){console.error(e)}
+    });
   }else showLogin();
 });
 </script>
