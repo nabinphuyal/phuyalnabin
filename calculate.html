@@ -304,7 +304,7 @@ const database = firebase.database();
 
 let currentUser = null;
 let currentNotes = [];
-let editId = null;      // editIndex → editId (safe for filtered lists)
+let editId = null;
 let chartInstance = null;
 
 /* ============================================================
@@ -326,14 +326,12 @@ function toggleDropdown(){
 }
 function toggleTheme(){document.body.classList.toggle('dark-theme')}
 
-// Unique ID generator — पुरानो data migrate गर्न + edit/delete को लागि
 function generateId(){
   return Date.now().toString(36) + Math.random().toString(36).substr(2,9);
 }
 
-// नेपाली महिना auto-detect (approx — हरेक वर्ष ~15 दिन फरक)
 function getCurrentNepaliMonth(){
-  const m = new Date().getMonth(); // 0=Jan
+  const m = new Date().getMonth();
   const map = ["माघ","फागुन","चैत","बैशाख","जेठ","असार",
                "साउन","भदौ","असोज","कात्तिक","मंसिर","पुस"];
   return map[m];
@@ -351,7 +349,6 @@ function migrateNotesIfNeeded(notes, uid){
     return n;
   });
   if(changed){
-    // background मा save — user लाई थाहा नदिने, data नहट्ने
     database.ref('users/'+uid+'/notes').set(migrated)
       .then(()=>console.log('✅ Purano notes migrate bhayo (safe)'))
       .catch(err=>console.warn('Migration save failed:', err));
@@ -399,17 +396,14 @@ async function updateProfileName(){
   if(newName.length < 4){showToast('⚠️ नाम कम्तीमा ४ अक्षरको हुनुपर्छ!');return}
 
   try{
-    // नयाँ username पहिले नै छ कि जाँच
     const check = await database.ref('idIndex/'+newName).once('value');
     if(check.exists()){
       showToast('❌ यो Username पहिले नै प्रयोगमा छ!');
       return;
     }
 
-    // user data update (notes untouched)
     await database.ref('users/'+currentUser.uid).update({id: newName});
 
-    // पुरानो idIndex हटाउने, नयाँ बनाउने
     await database.ref('idIndex/'+oldName).remove();
     await database.ref('idIndex/'+newName).set({
       uid: currentUser.uid,
@@ -573,7 +567,6 @@ function renderNotes(){
     if(isIncome) totalIncome += amt;
     else totalExpense += amt;
 
-    // ⭐ ID based onclick — filter/search भएपनि safe
     html += `<div class="note-item ${isIncome ? 'type-income' : 'type-expense'}">
       <span class="sn">${i+1}</span>
       <span class="item-category">${n.category || '📌'}</span>
@@ -610,7 +603,6 @@ function addNote(){
   const year = document.getElementById('selectYear').value;
   let month = document.getElementById('selectMonth').value;
 
-  // "ALL" भए हालको नेपाली महिना auto
   if(month === "ALL") month = getCurrentNepaliMonth();
 
   if(!name){showToast('⚠️ विवरणको नाम लेख्नुहोस्!'); return;}
@@ -711,82 +703,163 @@ function escapeHTML(str){
 }
 
 /* ============================================================
-   PDF EXPORT
+   PDF EXPORT — FIXED VERSION (Full Statement देखिने)
    ============================================================ */
 function downloadPDF(){
   const selYear = document.getElementById('selectYear').value;
   const selMonth = document.getElementById('selectMonth').value;
   const currentYear = new Date().getFullYear().toString();
 
-  let displayNotes = currentNotes.filter(n => {
+  const displayNotes = currentNotes.filter(n => {
     const nY = n.year || currentYear;
     const nM = n.month || "ALL";
     return (nY == selYear) && (selMonth === "ALL" || nM === selMonth);
   });
 
-  if(!displayNotes.length){showToast('⚠️ छानेको अवधिमा कुनै रेकर्ड छैन!'); return;}
+  if(!displayNotes.length){
+    showToast('⚠️ छानेको अवधिमा कुनै रेकर्ड छैन!');
+    return;
+  }
 
   let totalIncome = 0, totalExpense = 0;
-  let rows = '';
-  displayNotes.forEach((n,i)=>{
-    const amt = Number(n.amount);
+  displayNotes.forEach(n => {
+    const amt = Number(n.amount) || 0;
     if(n.type === 'income') totalIncome += amt;
     else totalExpense += amt;
+  });
+  const balance = totalIncome - totalExpense;
 
-    rows += `<tr style="border-bottom:1px solid #ddd; height:40px;">
-      <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;">${i+1}</td>
-      <td style="padding:10px;border:1px solid #cbd5e1;">${n.category || '📌'} ${escapeHTML(n.name)}</td>
-      <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;font-weight:bold;color:${n.type === 'income'?'#2e7d32':'#d32f2f'}">${n.type === 'income' ? 'आम्दानी' : 'खर्च'}</td>
-      <td style="padding:10px;border:1px solid #cbd5e1;text-align:right;font-weight:bold;">रु. ${amt.toFixed(2)}</td>
-      <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;font-size:12px;">${escapeHTML(n.datetime||'—')}</td>
-    </tr>`;
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+
+  let rows = '';
+  displayNotes.forEach((n, i) => {
+    const amt = Number(n.amount) || 0;
+    const isIncome = n.type === 'income';
+    rows += `
+      <tr style="border-bottom:1px solid #cbd5e1;">
+        <td style="padding:8px;border:1px solid #cbd5e1;text-align:center;">${i+1}</td>
+        <td style="padding:8px;border:1px solid #cbd5e1;">${esc(n.category || '📌')}</td>
+        <td style="padding:8px;border:1px solid #cbd5e1;">${esc(n.name)}</td>
+        <td style="padding:8px;border:1px solid #cbd5e1;text-align:center;color:${isIncome ? '#2e7d32' : '#d32f2f'};font-weight:600;">
+          ${isIncome ? 'आम्दानी' : 'खर्च'}
+        </td>
+        <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">
+          रु. ${amt.toFixed(2)}
+        </td>
+        <td style="padding:8px;border:1px solid #cbd5e1;text-align:center;font-size:11px;">
+          ${esc(n.datetime || '—')}
+        </td>
+      </tr>
+    `;
   });
 
   const pdfContainer = document.createElement('div');
-  pdfContainer.style.padding = '30px';
-  pdfContainer.style.fontFamily = "'Poppins', Arial, sans-serif";
+  pdfContainer.style.cssText = `
+    padding: 20px;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: #ffffff;
+    color: #1a2634;
+    width: 100%;
+    box-sizing: border-box;
+  `;
 
   pdfContainer.innerHTML = `
-    <div style="text-align:center;margin-bottom:20px;border-bottom:2px solid #1a2634;padding-bottom:10px">
-      <h1 style="margin:0;color:#1a2634;">Nabin Note - Pro Account Statement</h1>
-      <p style="margin:5px 0;">वर्ष: <b>${selYear}</b> | महिना: <b>${selMonth}</b> | युजर: <b>${escapeHTML(currentUser.id)}</b></p>
+    <div style="text-align:center;border-bottom:3px solid #1a2634;padding-bottom:12px;margin-bottom:15px;">
+      <h1 style="margin:0;color:#1a2634;font-size:22px;">Nabin Note - Pro Account Statement</h1>
+      <p style="margin:6px 0 0 0;font-size:13px;color:#475569;">
+        वर्ष: <b>${esc(selYear)}</b> &nbsp;|&nbsp;
+        महिना: <b>${esc(selMonth)}</b> &nbsp;|&nbsp;
+        युजर: <b>${esc(currentUser.id)}</b>
+      </p>
+      <p style="margin:4px 0 0 0;font-size:11px;color:#64748b;">
+        Generated: ${new Date().toLocaleString('en-GB', {timeZone:'Asia/Kathmandu'})}
+      </p>
     </div>
 
-    <table style="width:100%;border-collapse:collapse;margin-top:15px;">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
       <thead>
         <tr style="background:#1a2634;color:#ffffff;">
-          <th style="padding:10px;border:1px solid #1a2634;">S.N.</th>
-          <th style="padding:10px;border:1px solid #1a2634;text-align:left">विवरण (Category & Name)</th>
-          <th style="padding:10px;border:1px solid #1a2634;">प्रकार</th>
-          <th style="padding:10px;border:1px solid #1a2634;text-align:right">रकम (रु.)</th>
-          <th style="padding:10px;border:1px solid #1a2634;">मिति र समय</th>
+          <th style="padding:8px;border:1px solid #1a2634;text-align:center;">S.N.</th>
+          <th style="padding:8px;border:1px solid #1a2634;text-align:left;">क्याटेगोरी</th>
+          <th style="padding:8px;border:1px solid #1a2634;text-align:left;">विवरण</th>
+          <th style="padding:8px;border:1px solid #1a2634;text-align:center;">प्रकार</th>
+          <th style="padding:8px;border:1px solid #1a2634;text-align:right;">रकम (रु.)</th>
+          <th style="padding:8px;border:1px solid #1a2634;text-align:center;">मिति/समय</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
 
-    <div style="margin-top:20px;text-align:right;background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #cbd5e1">
-      <p style="margin:3px 0;color:#2e7d32;font-size:16px;"><b>कुल आम्दानी: रु. ${totalIncome.toFixed(2)}</b></p>
-      <p style="margin:3px 0;color:#d32f2f;font-size:16px;"><b>कुल खर्च: रु. ${totalExpense.toFixed(2)}</b></p>
-      <hr style="margin:8px 0;">
-      <h2 style="margin:0;color:#0284c7;font-size:20px;">बचत (Balance): रु. ${(totalIncome - totalExpense).toFixed(2)}</h2>
+    <div style="margin-top:20px;padding:15px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;">
+      <table style="width:100%;font-size:14px;">
+        <tr>
+          <td style="padding:4px 0;color:#2e7d32;font-weight:600;">कुल आम्दानी:</td>
+          <td style="padding:4px 0;text-align:right;color:#2e7d32;font-weight:700;">रु. ${totalIncome.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 0;color:#d32f2f;font-weight:600;">कुल खर्च:</td>
+          <td style="padding:4px 0;text-align:right;color:#d32f2f;font-weight:700;">रु. ${totalExpense.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 0 0 0;border-top:2px solid #1a2634;color:#0284c7;font-weight:700;font-size:16px;">बचत (Balance):</td>
+          <td style="padding:8px 0 0 0;border-top:2px solid #1a2634;text-align:right;color:${balance >= 0 ? '#0284c7' : '#d32f2f'};font-weight:800;font-size:16px;">
+            रु. ${balance.toFixed(2)}
+          </td>
+        </tr>
+      </table>
     </div>
 
-    <div style="text-align:center;margin-top:30px;color:#64748b;font-size:13px;">
-      <p>Official Website: <a href="https://phuyalnabin.com.np" target="_blank" style="color:#1a2634;font-weight:bold;">phuyalnabin.com.np</a></p>
+    <div style="margin-top:15px;text-align:center;font-size:11px;color:#64748b;">
+      <p style="margin:2px 0;">कुल रेकर्ड: <b>${displayNotes.length}</b></p>
+      <p style="margin:2px 0;">Official Website: <a href="https://phuyalnabin.com.np" style="color:#1a2634;font-weight:600;">phuyalnabin.com.np</a></p>
     </div>
   `;
 
+  pdfContainer.style.position = 'fixed';
+  pdfContainer.style.left = '-99999px';
+  pdfContainer.style.top = '0';
+  pdfContainer.style.width = '800px';
+  pdfContainer.style.background = '#fff';
+  pdfContainer.style.zIndex = '-1';
+
   document.body.appendChild(pdfContainer);
-  html2pdf().set({
-    margin: 0.4,
-    filename: `NabinNote_Statement_${selYear}_${selMonth}.pdf`,
-    html2canvas: {scale: 2},
-    jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'}
-  }).from(pdfContainer).save().then(()=>{
-    pdfContainer.remove();
-    showToast('✅ PDF Statement Downloaded!');
-  });
+
+  setTimeout(() => {
+    html2pdf()
+      .set({
+        margin: [10, 10, 10, 10],
+        filename: `NabinNote_Statement_${selYear}_${selMonth}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: 800
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      })
+      .from(pdfContainer)
+      .save()
+      .then(() => {
+        pdfContainer.remove();
+        showToast('✅ PDF Statement Downloaded!');
+      })
+      .catch(err => {
+        console.error('PDF error:', err);
+        pdfContainer.remove();
+        showToast('❌ PDF बनाउन सकिएन!');
+      });
+  }, 300);
 }
 
 /* ============================================================
@@ -799,7 +872,6 @@ auth.onAuthStateChanged(user=>{
         const d=snap.val();
         currentUser={uid:user.uid, id:d.id, email:d.email};
 
-        // पुरानो data migrate (safe — कुनै note हट्दैन)
         const rawNotes = Array.isArray(d.notes) ? d.notes : [];
         currentNotes = migrateNotesIfNeeded(rawNotes, user.uid);
 
