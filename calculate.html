@@ -9,7 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -57,7 +56,7 @@ p{color:var(--text-sub)}
 .btn-sm{padding:6px 14px;font-size:.8rem}
 
 .hidden{display:none!important}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a2634;color:#fff;padding:15px 30px;border-radius:15px;z-index:9999;display:none;box-shadow:0 5px 20px rgba(0,0,0,0.3);text-align:center}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a2634;color:#fff;padding:15px 30px;border-radius:15px;z-index:9999;display:none;box-shadow:0 5px 20px rgba(0,0,0,0.3);text-align:center;max-width:90%}
 
 .user-header{display:flex;justify-content:space-between;align-items:center;background:var(--border-color);padding:12px 20px;border-radius:15px;margin-bottom:20px}
 .menu-container{position:relative}
@@ -217,14 +216,15 @@ p{color:var(--text-sub)}
 
 <!-- Month / Year Selector Bar -->
 <div style="background:var(--border-color);padding:15px;border-radius:15px;margin-bottom:20px;">
-<h4 style="margin-bottom:8px;font-size:0.9rem;">📅 Filter by Year & Month</h4>
+<h4 style="margin-bottom:8px;font-size:0.9rem;">📅 Filter by Year (BS) & Month</h4>
 <div class="input-group" style="margin:0;">
 <select id="selectYear" onchange="renderNotes()">
-<option value="2024">2024</option>
-<option value="2025">2025</option>
-<option value="2026" selected>2026</option>
-<option value="2027">2027</option>
-<option value="2028">2028</option>
+<option value="2081">2081</option>
+<option value="2082">2082</option>
+<option value="2083" selected>2083</option>
+<option value="2084">2084</option>
+<option value="2085">2085</option>
+<option value="2086">2086</option>
 </select>
 <select id="selectMonth" onchange="renderNotes()">
 <option value="ALL">-- ALL MONTHS (सबै महिना) --</option>
@@ -233,7 +233,7 @@ p{color:var(--text-sub)}
 <option value="असार">असार</option>
 <option value="साउन">साउन</option>
 <option value="भदौ">भदौ</option>
-<option value="असोज" selected>असोज</option>
+<option value="असोज">असोज</option>
 <option value="कात्तिक">कात्तिक</option>
 <option value="मंसिर">मंसिर</option>
 <option value="पुस">पुस</option>
@@ -330,11 +330,51 @@ function generateId(){
   return Date.now().toString(36) + Math.random().toString(36).substr(2,9);
 }
 
+// 🇳🇵 नेपाली (BS) वर्ष auto-detect
+function getCurrentNepaliYear(){
+  const now = new Date();
+  const adYear = now.getFullYear();
+  const adMonth = now.getMonth(); // 0=Jan
+  // AD → BS: approx +56 वर्ष 8 महिना
+  // जनवरी-May सम्म +57, June-Dec सम्म +56
+  return (adMonth < 4 ? adYear + 57 : adYear + 56).toString();
+}
+
+// 🇳🇵 नेपाली महिना auto-detect (approx mapping)
 function getCurrentNepaliMonth(){
   const m = new Date().getMonth();
-  const map = ["माघ","फागुन","चैत","बैशाख","जेठ","असार",
-               "साउन","भदौ","असोज","कात्तिक","मंसिर","पुस"];
+  const map = [
+    "माघ",     // Jan
+    "फागुन",   // Feb
+    "चैत",     // Mar
+    "बैशाख",   // Apr
+    "जेठ",     // May
+    "असार",    // Jun
+    "साउन",    // Jul
+    "भदौ",     // Aug
+    "असोज",    // Sep
+    "कात्तिक", // Oct
+    "मंसिर",   // Nov
+    "पुस"      // Dec
+  ];
   return map[m];
+}
+
+// Page load हुँदा Year/Month auto-set
+function initializeYearMonth(){
+  const yearSelect = document.getElementById('selectYear');
+  const monthSelect = document.getElementById('selectMonth');
+  if(!yearSelect || !monthSelect) return;
+
+  const currentYear = getCurrentNepaliYear();
+  const currentMonth = getCurrentNepaliMonth();
+
+  if([...yearSelect.options].some(o => o.value === currentYear)){
+    yearSelect.value = currentYear;
+  }
+  if([...monthSelect.options].some(o => o.value === currentMonth)){
+    monthSelect.value = currentMonth;
+  }
 }
 
 function migrateNotesIfNeeded(notes, uid){
@@ -349,8 +389,8 @@ function migrateNotesIfNeeded(notes, uid){
   });
   if(changed){
     database.ref('users/'+uid+'/notes').set(migrated)
-      .then(()=>console.log('✅ Purano notes migrate bhayo (safe)'))
-      .catch(err=>console.warn('Migration save failed:', err));
+      .then(()=>console.log('✅ Purano notes migrate bhayo'))
+      .catch(err=>console.warn('Migration failed:', err));
   }
   return migrated;
 }
@@ -402,7 +442,6 @@ async function updateProfileName(){
     }
 
     await database.ref('users/'+currentUser.uid).update({id: newName});
-
     await database.ref('idIndex/'+oldName).remove();
     await database.ref('idIndex/'+newName).set({
       uid: currentUser.uid,
@@ -538,7 +577,7 @@ function renderNotes(){
   const selYear = document.getElementById('selectYear').value;
   const selMonth = document.getElementById('selectMonth').value;
   const searchQ = document.getElementById('searchInput').value.toLowerCase();
-  const currentYear = new Date().getFullYear().toString();
+  const currentYear = getCurrentNepaliYear();
 
   let displayNotes = currentNotes.filter(n => {
     const noteYear = n.year || currentYear;
@@ -702,12 +741,12 @@ function escapeHTML(str){
 }
 
 /* ============================================================
-   PDF EXPORT — FULL REWRITE (सबै data पहिलो page मा)
+   PDF EXPORT — Native Print (100% काम गर्छ, कुनै library bug छैन)
    ============================================================ */
 function downloadPDF(){
   const selYear = document.getElementById('selectYear').value;
   const selMonth = document.getElementById('selectMonth').value;
-  const currentYear = new Date().getFullYear().toString();
+  const currentYear = getCurrentNepaliYear();
 
   const displayNotes = currentNotes.filter(n => {
     const nY = n.year || currentYear;
@@ -738,128 +777,136 @@ function downloadPDF(){
     const isIncome = n.type === 'income';
     rows += `
       <tr>
-        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:center;">${i+1}</td>
-        <td style="padding:5px 6px;border:1px solid #cbd5e1;">${esc(n.category || '📌')}</td>
-        <td style="padding:5px 6px;border:1px solid #cbd5e1;">${esc(n.name)}</td>
-        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:center;color:${isIncome ? '#2e7d32' : '#d32f2f'};font-weight:600;">
+        <td style="padding:6px;border:1px solid #999;text-align:center;">${i+1}</td>
+        <td style="padding:6px;border:1px solid #999;">${esc(n.category || '📌')}</td>
+        <td style="padding:6px;border:1px solid #999;">${esc(n.name)}</td>
+        <td style="padding:6px;border:1px solid #999;text-align:center;color:${isIncome ? '#2e7d32' : '#d32f2f'};font-weight:600;">
           ${isIncome ? 'आम्दानी' : 'खर्च'}
         </td>
-        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">
+        <td style="padding:6px;border:1px solid #999;text-align:right;font-weight:600;">
           रु. ${amt.toFixed(2)}
         </td>
-        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:center;font-size:10px;">
+        <td style="padding:6px;border:1px solid #999;text-align:center;font-size:11px;">
           ${esc(n.datetime || '—')}
         </td>
       </tr>
     `;
   });
 
-  // 🎯 Wrapper — direct body मा राख्यो, position fixed screen बाहिर
-  const pdfContainer = document.createElement('div');
-  pdfContainer.style.cssText = `
-    position: fixed;
-    left: -99999px;
-    top: 0;
-    width: 750px;
-    padding: 0;
-    margin: 0;
-    background: #ffffff;
-    color: #1a2634;
-    font-family: 'Poppins', Arial, sans-serif;
-    box-sizing: border-box;
-    z-index: -1;
-  `;
+  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  
+  if(!printWindow){
+    showToast('⚠️ Popup blocked! कृपया browser मा popup allow गर्नुहोस्।');
+    return;
+  }
 
-  pdfContainer.innerHTML = `
-    <div style="text-align:center;border-bottom:2px solid #1a2634;padding-bottom:6px;margin-bottom:10px;">
-      <h1 style="margin:0;color:#1a2634;font-size:20px;">Nabin Note - Account Statement</h1>
-      <p style="margin:4px 0 0 0;font-size:12px;color:#475569;">
-        वर्ष: <b>${esc(selYear)}</b> &nbsp;|&nbsp;
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="ne">
+    <head>
+      <meta charset="UTF-8">
+      <title>NabinNote_Statement_${selYear}_${selMonth}</title>
+      <style>
+        * { box-sizing: border-box; }
+        body {
+          font-family: 'Poppins', Arial, sans-serif;
+          color: #1a2634;
+          padding: 20px;
+          margin: 0;
+          background: #ffffff;
+        }
+        h1 { font-size: 20px; margin: 0 0 5px 0; text-align: center; }
+        .meta { text-align: center; font-size: 12px; color: #555; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #1a2634; }
+        table.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        table.data-table thead { background: #1a2634; color: #ffffff; }
+        table.data-table thead th { padding: 8px; border: 1px solid #1a2634; text-align: left; }
+        table.data-table thead th.center { text-align: center; }
+        table.data-table thead th.right { text-align: right; }
+        table.data-table tbody td { padding: 6px; border: 1px solid #ccc; }
+        .totals {
+          margin-top: 20px;
+          padding: 12px;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          font-size: 13px;
+        }
+        .totals table { width: 100%; border-collapse: collapse; }
+        .totals td { padding: 3px 0; border: none; }
+        .totals .income { color: #2e7d32; font-weight: 600; }
+        .totals .expense { color: #d32f2f; font-weight: 600; }
+        .totals .balance { color: #0284c7; font-weight: 700; font-size: 15px; border-top: 2px solid #1a2634; padding-top: 6px; }
+        .footer { text-align: center; font-size: 11px; color: #777; margin-top: 20px; }
+        @media print {
+          body { padding: 10px; }
+          table.data-table { font-size: 11px; }
+          table.data-table thead { 
+            background: #1a2634 !important; 
+            color: #fff !important; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Nabin Note - Account Statement</h1>
+      <div class="meta">
+        वर्ष (BS): <b>${esc(selYear)}</b> &nbsp;|&nbsp;
         महिना: <b>${esc(selMonth)}</b> &nbsp;|&nbsp;
-        युजर: <b>${esc(currentUser.id)}</b>
-      </p>
-    </div>
+        युजर: <b>${esc(currentUser.id)}</b><br>
+        Generated: ${new Date().toLocaleString('en-GB', {timeZone:'Asia/Kathmandu'})}
+      </div>
 
-    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-      <thead>
-        <tr style="background:#1a2634;color:#ffffff;">
-          <th style="padding:6px;border:1px solid #1a2634;text-align:center;width:40px;">क्र.सं.</th>
-          <th style="padding:6px;border:1px solid #1a2634;text-align:left;width:110px;">क्याटेगोरी</th>
-          <th style="padding:6px;border:1px solid #1a2634;text-align:left;">विवरण</th>
-          <th style="padding:6px;border:1px solid #1a2634;text-align:center;width:70px;">प्रकार</th>
-          <th style="padding:6px;border:1px solid #1a2634;text-align:right;width:80px;">रकम (रु.)</th>
-          <th style="padding:6px;border:1px solid #1a2634;text-align:center;width:110px;">मिति र समय</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-
-    <div style="margin-top:12px;padding:10px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;">
-      <table style="width:100%;font-size:13px;">
-        <tr>
-          <td style="padding:3px 0;color:#2e7d32;font-weight:600;">कुल आम्दानी:</td>
-          <td style="padding:3px 0;text-align:right;color:#2e7d32;font-weight:700;">रु. ${totalIncome.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td style="padding:3px 0;color:#d32f2f;font-weight:600;">कुल खर्च:</td>
-          <td style="padding:3px 0;text-align:right;color:#d32f2f;font-weight:700;">रु. ${totalExpense.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td style="padding:6px 0 0 0;border-top:2px solid #1a2634;color:#0284c7;font-weight:700;font-size:14px;">बचत (Balance):</td>
-          <td style="padding:6px 0 0 0;border-top:2px solid #1a2634;text-align:right;color:${balance >= 0 ? '#0284c7' : '#d32f2f'};font-weight:800;font-size:14px;">
-            रु. ${balance.toFixed(2)}
-          </td>
-        </tr>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="center" style="width:45px;">क्र.सं.</th>
+            <th style="width:120px;">क्याटेगोरी</th>
+            <th>विवरण</th>
+            <th class="center" style="width:75px;">प्रकार</th>
+            <th class="right" style="width:90px;">रकम (रु.)</th>
+            <th class="center" style="width:120px;">मिति र समय</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
       </table>
-    </div>
 
-    <div style="margin-top:10px;text-align:center;font-size:10px;color:#64748b;">
-      <p style="margin:2px 0;">कुल रेकर्ड: <b>${displayNotes.length}</b> &nbsp;|&nbsp; Generated: ${new Date().toLocaleString('en-GB', {timeZone:'Asia/Kathmandu'})}</p>
-      <p style="margin:2px 0;">Official Website: <a href="https://phuyalnabin.com.np" style="color:#1a2634;font-weight:600;">phuyalnabin.com.np</a></p>
-    </div>
-  `;
+      <div class="totals">
+        <table>
+          <tr>
+            <td class="income">कुल आम्दानी:</td>
+            <td class="income" style="text-align:right;">रु. ${totalIncome.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td class="expense">कुल खर्च:</td>
+            <td class="expense" style="text-align:right;">रु. ${totalExpense.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td class="balance">बचत (Balance):</td>
+            <td class="balance" style="text-align:right; color:${balance >= 0 ? '#0284c7' : '#d32f2f'};">रु. ${balance.toFixed(2)}</td>
+          </tr>
+        </table>
+      </div>
 
-  document.body.appendChild(pdfContainer);
+      <div class="footer">
+        कुल रेकर्ड: <b>${displayNotes.length}</b> &nbsp;|&nbsp;
+        Official Website: <a href="https://phuyalnabin.com.np" style="color:#1a2634;font-weight:600;">phuyalnabin.com.np</a>
+      </div>
 
-  // 🎯 500ms delay — fonts + DOM पूरै render हुन्छ
-  setTimeout(() => {
-    const opt = {
-      margin: [4, 5, 4, 5],       // mm
-      filename: `NabinNote_Statement_${selYear}_${selMonth}.pdf`,
-      image: { type: 'jpeg', quality: 0.95 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        width: 750,
-        windowWidth: 750
-      },
-      jsPDF: {
-        unit: 'mm',
-        format: 'a4',
-        orientation: 'portrait'
-      },
-      pagebreak: {
-        mode: ['css', 'legacy'],
-        avoid: 'tr'
-      }
-    };
+      <script>
+        window.onload = function() {
+          setTimeout(function() {
+            window.print();
+          }, 400);
+        };
+      <\/script>
+    </body>
+    </html>
+  `);
 
-    html2pdf()
-      .set(opt)
-      .from(pdfContainer)
-      .save()
-      .then(() => {
-        pdfContainer.remove();
-        showToast('✅ PDF Statement Downloaded!');
-      })
-      .catch(err => {
-        console.error('PDF error:', err);
-        pdfContainer.remove();
-        showToast('❌ PDF बनाउन सकिएन!');
-      });
-  }, 500);
+  printWindow.document.close();
+  showToast('📄 Print Dialog खोल्दै... "Save as PDF" छान्नुहोस्!');
 }
 
 /* ============================================================
@@ -884,6 +931,11 @@ auth.onAuthStateChanged(user=>{
     });
   }else showLogin();
 });
+
+/* ============================================================
+   PAGE LOAD — Year/Month auto-set
+   ============================================================ */
+initializeYearMonth();
 </script>
 </body>
 </html>
