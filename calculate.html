@@ -337,7 +337,6 @@ function getCurrentNepaliMonth(){
   return map[m];
 }
 
-// पुरानो note हरूमा _id छैन भने थप्ने (DATA SAFE MIGRATION)
 function migrateNotesIfNeeded(notes, uid){
   let changed = false;
   const migrated = notes.map(n => {
@@ -703,7 +702,7 @@ function escapeHTML(str){
 }
 
 /* ============================================================
-   PDF EXPORT — FIXED VERSION (Full Statement देखिने)
+   PDF EXPORT — FULL REWRITE (सबै data पहिलो page मा)
    ============================================================ */
 function downloadPDF(){
   const selYear = document.getElementById('selectYear').value;
@@ -738,116 +737,117 @@ function downloadPDF(){
     const amt = Number(n.amount) || 0;
     const isIncome = n.type === 'income';
     rows += `
-      <tr style="border-bottom:1px solid #cbd5e1;">
-        <td style="padding:8px;border:1px solid #cbd5e1;text-align:center;">${i+1}</td>
-        <td style="padding:8px;border:1px solid #cbd5e1;">${esc(n.category || '📌')}</td>
-        <td style="padding:8px;border:1px solid #cbd5e1;">${esc(n.name)}</td>
-        <td style="padding:8px;border:1px solid #cbd5e1;text-align:center;color:${isIncome ? '#2e7d32' : '#d32f2f'};font-weight:600;">
+      <tr>
+        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:center;">${i+1}</td>
+        <td style="padding:5px 6px;border:1px solid #cbd5e1;">${esc(n.category || '📌')}</td>
+        <td style="padding:5px 6px;border:1px solid #cbd5e1;">${esc(n.name)}</td>
+        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:center;color:${isIncome ? '#2e7d32' : '#d32f2f'};font-weight:600;">
           ${isIncome ? 'आम्दानी' : 'खर्च'}
         </td>
-        <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">
+        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">
           रु. ${amt.toFixed(2)}
         </td>
-        <td style="padding:8px;border:1px solid #cbd5e1;text-align:center;font-size:11px;">
+        <td style="padding:5px 6px;border:1px solid #cbd5e1;text-align:center;font-size:10px;">
           ${esc(n.datetime || '—')}
         </td>
       </tr>
     `;
   });
 
+  // 🎯 Wrapper — direct body मा राख्यो, position fixed screen बाहिर
   const pdfContainer = document.createElement('div');
   pdfContainer.style.cssText = `
-    padding: 20px;
-    font-family: 'Poppins', Arial, sans-serif;
+    position: fixed;
+    left: -99999px;
+    top: 0;
+    width: 750px;
+    padding: 0;
+    margin: 0;
     background: #ffffff;
     color: #1a2634;
-    width: 100%;
+    font-family: 'Poppins', Arial, sans-serif;
     box-sizing: border-box;
+    z-index: -1;
   `;
 
   pdfContainer.innerHTML = `
-    <div style="text-align:center;border-bottom:3px solid #1a2634;padding-bottom:12px;margin-bottom:15px;">
-      <h1 style="margin:0;color:#1a2634;font-size:22px;">Nabin Note - Pro Account Statement</h1>
-      <p style="margin:6px 0 0 0;font-size:13px;color:#475569;">
+    <div style="text-align:center;border-bottom:2px solid #1a2634;padding-bottom:6px;margin-bottom:10px;">
+      <h1 style="margin:0;color:#1a2634;font-size:20px;">Nabin Note - Account Statement</h1>
+      <p style="margin:4px 0 0 0;font-size:12px;color:#475569;">
         वर्ष: <b>${esc(selYear)}</b> &nbsp;|&nbsp;
         महिना: <b>${esc(selMonth)}</b> &nbsp;|&nbsp;
         युजर: <b>${esc(currentUser.id)}</b>
       </p>
-      <p style="margin:4px 0 0 0;font-size:11px;color:#64748b;">
-        Generated: ${new Date().toLocaleString('en-GB', {timeZone:'Asia/Kathmandu'})}
-      </p>
     </div>
 
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <table style="width:100%;border-collapse:collapse;font-size:11px;">
       <thead>
         <tr style="background:#1a2634;color:#ffffff;">
-          <th style="padding:8px;border:1px solid #1a2634;text-align:center;">S.N.</th>
-          <th style="padding:8px;border:1px solid #1a2634;text-align:left;">क्याटेगोरी</th>
-          <th style="padding:8px;border:1px solid #1a2634;text-align:left;">विवरण</th>
-          <th style="padding:8px;border:1px solid #1a2634;text-align:center;">प्रकार</th>
-          <th style="padding:8px;border:1px solid #1a2634;text-align:right;">रकम (रु.)</th>
-          <th style="padding:8px;border:1px solid #1a2634;text-align:center;">मिति/समय</th>
+          <th style="padding:6px;border:1px solid #1a2634;text-align:center;width:40px;">क्र.सं.</th>
+          <th style="padding:6px;border:1px solid #1a2634;text-align:left;width:110px;">क्याटेगोरी</th>
+          <th style="padding:6px;border:1px solid #1a2634;text-align:left;">विवरण</th>
+          <th style="padding:6px;border:1px solid #1a2634;text-align:center;width:70px;">प्रकार</th>
+          <th style="padding:6px;border:1px solid #1a2634;text-align:right;width:80px;">रकम (रु.)</th>
+          <th style="padding:6px;border:1px solid #1a2634;text-align:center;width:110px;">मिति र समय</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
 
-    <div style="margin-top:20px;padding:15px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;">
-      <table style="width:100%;font-size:14px;">
+    <div style="margin-top:12px;padding:10px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;">
+      <table style="width:100%;font-size:13px;">
         <tr>
-          <td style="padding:4px 0;color:#2e7d32;font-weight:600;">कुल आम्दानी:</td>
-          <td style="padding:4px 0;text-align:right;color:#2e7d32;font-weight:700;">रु. ${totalIncome.toFixed(2)}</td>
+          <td style="padding:3px 0;color:#2e7d32;font-weight:600;">कुल आम्दानी:</td>
+          <td style="padding:3px 0;text-align:right;color:#2e7d32;font-weight:700;">रु. ${totalIncome.toFixed(2)}</td>
         </tr>
         <tr>
-          <td style="padding:4px 0;color:#d32f2f;font-weight:600;">कुल खर्च:</td>
-          <td style="padding:4px 0;text-align:right;color:#d32f2f;font-weight:700;">रु. ${totalExpense.toFixed(2)}</td>
+          <td style="padding:3px 0;color:#d32f2f;font-weight:600;">कुल खर्च:</td>
+          <td style="padding:3px 0;text-align:right;color:#d32f2f;font-weight:700;">रु. ${totalExpense.toFixed(2)}</td>
         </tr>
         <tr>
-          <td style="padding:8px 0 0 0;border-top:2px solid #1a2634;color:#0284c7;font-weight:700;font-size:16px;">बचत (Balance):</td>
-          <td style="padding:8px 0 0 0;border-top:2px solid #1a2634;text-align:right;color:${balance >= 0 ? '#0284c7' : '#d32f2f'};font-weight:800;font-size:16px;">
+          <td style="padding:6px 0 0 0;border-top:2px solid #1a2634;color:#0284c7;font-weight:700;font-size:14px;">बचत (Balance):</td>
+          <td style="padding:6px 0 0 0;border-top:2px solid #1a2634;text-align:right;color:${balance >= 0 ? '#0284c7' : '#d32f2f'};font-weight:800;font-size:14px;">
             रु. ${balance.toFixed(2)}
           </td>
         </tr>
       </table>
     </div>
 
-    <div style="margin-top:15px;text-align:center;font-size:11px;color:#64748b;">
-      <p style="margin:2px 0;">कुल रेकर्ड: <b>${displayNotes.length}</b></p>
+    <div style="margin-top:10px;text-align:center;font-size:10px;color:#64748b;">
+      <p style="margin:2px 0;">कुल रेकर्ड: <b>${displayNotes.length}</b> &nbsp;|&nbsp; Generated: ${new Date().toLocaleString('en-GB', {timeZone:'Asia/Kathmandu'})}</p>
       <p style="margin:2px 0;">Official Website: <a href="https://phuyalnabin.com.np" style="color:#1a2634;font-weight:600;">phuyalnabin.com.np</a></p>
     </div>
   `;
 
-  pdfContainer.style.position = 'fixed';
-  pdfContainer.style.left = '-99999px';
-  pdfContainer.style.top = '0';
-  pdfContainer.style.width = '800px';
-  pdfContainer.style.background = '#fff';
-  pdfContainer.style.zIndex = '-1';
-
   document.body.appendChild(pdfContainer);
 
+  // 🎯 500ms delay — fonts + DOM पूरै render हुन्छ
   setTimeout(() => {
+    const opt = {
+      margin: [4, 5, 4, 5],       // mm
+      filename: `NabinNote_Statement_${selYear}_${selMonth}.pdf`,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        width: 750,
+        windowWidth: 750
+      },
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait'
+      },
+      pagebreak: {
+        mode: ['css', 'legacy'],
+        avoid: 'tr'
+      }
+    };
+
     html2pdf()
-      .set({
-        margin: [10, 10, 10, 10],
-        filename: `NabinNote_Statement_${selYear}_${selMonth}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          backgroundColor: '#ffffff',
-          scrollX: 0,
-          scrollY: 0,
-          windowWidth: 800
-        },
-        jsPDF: {
-          unit: 'mm',
-          format: 'a4',
-          orientation: 'portrait'
-        },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-      })
+      .set(opt)
       .from(pdfContainer)
       .save()
       .then(() => {
@@ -859,7 +859,7 @@ function downloadPDF(){
         pdfContainer.remove();
         showToast('❌ PDF बनाउन सकिएन!');
       });
-  }, 300);
+  }, 500);
 }
 
 /* ============================================================
