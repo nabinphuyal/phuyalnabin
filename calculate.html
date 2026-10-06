@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nabin Note - Pro Secure</title>
+<title>Nabin Note - Advanced Monthly Note</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -36,9 +36,9 @@ body{background:var(--bg-color);min-height:100vh;padding:20px;color:var(--text-m
 h2, h3{color:var(--text-main);margin-bottom:15px}
 p{color:var(--text-sub)}
 
-.input-group{display:flex;gap:15px;flex-wrap:wrap;margin:15px 0}
-.input-group input, .modal-box input, select{flex:1;min-width:150px;padding:14px 20px;border:2px solid var(--border-color);background:var(--card-bg);color:var(--text-main);border-radius:15px;font-size:1rem;outline:none}
-.input-group input:focus, .modal-box input:focus{border-color:#2c3e50}
+.input-group{display:flex;gap:12px;flex-wrap:wrap;margin:15px 0}
+.input-group input, .modal-box input, select{flex:1;min-width:140px;padding:12px 18px;border:2px solid var(--border-color);background:var(--card-bg);color:var(--text-main);border-radius:15px;font-size:0.95rem;outline:none}
+.input-group input:focus, .modal-box input:focus, select:focus{border-color:#2c3e50}
 
 .password-wrapper{position:relative;flex:1;min-width:150px;display:flex;align-items:center}
 .password-wrapper input{width:100%;padding-right:50px}
@@ -64,30 +64,41 @@ p{color:var(--text-sub)}
 .dropdown-menu button:hover{background:var(--border-color)}
 
 /* Summary Cards */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:15px;margin:15px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:15px;margin:15px 0}
 .stat-card{background:var(--border-color);padding:15px 20px;border-radius:15px;text-align:center}
 .stat-card h4{font-size:0.85rem;color:var(--text-sub)}
 .stat-card p{font-size:1.3rem;font-weight:700;color:var(--text-main);margin-top:5px}
 
-.note-item{display:flex;flex-wrap:wrap;align-items:center;gap:10px 15px;padding:14px 20px;background:var(--border-color);border-radius:12px;margin-bottom:8px;border-left:4px solid #1a2634}
+.note-item{display:flex;flex-wrap:wrap;align-items:center;gap:10px 15px;padding:12px 18px;background:var(--border-color);border-radius:12px;margin-bottom:8px;border-left:4px solid #1a2634}
 .note-item .sn{font-weight:700;min-width:30px}
 .item-name{flex:2;min-width:120px;font-weight:500}
 .item-amount{flex:1;font-weight:600;text-align:right}
 .item-datetime{flex:1.5;font-size:.75rem;opacity:0.8;text-align:center}
-.action-btns button{background:none;border:0;cursor:pointer;padding:5px;font-size:1rem}
+.action-btns button{background:none;border:0;cursor:pointer;padding:5px 8px;font-size:1rem}
 .edit-btn{color:#f9a825}.delete-btn{color:#d32f2f}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center}
 .modal-box{background:var(--card-bg);padding:30px;border-radius:25px;max-width:450px;width:90%}
-.modal-box input{width:100%;margin:8px 0}
+.modal-box input, .modal-box select{width:100%;margin:8px 0}
 .modal-box .btn-group{display:flex;gap:12px;margin-top:15px}
 
-@media(max-width:600px){.note-item{flex-direction:column;align-items:flex-start}.item-amount,.item-datetime{text-align:left}}
+@media(max-width:600px){.note-item{flex-direction:column;align-items:flex-start}.item-amount,.item-datetime{text-align:left}.input-group{flex-direction:column}}
 </style>
 </head>
 <body>
 
 <div id="toast" class="toast"></div>
+
+<!-- EDIT NOTE MODAL -->
+<div class="modal-overlay" id="editModal">
+<div class="modal-box">
+<h3>✏️ Edit Note</h3>
+<input type="text" id="editName" placeholder="सामान/विषयको नाम">
+<input type="number" id="editAmount" placeholder="रकम (रु.)" step="0.01">
+<div class="btn-group">
+<button class="btn btn-success" onclick="saveEdit()">💾 Save Changes</button>
+<button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+</div></div></div>
 
 <!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsModal">
@@ -115,7 +126,7 @@ p{color:var(--text-sub)}
 <!-- LOGIN PAGE -->
 <div id="loginPage" class="card">
 <h2>🔑 Secure Login</h2>
-<p style="margin-bottom:15px">तपाईंको व्यक्तिगत तथा पारिवारिक वित्तीय हिसाब सुरक्षित राख्नुहोस्।</p>
+<p style="margin-bottom:15px">तपाईंको मासिक हिसाब-किताब सुरक्षित राख्नुहोस्।</p>
 <div class="input-group">
 <input type="text" id="loginId" placeholder="Username">
 <div class="password-wrapper">
@@ -163,23 +174,52 @@ p{color:var(--text-sub)}
 </div>
 </div>
 
+<!-- Month / Year Selector Bar -->
+<div style="background:var(--border-color);padding:15px;border-radius:15px;margin-bottom:20px;">
+<h4 style="margin-bottom:8px;font-size:0.9rem;">📅 मिति र महिना छान्नुहोस् (Monthly Filter)</h4>
+<div class="input-group" style="margin:0;">
+<select id="selectYear" onchange="filterNotes()">
+<option value="2080">२०८०</option>
+<option value="2081">२०८१</option>
+<option value="2082">२०८२</option>
+<option value="2083" selected>२०८३</option>
+<option value="2084">२०८४</option>
+<option value="2085">२०८५</option>
+</select>
+<select id="selectMonth" onchange="filterNotes()">
+<option value="बैशाख">बैशाख</option>
+<option value="जेठ">जेठ</option>
+<option value="असार">असार</option>
+<option value="साउन">साउन</option>
+<option value="भदौ">भदौ</option>
+<option value="असोज" selected>असोज</option>
+<option value="कात्तिक">कात्तिक</option>
+<option value="मंसिर">मंसिर</option>
+<option value="पुस">पुस</option>
+<option value="माघ">माघ</option>
+<option value="फागुन">फागुन</option>
+<option value="चैत">चैत</option>
+</select>
+</div>
+</div>
+
 <!-- Quick Statistics -->
 <div class="stats-grid">
-<div class="stat-card"><h4>कुल नोटहरू</h4><p id="statCount">0</p></div>
-<div class="stat-card"><h4>जम्मा रकम</h4><p id="statTotal">रु. 0</p></div>
+<div class="stat-card"><h4>छानिएको महिनाको नोटहरू</h4><p id="statCount">0</p></div>
+<div class="stat-card"><h4>छानिएको महिनाको जम्मा खर्च</h4><p id="statTotal">रु. 0</p></div>
 </div>
 
 <h2>📝 Add New Note</h2>
 <div class="input-group">
 <input type="text" id="noteName" placeholder="सामान/विषयको नाम">
-<input type="number" id="noteAmount" placeholder="रकम (रु.)">
-<button class="btn btn-primary" onclick="addNote()">➕ Add</button>
+<input type="number" id="noteAmount" placeholder="रकम (रु.)" step="0.01">
+<button class="btn btn-primary" onclick="addNote()">➕ Add Note</button>
 </div>
 
-<!-- Search Bar -->
+<!-- Search & Export -->
 <div class="input-group" style="margin-top:20px;">
 <input type="text" id="searchInput" placeholder="🔍 नामबाट खोज्नुहोस्..." onkeyup="filterNotes()">
-<button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📥 Export PDF</button>
+<button class="btn btn-secondary btn-sm" onclick="downloadPDF()">📥 PDF (छापिएको महिनाको)</button>
 </div>
 
 <div id="noteList" style="margin-top:15px"></div>
@@ -202,7 +242,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
 
-let currentUser=null, currentNotes=[];
+let currentUser=null, currentNotes=[], editIndex=null;
 
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
 function togglePassword(id, btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
@@ -212,7 +252,7 @@ function toggleTheme(){document.body.classList.toggle('dark-theme')}
 function showLogin(){document.getElementById('loginPage').classList.remove('hidden');document.getElementById('notePage').classList.add('hidden');document.getElementById('createPage').classList.add('hidden')}
 function showCreate(){document.getElementById('loginPage').classList.add('hidden');document.getElementById('createPage').classList.remove('hidden')}
 
-/* Settings Modal Functions */
+/* Settings Modal */
 function openSettings(){
   document.getElementById('dropdownMenu').style.display='none';
   document.getElementById('settingName').value = currentUser.id;
@@ -245,9 +285,7 @@ async function changePassword(){
     await user.updatePassword(newPass);
     closeSettings();
     showToast('🔐 Password successfully updated!');
-  }catch(e){
-    showToast('❌ पुरानो पासवर्ड मिलेन!');
-  }
+  }catch(e){showToast('❌ पुरानो पासवर्ड मिलेन!')}
 }
 
 /* User Auth Functions */
@@ -277,47 +315,176 @@ async function createAccount(){
 function logoutUser(){auth.signOut();showLogin();showToast('Logout भयो!')}
 
 /* Note Operations */
-function renderNotes(data = currentNotes){
+function renderNotes(filteredData = null){
   const container = document.getElementById('noteList');
-  if(!data.length){container.innerHTML='<p style="text-align:center;padding:20px;">कुनै नोट फेला परेन।</p>';return}
+  const selYear = document.getElementById('selectYear').value;
+  const selMonth = document.getElementById('selectMonth').value;
+  const searchQ = document.getElementById('searchInput').value.toLowerCase();
+
+  // Filter notes by Month & Year & Search Query
+  let displayNotes = currentNotes.filter(n => {
+    const matchMonth = (n.year == selYear && n.month == selMonth);
+    const matchSearch = n.name.toLowerCase().includes(searchQ);
+    return matchMonth && matchSearch;
+  });
+
+  if(!displayNotes.length){
+    container.innerHTML='<p style="text-align:center;padding:20px;">यो महिनामा कुनै नोट छैन।</p>';
+    document.getElementById('statCount').textContent = '0';
+    document.getElementById('statTotal').textContent = 'रु. 0.00';
+    return;
+  }
   
   let html='', total=0;
-  data.forEach((n,i)=>{
+  displayNotes.forEach((n,i)=>{
     total += Number(n.amount);
+    const originalIndex = currentNotes.indexOf(n);
     html += `<div class="note-item">
       <span class="sn">${i+1}</span>
-      <span class="item-name">${n.name}</span>
+      <span class="item-name">${escapeHTML(n.name)}</span>
       <span class="item-amount">रु. ${Number(n.amount).toFixed(2)}</span>
       <span class="item-datetime">${n.datetime||''}</span>
-      <div class="action-btns"><button class="delete-btn" onclick="deleteNote(${i})"><i class="fa-solid fa-trash"></i></button></div>
+      <div class="action-btns">
+        <button class="edit-btn" onclick="openEditModal(${originalIndex})"><i class="fa-solid fa-pen"></i></button>
+        <button class="delete-btn" onclick="deleteNote(${originalIndex})"><i class="fa-solid fa-trash"></i></button>
+      </div>
     </div>`;
   });
   container.innerHTML = html;
-  document.getElementById('statCount').textContent = currentNotes.length;
+  document.getElementById('statCount').textContent = displayNotes.length;
   document.getElementById('statTotal').textContent = 'रु. ' + total.toFixed(2);
 }
 
 function addNote(){
   const name=document.getElementById('noteName').value.trim();
   const amount=document.getElementById('noteAmount').value.trim();
-  if(!name || !amount)return;
-  const now = new Date().toLocaleDateString('ne-NP');
-  currentNotes.push({name, amount:parseFloat(amount), datetime:now});
-  database.ref('users/'+currentUser.uid+'/notes').set(currentNotes);
-  document.getElementById('noteName').value='';document.getElementById('noteAmount').value='';
+  const year=document.getElementById('selectYear').value;
+  const month=document.getElementById('selectMonth').value;
+
+  if(!name || !amount) {showToast('⚠️ विवरण र रकम भर्नुहोस्!'); return;}
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('ne-NP', {hour:'2-digit', minute:'2-digit'});
+
+  currentNotes.push({
+    name, 
+    amount: parseFloat(amount), 
+    year: year, 
+    month: month,
+    datetime: `${year} ${month} | ${timeStr}`
+  });
+
+  saveNotesToFirebase();
+  document.getElementById('noteName').value='';
+  document.getElementById('noteAmount').value='';
   renderNotes();
+  showToast('✅ Note added!');
 }
 
 function deleteNote(i){
-  currentNotes.splice(i,1);
-  database.ref('users/'+currentUser.uid+'/notes').set(currentNotes);
-  renderNotes();
+  if(confirm('के तपाईं यो नोट मेटाउन चाहनुहुन्छ?')){
+    currentNotes.splice(i,1);
+    saveNotesToFirebase();
+    renderNotes();
+    showToast('🗑️ Note Deleted!');
+  }
 }
 
-function filterNotes(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = currentNotes.filter(n=> n.name.toLowerCase().includes(q));
-  renderNotes(filtered);
+/* Edit Modal Functions */
+function openEditModal(i){
+  editIndex = i;
+  document.getElementById('editName').value = currentNotes[i].name;
+  document.getElementById('editAmount').value = currentNotes[i].amount;
+  document.getElementById('editModal').style.display='flex';
+}
+function closeEditModal(){document.getElementById('editModal').style.display='none'; editIndex=null;}
+
+function saveEdit(){
+  const name = document.getElementById('editName').value.trim();
+  const amount = document.getElementById('editAmount').value.trim();
+  if(!name || !amount) {showToast('⚠️ विवरण भर्नुहोस्!'); return;}
+
+  currentNotes[editIndex].name = name;
+  currentNotes[editIndex].amount = parseFloat(amount);
+  
+  saveNotesToFirebase();
+  renderNotes();
+  closeEditModal();
+  showToast('✅ Note Updated!');
+}
+
+function saveNotesToFirebase(){
+  if(currentUser) database.ref('users/'+currentUser.uid+'/notes').set(currentNotes);
+}
+
+function filterNotes(){ renderNotes(); }
+
+function escapeHTML(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+/* Customized PDF Download with Footer Notice */
+function downloadPDF(){
+  const selYear = document.getElementById('selectYear').value;
+  const selMonth = document.getElementById('selectMonth').value;
+  
+  let displayNotes = currentNotes.filter(n => n.year == selYear && n.month == selMonth);
+  if(!displayNotes.length){showToast('⚠️ छापेको महिनामा नोटहरू छैनन्!'); return;}
+
+  let total = displayNotes.reduce((s,n)=> s + Number(n.amount), 0);
+  let rows = '';
+  displayNotes.forEach((n,i)=>{
+    rows += `<tr>
+      <td style="padding:8px;border:1px solid #ddd;text-align:center">${i+1}</td>
+      <td style="padding:8px;border:1px solid #ddd">${escapeHTML(n.name)}</td>
+      <td style="padding:8px;border:1px solid #ddd;text-align:right">रु. ${Number(n.amount).toFixed(2)}</td>
+      <td style="padding:8px;border:1px solid #ddd;text-align:center">${escapeHTML(n.datetime||'')}</td>
+    </tr>`;
+  });
+
+  const pdfContainer = document.createElement('div');
+  pdfContainer.style.padding = '30px';
+  pdfContainer.style.fontFamily = 'Arial, sans-serif';
+  pdfContainer.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <h1 style="margin:0;color:#1a2634">Nabin Note - Monthly Statement</h1>
+      <p style="margin:5px 0 0 0;color:#666">वर्ष: <b>${selYear}</b> | महिना: <b>${selMonth}</b></p>
+      <p style="margin:2px 0;color:#666;font-size:0.85rem">प्रयोगकर्ता: <b>${escapeHTML(currentUser.id)}</b></p>
+    </div>
+    
+    <table style="width:100%;border-collapse:collapse;margin-top:15px">
+      <thead>
+        <tr style="background:#1a2634;color:#fff">
+          <th style="padding:10px;border:1px solid #1a2634">क्र.स.</th>
+          <th style="padding:10px;border:1px solid #1a2634">सामान/विषय</th>
+          <th style="padding:10px;border:1px solid #1a2634">रकम (रु.)</th>
+          <th style="padding:10px;border:1px solid #1a2634">मिति र समय</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+
+    <h3 style="text-align:right;margin-top:20px;color:#2e7d32">कुल जम्मा खर्च: रु. ${total.toFixed(2)}</h3>
+
+    <hr style="margin-top:40px;border:0;border-top:1px dashed #ccc;">
+    <div style="text-align:center;margin-top:15px;color:#555;font-size:0.8rem;line-height:1.5">
+      <p>धन्यवाद <b>nabinphuyal</b> को वेब भिजिट गर्नुभएकोमा! अरू पनि तपाईंलाई काम लाग्ने कुराहरू छन् यो वेबमा, त्यसैले चेक गर्नुहोस्:</p>
+      <p style="margin-top:4px"><a href="https://phuyalnabin.com.np" target="_blank" style="color:#1a2634;font-weight:bold;text-decoration:underline">phuyalnabin.com.np</a></p>
+    </div>
+  `;
+
+  document.body.appendChild(pdfContainer);
+  html2pdf().set({
+    margin: 0.5,
+    filename: `NabinNote_${selYear}_${selMonth}_${currentUser.id}.pdf`,
+    html2canvas: {scale: 2},
+    jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'}
+  }).from(pdfContainer).save().then(()=>{
+    pdfContainer.remove();
+    showToast('✅ PDF Downloaded!');
+  });
 }
 
 auth.onAuthStateChanged(async user=>{
@@ -337,4 +504,3 @@ auth.onAuthStateChanged(async user=>{
 </script>
 </body>
 </html>
-c
