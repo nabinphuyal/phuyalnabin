@@ -10,7 +10,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<!-- Chart.js for Pro Visual Analytics -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -67,7 +66,6 @@ p{color:var(--text-sub)}
 .dropdown-menu button{padding:12px 20px;border:none;background:none;text-align:left;color:var(--text-main);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:10px}
 .dropdown-menu button:hover{background:var(--border-color)}
 
-/* Enhanced Summary Cards */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:15px;margin:15px 0}
 .stat-card{background:var(--border-color);padding:18px 20px;border-radius:18px;text-align:center;box-shadow: 0 4px 12px rgba(0,0,0,0.03)}
 .stat-card h4{font-size:0.85rem;color:var(--text-sub)}
@@ -304,18 +302,85 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
 
-let currentUser=null, currentNotes=[], editIndex=null, chartInstance=null;
+let currentUser = null;
+let currentNotes = [];
+let editId = null;      // editIndex → editId (safe for filtered lists)
+let chartInstance = null;
 
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
-function togglePassword(id, btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
-function toggleDropdown(){const d=document.getElementById('dropdownMenu');d.style.display=d.style.display==='flex'?'none':'flex'}
+/* ============================================================
+   HELPER FUNCTIONS
+   ============================================================ */
+function showToast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',3500);
+}
+function togglePassword(id){
+  const i=document.getElementById(id);
+  i.type = i.type==='password'?'text':'password';
+}
+function toggleDropdown(){
+  const d=document.getElementById('dropdownMenu');
+  d.style.display = d.style.display==='flex'?'none':'flex';
+}
 function toggleTheme(){document.body.classList.toggle('dark-theme')}
 
-function showLogin(){document.getElementById('loginPage').classList.remove('hidden');document.getElementById('notePage').classList.add('hidden');document.getElementById('createPage').classList.add('hidden')}
-function showCreate(){document.getElementById('loginPage').classList.add('hidden');document.getElementById('createPage').classList.remove('hidden')}
-function showRecovery(){document.getElementById('recoveryModal').style.display='flex';document.getElementById('recoveryEmail').value='';document.getElementById('recoveryResult').innerHTML=''}
+// Unique ID generator — पुरानो data migrate गर्न + edit/delete को लागि
+function generateId(){
+  return Date.now().toString(36) + Math.random().toString(36).substr(2,9);
+}
+
+// नेपाली महिना auto-detect (approx — हरेक वर्ष ~15 दिन फरक)
+function getCurrentNepaliMonth(){
+  const m = new Date().getMonth(); // 0=Jan
+  const map = ["माघ","फागुन","चैत","बैशाख","जेठ","असार",
+               "साउन","भदौ","असोज","कात्तिक","मंसिर","पुस"];
+  return map[m];
+}
+
+// पुरानो note हरूमा _id छैन भने थप्ने (DATA SAFE MIGRATION)
+function migrateNotesIfNeeded(notes, uid){
+  let changed = false;
+  const migrated = notes.map(n => {
+    if(!n || typeof n !== 'object') return n;
+    if(!n._id){
+      changed = true;
+      return { ...n, _id: generateId() };
+    }
+    return n;
+  });
+  if(changed){
+    // background मा save — user लाई थाहा नदिने, data नहट्ने
+    database.ref('users/'+uid+'/notes').set(migrated)
+      .then(()=>console.log('✅ Purano notes migrate bhayo (safe)'))
+      .catch(err=>console.warn('Migration save failed:', err));
+  }
+  return migrated;
+}
+
+/* ============================================================
+   PAGE NAVIGATION
+   ============================================================ */
+function showLogin(){
+  document.getElementById('loginPage').classList.remove('hidden');
+  document.getElementById('notePage').classList.add('hidden');
+  document.getElementById('createPage').classList.add('hidden');
+}
+function showCreate(){
+  document.getElementById('loginPage').classList.add('hidden');
+  document.getElementById('createPage').classList.remove('hidden');
+}
+function showRecovery(){
+  document.getElementById('recoveryModal').style.display='flex';
+  document.getElementById('recoveryEmail').value='';
+  document.getElementById('recoveryResult').innerHTML='';
+}
 function closeRecovery(){document.getElementById('recoveryModal').style.display='none'}
 
+/* ============================================================
+   SETTINGS
+   ============================================================ */
 function openSettings(){
   document.getElementById('dropdownMenu').style.display='none';
   document.getElementById('settingName').value = currentUser.id;
@@ -323,26 +388,48 @@ function openSettings(){
   document.getElementById('newPassword').value = '';
   document.getElementById('settingsModal').style.display='flex';
 }
-function closeSettings(){
-  document.getElementById('settingsModal').style.display='none';
-}
+function closeSettings(){document.getElementById('settingsModal').style.display='none'}
 
 async function updateProfileName(){
-  const newName = document.getElementById('settingName').value.trim();
+  const newName = document.getElementById('settingName').value.trim().toLowerCase();
+  const oldName = currentUser.id;
+
   if(!newName){showToast('⚠️ नाम खाली राख्न मिल्दैन!');return}
+  if(newName === oldName){showToast('ℹ️ यही नाम पहिले नै छ!');return}
+  if(newName.length < 4){showToast('⚠️ नाम कम्तीमा ४ अक्षरको हुनुपर्छ!');return}
+
   try{
+    // नयाँ username पहिले नै छ कि जाँच
+    const check = await database.ref('idIndex/'+newName).once('value');
+    if(check.exists()){
+      showToast('❌ यो Username पहिले नै प्रयोगमा छ!');
+      return;
+    }
+
+    // user data update (notes untouched)
     await database.ref('users/'+currentUser.uid).update({id: newName});
+
+    // पुरानो idIndex हटाउने, नयाँ बनाउने
+    await database.ref('idIndex/'+oldName).remove();
+    await database.ref('idIndex/'+newName).set({
+      uid: currentUser.uid,
+      email: currentUser.email
+    });
+
     currentUser.id = newName;
     document.getElementById('displayName').textContent = newName;
     closeSettings();
     showToast('✅ Profile Name Updated!');
-  }catch(e){showToast('❌ Name Update हुन सकेन!')}
+  }catch(e){
+    console.error(e);
+    showToast('❌ Name Update हुन सकेन!');
+  }
 }
 
 async function changePassword(){
   const oldPass = document.getElementById('oldPassword').value;
   const newPass = document.getElementById('newPassword').value;
-  
+
   if(!oldPass){showToast('⚠️ पुरानो पासवर्ड राख्नुहोस्!'); return;}
   if(newPass.length < 8){showToast('⚠️ नयाँ पासवर्ड कम्तीमा ८ अक्षरको हुनुपर्छ!'); return;}
 
@@ -359,6 +446,9 @@ async function changePassword(){
   }
 }
 
+/* ============================================================
+   AUTH
+   ============================================================ */
 async function loginUser(){
   const id=document.getElementById('loginId').value.trim().toLowerCase();
   const pass=document.getElementById('loginPassword').value;
@@ -418,7 +508,14 @@ function logoutUser(){
   showToast('🚪 Logged out!');
 }
 
+/* ============================================================
+   CHART
+   ============================================================ */
 function renderChart(income, expense){
+  if(typeof Chart === 'undefined'){
+    console.warn('Chart.js load भएन');
+    return;
+  }
   const ctx = document.getElementById('expenseChart').getContext('2d');
   if(chartInstance) chartInstance.destroy();
 
@@ -435,27 +532,28 @@ function renderChart(income, expense){
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom' }
-      }
+      plugins: { legend: { position: 'bottom' } }
     }
   });
 }
 
+/* ============================================================
+   RENDER NOTES LIST
+   ============================================================ */
 function renderNotes(){
   const container = document.getElementById('noteList');
   const selYear = document.getElementById('selectYear').value;
   const selMonth = document.getElementById('selectMonth').value;
   const searchQ = document.getElementById('searchInput').value.toLowerCase();
+  const currentYear = new Date().getFullYear().toString();
 
   let displayNotes = currentNotes.filter(n => {
-    const noteYear = n.year || "2026";
+    const noteYear = n.year || currentYear;
     const noteMonth = n.month || "ALL";
-
     const matchYear = (noteYear == selYear);
     const matchMonth = (selMonth === "ALL" || noteMonth === selMonth);
-    const matchSearch = n.name.toLowerCase().includes(searchQ) || (n.category && n.category.toLowerCase().includes(searchQ));
-
+    const matchSearch = (n.name || '').toLowerCase().includes(searchQ) ||
+                        (n.category && n.category.toLowerCase().includes(searchQ));
     return matchYear && matchMonth && matchSearch;
   });
 
@@ -472,12 +570,10 @@ function renderNotes(){
   displayNotes.forEach((n,i)=>{
     const amt = Number(n.amount);
     const isIncome = n.type === 'income';
-    
     if(isIncome) totalIncome += amt;
     else totalExpense += amt;
 
-    const originalIndex = currentNotes.indexOf(n);
-    
+    // ⭐ ID based onclick — filter/search भएपनि safe
     html += `<div class="note-item ${isIncome ? 'type-income' : 'type-expense'}">
       <span class="sn">${i+1}</span>
       <span class="item-category">${n.category || '📌'}</span>
@@ -485,8 +581,8 @@ function renderNotes(){
       <span class="item-amount ${isIncome ? 'income-text' : 'expense-text'}">${isIncome ? '+' : '-'} रु. ${amt.toFixed(2)}</span>
       <span class="item-datetime">${escapeHTML(n.datetime || '—')}</span>
       <div class="action-btns">
-        <button class="edit-btn" onclick="openEditModal(${originalIndex})"><i class="fa-solid fa-pen"></i></button>
-        <button class="delete-btn" onclick="deleteNote(${originalIndex})"><i class="fa-solid fa-trash"></i></button>
+        <button class="edit-btn" onclick="openEditModal('${n._id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="delete-btn" onclick="deleteNote('${n._id}')"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>`;
   });
@@ -494,7 +590,7 @@ function renderNotes(){
   container.innerHTML = html;
   document.getElementById('statIncome').textContent = 'रु. ' + totalIncome.toFixed(2);
   document.getElementById('statExpense').textContent = 'रु. ' + totalExpense.toFixed(2);
-  
+
   const balance = totalIncome - totalExpense;
   const balanceEl = document.getElementById('statBalance');
   balanceEl.textContent = 'रु. ' + balance.toFixed(2);
@@ -503,6 +599,9 @@ function renderNotes(){
   renderChart(totalIncome, totalExpense);
 }
 
+/* ============================================================
+   ADD / DELETE / EDIT
+   ============================================================ */
 function addNote(){
   const type = document.getElementById('noteType').value;
   const category = document.getElementById('noteCategory').value;
@@ -511,15 +610,19 @@ function addNote(){
   const year = document.getElementById('selectYear').value;
   let month = document.getElementById('selectMonth').value;
 
-  if(month === "ALL") month = "असोज";
+  // "ALL" भए हालको नेपाली महिना auto
+  if(month === "ALL") month = getCurrentNepaliMonth();
 
   if(!name){showToast('⚠️ विवरणको नाम लेख्नुहोस्!'); return;}
   if(!amount || isNaN(amount) || amount <= 0){showToast('⚠️ सही रकम लेख्नुहोस्!'); return;}
 
   const now = new Date();
-  const timeStr = now.toLocaleTimeString('ne-NP', {hour:'2-digit', minute:'2-digit'});
+  const timeStr = now.toLocaleTimeString('en-GB', {
+    hour:'2-digit', minute:'2-digit', timeZone:'Asia/Kathmandu'
+  });
 
   currentNotes.push({
+    _id: generateId(),
     type: type,
     category: category,
     name: name,
@@ -536,42 +639,58 @@ function addNote(){
   showToast('✅ Record Added!');
 }
 
-function deleteNote(i){
+function deleteNote(id){
   if(confirm('के तपाईं यो रेकर्ड मेटाउन चाहनुहुन्छ?')){
-    currentNotes.splice(i,1);
+    currentNotes = currentNotes.filter(n => n._id !== id);
     saveNotesToFirebase();
     showToast('🗑️ Record Deleted!');
   }
 }
 
-function openEditModal(i){
-  editIndex = i;
-  document.getElementById('editType').value = currentNotes[i].type || 'expense';
-  document.getElementById('editCategory').value = currentNotes[i].category || '📌 अन्य';
-  document.getElementById('editName').value = currentNotes[i].name;
-  document.getElementById('editAmount').value = currentNotes[i].amount;
+function openEditModal(id){
+  const note = currentNotes.find(n => n._id === id);
+  if(!note){showToast('❌ Record भेटिएन!'); return;}
+
+  editId = id;
+  document.getElementById('editType').value = note.type || 'expense';
+  document.getElementById('editCategory').value = note.category || '📌 अन्य';
+  document.getElementById('editName').value = note.name;
+  document.getElementById('editAmount').value = note.amount;
   document.getElementById('editModal').style.display='flex';
 }
-function closeEditModal(){document.getElementById('editModal').style.display='none'; editIndex=null;}
+
+function closeEditModal(){
+  document.getElementById('editModal').style.display='none';
+  editId = null;
+}
 
 function saveEdit(){
   const type = document.getElementById('editType').value;
   const category = document.getElementById('editCategory').value;
   const name = document.getElementById('editName').value.trim();
   const amount = document.getElementById('editAmount').value.trim();
-  
-  if(!name || !amount || isNaN(amount)) {showToast('⚠️️ विवरण र रकम सही हाल्नुहोस्!'); return;}
 
-  currentNotes[editIndex].type = type;
-  currentNotes[editIndex].category = category;
-  currentNotes[editIndex].name = name;
-  currentNotes[editIndex].amount = parseFloat(amount);
-  
+  if(!name || !amount || isNaN(amount)) {
+    showToast('⚠️ विवरण र रकम सही हाल्नुहोस्!');
+    return;
+  }
+
+  const idx = currentNotes.findIndex(n => n._id === editId);
+  if(idx === -1){ showToast('❌ Record भेटिएन!'); return; }
+
+  currentNotes[idx].type = type;
+  currentNotes[idx].category = category;
+  currentNotes[idx].name = name;
+  currentNotes[idx].amount = parseFloat(amount);
+
   saveNotesToFirebase();
   closeEditModal();
   showToast('✅ Record Updated!');
 }
 
+/* ============================================================
+   SAVE / EXPORT
+   ============================================================ */
 function saveNotesToFirebase(){
   if(currentUser) database.ref('users/'+currentUser.uid+'/notes').set(currentNotes);
 }
@@ -591,12 +710,16 @@ function escapeHTML(str){
   return d.innerHTML;
 }
 
+/* ============================================================
+   PDF EXPORT
+   ============================================================ */
 function downloadPDF(){
   const selYear = document.getElementById('selectYear').value;
   const selMonth = document.getElementById('selectMonth').value;
-  
+  const currentYear = new Date().getFullYear().toString();
+
   let displayNotes = currentNotes.filter(n => {
-    const nY = n.year || "2026";
+    const nY = n.year || currentYear;
     const nM = n.month || "ALL";
     return (nY == selYear) && (selMonth === "ALL" || nM === selMonth);
   });
@@ -628,7 +751,7 @@ function downloadPDF(){
       <h1 style="margin:0;color:#1a2634;">Nabin Note - Pro Account Statement</h1>
       <p style="margin:5px 0;">वर्ष: <b>${selYear}</b> | महिना: <b>${selMonth}</b> | युजर: <b>${escapeHTML(currentUser.id)}</b></p>
     </div>
-    
+
     <table style="width:100%;border-collapse:collapse;margin-top:15px;">
       <thead>
         <tr style="background:#1a2634;color:#ffffff;">
@@ -666,14 +789,20 @@ function downloadPDF(){
   });
 }
 
-// REALTIME FIREBASE SYNC (Pro Feature)
+/* ============================================================
+   FIREBASE REALTIME SYNC + AUTO MIGRATION
+   ============================================================ */
 auth.onAuthStateChanged(user=>{
   if(user){
     database.ref('users/'+user.uid).on('value', snap=>{
       if(snap.exists()){
         const d=snap.val();
         currentUser={uid:user.uid, id:d.id, email:d.email};
-        currentNotes=Array.isArray(d.notes)?d.notes:[];
+
+        // पुरानो data migrate (safe — कुनै note हट्दैन)
+        const rawNotes = Array.isArray(d.notes) ? d.notes : [];
+        currentNotes = migrateNotesIfNeeded(rawNotes, user.uid);
+
         document.getElementById('displayName').textContent=d.id;
         document.getElementById('loginPage').classList.add('hidden');
         document.getElementById('createPage').classList.add('hidden');
