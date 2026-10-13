@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>नेपाल डिजिटल GIS एवं पर्यटकीय पोर्टल | Nepal 77 Districts Master Portal</title>
+    <title>नेपाल जियो-इन्टेलिजेन्स पोर्टल | Nepal 77 Districts Master GIS</title>
     
     <!-- Leaflet GIS Mapping CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -14,12 +14,13 @@
 
     <style>
         :root {
-            --primary: #0056b3;
-            --accent: #dc3545;
-            --gold: #ffc107;
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.85);
-            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            --primary: #0ea5e9;
+            --accent: #f43f5e;
+            --gold: #fbbf24;
+            --bg-dark: #020617;
+            --card-bg: rgba(15, 23, 42, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
 
         * {
@@ -30,17 +31,19 @@
         }
 
         body {
-            background-color: #0b1120;
-            color: #fff;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
             overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, transparent 50%);
         }
 
         /* Navigation Header */
         header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.8rem 1.5rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.8rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -52,52 +55,56 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
         .brand h1 {
-            font-size: 1.3rem;
-            background: linear-gradient(45deg, #ff4b5c, #ffb400);
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
         }
 
         .search-box {
             position: relative;
-            width: 320px;
+            width: 380px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 8px 16px 8px 38px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
+            padding: 10px 20px 10px 45px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
             outline: none;
             transition: 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .search-box input:focus {
-            background: rgba(255,255,255,0.2);
-            border-color: #ffc107;
-            box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
         }
 
         .search-box i {
             position: absolute;
-            left: 14px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #aaa;
+            color: var(--primary);
+            font-size: 1.1rem;
         }
 
         /* Grid Layout */
         .app-container {
             display: grid;
-            grid-template-columns: 1fr 450px;
-            height: calc(100vh - 65px);
+            grid-template-columns: 1fr 480px;
+            height: calc(100vh - 70px);
         }
 
         /* Map Section */
@@ -105,160 +112,236 @@
             position: relative;
             width: 100%;
             height: 100%;
-            background: #090d16;
+            background: #020617;
         }
 
         #map {
             width: 100%;
             height: 100%;
+            z-index: 1;
         }
 
         /* Sidebar Section */
         .info-sidebar {
-            background: var(--bg-dark);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            padding: 1.5rem;
             overflow-y: auto;
             box-shadow: var(--shadow);
             z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 1rem;
-            background: rgba(255,255,255,0.05);
-            padding: 10px;
-            border-radius: 12px;
+            gap: 12px;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
             text-align: center;
         }
 
         .stat-item h3 {
-            color: #38bdf8;
-            font-size: 1.2rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: 800;
         }
 
         .stat-item p {
             font-size: 0.75rem;
             color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
         }
 
         .default-state {
             text-align: center;
-            padding: 2.5rem 1rem;
+            padding: 3rem 1rem;
             color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .default-state i {
-            font-size: 3.5rem;
-            color: #ff4b5c;
-            margin-bottom: 1rem;
+            font-size: 4rem;
+            background: linear-gradient(45deg, #f43f5e, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 20px rgba(244, 63, 94, 0.4));
+        }
+
+        .default-state h2 {
+            font-size: 1.5rem;
+            color: #f8fafc;
+            margin-bottom: 10px;
         }
 
         /* Details Card */
         .detail-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            animation: fadeIn 0.3s ease-in-out;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .district-header {
-            border-bottom: 2px solid #38bdf8;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .district-title {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: #38bdf8;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
         }
 
         .badge {
-            background: #dc3545;
+            background: linear-gradient(135deg, #e11d48, #be123c);
             color: white;
             font-size: 0.75rem;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
         }
 
         .palika-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-top: 1rem;
-            max-height: 55vh;
+            gap: 10px;
+            margin-top: 1.5rem;
             overflow-y: auto;
-            padding-right: 5px;
+            padding-right: 8px;
+            flex: 1;
         }
 
+        /* Custom Scrollbar */
+        .palika-list::-webkit-scrollbar { width: 6px; }
+        .palika-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
+        .palika-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .palika-list::-webkit-scrollbar-thumb:hover { background: #475569; }
+
         .palika-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 10px 14px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px 18px;
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .palika-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: 0.3s;
         }
 
         .palika-item:hover {
-            background: linear-gradient(90deg, #0284c7, #0369a1);
-            transform: translateX(4px);
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateX(6px);
         }
 
+        .palika-item:hover::before { opacity: 1; }
+
         .palika-detail {
-            margin-top: 6px;
-            background: rgba(15, 23, 42, 0.95);
-            border-radius: 10px;
-            padding: 10px;
-            border-left: 3px solid #ffc107;
+            margin-top: 10px;
+            background: rgba(2, 6, 23, 0.8);
+            border-radius: 14px;
+            padding: 15px;
+            border-left: 3px solid var(--gold);
+            animation: fadeIn 0.3s ease;
         }
 
         .attraction-tag {
-            display: inline-block;
-            background: rgba(255, 193, 7, 0.15);
-            color: #ffc107;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            margin: 3px 2px;
-            border: 1px solid rgba(255, 193, 7, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin: 4px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .attraction-tag:hover {
+            background: rgba(251, 191, 36, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.2);
         }
 
         .map-overlay {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(15, 23, 42, 0.9);
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
+            bottom: 25px;
+            left: 25px;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
             z-index: 1000;
-            color: #fff;
+            color: #cbd5e1;
             font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             .app-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: 50vh 1fr;
+                grid-template-rows: 45vh 1fr;
             }
+            .search-box { width: 200px; }
+            .brand h1 { font-size: 1rem; }
         }
     </style>
 </head>
@@ -267,10 +350,10 @@
     <!-- Header Navigation -->
     <header>
         <div class="brand">
-            <i class="fa-solid fa-map-location-dot fa-2x" style="color: #ff4b5c;"></i>
+            <i class="fa-solid fa-earth-asia fa-2x" style="color: #38bdf8; text-shadow: 0 0 20px rgba(56,189,248,0.5);"></i>
             <div>
-                <h1>नेपाल डिजिटल GIS मास्टर पोर्टल</h1>
-                <small style="color: #94a3b8; font-size: 0.75rem;">Interactive Map of 77 Districts & 753 Local Levels</small>
+                <h1>नेपाल जियो-इन्टेलिजेन्स पोर्टल</h1>
+                <small style="color: #64748b; font-size: 0.7rem; letter-spacing: 1px;">NEPAL 77 DISTRICTS MASTER GIS</small>
             </div>
         </div>
         
@@ -287,7 +370,7 @@
         <div id="map-container">
             <div id="map"></div>
             <div class="map-overlay">
-                <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> नक्साको जुनसुकै जिल्लामा थिचेर स्थानीय तहहरू र पर्यटकीय स्थलहरू खोल्नुहोस्।
+                <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> नक्सामा क्लिक गर्नुहोस् वा सर्च गर्नुहोस्।
             </div>
         </div>
 
@@ -296,11 +379,11 @@
             <div class="stats-bar">
                 <div class="stat-item">
                     <h3>७</h3>
-                    <p>प्रदेशहरू</p>
+                    <p>प्रदेश</p>
                 </div>
                 <div class="stat-item">
                     <h3>७७</h3>
-                    <p>जिल्लाहरू</p>
+                    <p>जिल्ला</p>
                 </div>
                 <div class="stat-item">
                     <h3>७५३</h3>
@@ -309,32 +392,32 @@
             </div>
 
             <div class="default-state" id="defaultState">
-                <i class="fa-solid fa-compass"></i>
+                <i class="fa-solid fa-map-location-dot"></i>
                 <h2>नेपालको सम्पूर्ण ७७ जिल्लाको नक्सा</h2>
-                <p style="margin-top: 8px;">नक्सामा थिचेर वा माथिको सर्च बक्समा टाइप गरेर कुनै पनि जिल्ला वा गाउँपालिका/नगरपालिकाको सम्पूर्ण बायोडाटा हेर्नुहोस्।</p>
+                <p style="margin-top: 10px; font-size: 0.9rem;">नक्सामा थिचेर वा माथिको सर्च बक्समा टाइप गरेर कुनै पनि जिल्ला वा गाउँपालिका/नगरपालिकाको सम्पूर्ण बायोडाटा हेर्नुहोस्।</p>
             </div>
 
             <!-- Dynamic Content Output -->
-            <div id="dynamicContent"></div>
+            <div id="dynamicContent" style="display: none;"></div>
         </div>
 
     </div>
 
     <!-- Leaflet JS Mapping Engine -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script>
+        <script>
         // 1. Initialize Leaflet Map Centered on Nepal
-        const map = L.map('map').setView([28.3949, 84.1240], 7);
+        const map = L.map('map', { zoomControl: false }).setView([28.3949, 84.1240], 7);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        // Premium Dark Map Tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 18,
             attribution: '&copy; OpenStreetMap &copy; CARTO'
         }).addTo(map);
 
-        // 2. Complete 77 Districts Database with Local Bodies & Major Attractions
+        // 2. Complete 77 Districts Database (All 753 Local Levels + Attractions)
         const nepal77Database = {
-            // --- कोशी प्रदेश (Province 1) ---
             "Taplejung": { name: "ताप्लेजुङ", province: "कोशी प्रदेश", headquarter: "फुङलिङ", palikas: [
                 { name: "फुङलिङ नगरपालिका", type: "नगरपालिका", spots: ["पाथीभरा देवी मन्दिर", "फुङफुङ्गे झरना"] },
                 { name: "सिरिजङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["कञ्चनजङ्घा आधार शिविर", "याङ्मा गाउँ"] },
@@ -402,7 +485,7 @@
                 { name: "कमल गाउँपालिका", type: "गाउँपालिका", spots: ["कमलपोखरी"] },
                 { name: "गौरीगञ्ज गाउँपालिका", type: "गाउँपालिका", spots: ["हुलाकी राजमार्ग बजार"] },
                 { name: "झापा गाउँपालिका", type: "गाउँपालिका", spots: ["झापा बजार"] },
-                { name: "झापा/बुद्धशान्ति गाउँपालिका", type: "गाउँपालिका", spots: ["बुद्धशान्ति पार्क"] },
+                { name: "बुद्धशान्ति गाउँपालिका", type: "गाउँपालिका", spots: ["बुद्धशान्ति पार्क"] },
                 { name: "हल्दीबारी गाउँपालिका", type: "गाउँपालिका", spots: ["जातीय सङ्ग्रहालय"] },
                 { name: "कचनकवल गाउँपालिका", type: "गाउँपालिका", spots: ["कचनकवल (नेपालको सबैभन्दा होचो ठाउँ - ५८ मिटर)"] },
                 { name: "बाह्रदशी गाउँपालिका", type: "गाउँपालिका", spots: ["साधुबेला धाम"] }
@@ -461,11 +544,11 @@
             ]},
             "Terhathum": { name: "तेह्रथुम", province: "कोशी प्रदेश", headquarter: "म्याङ्लुङ", palikas: [
                 { name: "म्याङ्लुङ नगरपालिका", type: "नगरपालिका", spots: ["म्याङ्लुङ छाता चौक", "सिंहवाहिनी"] },
-                { name: "लालगुराँस नगरपालिका", type: "नगरपालिका", spots: ["वसन्तपुर", "TJR (टीआरजे) गुराँस क्षेत्र"] },
+                { name: "लालगुराँस नगरपालिका", type: "नगरपालिका", spots: ["वसन्तपुर", "TJR गुराँस क्षेत्र"] },
                 { name: "आठराई गाउँपालिका", type: "गाउँपालिका", spots: ["संक्रान्ति बजार"] },
                 { name: "फेदाप गाउँपालिका", type: "गाउँपालिका", spots: ["पोखरी बजार"] },
                 { name: "छथर गाउँपालिका", type: "गाउँपालिका", spots: ["मार्ग पोखरी"] },
-                { name: "मेनाम्यायेम / मेन्छायायेम गाउँपालिका", type: "गाउँपालिका", spots: ["मेन्छायायेम डाँडा"] }
+                { name: "मेन्छायायेम गाउँपालिका", type: "गाउँपालिका", spots: ["मेन्छायायेम डाँडा"] }
             ]},
             "Okhaldhunga": { name: "ओखलढुङ्गा", province: "कोशी प्रदेश", headquarter: "ओखलढुङ्गा", palikas: [
                 { name: "सिद्धिचरण नगरपालिका", type: "नगरपालिका", spots: ["ओखलढुङ्गा गढी", "युगकवि सिद्धिचरण स्रष्टा पार्क"] },
@@ -499,8 +582,8 @@
                 { name: "रौतामाई गाउँपालिका", type: "गाउँपालिका", spots: ["रौता पोखरी"] },
                 { name: "सुनकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["नेपालटार"] }
             ]},
-
-            // --- मधेश प्रदेश (Madhesh Province) ---
+            
+            // --- मधेश प्रदेश ---
             "Saptari": { name: "सप्तरी", province: "मधेश प्रदेश", headquarter: "राजविराज", palikas: [
                 { name: "राजविराज नगरपालिका", type: "नगरपालिका", spots: ["राजदेवी मन्दिर", "छिन्नमस्ता भगवती (सखडा)"] },
                 { name: "कञ्चनरूप नगरपालिका", type: "नगरपालिका", spots: ["कञ्चनपुर बजार"] },
@@ -514,7 +597,7 @@
                 { name: "छिन्नमस्ता गाउँपालिका", type: "गाउँपालिका", spots: ["सखडा मन्दिर"] },
                 { name: "महादेवा गाउँपालिका", type: "गाउँपालिका", spots: ["महादेवा"] },
                 { name: "तिरहुत गाउँपालिका", type: "गाउँपालिका", spots: ["तिरहुत धाम"] },
-                { name: "तिलोठी / तिलोठी कोइलाडी गाउँपालिका", type: "गाउँपालिका", spots: ["कोइलाडी"] },
+                { name: "तिलोठी गाउँपालिका", type: "गाउँपालिका", spots: ["कोइलाडी"] },
                 { name: "रूपनी गाउँपालिका", type: "गाउँपालिका", spots: ["रूपनी चोक"] },
                 { name: "विष्णुपुर गाउँपालिका", type: "गाउँपालिका", spots: ["विष्णुपुर धाम"] },
                 { name: "बलान-बिहुल गाउँपालिका", type: "गाउँपालिका", spots: ["बलान नदी"] },
@@ -538,14 +621,14 @@
                 { name: "नरहा गाउँपालिका", type: "गाउँपालिका", spots: ["नरहा धाम"] },
                 { name: "सखुवानान्कारकट्टी गाउँपालिका", type: "गाउँपालिका", spots: ["महेशपुर"] },
                 { name: "अर्णमा गाउँपालिका", type: "गाउँपालिका", spots: ["अर्णमा पोखरी"] },
-                { name: "नवराजपुर गाउँपालिका", type: "गाउँपालिका", spots: ["झाझपट्टी"] text }
+                { name: "नवराजपुर गाउँपालिका", type: "गाउँपालिका", spots: ["झाझपट्टी"] }
             ]},
             "Dhanusha": { name: "धनुषा", province: "मधेश प्रदेश", headquarter: "जनकपुरधाम", palikas: [
                 { name: "जनकपुरधाम उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["जानकी मन्दिर", "राममन्दिर", "धनुषसागर", "गंगासागर"] },
                 { name: "छीरेश्वरनाथ नगरपालिका", type: "नगरपालिका", spots: ["छीरेश्वरनाथ महादेव"] },
                 { name: "गणेशमान चारनाथ नगरपालिका", type: "नगरपालिका", spots: ["चारनाथ नदी"] },
                 { name: "धनुषाधाम नगरपालिका", type: "नगरपालिका", spots: ["धनुषाधाम (रामले भाँचेको धनुषको टुक्रा)"] },
-                { name: "बाहुनडाँडा / नगराइन नगरपालिका", type: "नगरपालिका", spots: ["नगराइन धाम"] },
+                { name: "नगराइन नगरपालिका", type: "नगरपालिका", spots: ["नगराइन धाम"] },
                 { name: "विदेह नगरपालिका", type: "नगरपालिका", spots: ["विदेह राजा जनक स्थल"] },
                 { name: "मिथिला नगरपालिका", type: "नगरपालिका", spots: ["ढल्केबर", "पुष्पलाल पार्क"] },
                 { name: "शहीदनगर नगरपालिका", type: "नगरपालिका", spots: ["यदुकुहा"] },
@@ -603,14 +686,14 @@
                 { name: "गौर नगरपालिका", type: "नगरपालिका", spots: ["राधाकृष्ण मन्दिर", "गौर भन्सार"] },
                 { name: "चंद्रपुर नगरपालिका", type: "नगरपालिका", spots: ["चाँदी नदी", "नुनथर (पर्यटकीय क्षेत्र)"] },
                 { name: "गरुडा नगरपालिका", type: "नगरपालिका", spots: ["श्रीराम सुगर मिल"] },
-                { name: "शिवनगर / गढीमाई नगरपालिका", type: "नगरपालिका", spots: ["गढीमाई मन्दिर"] },
-                { name: "ब्रह्मपुरी / बौधीमाई नगरपालिका", type: "नगरपालिका", spots: ["बौधीमाई मन्दिर"] },
+                { name: "गढीमाई नगरपालिका", type: "नगरपालिका", spots: ["गढीमाई मन्दिर"] },
+                { name: "बौधीमाई नगरपालिका", type: "नगरपालिका", spots: ["बौधीमाई मन्दिर"] },
                 { name: "वृन्दावन नगरपालिका", type: "नगरपालिका", spots: ["वृन्दावन वन"] },
                 { name: "देवाही गोनाही नगरपालिका", type: "नगरपालिका", spots: ["देवाही धाम"] },
                 { name: "मौलापुर नगरपालिका", type: "नगरपालिका", spots: ["पतौरा पुरातात्विक महादेव मन्दिर"] },
                 { name: "माधव नारायण नगरपालिका", type: "नगरपालिका", spots: ["माधवनारायण धाम"] },
                 { name: "ईशनाथ नगरपालिका", type: "नगरपालिका", spots: ["ईशनाथ मन्दिर"] },
-                { name: "परसोहा / परोहा नगरपालिका", type: "नगरपालिका", spots: ["लौकाहा"] },
+                { name: "परसोहा नगरपालिका", type: "नगरपालिका", spots: ["लौकाहा"] },
                 { name: "फटुवा विजयपुर नगरपालिका", type: "नगरपालिका", spots: ["विजयपुर"] },
                 { name: "गुजरा नगरपालिका", type: "नगरपालिका", spots: ["जङ्गलसैया"] },
                 { name: "कटहरिया नगरपालिका", type: "नगरपालिका", spots: ["कटहरिया बजार"] },
@@ -654,7 +737,7 @@
                 { name: "जिराभवानी गाउँपालिका", type: "गाउँपालिका", spots: ["जिराभवानी"] }
             ]},
 
-            // --- बागमती प्रदेश (Bagmati Province) ---
+            // --- बागमती प्रदेश ---
             "Kathmandu": { name: "काठमाडौँ", province: "बागमती प्रदेश", headquarter: "काठमाडौँ", palikas: [
                 { name: "काठमाडौँ महानगरपालिका", type: "महानगरपालिका", spots: ["पशुपतिनाथ मन्दिर", "स्वयम्भूनाथ", "वसन्तपुर दरबार क्षेत्र", "बौद्धनाथ"] },
                 { name: "बूढानीलकण्ठ नगरपालिका", type: "नगरपालिका", spots: ["बूढानीलकण्ठ मन्दिर", "शिवपुरी निकुञ्ज"] },
@@ -736,7 +819,7 @@
                 { name: "नीलकण्ठ नगरपालिका", type: "नगरपालिका", spots: ["धादिङबेँसी", "सुनाउला बजार"] },
                 { name: "धुनीबेँसी नगरपालिका", type: "नगरपालिका", spots: ["महेशफाँट", "नौबिसे"] },
                 { name: "गल्छी गाउँपालिका", type: "गाउँपालिका", spots: ["गल्छी त्रिशूली किनार"] },
-                { name: "गजाधुरी / गजिउरी / गजुरिए गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिशूली रिभर राफ्टिङ"] },
+                { name: "गजुरी गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिशूली रिभर राफ्टिङ"] },
                 { name: "बेनीघाट रोराङ गाउँपालिका", type: "गाउँपालिका", spots: ["हुग्दीखोला", "मलेखु (माछा प्रसिद्ध)"] },
                 { name: "सिद्धलेक गाउँपालिका", type: "गाउँपालिका", spots: ["सिद्धलेक डाँडा"] },
                 { name: "ज्वालामुखी गाउँपालिका", type: "गाउँपालिका", spots: ["ज्वालामुखी देवी"] },
@@ -745,7 +828,7 @@
                 { name: "खन्याबास गाउँपालिका", type: "गाउँपालिका", spots: ["दार्खा"] },
                 { name: "नेत्रावती डबजोङ गाउँपालिका", type: "गाउँपालिका", spots: ["नेत्रावती खोला"] },
                 { name: "रुबी भ्याली गाउँपालिका", type: "गाउँपालिका", spots: ["रुबी भ्याली (बहुमूल्य पत्थर खानी र गणेश हिमाल)"] },
-                { name: "थोपाल / थाक्रे गाउँपालिका", type: "गाउँपालिका", spots: ["थाक्रे सिमेन्ट क्षेत्र"] }
+                { name: "थाक्रे गाउँपालिका", type: "गाउँपालिका", spots: ["थाक्रे सिमेन्ट क्षेत्र"] }
             ]},
             "Makwanpur": { name: "मकवानपुर", province: "बागमती प्रदेश", headquarter: "हेटौँडा", palikas: [
                 { name: "हेटौँडा उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["शहीद स्मारक", "भुटनदेवी मन्दिर", "पुष्पलाल पार्क"] },
@@ -775,7 +858,7 @@
                 { name: "हरिहरपुरगढी गाउँपालिका", type: "गाउँपालिका", spots: ["हरिहरपुरगढी दरबार भग्नावशेष"] },
                 { name: "मरीण गाउँपालिका", type: "गाउँपालिका", spots: ["मरीण डाइभर्सन"] },
                 { name: "तीनपाटन गाउँपालिका", type: "गाउँपालिका", spots: ["चकमके"] },
-                { name: "फि Derive / फिकल गाउँपालिका", type: "गाउँपालिका", spots: ["फिकल डाँडा (सूर्योदय)"] },
+                { name: "फिकल गाउँपालिका", type: "गाउँपालिका", spots: ["फिकल डाँडा (सूर्योदय)"] },
                 { name: "घ्याङ्लेख गाउँपालिका", type: "गाउँपालिका", spots: ["घ्याङ्लेख"] },
                 { name: "गोलञ्जोर गाउँपालिका", type: "गाउँपालिका", spots: ["ग्वालटार (जुनार खेती हब)"] }
             ]},
@@ -801,7 +884,7 @@
                 { name: "विगु गाउँपालिका", type: "गाउँपालिका", spots: ["विगु गुम्बा", "माथिल्लो तामाकोशी जलविद्युत्"] }
             ]},
 
-            // --- गण्डकी प्रदेश (Gandaki Province) ---
+            // --- गण्डकी प्रदेश ---
             "Kaski": { name: "कास्की", province: "गण्डकी प्रदेश", headquarter: "पोखरा", palikas: [
                 { name: "पोखरा महानगरपालिका", type: "महानगरपालिका", spots: ["फेवा ताल", "सारङ्कोट", "डेभिड फल्स", "विश्व शान्ति स्तूप", "विन्द्यवासिनी", "चमेरे गुफा"] },
                 { name: "अन्नपूर्ण गाउँपालिका", type: "गाउँपालिका", spots: ["घान्द्रुक", "अन्नपूर्ण बेस क्याम्प (ABC)", "पुन हिल"] },
@@ -812,7 +895,7 @@
             "Gorkha": { name: "गोरखा", province: "गण्डकी प्रदेश", headquarter: "गोरखा", palikas: [
                 { name: "गोरखा नगरपालिका", type: "नगरपालिका", spots: ["गोरखा दरबार", "गोरखा काली मन्दिर", "रामशाह शाहको चौतारा"] },
                 { name: "पालुङटार नगरपालिका", type: "नगरपालिका", spots: ["पालुङटार विमानस्थल", "लिगलिगकोट (दौडिएर राजा हुने ऐतिहासिक ठाउँ)"] },
-                { name: "सुलिकोट / बारपाक सुलिकोट गाउँपालिका", type: "गाउँपालिका", spots: ["बारपाक (२०७२ भूकम्पको केन्द्रविन्दु)"] },
+                { name: "बारपाक सुलिकोट गाउँपालिका", type: "गाउँपालिका", spots: ["बारपाक (२०७२ भूकम्पको केन्द्रविन्दु)"] },
                 { name: "सिरानचोक गाउँपालिका", type: "गाउँपालिका", spots: ["सिरानचोक गढी"] },
                 { name: "अजिरकोट गाउँपालिका", type: "गाउँपालिका", spots: ["भान्सार"] },
                 { name: "धार्चे गाउँपालिका", type: "गाउँपालिका", spots: ["लाप्राक (एकीकृत बस्ती)"] },
@@ -820,7 +903,7 @@
                 { name: "गण्डकी गाउँपालिका", type: "गाउँपालिका", spots: ["ताङ्गीचोक"] },
                 { name: "शहीद लखन गाउँपालिका", type: "गाउँपालिका", spots: ["मनकामना मन्दिर (नेपालको पहिलो केबलकार)"] },
                 { name: "भीमसेनथापा गाउँपालिका", type: "गाउँपालिका", spots: ["खाञ्चोक"] },
-                { name: "देवघाट / आरूघाट गाउँपालिका", type: "गाउँपालिका", spots: ["आरूघाट बजार"] }
+                { name: "आरूघाट गाउँपालिका", type: "गाउँपालिका", spots: ["आरूघाट बजार"] }
             ]},
             "Lamjung": { name: "लमजुङ", province: "गण्डकी प्रदेश", headquarter: "बेँसीसहर", palikas: [
                 { name: "बेँसीसहर नगरपालिका", type: "नगरपालिका", spots: ["अन्नपूर्ण पदमार्ग प्रवेशद्वार", "गाउँसहर दरबार"] },
@@ -828,7 +911,7 @@
                 { name: "मध्यनेपाल नगरपालिका", type: "नगरपालिका", spots: ["इशानेश्वर महादेव (करापु)"] },
                 { name: "राइनास नगरपालिका", type: "नगरपालिका", spots: ["राइनासकोट (घरबास/Homestay)"] },
                 { name: "क्व्होलासोथार गाउँपालिका", type: "गाउँपालिका", spots: ["घलेगाउँ (SAARC नमुना गाउँ)", "भुजुङ"] },
-                { name: "मनाङ / मर्स्याङ्दी गाउँपालिका", type: "गाउँपालिका", spots: ["मर्स्याङ्दी जलविद्युत्"] },
+                { name: "मर्स्याङ्दी गाउँपालिका", type: "गाउँपालिका", spots: ["मर्स्याङ्दी जलविद्युत्"] },
                 { name: "दोर्दी गाउँपालिका", type: "गाउँपालिका", spots: ["नौथर"] },
                 { name: "दूधपोखरी गाउँपालिका", type: "गाउँपालिका", spots: ["पवित्र दूधपोखरी"] }
             ]},
@@ -847,7 +930,7 @@
             "Syangja": { name: "स्याङ्जा", province: "गण्डकी प्रदेश", headquarter: "पुतलीबजार", palikas: [
                 { name: "पुतलीबजार नगरपालिका", type: "नगरपालिका", spots: ["स्याङ्जा बजार", "नुवाकोट गढी"] },
                 { name: "वालिङ नगरपालिका", type: "नगरपालिका", spots: ["स्मार्ट सिटी वालिङ", "पिङखानी"] },
-                { name: "गण्डकीकोट / गल्याङ नगरपालिका", type: "नगरपालिका", spots: ["गल्याङ बजार"] },
+                { name: "गल्याङ नगरपालिका", type: "नगरपालिका", spots: ["गल्याङ बजार"] },
                 { name: "भीरकोट नगरपालिका", type: "नगरपालिका", spots: ["स्वोरेक मैदान (Paragliding Hub)"] },
                 { name: "चापाकोट नगरपालिका", type: "नगरपालिका", spots: ["सुन्तलाबारी चापाकोट"] },
                 { name: "आँधीखोला गाउँपालिका", type: "गाउँपालिका", spots: ["आँधीखोला मुहान", "श्रवणकुमार"] },
@@ -910,17 +993,17 @@
                 { name: "विनयी त्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिवेणी धाम", "वाल्मीकि आश्रम"] }
             ]},
 
-            // --- लुम्बिनी प्रदेश (Lumbini Province) ---
+            // --- लुम्बिनी प्रदेश ---
             "Rupandehi": { name: "रूपन्देही", province: "लुम्बिनी प्रदेश", headquarter: "भैरहवा", palikas: [
                 { name: "लुम्बिनी सांस्कृतिक नगरपालिका", type: "नगरपालिका", spots: ["मायादेवी मन्दिर (भगवान् बुद्ध जन्मस्थल)", "अन्तर्राष्ट्रिय गुम्बाहरू", "अशोक स्तम्भ"] },
-                { name: "बुट्वल उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["जीतगढी किल्ला", "मणिमुकुन्द सेन फूलबारी", "केबलकार"] },
+                { name: "बुटवल उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["जीतगढी किल्ला", "मणिमुकुन्द सेन फूलबारी", "केबलकार"] },
                 { name: "सिद्धार्थनगर नगरपालिका", type: "नगरपालिका", spots: ["गौतम बुद्ध अन्तर्राष्ट्रिय विमानस्थल", "भैरहवा बजार"] },
                 { name: "तिलोत्तमा नगरपालिका", type: "नगरपालिका", spots: ["शंकरनगर वनविहार र अनुसन्धान केन्द्र"] },
                 { name: "सैनामैना नगरपालिका", type: "नगरपालिका", spots: ["पर्रोहा परमेश्वर जोतिर्लिङ्ग धाम"] },
                 { name: "देवदह नगरपालिका", type: "नगरपालिका", spots: ["देवदह (भगवान् बुद्धको मावली स्थल)"] },
                 { name: "ओमसतिया गाउँपालिका", type: "गाउँपालिका", spots: ["ओमसतिया पोखरी"] },
                 { name: "रोहिणी गाउँपालिका", type: "गाउँपालिका", spots: ["रोहिणी नदी"] },
-                { name: "अन्धाधुन्ध / मर्चवारी गाउँपालिका", type: "गाउँपालिका", spots: ["मर्चवारी देवी मन्दिर"] },
+                { name: "मर्चवारी गाउँपालिका", type: "गाउँपालिका", spots: ["मर्चवारी देवी मन्दिर"] },
                 { name: "कोटहीमाई गाउँपालिका", type: "गाउँपालिका", spots: ["कोटहीमाई"] },
                 { name: "समरीमाई गाउँपालिका", type: "गाउँपालिका", spots: ["समरीमाई"] },
                 { name: "सियारी गाउँपालिका", type: "गाउँपालिका", spots: ["सियारी माछा पालन क्षेत्र"] },
@@ -945,7 +1028,7 @@
                 { name: "रामग्राम नगरपालिका", type: "नगरपालिका", spots: ["रामग्राम स्तूप (अष्टधातु युक्त नफोडिएको बुद्ध अस्तिधातु स्तूप)"] },
                 { name: "सुनवल नगरपालिका", type: "नगरपालिका", spots: ["लक्ष्मीपुर", "सुनवल बजार"] },
                 { name: "बर्दघाट नगरपालिका", type: "नगरपालिका", spots: ["दाउन्ने देवी मन्दिर (दाउन्ने पहाड)"] },
-                { name: "उमरी / पाल्हीनन्दन गाउँपालिका", type: "गाउँपालिका", spots: ["पाल्ही भगवती मन्दिर"] },
+                { name: "पाल्हीनन्दन गाउँपालिका", type: "गाउँपालिका", spots: ["पाल्ही भगवती मन्दिर"] },
                 { name: "सरावल गाउँपालिका", type: "गाउँपालिका", spots: ["सरावल ताल"] },
                 { name: "प्रतापपुर गाउँपालिका", type: "गाउँपालिका", spots: ["गुठीप्रतापपुर"] },
                 { name: "सुस्ता गाउँपालिका", type: "गाउँपालिका", spots: ["सुस्ता क्षेत्र (नारायणी पारि)"] }
@@ -954,9 +1037,9 @@
                 { name: "तानसेन नगरपालिका", type: "नगरपालिका", spots: ["तानसेन दरबार (सङ्ग्रहालय)", "श्रीनगर डाँडा", "रानीमहल (नेपालको ताज महल)"] },
                 { name: "रामपुर नगरपालिका", type: "नगरपालिका", spots: ["रामपुर उपत्यका", "कालीगण्डकी किनार"] },
                 { name: "निस्दी गाउँपालिका", type: "गाउँपालिका", spots: ["मित्याल (कौडा नृत्य र मगर संस्कृति)"] },
-                { name: "पूर्वरोला / पूर्वखोला गाउँपालिका", type: "गाउँपालिका", spots: ["रम्भा"] },
+                { name: "पूर्वखोला गाउँपालिका", type: "गाउँपालिका", spots: ["रम्भा"] },
                 { name: "रम्भा गाउँपालिका", type: "गाउँपालिका", spots: ["रम्भादेवी मन्दिर"] },
-                { name: "माठगढी / माझगढी गाउँपालिका", type: "गाउँपालिका", spots: ["माझगढी किल्ला"] },
+                { name: "माझगढी गाउँपालिका", type: "गाउँपालिका", spots: ["माझगढी किल्ला"] },
                 { name: "तिनाउ गाउँपालिका", type: "गाउँपालिका", spots: ["सत्यवती ताल", "सिद्धबाबा मन्दिर"] },
                 { name: "रिब्दीकोट गाउँपालिका", type: "गाउँपालिका", spots: ["भैरवस्थान मन्दिर (एसियाकै ठूलो त्रिशूल)"] },
                 { name: "रैनादेवी छहरा गाउँपालिका", type: "गाउँपालिका", spots: ["छहरा झरना"] },
@@ -974,7 +1057,7 @@
                 { name: "छत्रकोट गाउँपालिका", type: "गाउँपालिका", spots: ["छत्रकोट मन्दिर"] },
                 { name: "धुर्कोट गाउँपालिका", type: "गाउँपालिका", spots: ["धुर्कोट गढी", "विचित्र गुफा"] },
                 { name: "मदाने गाउँपालिका", type: "गाउँपालिका", spots: ["मदाने लेख"] },
-                { name: "मलिकार्चुन / मालिका गाउँपालिका", type: "गाउँपालिका", spots: ["मालिका थान"] }
+                { name: "मालिका गाउँपालिका", type: "गाउँपालिका", spots: ["मालिका थान"] }
             ]},
             "Arghakhanchi": { name: "अर्घाखाँची", province: "लुम्बिनी प्रदेश", headquarter: "सन्धीखर्क", palikas: [
                 { name: "सन्धिखर्क नगरपालिका", type: "नगरपालिका", spots: ["सन्धिखर्क बजार", "नरपानी (चिसो हावापानी)"] },
@@ -1020,9 +1103,9 @@
                 { name: "गंगादेव गाउँपालिका", type: "गाउँपालिका", spots: ["जिनबाङ"] }
             ]},
             "EasternRukum": { name: "पूर्वी रुकुम", province: "लुम्बिनी प्रदेश", headquarter: "रुुकुमकोट", palikas: [
-                { name: "सिसेनो / सिस्वा गाउँपालिका / पुथा उत्तरगङ्गा", type: "गाउँपालिका", spots: ["पुथा हिमाल आधार शिविर", "तकसेरा गाउँ"] },
+                { name: "पुथा उत्तरगङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["पुथा हिमाल आधार शिविर", "तकसेरा गाउँ"] },
                 { name: "भूमे गाउँपालिका", type: "गाउँपालिका", spots: ["खाबाङ", "गोरिल्ला पदमार्ग"] },
-                { name: "सिस्वा / भूमे / रुकुमगाड / सिस्ने गाउँपालिका", type: "गाउँपालिका", spots: ["रुकुमकोट", "कमलदह (कमल पोखरी)"] }
+                { name: "सिस्ने गाउँपालिका", type: "गाउँपालिका", spots: ["रुकुमकोट", "कमलदह (कमल पोखरी)"] }
             ]},
             "Banke": { name: "बाँके", province: "लुम्बिनी प्रदेश", headquarter: "नेपालगञ्ज", palikas: [
                 { name: "नेपालगञ्ज उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["बागेश्वरी मन्दिर (जिब्रो भएको मूर्ति)", "वाटरपार्क", "रानीतलाव"] },
@@ -1045,7 +1128,7 @@
                 { name: "बढैयाताल गाउँपालिका", type: "गाउँपालिका", spots: ["बढैयाताल (चरा अवलोकन सिमसार)"] }
             ]},
 
-            // --- कर्णाली प्रदेश (Karnali Province) ---
+            // --- कर्णाली प्रदेश ---
             "WesternRukum": { name: "पश्चिमी रुकुम", province: "कर्णाली प्रदेश", headquarter: "मुसीकोट", palikas: [
                 { name: "मुसीकोट नगरपालिका", type: "नगरपालिका", spots: ["मुसीकोट खलङ्गा", "साईकुमारी मन्दिर"] },
                 { name: "चौरजहारी नगरपालिका", type: "नगरपालिका", spots: ["चौरजहारी उपत्यका", "विमानस्थल"] },
@@ -1060,7 +1143,7 @@
                 { name: "बनगाड कुपिण्डे नगरपालिका", type: "नगरपालिका", spots: ["कुपिण्डे दह (रङ फेर्ने ताल)", "देवस्थल"] },
                 { name: "कालीमाटी गाउँपालिका", type: "गाउँपालिका", spots: ["कालीमाटी"] },
                 { name: "छत्रेश्वरी गाउँपालिका", type: "गाउँपालिका", spots: ["छत्रेश्वरी छायाक्षेत्र मन्दिर (सतीदेवीको अङ्ग पतन स्थल)"] },
-                { name: "ढोरचौर / सिद्धकुमाख गाउँपालिका", type: "गाउँपालिका", spots: ["सिद्धकुमाख डाँडा"] },
+                { name: "ढोरचौर गाउँपालिका", type: "गाउँपालिका", spots: ["सिद्धकुमाख डाँडा"] },
                 { name: "दार्मा गाउँपालिका", type: "गाउँपालिका", spots: ["फारुला"] },
                 { name: "कुमाख गाउँपालिका", type: "गाउँपालिका", spots: ["कुमाख पहाड"] },
                 { name: "कपुरकोट गाउँपालिका", type: "गाउँपालिका", spots: ["कपुरकोट (बेमौसमी तरकारी हब)"] },
@@ -1146,7 +1229,7 @@
                 { name: "सिम्ता गाउँपालिका", type: "गाउँपालिका", spots: ["रामेडाँडा"] }
             ]},
 
-            // --- सुदूरपश्चिम प्रदेश (Sudurpashchim Province) ---
+            // --- सुदूरपश्चिम प्रदेश ---
             "Bajura": { name: "बाजुरा", province: "सुदूरपश्चिम प्रदेश", headquarter: "मार्तडी", palikas: [
                 { name: "बडीमालिका नगरपालिका", type: "नगरपालिका", spots: ["बडीमालिका मन्दिर (सुदूरपश्चिमको प्रसिद्ध शक्तिपीठ)", "मार्तडी"] },
                 { name: "त्रिवेणी नगरपालिका", type: "नगरपालिका", spots: ["नाटेश्वरी मन्दिर"] },
@@ -1156,7 +1239,7 @@
                 { name: "जगन्नाथ गाउँपालिका", type: "गाउँपालिका", spots: ["जगन्नाथ मन्दिर"] },
                 { name: "खप्तड छेडेदह गाउँपालिका", type: "गाउँपालिका", spots: ["छेडेदह ताल"] },
                 { name: "गौमुल गाउँपालिका", type: "गाउँपालिका", spots: ["गौमुल घटाल"] },
-                { name: "काँडा / रामारोशन / हिमाली गाउँपालिका", type: "गाउँपालिका", spots: ["हिमाली पाटन"] }
+                { name: "रामारोशन गाउँपालिका", type: "गाउँपालिका", spots: ["हिमाली पाटन"] }
             ]},
             "Bajhang": { name: "बझाङ", province: "सुदूरपश्चिम प्रदेश", headquarter: "चैनपुर", palikas: [
                 { name: "जयपृथ्वी नगरपालिका", type: "नगरपालिका", spots: ["जयपृथ्वीबहादुर सिंहको दरबार", "चैनपुर"] },
@@ -1199,7 +1282,7 @@
                 { name: "दिपायल सिलगढी नगरपालिका", type: "नगरपालिका", spots: ["दिपायल दरबार", "शैलेश्वर महादेव मन्दिर", "सेती नदी"] },
                 { name: "शिखर नगरपालिका", type: "नगरपालिका", spots: ["शिखर केदार"] },
                 { name: "पूर्वीचौकी गाउँपालिका", type: "गाउँपालिका", spots: ["पूर्वीचौकी किल्ला"] },
-                { name: "खप्तड राष्ट्रिय निकुञ्ज क्षेत्र / आदर्श गाउँपालिका", type: "गाउँपालिका", spots: ["खप्तड बाबाको आश्रम", "खप्तड दह", "त्रिवेणी धाम"] },
+                { name: "आदर्श गाउँपालिका", type: "गाउँपालिका", spots: ["खप्तड बाबाको आश्रम", "खप्तड दह", "त्रिवेणी धाम"] },
                 { name: "सायल गाउँपालिका", type: "गाउँपालिका", spots: ["छत्तीवन"] },
                 { name: "केआईसिंह गाउँपालिका", type: "गाउँपालिका", spots: ["वायल"] },
                 { name: "बोगटान फुड्सिल गाउँपालिका", type: "गाउँपालिका", spots: ["बोगटान राज्य भग्नावशेष"] },
@@ -1209,7 +1292,7 @@
             "Dadeldhura": { name: "डडेल्धुरा", province: "सुदूरपश्चिम प्रदेश", headquarter: "अमरगढी", palikas: [
                 { name: "अमरगढी नगरपालिका", type: "नगरपालिका", spots: ["ऐतिहासिक अमरगढी किल्ला (वीर अमरसिंह थापाले बनाएको)", "उग्रतारा मन्दिर"] },
                 { name: "परशुराम नगरपालिका", type: "नगरपालिका", spots: ["परशुराम धाम (महाकाली किनार)"] },
-                { name: "आलग्ड / आलिताल गाउँपालिका", type: "गाउँपालिका", spots: ["आलि ताल"] },
+                { name: "आलिताल गाउँपालिका", type: "गाउँपालिका", spots: ["आलि ताल"] },
                 { name: "भागेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["भागेश्वर मन्दिर"] },
                 { name: "नवदुर्गा गाउँपालिका", type: "गाउँपालिका", spots: ["नवदुर्गा भगवती"] },
                 { name: "अजयमेरु गाउँपालिका", type: "गाउँपालिका", spots: ["अजयमेरुकोट (प्राचीन डोटेली राजाको दरबार)"] },
@@ -1237,51 +1320,52 @@
                 { name: "जानकी गाउँपालिका", type: "गाउँपालिका", spots: ["अमरावती"] },
                 { name: "बर्दगोरिया गाउँपालिका", type: "गाउँपालिका", spots: ["बर्दगोरिया मन्दिर"] },
                 { name: "मोहन्याल गाउँपालिका", type: "गाउँपालिका", spots: ["सोलट्टा"] },
-                { name: "कायलारी / कैलारी गाउँपालिका", type: "गाउँपालिका", spots: ["कोइलाही ताल"] },
+                { name: "कैलारी गाउँपालिका", type: "गाउँपालिका", spots: ["कोइलाही ताल"] },
                 { name: "जोशीपुर गाउँपालिका", type: "गाउँपालिका", spots: ["जोशीपुर थारु बहुल बजार"] },
                 { name: "चुरे गाउँपालिका", type: "गाउँपालिका", spots: ["खानीडाँडा (शीतल हावापानी)"] }
             ]}
         };
 
-        // 3. Load Nepal GeoJSON Map Vectors
+        // 3. Load Nepal GeoJSON Map Vectors (Using Reliable Source)
         let geojsonLayer;
 
-        fetch('https://raw.githubusercontent.com/m-a-n-i-s-h/Nepal-GeoJSON/master/districts.geojson')
+        fetch('https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-districts.geojson')
             .then(res => res.json())
             .then(data => {
                 geojsonLayer = L.geoJSON(data, {
                     style: () => ({
-                        fillColor: '#0284c7',
+                        fillColor: '#0ea5e9',
                         weight: 1.5,
                         opacity: 1,
                         color: '#ffffff',
-                        fillOpacity: 0.5
+                        fillOpacity: 0.4
                     }),
                     onEachFeature: (feature, layer) => {
                         const distName = feature.properties.DIST_NAME || feature.properties.name || "District";
-                        layer.bindTooltip(distName, { permanent: false, direction: "center" });
+                        layer.bindTooltip(distName, { permanent: false, direction: "center", className: 'custom-tooltip' });
 
                         layer.on({
                             mouseover: (e) => {
-                                e.target.setStyle({ weight: 3, color: '#ffc107', fillOpacity: 0.8 });
+                                e.target.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.8 });
                             },
                             mouseout: (e) => {
                                 geojsonLayer.resetStyle(e.target);
                             },
                             click: (e) => {
-                                map.fitBounds(e.target.getBounds());
+                                map.fitBounds(e.target.getBounds(), { padding: [50, 50] });
                                 renderDistrictDetails(distName);
                             }
                         });
                     }
                 }).addTo(map);
             })
-            .catch(err => console.log("GIS Map Fetching...", err));
+            .catch(err => console.log("GIS Map Fetching Error:", err));
 
         // 4. Render Sidebar Information
         function renderDistrictDetails(queryKey) {
             document.getElementById('defaultState').style.display = 'none';
             const container = document.getElementById('dynamicContent');
+            container.style.display = 'block';
 
             let matchedKey = Object.keys(nepal77Database).find(key => 
                 key.toLowerCase() === queryKey.toLowerCase() || 
@@ -1305,7 +1389,10 @@
 
             let palikaHTML = '';
             data.palikas.forEach((p, idx) => {
-                let spotsHTML = p.spots.map(s => `<span class="attraction-tag"><i class="fa-solid fa-location-dot"></i> ${s}</span>`).join('');
+                let spotsHTML = p.spots.map(s => {
+                    const mapQuery = encodeURIComponent(s + ', ' + data.name + ', Nepal');
+                    return `<a href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" class="attraction-tag"><i class="fa-solid fa-map-pin"></i> ${s}</a>`;
+                }).join('');
                 
                 palikaHTML += `
                     <div class="palika-item" onclick="togglePalikaDetail(${idx})">
@@ -1313,10 +1400,12 @@
                             <strong>${p.name}</strong> 
                             <small style="color: #94a3b8; display:block;">${p.type}</small>
                         </div>
-                        <i class="fa-solid fa-chevron-down" id="icon-${idx}"></i>
+                        <i class="fa-solid fa-chevron-down" id="icon-${idx}" style="transition: 0.3s;"></i>
                     </div>
                     <div class="palika-detail" id="palika-detail-${idx}" style="display: none;">
-                        <span style="color: #ffc107; font-size: 0.85rem; font-weight: 600; display:block; margin-bottom: 4px;">मुख्य आकर्षणहरू:</span>
+                        <span style="color: #fbbf24; font-size: 0.85rem; font-weight: 600; display:block; margin-bottom: 8px;">
+                            <i class="fa-solid fa-camera"></i> मुख्य आकर्षणहरू (क्लिक गर्नुहोस् - गुगल म्याप):
+                        </span>
                         <div>${spotsHTML}</div>
                     </div>
                 `;
@@ -1328,10 +1417,12 @@
                         <span class="district-title">${data.name}</span>
                         <span class="badge">${data.province}</span>
                     </div>
-                    <p style="margin-bottom: 6px; font-size: 0.95rem;"><strong>सदरमुकाम:</strong> ${data.headquarter}</p>
-                    <p style="font-size: 0.95rem; margin-bottom: 10px;"><strong>स्थानीय तहको सङ्ख्या:</strong> ${data.palikas.length}</p>
+                    <p style="margin-bottom: 6px; font-size: 0.95rem; color: #cbd5e1;"><strong>सदरमुकाम:</strong> ${data.headquarter}</p>
+                    <p style="font-size: 0.95rem; margin-bottom: 10px; color: #cbd5e1;"><strong>स्थानीय तहको सङ्ख्या:</strong> ${data.palikas.length}</p>
                     
-                    <strong style="color: #38bdf8; display:block; margin-top: 10px;">स्थानीय तह र पर्यटकीय स्थलहरू:</strong>
+                    <strong style="color: #38bdf8; display:block; margin-top: 15px; font-size: 1.1rem;">
+                        <i class="fa-solid fa-building"></i> स्थानीय तह र पर्यटकीय स्थलहरू:
+                    </strong>
                     <div class="palika-list">
                         ${palikaHTML}
                     </div>
@@ -1345,10 +1436,10 @@
             const icon = document.getElementById(`icon-${index}`);
             if (el.style.display === "none") {
                 el.style.display = "block";
-                icon.className = "fa-solid fa-chevron-up";
+                icon.style.transform = "rotate(180deg)";
             } else {
                 el.style.display = "none";
-                icon.className = "fa-solid fa-chevron-down";
+                icon.style.transform = "rotate(0deg)";
             }
         }
 
@@ -1360,6 +1451,16 @@
                     const item = nepal77Database[key];
                     if (key.toLowerCase().includes(q) || item.name.includes(q)) {
                         renderDistrictDetails(key);
+                        if(geojsonLayer){
+                            geojsonLayer.eachLayer(layer => {
+                                const dName = layer.feature.properties.DIST_NAME || layer.feature.properties.name;
+                                if(dName && (dName.toLowerCase() === key.toLowerCase() || dName === item.name)){
+                                    map.fitBounds(layer.getBounds(), { padding: [50, 50] });
+                                    layer.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.8 });
+                                    setTimeout(() => geojsonLayer.resetStyle(layer), 3000);
+                                }
+                            });
+                        }
                         break;
                     }
                     // Search in Palikas
