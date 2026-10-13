@@ -3,240 +3,1373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Nepal - नेपालको परिचय</title>
+    <title>नेपाल डिजिटल GIS एवं पर्यटकीय पोर्टल | Nepal 77 Districts Master Portal</title>
+    
+    <!-- Leaflet GIS Mapping CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #0056b3;
+            --accent: #dc3545;
+            --gold: #ffc107;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Mukta', 'Poppins', sans-serif;
         }
 
         body {
-            background-color: #f4f6f9;
-            color: #333;
-            line-height: 1.6;
+            background-color: #0b1120;
+            color: #fff;
+            overflow-x: hidden;
         }
 
-        /* Header & Navigation */
+        /* Navigation Header */
         header {
-            background: linear-gradient(135deg, #dc3545, #0056b3);
-            color: white;
-            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
+            z-index: 2000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand h1 {
+            font-size: 1.3rem;
+            background: linear-gradient(45deg, #ff4b5c, #ffb400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .search-box {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 16px 8px 38px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            outline: none;
+            transition: 0.3s ease;
+        }
+
+        .search-box input:focus {
+            background: rgba(255,255,255,0.2);
+            border-color: #ffc107;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        /* Grid Layout */
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 450px;
+            height: calc(100vh - 65px);
+        }
+
+        /* Map Section */
+        #map-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #090d16;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar Section */
+        .info-sidebar {
+            background: var(--bg-dark);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.2rem;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
             z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 1rem;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
         }
 
-        .lang-btn {
-            background-color: #ffffff;
-            color: #333;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+        .stat-item h3 {
+            color: #38bdf8;
+            font-size: 1.2rem;
         }
 
-        .lang-btn:hover {
-            background-color: #ffdd57;
-            transform: scale(1.05);
+        .stat-item p {
+            font-size: 0.75rem;
+            color: #94a3b8;
         }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200') center/cover;
-            height: 60vh;
+        .default-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #94a3b8;
+        }
+
+        .default-state i {
+            font-size: 3.5rem;
+            color: #ff4b5c;
+            margin-bottom: 1rem;
+        }
+
+        /* Details Card */
+        .detail-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .district-header {
+            border-bottom: 2px solid #38bdf8;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .district-title {
+            font-size: 1.6rem;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .badge {
+            background: #dc3545;
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .palika-list {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 8px;
+            margin-top: 1rem;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .palika-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            color: white;
-            text-align: center;
-            padding: 0 1rem;
         }
 
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+        .palika-item:hover {
+            background: linear-gradient(90deg, #0284c7, #0369a1);
+            transform: translateX(4px);
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
+        .palika-detail {
+            margin-top: 6px;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 10px;
+            padding: 10px;
+            border-left: 3px solid #ffc107;
         }
 
-        /* Container Section */
-        .container {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        .attraction-tag {
+            display: inline-block;
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin: 3px 2px;
+            border: 1px solid rgba(255, 193, 7, 0.3);
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            color: #0056b3;
-            position: relative;
+        .map-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+            color: #fff;
+            font-size: 0.85rem;
         }
 
-        /* Features Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 50vh 1fr;
+            }
         }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: #dc3545;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #111;
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 3rem;
-        }
-
-        /* Language Toggle Display Rules */
-        .lang-en { display: none; }
-        .lang-ne { display: block; }
-
-        body.en .lang-ne { display: none; }
-        body.en .lang-en { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
+    <!-- Header Navigation -->
     <header>
-        <div class="logo">
-            <span class="lang-ne">🇳🇵 नेपालको बारेमा</span>
-            <span class="lang-en">🇳🇵 About Nepal</span>
+        <div class="brand">
+            <i class="fa-solid fa-map-location-dot fa-2x" style="color: #ff4b5c;"></i>
+            <div>
+                <h1>नेपाल डिजिटल GIS मास्टर पोर्टल</h1>
+                <small style="color: #94a3b8; font-size: 0.75rem;">Interactive Map of 77 Districts & 753 Local Levels</small>
+            </div>
         </div>
-        <button class="lang-btn" onclick="toggleLanguage()">
-            <span class="lang-ne">English</span>
-            <span class="lang-en">नेपाली</span>
-        </button>
+        
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="जिल्ला वा गाउँ/नगरपालिका खोज्नुहोस्..." onkeyup="searchLocation()">
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1 class="lang-ne">सुन्दर शान्त विशाल नेपाल</h1>
-        <h1 class="lang-en">Beautiful & Peaceful Nepal</h1>
-        <p class="lang-ne">संसारको सर्वोच्च शिखर सगरमाथा र भगवान् बुद्धको जन्मभूमिमा तपाईंलाई स्वागत छ।</p>
-        <p class="lang-en">Welcome to the land of Mount Everest and the birthplace of Lord Buddha.</p>
-    </section>
-
-    <!-- Popular Highlights Section -->
-    <div class="container">
-        <h2 class="section-title lang-ne">नेपालका प्रमुख आकर्षणहरू</h2>
-        <h2 class="section-title lang-en">Popular Highlights of Nepal</h2>
-
-        <div class="grid">
-            <!-- Mt. Everest -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title lang-ne">🏔️ सगरमाथा (Mt. Everest)</h3>
-                    <h3 class="card-title lang-en">🏔️ Mount Everest</h3>
-                    <p class="lang-ne">संसारको सबैभन्दा अग्लो हिमशिखर (८,८४८.८६ मिटर) नेपालको सोलुखुम्बु जिल्लामा अवस्थित छ।</p>
-                    <p class="lang-en">The world's highest peak (8,848.86m) is located in the Solukhumbu district of Nepal.</p>
-                </div>
-            </div>
-
-            <!-- Lord Buddha -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title lang-ne">☸️ लुम्बिनी (Lord Buddha)</h3>
-                    <h3 class="card-title lang-en">☸️ Lumbini</h3>
-                    <p class="lang-ne">शान्तिका प्रतीक भगवान् गौतम बुद्धको जन्मस्थल लुम्बिनी विश्वभरका मानिसहरूका लागि पवित्र तीर्थस्थल हो।</p>
-                    <p class="lang-en">The birthplace of Lord Buddha, Lumbini is a sacred pilgrimage site for people worldwide.</p>
-                </div>
-            </div>
-
-            <!-- Culture & Diversity -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title lang-ne">🎭 बहुसांस्कृतिक एकता</h3>
-                    <h3 class="card-title lang-en">🎭 Cultural Diversity</h3>
-                    <p class="lang-ne">नेपालमा १२५ भन्दा बढी जातजाति र १२३ भन्दा बढी भाषाभाषीहरू आपसमा मेलमिलापका साथ बसोबास गर्छन्।</p>
-                    <p class="lang-en">Nepal is home to over 125 ethnic groups and 123 languages living in harmony.</p>
-                </div>
-            </div>
-
-            <!-- Lakes & Nature -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title lang-ne">🌊 ताल र प्राकृतिक सौन्दर्य</h3>
-                    <h3 class="card-title lang-en">🌊 Lakes & Natural Beauty</h3>
-                    <p class="lang-ne">फेवा ताल, रारा ताल, र सेफोक्सुण्डो जस्ता प्राकृतिक सुन्दर तालहरूले नेपालको सुन्दरता बढाएका छन्।</p>
-                    <p class="lang-en">Scenic lakes like Phewa, Rara, and Shey Phoksundo enhance the natural charm of Nepal.</p>
-                </div>
-            </div>
-
-            <!-- Heritage Sites -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title lang-ne">🛕 युनेस्को विश्व सम्पदा</h3>
-                    <h3 class="card-title lang-en">🛕 UNESCO World Heritage</h3>
-                    <p class="lang-ne">पशुपतिनाथ, स्वयम्भूनाथ, र काठमाडौँ उपत्यकाका दरबार क्षेत्रहरू ऐतिहासिक र धार्मिक दृष्टिकोणले प्रसिद्ध छन्।</p>
-                    <p class="lang-en">Pashupatinath, Swayambhunath, and Kathmandu Valley Durbar Squares hold deep heritage value.</p>
-                </div>
-            </div>
-
-            <!-- Wildlife & National Parks -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title lang-ne">🦏 वन्यजन्तु र राष्ट्रिय निकुञ्ज</h3>
-                    <h3 class="card-title lang-en">🦏 Wildlife & National Parks</h3>
-                    <p class="lang-ne">चितवन राष्ट्रिय निकुञ्जमा एकसिङ्गे गैँडा, पाटेबाघ र अन्य दुर्लभ वन्यजन्तुहरू अवलोकन गर्न सकिन्छ।</p>
-                    <p class="lang-en">Chitwan National Park is famous for the rare one-horned rhino and Bengal tigers.</p>
-                </div>
+    <!-- Main Application -->
+    <div class="app-container">
+        
+        <!-- Interactive Map Container -->
+        <div id="map-container">
+            <div id="map"></div>
+            <div class="map-overlay">
+                <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> नक्साको जुनसुकै जिल्लामा थिचेर स्थानीय तहहरू र पर्यटकीय स्थलहरू खोल्नुहोस्।
             </div>
         </div>
+
+        <!-- Dynamic Sidebar Panel -->
+        <div class="info-sidebar">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <h3>७</h3>
+                    <p>प्रदेशहरू</p>
+                </div>
+                <div class="stat-item">
+                    <h3>७७</h3>
+                    <p>जिल्लाहरू</p>
+                </div>
+                <div class="stat-item">
+                    <h3>७५३</h3>
+                    <p>स्थानीय तह</p>
+                </div>
+            </div>
+
+            <div class="default-state" id="defaultState">
+                <i class="fa-solid fa-compass"></i>
+                <h2>नेपालको सम्पूर्ण ७७ जिल्लाको नक्सा</h2>
+                <p style="margin-top: 8px;">नक्सामा थिचेर वा माथिको सर्च बक्समा टाइप गरेर कुनै पनि जिल्ला वा गाउँपालिका/नगरपालिकाको सम्पूर्ण बायोडाटा हेर्नुहोस्।</p>
+            </div>
+
+            <!-- Dynamic Content Output -->
+            <div id="dynamicContent"></div>
+        </div>
+
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p class="lang-ne">&copy; २०२६ नेपालको परिचय | सर्वाधिकार सुरक्षित</p>
-        <p class="lang-en">&copy; 2026 About Nepal | All Rights Reserved</p>
-    </footer>
+    <!-- Leaflet JS Mapping Engine -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- JavaScript for Language Switcher -->
     <script>
-        function toggleLanguage() {
-            document.body.classList.toggle('en');
+        // 1. Initialize Leaflet Map Centered on Nepal
+        const map = L.map('map').setView([28.3949, 84.1240], 7);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap &copy; CARTO'
+        }).addTo(map);
+
+        // 2. Complete 77 Districts Database with Local Bodies & Major Attractions
+        const nepal77Database = {
+            // --- कोशी प्रदेश (Province 1) ---
+            "Taplejung": { name: "ताप्लेजुङ", province: "कोशी प्रदेश", headquarter: "फुङलिङ", palikas: [
+                { name: "फुङलिङ नगरपालिका", type: "नगरपालिका", spots: ["पाथीभरा देवी मन्दिर", "फुङफुङ्गे झरना"] },
+                { name: "सिरिजङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["कञ्चनजङ्घा आधार शिविर", "याङ्मा गाउँ"] },
+                { name: "मिक्वाखोला गाउँपालिका", type: "गाउँपालिका", spots: ["सोदु पोखरी"] },
+                { name: "आठराई त्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिवेणी धाम"] },
+                { name: "पाथीभरा याङवरक गाउँपालिका", type: "गाउँपालिका", spots: ["काबेली नदी"] },
+                { name: "फक्ताङलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["ओलाङ्चुङगोला", "टिपताला भञ्ज्याङ"] },
+                { name: "मेरिङदेन गाउँपालिका", type: "गाउँपालिका", spots: ["खाम्बाचेन"] },
+                { name: "मैवाखोला गाउँपालिका", type: "गाउँपालिका", spots: ["धुकुटी डाँडा"] },
+                { name: "सिदिङ्वा गाउँपालिका", type: "गाउँपालिका", spots: ["तिम्बुङ पोखरी"] }
+            ]},
+            "Sankhuwasabha": { name: "संखुवासभा", province: "कोशी प्रदेश", headquarter: "खाँदबारी", palikas: [
+                { name: "खाँदबारी नगरपालिका", type: "नगरपालिका", spots: ["मनकामना मन्दिर", "अरुण उपत्यका"] },
+                { name: "चैनपुर नगरपालिका", type: "नगरपालिका", spots: ["बालेश्वर महादेव", "करुवा उद्योग"] },
+                { name: "धर्मदेवी नगरपालिका", type: "नगरपालिका", spots: ["मुढेशनिश्चरे"] },
+                { name: "मादी नगरपालिका", type: "नगरपालिका", spots: ["मादी ओखरबोटे"] },
+                { name: "पाँचखपन नगरपालिका", type: "नगरपालिका", spots: ["वानाम बाहुनगाउँ"] },
+                { name: "भोटखोला गाउँपालिका", type: "गाउँपालिका", spots: ["किमाथाङ्का नाका", "अरुण नदी मुहान"] },
+                { name: "मकालू गाउँपालिका", type: "गाउँपालिका", spots: ["मकालु आधार शिविर", "बरुण उपत्यका"] },
+                { name: "सभापोखरी गाउँपालिका", type: "गाउँपालिका", spots: ["सभापोखरी"] },
+                { name: "सिलीचोङ गाउँपालिका", type: "गाउँपालिका", spots: ["सिलीचोङ चुचुरो"] },
+                { name: "चिचिला गाउँपालिका", type: "गाउँपालिका", spots: ["चिचिला डाँडा"] }
+            ]},
+            "Solukhumbu": { name: "सोलुखुम्बु", province: "कोशी प्रदेश", headquarter: "सल्लेरी", palikas: [
+                { name: "सोलुदूधकुण्ड नगरपालिका", type: "नगरपालिका", spots: ["दूधकुण्ड", "पिके डाँडा"] },
+                { name: "खुम्बु पासाङल्हामु गाउँपालिका", type: "गाउँपालिका", spots: ["सगरमाथा (Mt. Everest)", "नाम्चे बजार", "त्याङ्बोचे गुम्बा", "कालापत्थर"] },
+                { name: "माप्य दूधकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["सिलौटी डाँडा"] },
+                { name: "महाकुलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["मेरा पिक (Mera Peak)", "पञ्चपोखरी"] },
+                { name: "नेचासल्यान गाउँपालिका", type: "गाउँपालिका", spots: ["हिले डाँडा"] },
+                { name: "पञ्चपोखरी थाङपाल / सोताङ गाउँपालिका", type: "गाउँपालिका", spots: ["सोताङ बजार"] },
+                { name: "लिखुपिके गाउँपालिका", type: "गाउँपालिका", spots: ["पिके पिक"] },
+                { name: "थुलुङ दूधकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["मुक्ली"] }
+            ]},
+            "Panchthar": { name: "पाँचथर", province: "कोशी प्रदेश", headquarter: "फिदिम", palikas: [
+                { name: "फिदिम नगरपालिका", type: "नगरपालिका", spots: ["जोडपोखरी", "लब्ब्रेकुटी"] },
+                { name: "फालेलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["चारराते", "चारराते चौँरी फर्म"] },
+                { name: "फाल्गुनन्द गाउँपालिका", type: "गाउँपालिका", spots: ["सिलौटी धाम"] },
+                { name: "हिलिहाङ गाउँपालिका", type: "गाउँपालिका", spots: ["हिलिहाङ दरबार"] },
+                { name: "कुम्मायक गाउँपालिका", type: "गाउँपालिका", spots: ["कुम्मायक कुसायक"] },
+                { name: "मिक्लाजुङ गाउँपालिका", type: "गाउँपालिका", spots: ["मिक्लाजुङ डाँडा"] },
+                { name: "तुम्बेवा गाउँपालिका", type: "गाउँपालिका", spots: ["तमोर नदी किनार"] },
+                { name: "याङवरक गाउँपालिका", type: "गाउँपालिका", spots: ["चिवाभञ्ज्याङ (मध्यपहाडी सुरु)"] }
+            ]},
+            "Ilam": { name: "इलाम", province: "कोशी प्रदेश", headquarter: "इलाम", palikas: [
+                { name: "इलाम नगरपालिका", type: "नगरपालिका", spots: ["इलाम चिया बगान", "माइस्थान", "माईपोखरी"] },
+                { name: "सूर्योदय नगरपालिका", type: "नगरपालिका", spots: ["कन्याम", "अन्तू डाँडा (सूर्योदय)"] },
+                { name: "देउमाई नगरपालिका", type: "नगरपालिका", spots: ["गजाधर धाम", "सिद्धिथुम्का"] },
+                { name: "माई नगरपालिका", type: "नगरपालिका", spots: ["माईखोला धाम"] },
+                { name: "फाकफोकथुम गाउँपालिका", type: "गाउँपालिका", spots: ["थुम डाँडा"] },
+                { name: "माईजोगमाई गाउँपालिका", type: "गाउँपालिका", spots: ["थुम्के डाँडा"] },
+                { name: "माङ्सेबुङ गाउँपालिका", type: "गाउँपालिका", spots: ["किरात धार्मिक स्थल लारुम्बा"] },
+                { name: "रोङ गाउँपालिका", type: "गाउँपालिका", spots: ["कुटीडाँडा", "पाथिभरा"] },
+                { name: "सन्दकपुर गाउँपालिका", type: "गाउँपालिका", spots: ["सन्दकपुर (हिमशृङ्खला दृश्यावलोकन)"] },
+                { name: "चुलाचुली गाउँपालिका", type: "गाउँपालिका", spots: ["चुलाचुली डाँडा"] }
+            ]},
+            "Jhapa": { name: "झापा", province: "कोशी प्रदेश", headquarter: "भद्रपुर", palikas: [
+                { name: "मेचीनगर नगरपालिका", type: "नगरपालिका", spots: ["काँकडभिट्टा", "मिनी माउन्टेन"] },
+                { name: "भद्रपुर नगरपालिका", type: "नगरपालिका", spots: ["कीचकवध"] },
+                { name: "बिर्तामोड नगरपालिका", type: "नगरपालिका", spots: ["डोमुखा", "सुपरमार्केट"] },
+                { name: "दमक नगरपालिका", type: "नगरपालिका", spots: ["दमक भ्यु टावर"] },
+                { name: "कङ्काई नगरपालिका", type: "नगरपालिका", spots: ["कोटिहोम धाम", "कङ्काई नदी"] },
+                { name: "अर्जुनधारा नगरपालिका", type: "नगरपालिका", spots: ["अर्जुनधारा जलेश्वर धाम"] },
+                { name: "शिवसताक्षी नगरपालिका", type: "नगरपालिका", spots: ["सतासीधाम", "चिल्ड्रेन पार्क"] },
+                { name: "गौरादह नगरपालिका", type: "नगरपालिका", spots: ["गौरादह पोखरी"] },
+                { name: "कमल गाउँपालिका", type: "गाउँपालिका", spots: ["कमलपोखरी"] },
+                { name: "गौरीगञ्ज गाउँपालिका", type: "गाउँपालिका", spots: ["हुलाकी राजमार्ग बजार"] },
+                { name: "झापा गाउँपालिका", type: "गाउँपालिका", spots: ["झापा बजार"] },
+                { name: "झापा/बुद्धशान्ति गाउँपालिका", type: "गाउँपालिका", spots: ["बुद्धशान्ति पार्क"] },
+                { name: "हल्दीबारी गाउँपालिका", type: "गाउँपालिका", spots: ["जातीय सङ्ग्रहालय"] },
+                { name: "कचनकवल गाउँपालिका", type: "गाउँपालिका", spots: ["कचनकवल (नेपालको सबैभन्दा होचो ठाउँ - ५८ मिटर)"] },
+                { name: "बाह्रदशी गाउँपालिका", type: "गाउँपालिका", spots: ["साधुबेला धाम"] }
+            ]},
+            "Morang": { name: "मोरङ", province: "कोशी प्रदेश", headquarter: "विराटनगर", palikas: [
+                { name: "विराटनगर महानगरपालिका", type: "महानगरपालिका", spots: ["विराटनगर जुट मिल", "काली मन्दिर", "बरगाछी"] },
+                { name: "बेलबारी नगरपालिका", type: "नगरपालिका", spots: ["बेतना सिमसार"] },
+                { name: "पथरी शनिश्चरे नगरपालिका", type: "नगरपालिका", spots: ["भुलभुले सिमसार"] },
+                { name: "सुन्दरहरैँचा नगरपालिका", type: "नगरपालिका", spots: ["हसिना सिमसार"] },
+                { name: "लेटाङ नगरपालिका", type: "नगरपालिका", spots: ["राजारानी पोखरी"] },
+                { name: "रतुवामाई नगरपालिका", type: "नगरपालिका", spots: ["रतुवा नदी किनार"] },
+                { name: "सुनवर्षि नगरपालिका", type: "नगरपालिका", spots: ["सुन्झोडा पार्क"] },
+                { name: "उर्लाबारी नगरपालिका", type: "नगरपालिका", spots: ["मिनी जावलाखेल"] },
+                { name: "रङ्गेली नगरपालिका", type: "नगरपालिका", spots: ["ऐतिहासिक रङ्गेली बजार"] },
+                { name: "कानेपोखरी गाउँपालिका", type: "गाउँपालिका", spots: ["कानेपोखरी जंगल"] },
+                { name: "कटहरी गाउँपालिका", type: "गाउँपालिका", spots: ["कटहरी हाट"] },
+                { name: "ग्रामथान गाउँपालिका", type: "गाउँपालिका", spots: ["सरस्वती मन्दिर"] },
+                { name: "जहदा गाउँपालिका", type: "गाउँपालिका", spots: ["लक्ष्मीपुर"] },
+                { name: "धनपालथान गाउँपालिका", type: "गाउँपालिका", spots: ["धनपालगढी"] },
+                { name: "मिक्लाजुङ गाउँपालिका", type: "गाउँपालिका", spots: ["टाँडी पार्क"] },
+                { name: "बुढीगङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["औद्योगिक क्षेत्र"] }
+            ]},
+            "Sunsari": { name: "सुनसरी", province: "कोशी प्रदेश", headquarter: "इनरुवा", palikas: [
+                { name: "धरान उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["दन्तकाली", "पिण्डेश्वर", "बुढासुब्बा", "भेडेटार"] },
+                { name: "इटहरी उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["ओशिन पार्क", "तालतलैया"] },
+                { name: "इनरुवा नगरपालिका", type: "नगरपालिका", spots: ["भगवती मन्दिर"] },
+                { name: "बराहक्षेत्र नगरपालिका", type: "नगरपालिका", spots: ["बराहक्षेत्र धाम", "चतराधाम"] },
+                { name: "रामधुनी नगरपालिका", type: "नगरपालिका", spots: ["रामधुनी वन मन्दिर"] },
+                { name: "दुहबी नगरपालिका", type: "नगरपालिका", spots: ["दुहबी बजार"] },
+                { name: "कोशी गाउँपालिका", type: "गाउँपालिका", spots: ["कोशी टप्पु वन्यजन्तु आरक्ष"] },
+                { name: "गडही गाउँपालिका", type: "गाउँपालिका", spots: ["गडही मन्दिर"] },
+                { name: "बर्जु गाउँपालिका", type: "गाउँपालिका", spots: ["बर्जु ताल"] },
+                { name: "भोक्राहा नरसिंह गाउँपालिका", type: "गाउँपालिका", spots: ["नरसिंह धाम"] },
+                { name: "हरिनगर गाउँपालिका", type: "गाउँपालिका", spots: ["हरिनगर बजार"] },
+                { name: "देवानगञ्ज गाउँपालिका", type: "गाउँपालिका", spots: ["देवानगञ्ज मन्दिर"] }
+            ]},
+            "Bhojpur": { name: "भोजपुर", province: "कोशी प्रदेश", headquarter: "भोजपुर", palikas: [
+                { name: "भोजपुर नगरपालिका", type: "नगरपालिका", spots: ["सिद्धकाली मन्दिर", "टक्सार (खुकुरी उद्योग)"] },
+                { name: "षडानन्द नगरपालिका", type: "नगरपालिका", spots: ["दिङ्ला", "षडानन्द बालागुरु आश्रम"] },
+                { name: "टेम्केमैयुङ गाउँपालिका", type: "गाउँपालिका", spots: ["टेम्के डाँडा", "चखेवा भञ्ज्याङ"] },
+                { name: "अरुण गाउँपालिका", type: "गाउँपालिका", spots: ["प्याउली बजार"] },
+                { name: "आमचोक गाउँपालिका", type: "गाउँपालिका", spots: ["चित्रपुर गढी"] },
+                { name: "हटुवागढी गाउँपालिका", type: "गाउँपालिका", spots: ["हटुवागढी किल्ला"] },
+                { name: "पौवादुङ्मा गाउँपालिका", type: "गाउँपालिका", spots: ["नेपालडाँडा"] },
+                { name: "साल्पासिलिछो गाउँपालिका", type: "गाउँपालिका", spots: ["साल्पा पोखरी"] },
+                { name: "रामप्रसादराई गाउँपालिका", type: "गाउँपालिका", spots: ["वैकुण्ठे"] }
+            ]},
+            "Dhankuta": { name: "धनकुटा", province: "कोशी प्रदेश", headquarter: "धनकुटा", palikas: [
+                { name: "धनकुटा नगरपालिका", type: "नगरपालिका", spots: ["निसाने डाँडा", "हिले बजार", "टोङबा बजार"] },
+                { name: "पाख्रिबास नगरपालिका", type: "नगरपालिका", spots: ["कृषि अनुसन्धान केन्द्र"] },
+                { name: "महालक्ष्मी नगरपालिका", type: "नगरपालिका", spots: ["जीतपुर बजार"] },
+                { name: "साँगुरीगढी गाउँपालिका", type: "गाउँपालिका", spots: ["भेडेटार", "साँगुरीगढी किल्ला", "नमस्ते झरना"] },
+                { name: "चौबीसे गाउँपालिका", type: "गाउँपालिका", spots: ["राजारानी पोखरी"] },
+                { name: "छथर जोरपाटी गाउँपालिका", type: "गाउँपालिका", spots: ["जोरपाटी सिमसार"] },
+                { name: "खाल्सा छिन्ताङ शहीदभूमि गाउँपालिका", type: "गाउँपालिका", spots: ["छिन्ताङ देवी मन्दिर"] }
+            ]},
+            "Terhathum": { name: "तेह्रथुम", province: "कोशी प्रदेश", headquarter: "म्याङ्लुङ", palikas: [
+                { name: "म्याङ्लुङ नगरपालिका", type: "नगरपालिका", spots: ["म्याङ्लुङ छाता चौक", "सिंहवाहिनी"] },
+                { name: "लालगुराँस नगरपालिका", type: "नगरपालिका", spots: ["वसन्तपुर", "TJR (टीआरजे) गुराँस क्षेत्र"] },
+                { name: "आठराई गाउँपालिका", type: "गाउँपालिका", spots: ["संक्रान्ति बजार"] },
+                { name: "फेदाप गाउँपालिका", type: "गाउँपालिका", spots: ["पोखरी बजार"] },
+                { name: "छथर गाउँपालिका", type: "गाउँपालिका", spots: ["मार्ग पोखरी"] },
+                { name: "मेनाम्यायेम / मेन्छायायेम गाउँपालिका", type: "गाउँपालिका", spots: ["मेन्छायायेम डाँडा"] }
+            ]},
+            "Okhaldhunga": { name: "ओखलढुङ्गा", province: "कोशी प्रदेश", headquarter: "ओखलढुङ्गा", palikas: [
+                { name: "सिद्धिचरण नगरपालिका", type: "नगरपालिका", spots: ["ओखलढुङ्गा गढी", "युगकवि सिद्धिचरण स्रष्टा पार्क"] },
+                { name: "खिजिदेम्बा गाउँपालिका", type: "गाउँपालिका", spots: ["देम्बा डाँडा"] },
+                { name: "चम्पादेवी गाउँपालिका", type: "गाउँपालिका", spots: ["चम्पादेवी काँकड"] },
+                { name: "चिशङ्खुगढी गाउँपालिका", type: "गाउँपालिका", spots: ["चिशङ्खु गढी"] },
+                { name: "मानेभञ्ज्याङ गाउँपालिका", type: "गाउँपालिका", spots: ["मानेभञ्ज्याङ"] },
+                { name: "मोलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["मोलुङ झरना"] },
+                { name: "लिखु गाउँपालिका", type: "गाउँपालिका", spots: ["लिखु नदी किनार"] },
+                { name: "सुनकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["सुनकोशी नदी र्‍याफ्टिङ"] }
+            ]},
+            "Khotang": { name: "खोटाङ", province: "कोशी प्रदेश", headquarter: "दिक्तेल", palikas: [
+                { name: "दिक्तेल रुपाकोट मझुवागढी नगरपालिका", type: "नगरपालिका", spots: ["मझुवागढी", "रूपाकोट डाँडा"] },
+                { name: "हलेसी तुवाचुङ नगरपालिका", type: "नगरपालिका", spots: ["हलेसी महादेव मन्दिर (पूर्वी पशुपतिनाथ)"] },
+                { name: "ऐसेलुखर्क गाउँपालिका", type: "गाउँपालिका", spots: ["रावाधाप पोखरी"] },
+                { name: "रावाबेसी गाउँपालिका", type: "गाउँपालिका", spots: ["लामिडाँडा"] },
+                { name: "साकेला गाउँपालिका", type: "गाउँपालिका", spots: ["तावा ताल"] },
+                { name: "दिप्रुङ चुइचुम्मा गाउँपालिका", type: "गाउँपालिका", spots: ["चुइचुम्मा डाँडा"] },
+                { name: "खोटेहाङ गाउँपालिका", type: "गाउँपालिका", spots: ["खोटाङ बजार"] },
+                { name: "जन्तेढुङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["जन्तेढुङ्गा"] },
+                { name: "बराहपोखरी गाउँपालिका", type: "गाउँपालिका", spots: ["बराहपोखरी"] },
+                { name: "केपिलासगढी गाउँपालिका", type: "गाउँपालिका", spots: ["केपिलासगढी किल्ला"] }
+            ]},
+            "Udayapur": { name: "उदयपुर", province: "कोशी प्रदेश", headquarter: "गाईघाट", palikas: [
+                { name: "त्रियुगा नगरपालिका", type: "नगरपालिका", spots: ["गाईघाट बजार", "त्रियुगा नदी"] },
+                { name: "कटारी नगरपालिका", type: "नगरपालिका", spots: ["कटारी बजार", "चोङसिङ"] },
+                { name: "चौदण्डीगढी नगरपालिका", type: "नगरपालिका", spots: ["चौदण्डीगढी सेनकालीन दरबार"] },
+                { name: "बेलका नगरपालिका", type: "नगरपालिका", spots: ["चतरा पुल", "कोशी टापु किनार"] },
+                { name: "उदयपुरगढी गाउँपालिका", type: "गाउँपालिका", spots: ["उदयपुरगढी ऐतिहासिक किल्ला"] },
+                { name: "ताप्ली गाउँपालिका", type: "गाउँपालिका", spots: ["ताप्ली पोखरी"] },
+                { name: "रौतामाई गाउँपालिका", type: "गाउँपालिका", spots: ["रौता पोखरी"] },
+                { name: "सुनकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["नेपालटार"] }
+            ]},
+
+            // --- मधेश प्रदेश (Madhesh Province) ---
+            "Saptari": { name: "सप्तरी", province: "मधेश प्रदेश", headquarter: "राजविराज", palikas: [
+                { name: "राजविराज नगरपालिका", type: "नगरपालिका", spots: ["राजदेवी मन्दिर", "छिन्नमस्ता भगवती (सखडा)"] },
+                { name: "कञ्चनरूप नगरपालिका", type: "नगरपालिका", spots: ["कञ्चनपुर बजार"] },
+                { name: "डाकनेश्वरी नगरपालिका", type: "नगरपालिका", spots: ["डाकनेश्वरी मन्दिर"] },
+                { name: "बोदेबरसाइन नगरपालिका", type: "नगरपालिका", spots: ["राजाजी स्थान"] },
+                { name: "खड्ग नगरपालिका", type: "नगरपालिका", spots: ["कल्याणपुर"] },
+                { name: "शम्भुनाथ नगरपालिका", type: "नगरपालिका", spots: ["शम्भुनाथ महादेव मन्दिर"] },
+                { name: "हनुमाननगर कङ्कालिनी नगरपालिका", type: "नगरपालिका", spots: ["कङ्कालिनी देवी मन्दिर", "कोशी ब्यारेज"] },
+                { name: "सप्तकोशी नगरपालिका", type: "नगरपालिका", spots: ["फत्तेपुर"] },
+                { name: "अग्निसाइर कृष्णासवरन गाउँपालिका", type: "गाउँपालिका", spots: ["कृष्णसार संरक्षण"] },
+                { name: "छिन्नमस्ता गाउँपालिका", type: "गाउँपालिका", spots: ["सखडा मन्दिर"] },
+                { name: "महादेवा गाउँपालिका", type: "गाउँपालिका", spots: ["महादेवा"] },
+                { name: "तिरहुत गाउँपालिका", type: "गाउँपालिका", spots: ["तिरहुत धाम"] },
+                { name: "तिलोठी / तिलोठी कोइलाडी गाउँपालिका", type: "गाउँपालिका", spots: ["कोइलाडी"] },
+                { name: "रूपनी गाउँपालिका", type: "गाउँपालिका", spots: ["रूपनी चोक"] },
+                { name: "विष्णुपुर गाउँपालिका", type: "गाउँपालिका", spots: ["विष्णुपुर धाम"] },
+                { name: "बलान-बिहुल गाउँपालिका", type: "गाउँपालिका", spots: ["बलान नदी"] },
+                { name: "राजगढ गाउँपालिका", type: "गाउँपालिका", spots: ["राजगढ बजार"] },
+                { name: "बेल्ही चपेना गाउँपालिका", type: "गाउँपालिका", spots: ["बेल्ही नाका"] }
+            ]},
+            "Siraha": { name: "सिराहा", province: "मधेश प्रदेश", headquarter: "सिराहा", palikas: [
+                { name: "सिराहा नगरपालिका", type: "नगरपालिका", spots: ["सलहेश फुलबारी", "सिराहा बजार"] },
+                { name: "लाहान नगरपालिका", type: "नगरपालिका", spots: ["सलहेश गहवर", "फूलबारी"] },
+                { name: "गोलबजार नगरपालिका", type: "नगरपालिका", spots: ["धमिरा जंगल"] },
+                { name: "मिर्चैया नगरपालिका", type: "नगरपालिका", spots: ["कमला नदी किनार"] },
+                { name: "कल्याणपुर नगरपालिका", type: "नगरपालिका", spots: ["कल्याणपुर मन्दिर"] },
+                { name: "कर्जन्हा नगरपालिका", type: "नगरपालिका", spots: ["फूलकुमारी"] },
+                { name: "सुखीपुर नगरपालिका", type: "नगरपालिका", spots: ["सुखीपुर मन्दिर"] },
+                { name: "धनगढीमाई नगरपालिका", type: "नगरपालिका", spots: ["कसहा"] },
+                { name: "भगवानपुर गाउँपालिका", type: "गाउँपालिका", spots: ["भगवानपुर"] },
+                { name: "औरही गाउँपालिका", type: "गाउँपालिका", spots: ["औरही बजार"] },
+                { name: "विष्णुपुर गाउँपालिका", type: "गाउँपालिका", spots: ["विष्णुपुर"] },
+                { name: "बरीयरापट्टी गाउँपालिका", type: "गाउँपालिका", spots: ["बरीयरापट्टी"] },
+                { name: "लक्ष्मीपुर पतारी गाउँपालिका", type: "गाउँपालिका", spots: ["पतारी पोखरी"] },
+                { name: "नरहा गाउँपालिका", type: "गाउँपालिका", spots: ["नरहा धाम"] },
+                { name: "सखुवानान्कारकट्टी गाउँपालिका", type: "गाउँपालिका", spots: ["महेशपुर"] },
+                { name: "अर्णमा गाउँपालिका", type: "गाउँपालिका", spots: ["अर्णमा पोखरी"] },
+                { name: "नवराजपुर गाउँपालिका", type: "गाउँपालिका", spots: ["झाझपट्टी"] text }
+            ]},
+            "Dhanusha": { name: "धनुषा", province: "मधेश प्रदेश", headquarter: "जनकपुरधाम", palikas: [
+                { name: "जनकपुरधाम उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["जानकी मन्दिर", "राममन्दिर", "धनुषसागर", "गंगासागर"] },
+                { name: "छीरेश्वरनाथ नगरपालिका", type: "नगरपालिका", spots: ["छीरेश्वरनाथ महादेव"] },
+                { name: "गणेशमान चारनाथ नगरपालिका", type: "नगरपालिका", spots: ["चारनाथ नदी"] },
+                { name: "धनुषाधाम नगरपालिका", type: "नगरपालिका", spots: ["धनुषाधाम (रामले भाँचेको धनुषको टुक्रा)"] },
+                { name: "बाहुनडाँडा / नगराइन नगरपालिका", type: "नगरपालिका", spots: ["नगराइन धाम"] },
+                { name: "विदेह नगरपालिका", type: "नगरपालिका", spots: ["विदेह राजा जनक स्थल"] },
+                { name: "मिथिला नगरपालिका", type: "नगरपालिका", spots: ["ढल्केबर", "पुष्पलाल पार्क"] },
+                { name: "शहीदनगर नगरपालिका", type: "नगरपालिका", spots: ["यदुकुहा"] },
+                { name: "सबैला नगरपालिका", type: "नगरपालिका", spots: ["सबैला बजार"] },
+                { name: "कमला नगरपालिका", type: "नगरपालिका", spots: ["कमला नदी"] },
+                { name: "मिथिला विहारी नगरपालिका", type: "नगरपालिका", spots: ["कचुरी धाम"] },
+                { name: "हंसपुर नगरपालिका", type: "नगरपालिका", spots: ["हंसपुर पोखरी"] },
+                { name: "जनकनन्दिनी गाउँपालिका", type: "गाउँपालिका", spots: ["खजुरी रेलवे स्टेशन"] },
+                { name: "बटेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["बटेश्वर महादेव"] },
+                { name: "मुखियापट्टी मुसहरमिया गाउँपालिका", type: "गाउँपालिका", spots: ["तुल्सियाही"] },
+                { name: "लक्ष्मीनिया गाउँपालिका", type: "गाउँपालिका", spots: ["लक्ष्मीनिया पोखरी"] },
+                { name: "धनौजी गाउँपालिका", type: "गाउँपालिका", spots: ["धनौजी धाम"] },
+                { name: "औरही गाउँपालिका", type: "गाउँपालिका", spots: ["औरही"] }
+            ]},
+            "Mahottari": { name: "महोत्तरी", province: "मधेश प्रदेश", headquarter: "जलेस्वर", palikas: [
+                { name: "जलेस्वर नगरपालिका", type: "नगरपालिका", spots: ["जलेश्वरनाथ महादेव (जलभित्र रहने शिवलिङ्ग)"] },
+                { name: "बर्दिबास नगरपालिका", type: "नगरपालिका", spots: ["पंचधुरा माई", "राईमण्डल"] },
+                { name: "गौशाला नगरपालिका", type: "नगरपालिका", spots: ["काली मन्दिर", "गौशाला"] },
+                { name: "रामगोपालपुर नगरपालिका", type: "नगरपालिका", spots: ["रामगोपालपुर धाम"] },
+                { name: "मनरा सिसवा नगरपालिका", type: "नगरपालिका", spots: ["सिसवा पोखरी"] },
+                { name: "भङ्गाहा नगरपालिका", type: "नगरपालिका", spots: ["सिद्धनाथ मन्दिर"] },
+                { name: "बलवा नगरपालिका", type: "नगरपालिका", spots: ["धमौरा"] },
+                { name: "लोहारपट्टी नगरपालिका", type: "नगरपालिका", spots: ["लोहारपट्टी बजार"] },
+                { name: "मटिहानी नगरपालिका", type: "नगरपालिका", spots: ["लक्ष्मी नारायण मन्दिर", "मटिहानी पोखरी"] },
+                { name: "औरही नगरपालिका", type: "नगरपालिका", spots: ["सोनामाई मन्दिर"] },
+                { name: "एकडारा गाउँपालिका", type: "गाउँपालिका", spots: ["एकडारा पोखरी"] },
+                { name: "सोनमा गाउँपालिका", type: "गाउँपालिका", spots: ["सोनमा धाम"] },
+                { name: "साम्सी गाउँपालिका", type: "गाउँपालिका", spots: ["साम्सी नाका"] },
+                { name: "महत्तरी गाउँपालिका", type: "गाउँपालिका", spots: ["महत्तरी गाँउ"] },
+                { name: "पिपरिया गाउँपालिका", type: "गाउँपालिका", spots: ["पिपरिया पोखरी"] }
+            ]},
+            "Sarlahi": { name: "सर्लाही", province: "मधेश प्रदेश", headquarter: "मलङ्गवा", palikas: [
+                { name: "मलङ्गवा नगरपालिका", type: "नगरपालिका", spots: ["मंगलेश्वरी मन्दिर", "मलङ्गवा बजार"] },
+                { name: "हरियोन नगरपालिका", type: "नगरपालिका", spots: ["चतुर्भुजेश्वर महादेव"] },
+                { name: "लालबन्दी नगरपालिका", type: "नगरपालिका", spots: ["टमाटर खेती हब", "रणजोर खोला"] },
+                { name: "ईश्वरपुर नगरपालिका", type: "नगरपालिका", spots: ["सागरनाथ वन परियोजना", "भक्तिपुर"] },
+                { name: "बरहथवा नगरपालिका", type: "नगरपालिका", spots: ["हजरिया"] },
+                { name: "बलरा नगरपालिका", type: "नगरपालिका", spots: ["बलरा धाम"] },
+                { name: "गोडैता नगरपालिका", type: "नगरपालिका", spots: ["गोडैता पोखरी"] },
+                { name: "बागमती नगरपालिका", type: "नगरपालिका", spots: ["भरत ताल (नेपालको ठूलो मानवनिर्मित ताल)"] },
+                { name: "हरिपुर नगरपालिका", type: "नगरपालिका", spots: ["हरिपुर बजार"] },
+                { name: "हरिपूर्वा नगरपालिका", type: "नगरपालिका", spots: ["हरिपूर्वा"] },
+                { name: "कबिलासी नगरपालिका", type: "नगरपालिका", spots: ["कबिलासी मन्दिर"] },
+                { name: "चक्रघट्टा गाउँपालिका", type: "गाउँपालिका", spots: ["चक्रघट्टा पोखरी"] },
+                { name: "धन्कौल गाउँपालिका", type: "गाउँपालिका", spots: ["धन्कौल सुगर मिल"] },
+                { name: "ब्रह्मपुरी गाउँपालिका", type: "गाउँपालिका", spots: ["ब्रह्मपुरी मन्दिर"] },
+                { name: "रामनगर गाउँपालिका", type: "गाउँपालिका", spots: ["रामनगर"] },
+                { name: "कौडेना गाउँपालिका", type: "गाउँपालिका", spots: ["कौडेना"] },
+                { name: "विष्णु गाउँपालिका", type: "गाउँपालिका", spots: ["विष्णुपुर"] },
+                { name: "बसबरिया गाउँपालिका", type: "गाउँपालिका", spots: ["बसबरिया"] },
+                { name: "पर्सा गाउँपालिका", type: "गाउँपालिका", spots: ["पर्सा"] },
+                { name: "चंद्रनगर गाउँपालिका", type: "गाउँपालिका", spots: ["नागेश्वर धाम"] }
+            ]},
+            "Rautahat": { name: "रौतहट", province: "मधेश प्रदेश", headquarter: "गौर", palikas: [
+                { name: "गौर नगरपालिका", type: "नगरपालिका", spots: ["राधाकृष्ण मन्दिर", "गौर भन्सार"] },
+                { name: "चंद्रपुर नगरपालिका", type: "नगरपालिका", spots: ["चाँदी नदी", "नुनथर (पर्यटकीय क्षेत्र)"] },
+                { name: "गरुडा नगरपालिका", type: "नगरपालिका", spots: ["श्रीराम सुगर मिल"] },
+                { name: "शिवनगर / गढीमाई नगरपालिका", type: "नगरपालिका", spots: ["गढीमाई मन्दिर"] },
+                { name: "ब्रह्मपुरी / बौधीमाई नगरपालिका", type: "नगरपालिका", spots: ["बौधीमाई मन्दिर"] },
+                { name: "वृन्दावन नगरपालिका", type: "नगरपालिका", spots: ["वृन्दावन वन"] },
+                { name: "देवाही गोनाही नगरपालिका", type: "नगरपालिका", spots: ["देवाही धाम"] },
+                { name: "मौलापुर नगरपालिका", type: "नगरपालिका", spots: ["पतौरा पुरातात्विक महादेव मन्दिर"] },
+                { name: "माधव नारायण नगरपालिका", type: "नगरपालिका", spots: ["माधवनारायण धाम"] },
+                { name: "ईशनाथ नगरपालिका", type: "नगरपालिका", spots: ["ईशनाथ मन्दिर"] },
+                { name: "परसोहा / परोहा नगरपालिका", type: "नगरपालिका", spots: ["लौकाहा"] },
+                { name: "फटुवा विजयपुर नगरपालिका", type: "नगरपालिका", spots: ["विजयपुर"] },
+                { name: "गुजरा नगरपालिका", type: "नगरपालिका", spots: ["जङ्गलसैया"] },
+                { name: "कटहरिया नगरपालिका", type: "नगरपालिका", spots: ["कटहरिया बजार"] },
+                { name: "दुर्गा भगवती गाउँपालिका", type: "गाउँपालिका", spots: ["मत्स्यगन्धा पोखरी"] },
+                { name: "यमुनामाई गाउँपालिका", type: "गाउँपालिका", spots: ["यमुनामाई धाम"] },
+                { name: "राजदेवी नगरपालिका", type: "नगरपालिका", spots: ["राजदेवी मन्दिर"] },
+                { name: "राजपुर नगरपालिका", type: "नगरपालिका", spots: ["राजपुर"] }
+            ]},
+            "Bara": { name: "बारा", province: "मधेश प्रदेश", headquarter: "कलैया", palikas: [
+                { name: "कलैया उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["सिद्धेश्वर महादेव", "बरेवा दरबार"] },
+                { name: "जीतपुरसिमरा उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["सिमरा विमानस्थल", "विशेष आर्थिक क्षेत्र (SEZ)"] },
+                { name: "महागढीमाई नगरपालिका", type: "नगरपालिका", spots: ["विश्व प्रसिद्ध गढीमाई मन्दिर"] },
+                { name: "निजगढ नगरपालिका", type: "नगरपालिका", spots: ["अन्तर्राष्ट्रिय विमानस्थल स्थल", "फास्ट ट्र्याक विन्दु"] },
+                { name: "सिमरौनगढ नगरपालिका", type: "नगरपालिका", spots: ["ऐतिहासिक सिमरौनगढ राज्यका भग्नावशेष", "कङ्काली मन्दिर"] },
+                { name: "कोल्हवी नगरपालिका", type: "नगरपालिका", spots: ["तामझोर"] },
+                { name: "पचरौता नगरपालिका", type: "नगरपालिका", spots: ["पचरौता धाम"] },
+                { name: "देवताल गाउँपालिका", type: "गाउँपालिका", spots: ["देवताल पोखरी"] },
+                { name: "सुवर्ण गाउँपालिका", type: "गाउँपालिका", spots: ["सुवर्णपुर"] },
+                { name: "प्रसौनी गाउँपालिका", type: "गाउँपालिका", spots: ["प्रसौनी"] },
+                { name: "विश्रामपुर गाउँपालिका", type: "गाउँपालिका", spots: ["विश्रामपुर"] },
+                { name: "फेटा गाउँपालिका", type: "गाउँपालिका", spots: ["फेटा बजार"] },
+                { name: "बारागढी गाउँपालिका", type: "गाउँपालिका", spots: ["बारागढी गढी"] },
+                { name: "करैयामाई गाउँपालिका", type: "गाउँपालिका", spots: ["करैयामाई धाम"] },
+                { name: "परवानीपुर गाउँपालिका", type: "गाउँपालिका", spots: ["सूखा बन्दरगाह नजिक"] },
+                { name: "आदर्श कोतवाल गाउँपालिका", type: "गाउँपालिका", spots: ["कोतवाल धाम"] }
+            ]},
+            "Parsa": { name: "पर्सा", province: "मधेश प्रदेश", headquarter: "वीरगञ्ज", palikas: [
+                { name: "वीरगञ्ज महानगरपालिका", type: "महानगरपालिका", spots: ["नेपालको मुख्य प्रवेशद्वार", "घडीघर अस्ताचल", "गहवामाई मन्दिर", "ड्राई पोर्ट"] },
+                { name: "पोखरिया नगरपालिका", type: "नगरपालिका", spots: ["पोखरिया पोखरी"] },
+                { name: "पर्सागढी नगरपालिका", type: "नगरपालिका", spots: ["ऐतिहासिक पर्सागढी किल्ला"] },
+                { name: "बहुदरमाई नगरपालिका", type: "नगरपालिका", spots: ["बहुदरमाई मन्दिर"] },
+                { name: "ठोरी गाउँपालिका", type: "गाउँपालिका", spots: ["ठोरी (सीमाना र प्राकृतिक सुन्दरता)", "रामेस्वर धाम"] },
+                { name: "जगन्नाथपुर गाउँपालिका", type: "गाउँपालिका", spots: ["जगन्नाथपुर"] },
+                { name: "धोबिनी गाउँपालिका", type: "गाउँपालिका", spots: ["धोबिनी"] },
+                { name: "छिपहरमाई गाउँपालिका", type: "गाउँपालिका", spots: ["छिपहरमाई"] },
+                { name: "पकाहा मैनपुर गाउँपालिका", type: "गाउँपालिका", spots: ["मैनपुर"] },
+                { name: "बिन्दवासिनी गाउँपालिका", type: "गाउँपालिका", spots: ["बिन्दवासिनी मन्दिर"] },
+                { name: "सकराहा / स्रामपुर / सखुवा प्रसौनी गाउँपालिका", type: "गाउँपालिका", spots: ["पर्सा राष्ट्रिय निकुञ्ज प्रवेशद्वार"] },
+                { name: "पटेर्वा सुगौली गाउँपालिका", type: "गाउँपालिका", spots: ["सुगौली"] },
+                { name: "कालिकामाई गाउँपालिका", type: "गाउँपालिका", spots: ["कालिकामाई मन्दिर"] },
+                { name: "जिराभवानी गाउँपालिका", type: "गाउँपालिका", spots: ["जिराभवानी"] }
+            ]},
+
+            // --- बागमती प्रदेश (Bagmati Province) ---
+            "Kathmandu": { name: "काठमाडौँ", province: "बागमती प्रदेश", headquarter: "काठमाडौँ", palikas: [
+                { name: "काठमाडौँ महानगरपालिका", type: "महानगरपालिका", spots: ["पशुपतिनाथ मन्दिर", "स्वयम्भूनाथ", "वसन्तपुर दरबार क्षेत्र", "बौद्धनाथ"] },
+                { name: "बूढानीलकण्ठ नगरपालिका", type: "नगरपालिका", spots: ["बूढानीलकण्ठ मन्दिर", "शिवपुरी निकुञ्ज"] },
+                { name: "चन्द्रागिरि नगरपालिका", type: "नगरपालिका", spots: ["चन्द्रागिरि केबलकार", "भालेश्वर महादेव"] },
+                { name: "कीर्तिपुर नगरपालिका", type: "नगरपालिका", spots: ["बाघभैरव", "चोभार गलछी", "त्रिभुवन विश्वविद्यालय"] },
+                { name: "गोकर्णेश्वर नगरपालिका", type: "नगरपालिका", spots: ["गोकर्णेश्वर महादेव", "तारेभीर"] },
+                { name: "टोखा नगरपालिका", type: "नगरपालिका", spots: ["टोखा चण्डेश्वरी", "ऐतिहासिक बजार"] },
+                { name: "नागार्जुन नगरपालिका", type: "नगरपालिका", spots: ["जामामचो", "नागार्जुन गुम्बा"] },
+                { name: "कागेश्वरी मनोहरा नगरपालिका", type: "नगरपालिका", spots: ["कागेश्वरी धाम"] },
+                { name: "शङ्खरापुर नगरपालिका", type: "नगरपालिका", spots: ["साँखु बजार", "वज्रयोगिनी मन्दिर"] },
+                { name: "तारकेश्वर नगरपालिका", type: "नगरपालिका", spots: ["तारकेश्वर महादेव", "शान्तिधाम"] },
+                { name: "दक्षिणकाली नगरपालिका", type: "नगरपालिका", spots: ["दक्षिणकाली मन्दिर", "शेषनारायण"] }
+            ]},
+            "Lalitpur": { name: "ललितपुर", province: "बागमती प्रदेश", headquarter: "पाटन", palikas: [
+                { name: "ललितपुर महानगरपालिका", type: "महानगरपालिका", spots: ["पाटन दरबार क्षेत्र", "कृष्ण मन्दिर", "कुम्भेश्वर", "रातो मछिन्द्रनाथ"] },
+                { name: "महालक्ष्मी नगरपालिका", type: "नगरपालिका", spots: ["लुभू बजार", "महालक्ष्मी मन्दिर"] },
+                { name: "गोदावरी नगरपालिका", type: "नगरपालिका", spots: ["गोदावरी वनस्पति उद्यान", "फूलचोकी डाँडा", "नौधारा"] },
+                { name: "बागमती गाउँपालिका", type: "गाउँपालिका", spots: ["भट्टेडाँडा", "छैमले"] },
+                { name: "कोन्ज्योसोम गाउँपालिका", type: "गाउँपालिका", spots: ["दलचोकी भ्यु टावर"] },
+                { name: "महाङ्काल गाउँपालिका", type: "गाउँपालिका", spots: ["वैतरणी धाम"] }
+            ]},
+            "Bhaktapur": { name: "भक्तपुर", province: "बागमती प्रदेश", headquarter: "भक्तपुर", palikas: [
+                { name: "भक्तपुर नगरपालिका", type: "नगरपालिका", spots: ["भक्तपुर दरबार क्षेत्र", "न्यातपोल (पाँचतले मन्दिर)", "दत्तात्रेय"] },
+                { name: "सूर्यविनायक नगरपालिका", type: "नगरपालिका", spots: ["सूर्यविनायक मन्दिर", "पाइलटबाबा आश्रम", "डोलेश्वर महादेव"] },
+                { name: "चाँगुनारायण नगरपालिका", type: "नगरपालिका", spots: ["चाँगुनारायण मन्दिर (युनेस्को सम्पदा)", "नगरकोट (सूर्योदय)"] },
+                { name: "मध्यपुर थिमी नगरपालिका", type: "नगरपालिका", spots: ["बालकुमारी", "बोडे जिब्रो छेड्ने जात्रा", "कोरियाली अस्पताल"] }
+            ]},
+            "Kavrepalanchok": { name: "काभ्रेपलाञ्चोक", province: "बागमती प्रदेश", headquarter: "धुलिखेल", palikas: [
+                { name: "धुलिखेल नगरपालिका", type: "नगरपालिका", spots: ["धुलिखेल भ्यु पोइन्ट", "हजार सिँढी", "देवीस्थान"] },
+                { name: "बनेपा नगरपालिका", type: "नगरपालिका", spots: ["चण्डेश्वरी मन्दिर", "धनेश्वर महादेव"] },
+                { name: "पनौती नगरपालिका", type: "नगरपालिका", spots: ["पनौती त्रिवेणी घाट", "इन्द्रेश्वर महादेव"] },
+                { name: "पाँचखाल नगरपालिका", type: "नगरपालिका", spots: ["पलाञ्चोक भगवती", "पाँचखाल उपत्यका"] },
+                { name: "नमोबुद्ध नगरपालिका", type: "नगरपालिका", spots: ["नमोबुद्ध गुम्बा (पवित्र बौद्ध तीर्थस्थल)"] },
+                { name: "मण्डनदेउपुर नगरपालिका", type: "नगरपालिका", spots: ["नगरकोट नजिक देउपुर डाँडा"] },
+                { name: "रोशी गाउँपालिका", type: "गाउँपालिका", spots: ["रोशी खोला", "डम्फु डाँडा"] },
+                { name: "तेमाल गाउँपालिका", type: "गाउँपालिका", spots: ["तेमाल बोधिचित्त मन्दिर"] },
+                { name: "चौँरीदेउराली गाउँपालिका", type: "गाउँपालिका", spots: ["चौँरी पोखरी"] },
+                { name: "महाभारत गाउँपालिका", type: "गाउँपालिका", spots: ["महाभारत पर्वत शृङ्खला"] },
+                { name: "खानिखोला गाउँपालिका", type: "गाउँपालिका", spots: ["खानिखोला"] },
+                { name: "भुम्लु गाउँपालिका", type: "गाउँपालिका", spots: ["कोशीपारि पर्यटकीय क्षेत्र"] },
+                { name: "बेथानचोक गाउँपालिका", type: "गाउँपालिका", spots: ["बेथानचोक नारायण (काभ्रेको सर्वोच्च शिखर)"] }
+            ]},
+            "Sindhupalchok": { name: "सिन्धुपाल्चोक", province: "बागमती प्रदेश", headquarter: "चौतारा", palikas: [
+                { name: "चौतारा साँगाचोकगढी नगरपालिका", type: "नगरपालिका", spots: ["गौरती भीमसेन मन्दिर", "चौतारा बजार"] },
+                { name: "मेलम्ची नगरपालिका", type: "नगरपालिका", spots: ["मेलम्ची खानेपानी मुहान", "फट्केश्वर"] },
+                { name: "बाह्रबिसे नगरपालिका", type: "नगरपालिका", spots: ["बाह्रबिसे बजार", "तातोपानी नाका नजिक"] },
+                { name: "भोटेकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["तातोपानी (Tatopani)", "लास्ट रिसोर्ट (Bungee Jumping)"] },
+                { name: "हेलम्बु गाउँपालिका", type: "गाउँपालिका", spots: ["हेलम्बु (स्याउ र ओदो) पदमार्ग", "ग्रेटवाल"] },
+                { name: "पाँचपोखरी थाङपाल गाउँपालिका", type: "गाउँपालिका", spots: ["पाँचपोखरी (विश्वको उच्च स्थानका पोखरी)"] },
+                { name: "इन्द्रावती गाउँपालिका", type: "गाउँपालिका", spots: ["इन्द्रावती नदी किनार"] },
+                { name: "बलेफी गाउँपालिका", type: "गाउँपालिका", spots: ["बलेफी दोभान"] },
+                { name: "त्रिपुरासुन्दरी गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिपुरासुन्दरी मन्दिर"] },
+                { name: "सुनकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["खाडीचौर बजार"] },
+                { name: "जुगल गाउँपालिका", type: "गाउँपालिका", spots: ["जुगल हिमाल आधार शिविर"] },
+                { name: "लिसङ्खु पाखर गाउँपालिका", type: "गाउँपालिका", spots: ["मुडे बजार नजिक"] }
+            ]},
+            "Nuwakot": { name: "नुवाकोट", province: "बागमती प्रदेश", headquarter: "विदुर", palikas: [
+                { name: "विदुर नगरपालिका", type: "नगरपालिका", spots: ["नुवाकोट साततले दरबार", "भैरवी मन्दिर", "देवीघाट"] },
+                { name: "बेलकोटगढी नगरपालिका", type: "नगरपालिका", spots: ["बेलकोटगढी किल्ला"] },
+                { name: "ककनी गाउँपालिका", type: "गाउँपालिका", spots: ["ककनी (स्ट्रोबेरी र ट्राउट माछा)", "थाइ एयरल्याण्ड स्मारक"] },
+                { name: "शिवपुरी गाउँपालिका", type: "गाउँपालिका", spots: ["शिवपुरी राष्ट्रिय निकुञ्ज"] },
+                { name: "सूर्यगढी गाउँपालिका", type: "गाउँपालिका", spots: ["सूर्यगढी किल्ला"] },
+                { name: "तादी गाउँपालिका", type: "गाउँपालिका", spots: ["तादी खोला"] },
+                { name: "लिखु गाउँपालिका", type: "गाउँपालिका", spots: ["लिखु उपत्यका"] },
+                { name: "पञ्चकन्या गाउँपालिका", type: "गाउँपालिका", spots: ["पञ्चकन्या मन्दिर"] },
+                { name: "तारकेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["तारुका (माघे सङ्क्रान्ति गोरु जुधाइ)"] },
+                { name: "किस्पाङ गाउँपालिका", type: "गाउँपालिका", spots: ["किस्पाङ पोखरी"] },
+                { name: "म्यगङ गाउँपालिका", type: "गाउँपालिका", spots: ["म्यगङ डाँडा"] },
+                { name: "दुप्चेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["दुप्चेश्वर महादेव (छोटो पशुपतिनाथ)"] }
+            ]},
+            "Rasuwa": { name: "रसुवा", province: "बागमती प्रदेश", headquarter: "धुन्चे", palikas: [
+                { name: "गोसाइँकुण्ड गाउँपालिका", type: "गाउँपालिका", spots: ["पवित्र गोसाइँकुण्ड", "धुन्चे", "लाङटाङ उपत्यका", "सूर्यकुण्ड"] },
+                { name: "आमाछोदिङ्मो गाउँपालिका", type: "गाउँपालिका", spots: ["तातोपानी", "गातलाङ (परम्परागत तामाङ गाउँ)"] },
+                { name: "उत्तरगया गाउँपालिका", type: "गाउँपालिका", spots: ["उत्तरगया धाम", "बेत्रावती"] },
+                { name: "कालिका गाउँपालिका", type: "गाउँपालिका", spots: ["कालिकास्थान"] },
+                { name: "नौकुण्ड गाउँपालिका", type: "गाउँपालिका", spots: ["नौकुण्ड सिमसार"] }
+            ]},
+            "Dhading": { name: "धादिङ", province: "बागमती प्रदेश", headquarter: "धादिङबेँसी", palikas: [
+                { name: "नीलकण्ठ नगरपालिका", type: "नगरपालिका", spots: ["धादिङबेँसी", "सुनाउला बजार"] },
+                { name: "धुनीबेँसी नगरपालिका", type: "नगरपालिका", spots: ["महेशफाँट", "नौबिसे"] },
+                { name: "गल्छी गाउँपालिका", type: "गाउँपालिका", spots: ["गल्छी त्रिशूली किनार"] },
+                { name: "गजाधुरी / गजिउरी / गजुरिए गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिशूली रिभर राफ्टिङ"] },
+                { name: "बेनीघाट रोराङ गाउँपालिका", type: "गाउँपालिका", spots: ["हुग्दीखोला", "मलेखु (माछा प्रसिद्ध)"] },
+                { name: "सिद्धलेक गाउँपालिका", type: "गाउँपालिका", spots: ["सिद्धलेक डाँडा"] },
+                { name: "ज्वालामुखी गाउँपालिका", type: "गाउँपालिका", spots: ["ज्वालामुखी देवी"] },
+                { name: "त्रिपुरासुन्दरी गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिपुरासुन्दरी मन्दिर"] },
+                { name: "गंगाजमुना गाउँपालिका", type: "गाउँपालिका", spots: ["गंगाजमुना झरना (कुुकुरढुङ्गा)"] },
+                { name: "खन्याबास गाउँपालिका", type: "गाउँपालिका", spots: ["दार्खा"] },
+                { name: "नेत्रावती डबजोङ गाउँपालिका", type: "गाउँपालिका", spots: ["नेत्रावती खोला"] },
+                { name: "रुबी भ्याली गाउँपालिका", type: "गाउँपालिका", spots: ["रुबी भ्याली (बहुमूल्य पत्थर खानी र गणेश हिमाल)"] },
+                { name: "थोपाल / थाक्रे गाउँपालिका", type: "गाउँपालिका", spots: ["थाक्रे सिमेन्ट क्षेत्र"] }
+            ]},
+            "Makwanpur": { name: "मकवानपुर", province: "बागमती प्रदेश", headquarter: "हेटौँडा", palikas: [
+                { name: "हेटौँडा उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["शहीद स्मारक", "भुटनदेवी मन्दिर", "पुष्पलाल पार्क"] },
+                { name: "थाहा नगरपालिका", type: "नगरपालिका", spots: ["दामन (शीतकालीन हिमपात)", "पालुङ", "सिमभञ्ज्याङ"] },
+                { name: "भीमफेदी गाउँपालिका", type: "गाउँपालिका", spots: ["ऐतिहासिक भीमफेदी", "चिसापानी गढी"] },
+                { name: "मकवानपुरगढी गाउँपालिका", type: "गाउँपालिका", spots: ["मकवानपुरगढी दरबार (सेनकालीन किल्ला)"] },
+                { name: "मनहरी गाउँपालिका", type: "गाउँपालिका", spots: ["मनहरी मन्दिर", "पर्सा निकुञ्ज मध्यवर्ती"] },
+                { name: "राक्सिराङ्ग गाउँपालिका", type: "गाउँपालिका", spots: ["चेपाङ बहुल क्षेत्र"] },
+                { name: "बकाया गाउँपालिका", type: "गाउँपालिका", spots: ["बकाया खोला"] },
+                { name: "बागमती गाउँपालिका", type: "गाउँपालिका", spots: ["झरना र बागमती किनार"] },
+                { name: "इन्द्रसरोवर गाउँपालिका", type: "गाउँपालिका", spots: ["कुलेखानी इन्द्रसरोवर (नेपालको ठूलो ताल)", "मार्खु"] },
+                { name: "कैलाश गाउँपालिका", type: "गाउँपालिका", spots: ["वैकुण्ठ डाँडा"] }
+            ]},
+            "Chitwan": { name: "चितवन", province: "बागमती प्रदेश", headquarter: "भरतपुर", palikas: [
+                { name: "भरतपुर महानगरपालिका", type: "महानगरपालिका", spots: ["चितवन राष्ट्रिय निकुञ्ज", "पटिहानी", "नारायणी नदी किनार", "देवघाट धाम"] },
+                { name: "रत्ननगर नगरपालिका", type: "नगरपालिका", spots: ["सौराहा (Elephant Safari)", "बीसहजारी ताल"] },
+                { name: "माडी नगरपालिका", type: "नगरपालिका", spots: ["सोमेश्वर गढी", "वैकुण्ठ ताल", "पाण्डवनगर"] },
+                { name: "खैरहनी नगरपालिका", type: "नगरपालिका", spots: ["कुमरोज मध्यवर्ती सामुदायिक वन"] },
+                { name: "राप्ती नगरपालिका", type: "नगरपालिका", spots: ["चितहरी waterfall"] },
+                { name: "कालिका नगरपालिका", type: "नगरपालिका", spots: ["शक्तिखोर चेपाङ सङ्ग्रहालय"] },
+                { name: "इच्छाकामना गाउँपालिका", type: "गाउँपालिका", spots: ["मनकामना केबलकार तल्लो स्टेसन (कुरिन्टार)", "इच्छाकामना मन्दिर"] }
+            ]},
+            "Sindhuli": { name: "सिन्धुली", province: "बागमती प्रदेश", headquarter: "सिन्धुलीमाढी", palikas: [
+                { name: "कमलामाई नगरपालिका", type: "नगरपालिका", spots: ["सिन्धुलीगढी (ऐतिहासिक अङ्ग्रेज हराएको किल्ला)", "कमलामाई मन्दिर"] },
+                { name: "दूधौली नगरपालिका", type: "नगरपालिका", spots: ["डकाहा बजार"] },
+                { name: "सुनकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["खुर्कोट (बिपी राजमार्ग हब)"] },
+                { name: "हरिहरपुरगढी गाउँपालिका", type: "गाउँपालिका", spots: ["हरिहरपुरगढी दरबार भग्नावशेष"] },
+                { name: "मरीण गाउँपालिका", type: "गाउँपालिका", spots: ["मरीण डाइभर्सन"] },
+                { name: "तीनपाटन गाउँपालिका", type: "गाउँपालिका", spots: ["चकमके"] },
+                { name: "फि Derive / फिकल गाउँपालिका", type: "गाउँपालिका", spots: ["फिकल डाँडा (सूर्योदय)"] },
+                { name: "घ्याङ्लेख गाउँपालिका", type: "गाउँपालिका", spots: ["घ्याङ्लेख"] },
+                { name: "गोलञ्जोर गाउँपालिका", type: "गाउँपालिका", spots: ["ग्वालटार (जुनार खेती हब)"] }
+            ]},
+            "Ramechhap": { name: "रामेछाप", province: "बागमती प्रदेश", headquarter: "मन्थली", palikas: [
+                { name: "मन्थली नगरपालिका", type: "नगरपालिका", spots: ["मन्थली विमानस्थल", "तामाकोशी किनार"] },
+                { name: "रामेछाप नगरपालिका", type: "नगरपालिका", spots: ["रामेछाप दरबार", "ताम्बाकोशी"] },
+                { name: "उमाकुण्ड गाउँपालिका", type: "गाउँपालिका", spots: ["बहुला पोखरी", "प्रीति"] },
+                { name: "खाँडादेवी गाउँपालिका", type: "गाउँपालिका", spots: ["खाँडादेवी मन्दिर"] },
+                { name: "गोकुलगङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["गोकुलगङ्गा"] },
+                { name: "दोरम्बा शैलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["शैलुङ डाँडा (सयौँ थुम्काहरू)", "दोरम्बा"] },
+                { name: "लिखु तामाकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["लिखु जलविद्युत्"] },
+                { name: "सुनापति गाउँपालिका", type: "गाउँपालिका", spots: ["सुनापति डाँडा"] }
+            ]},
+            "Dolkha": { name: "दोलखा", province: "बागमती प्रदेश", headquarter: "चरीकोट", palikas: [
+                { name: "भीमेश्वर नगरपालिका", type: "नगरपालिका", spots: ["दोलखा भीमसेन (पसिना आउने मूर्ति)", "चरीकोट"] },
+                { name: "जिरी नगरपालिका", type: "नगरपालिका", spots: ["नेपालको स्विट्जरल्याण्ड 'जिरी'", "चिया बगान"] },
+                { name: "कालिञ्चोक गाउँपालिका", type: "गाउँपालिका", spots: ["कालिञ्चोक भगवती मन्दिर (केबलकार/हिमपात)", "कुरी गाउँ"] },
+                { name: "गौरीशङ्कर गाउँपालिका", type: "गाउँपालिका", spots: ["गौरीशङ्कर हिमाल (नेपाली समय निर्धारण विन्दु)", "छोरोल्पा हिमताल"] },
+                { name: "शैलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["शैलुङ थुम्का"] },
+                { name: "वैतेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["वैतेश्वर महादेव"] },
+                { name: "तामाकोशी गाउँपालिका", type: "गाउँपालिका", spots: ["जगती"] },
+                { name: "मेलुङ गाउँपालिका", type: "गाउँपालिका", spots: ["मेलुङ"] },
+                { name: "विगु गाउँपालिका", type: "गाउँपालिका", spots: ["विगु गुम्बा", "माथिल्लो तामाकोशी जलविद्युत्"] }
+            ]},
+
+            // --- गण्डकी प्रदेश (Gandaki Province) ---
+            "Kaski": { name: "कास्की", province: "गण्डकी प्रदेश", headquarter: "पोखरा", palikas: [
+                { name: "पोखरा महानगरपालिका", type: "महानगरपालिका", spots: ["फेवा ताल", "सारङ्कोट", "डेभिड फल्स", "विश्व शान्ति स्तूप", "विन्द्यवासिनी", "चमेरे गुफा"] },
+                { name: "अन्नपूर्ण गाउँपालिका", type: "गाउँपालिका", spots: ["घान्द्रुक", "अन्नपूर्ण बेस क्याम्प (ABC)", "पुन हिल"] },
+                { name: "माछापुच्छ्रे गाउँपालिका", type: "गाउँपालिका", spots: ["मार्दी हिमाल पदमार्ग (Mardi Base Camp)"] },
+                { name: "रूपा गाउँपालिका", type: "गाउँपालिका", spots: ["रूपा ताल"] },
+                { name: "मादी गाउँपालिका", type: "गाउँपालिका", spots: ["सिकलेस", "कपिलासे"] }
+            ]},
+            "Gorkha": { name: "गोरखा", province: "गण्डकी प्रदेश", headquarter: "गोरखा", palikas: [
+                { name: "गोरखा नगरपालिका", type: "नगरपालिका", spots: ["गोरखा दरबार", "गोरखा काली मन्दिर", "रामशाह शाहको चौतारा"] },
+                { name: "पालुङटार नगरपालिका", type: "नगरपालिका", spots: ["पालुङटार विमानस्थल", "लिगलिगकोट (दौडिएर राजा हुने ऐतिहासिक ठाउँ)"] },
+                { name: "सुलिकोट / बारपाक सुलिकोट गाउँपालिका", type: "गाउँपालिका", spots: ["बारपाक (२०७२ भूकम्पको केन्द्रविन्दु)"] },
+                { name: "सिरानचोक गाउँपालिका", type: "गाउँपालिका", spots: ["सिरानचोक गढी"] },
+                { name: "अजिरकोट गाउँपालिका", type: "गाउँपालिका", spots: ["भान्सार"] },
+                { name: "धार्चे गाउँपालिका", type: "गाउँपालिका", spots: ["लाप्राक (एकीकृत बस्ती)"] },
+                { name: "चुमनुव्री गाउँपालिका", type: "गाउँपालिका", spots: ["मनास्लु हिमाल आधार शिविर", "सामागाउँ", "चुम भ्याली"] },
+                { name: "गण्डकी गाउँपालिका", type: "गाउँपालिका", spots: ["ताङ्गीचोक"] },
+                { name: "शहीद लखन गाउँपालिका", type: "गाउँपालिका", spots: ["मनकामना मन्दिर (नेपालको पहिलो केबलकार)"] },
+                { name: "भीमसेनथापा गाउँपालिका", type: "गाउँपालिका", spots: ["खाञ्चोक"] },
+                { name: "देवघाट / आरूघाट गाउँपालिका", type: "गाउँपालिका", spots: ["आरूघाट बजार"] }
+            ]},
+            "Lamjung": { name: "लमजुङ", province: "गण्डकी प्रदेश", headquarter: "बेँसीसहर", palikas: [
+                { name: "बेँसीसहर नगरपालिका", type: "नगरपालिका", spots: ["अन्नपूर्ण पदमार्ग प्रवेशद्वार", "गाउँसहर दरबार"] },
+                { name: "सुन्दरबजार नगरपालिका", type: "नगरपालिका", spots: ["कृषि क्याम्पस", "पाउँदी"] },
+                { name: "मध्यनेपाल नगरपालिका", type: "नगरपालिका", spots: ["इशानेश्वर महादेव (करापु)"] },
+                { name: "राइनास नगरपालिका", type: "नगरपालिका", spots: ["राइनासकोट (घरबास/Homestay)"] },
+                { name: "क्व्होलासोथार गाउँपालिका", type: "गाउँपालिका", spots: ["घलेगाउँ (SAARC नमुना गाउँ)", "भुजुङ"] },
+                { name: "मनाङ / मर्स्याङ्दी गाउँपालिका", type: "गाउँपालिका", spots: ["मर्स्याङ्दी जलविद्युत्"] },
+                { name: "दोर्दी गाउँपालिका", type: "गाउँपालिका", spots: ["नौथर"] },
+                { name: "दूधपोखरी गाउँपालिका", type: "गाउँपालिका", spots: ["पवित्र दूधपोखरी"] }
+            ]},
+            "Tanahu": { name: "तनहुँ", province: "गण्डकी प्रदेश", headquarter: "दमौली", palikas: [
+                { name: "व्यास नगरपालिका", type: "नगरपालिका", spots: ["दमौली (महर्षि वेदव्यास गुफा)", "मानहुँकोट (बाक्लो कुहिरो र सूर्योदय)"] },
+                { name: "शुक्लागण्डकी नगरपालिका", type: "नगरपालिका", spots: ["दुलेगौँडा", "ढोरबराही मन्दिर"] },
+                { name: "भानु नगरपालिका", type: "नगरपालिका", spots: ["आदिकवि भानुभक्त जन्मस्थल (चुँदी रम्घा)"] },
+                { name: "भिमाद नगरपालिका", type: "नगरपालिका", spots: ["भिमाद बजार"] },
+                { name: "देवघाट गाउँपालिका", type: "गाउँपालिका", spots: ["पवित्र देवघाट धाम"] },
+                { name: "आँबुखैरेनी गाउँपालिका", type: "गाउँपालिका", spots: ["छिम्केश्वरी माई", "आँबुखैरेनी"] },
+                { name: "ऋषिङ्ग गाउँपालिका", type: "गाउँपालिका", spots: ["ऋषिङ्ग गढी"] },
+                { name: "घिरिङ गाउँपालिका", type: "गाउँपालिका", spots: ["घिरिङ सुन्दरी डाँडा"] },
+                { name: "म्याग्दे गाउँपालिका", type: "गाउँपालिका", spots: ["छाब्दिबराही मन्दिर"] },
+                { name: "बन्दीपुर गाउँपालिका", type: "गाउँपालिका", spots: ["बन्दीपुर (रानीपुर/पहाडी रानी, युरोपेली शैलीको बजार)", "सिद्धगुफा"] }
+            ]},
+            "Syangja": { name: "स्याङ्जा", province: "गण्डकी प्रदेश", headquarter: "पुतलीबजार", palikas: [
+                { name: "पुतलीबजार नगरपालिका", type: "नगरपालिका", spots: ["स्याङ्जा बजार", "नुवाकोट गढी"] },
+                { name: "वालिङ नगरपालिका", type: "नगरपालिका", spots: ["स्मार्ट सिटी वालिङ", "पिङखानी"] },
+                { name: "गण्डकीकोट / गल्याङ नगरपालिका", type: "नगरपालिका", spots: ["गल्याङ बजार"] },
+                { name: "भीरकोट नगरपालिका", type: "नगरपालिका", spots: ["स्वोरेक मैदान (Paragliding Hub)"] },
+                { name: "चापाकोट नगरपालिका", type: "नगरपालिका", spots: ["सुन्तलाबारी चापाकोट"] },
+                { name: "आँधीखोला गाउँपालिका", type: "गाउँपालिका", spots: ["आँधीखोला मुहान", "श्रवणकुमार"] },
+                { name: "फेदीखोला गाउँपालिका", type: "गाउँपालिका", spots: ["मत्तिका डाँडा"] },
+                { name: "हरिनाश गाउँपालिका", type: "गाउँपालिका", spots: ["चित्रे भञ्ज्याङ"] },
+                { name: "बिरुवा गाउँपालिका", type: "गाउँपालिका", spots: ["बिरुवा अर्छाले"] },
+                { name: "कालीगण्डकी गाउँपालिका", type: "गाउँपालिका", spots: ["कालीगण्डकी ए जलविद्युत् (मिर्मी)", "नेपालको ठूलो जलविद्युत्"] },
+                { name: "अर्जुनचौपारी गाउँपालिका", type: "गाउँपालिका", spots: ["अर्जुनगुफा"] }
+            ]},
+            "Manang": { name: "मनाङ", province: "गण्डकी प्रदेश", headquarter: "चामे", palikas: [
+                { name: "चामे गाउँपालिका", type: "गाउँपालिका", spots: ["चामे तातोपानी", "अन्नपूर्ण पदमार्ग"] },
+                { name: "मनाङ ङिस्याङ गाउँपालिका", type: "गाउँपालिका", spots: ["मनाङ गाउँ", "तिलिचो ताल (उच्च स्थानको ताल - ४,९१९m)", "थारोङ ला भञ्ज्याङ"] },
+                { name: "नार्पा भूमि गाउँपालिका", type: "गाउँपालिका", spots: ["नार र फू गाउँ (दुर्गम तथा प्राचीन बौद्ध संस्कृति)"] },
+                { name: "नासोङ गाउँपालिका", type: "गाउँपालिका", spots: ["धारापानी"] }
+            ]},
+            "Mustang": { name: "मुस्ताङ", province: "गण्डकी प्रदेश", headquarter: "जोमसोम", palikas: [
+                { name: "घरपझोङ गाउँपालिका", type: "गाउँपालिका", spots: ["जोमसोम (Jomsom)", "मार्फा (स्याउको राजधानी)", "ढुम्बा ताल"] },
+                { name: "वारागुङ मुक्तिक्षेत्र गाउँपालिका", type: "गाउँपालिका", spots: ["मुक्तिनाथ मन्दिर (१०८ धारा र अखण्ड ज्वाला)", "कागबेनी"] },
+                { name: "लोमान्थाङ गाउँपालिका", type: "गाउँपालिका", spots: ["लोमान्थाङ (उब्जित पर्खालभित्रको माथिल्लो मुस्ताङ दरबार)"] },
+                { name: "लो-घेकर दामोदरकुण्ड गाउँपालिका", type: "गाउँपालिका", spots: ["पवित्र दामोदरकुण्ड", "लो-घेकर गुम्बा"] },
+                { name: "थासाङ गाउँपालिका", type: "गाउँपालिका", spots: ["लेते", "टुकुचे"] }
+            ]},
+            "Myagdi": { name: "म्याग्दी", province: "गण्डकी प्रदेश", headquarter: "बेनी", palikas: [
+                { name: "बेनी नगरपालिका", type: "नगरपालिका", spots: ["बेनी बजार", "गलेश्वर धाम", "तातोपानी"] },
+                { name: "अन्नपूर्ण गाउँपालिका", type: "गाउँपालिका", spots: ["तातोपानी (Tatopani Hot Spring)", "रुप्से झरना", "अन्धागलछी (विश्वको गहिरो गल्छी)"] },
+                { name: "धवलागिरी गाउँपालिका", type: "गाउँपालिका", spots: ["धौलागिरि हिमाल आधार शिविर", "गुर्जा गाउँ"] },
+                { name: "मङ्गला गाउँपालिका", type: "गाउँपालिका", spots: ["बाबियाचौर"] },
+                { name: "मालिका गाउँपालिका", type: "गाउँपालिका", spots: ["दरबाङ"] },
+                { name: "रघुगङ्गा गाउँपालिका", type: "गाउँपालिका", spots: ["रघुगंगा खोला"] }
+            ]},
+            "Parbat": { name: "पर्वत", province: "गण्डकी प्रदेश", headquarter: "कुश्मा", palikas: [
+                { name: "कुश्मा नगरपालिका", type: "नगरपालिका", spots: ["नेपालको अग्लो झोलुङ्गे पुल", "द क्लिफ बञ्जी जम्प", "गुप्तेश्वर गुफा"] },
+                { name: "फलेवास नगरपालिका", type: "नगरपालिका", spots: ["लामयाङ", "फलेवास ढिक"] },
+                { name: "जलजला गाउँपालिका", type: "गाउँपालिका", spots: ["मल्लाज दरबार", "हाम्पाल डाँडा"] },
+                { name: "पैयूँ गाउँपालिका", type: "गाउँपालिका", spots: ["हुवास"] },
+                { name: "महाशिला गाउँपालिका", type: "गाउँपालिका", spots: ["महाशिला (विश्वको ठूलो एकल शिला)"] },
+                { name: "मोदी गाउँपालिका", type: "गाउँपालिका", spots: ["पातीचौर", "पंचासे डाँडा"] },
+                { name: "विहादी गाउँपालिका", type: "गाउँपालिका", spots: ["विहादी सेतीबेणी शालिग्राम शिला"] }
+            ]},
+            "Baglung": { name: "बागलुङ", province: "गण्डकी प्रदेश", headquarter: "बागलुङ", palikas: [
+                { name: "बागलुङ नगरपालिका", type: "नगरपालिका", spots: ["बागलुङ कालिका मन्दिर", "लामो suspension bridge", "पंचकोट"] },
+                { name: "गलकोट नगरपालिका", type: "नगरपालिका", spots: ["गलकोट दरबार", "घुम्टेको धुरी"] },
+                { name: "जैमिनी नगरपालिका", type: "नगरपालिका", spots: ["जैमिनी घाट"] },
+                { name: "ढोरपाटन नगरपालिका", type: "नगरपालिका", spots: ["ढोरपाटन शिकार आरक्ष (नेपालको एक मात्र शिकार आरक्ष)", "बुर्तिबाङ"] },
+                { name: "बरेङ गाउँपालिका", type: "गाउँपालिका", spots: ["बरेङ बजार"] },
+                { name: "काठेखोला गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिधनुष"] },
+                { name: "तमानखोला गाउँपालिका", type: "गाउँपालिका", spots: ["तमानखोला"] },
+                { name: "ताराखोला गाउँपालिका", type: "गाउँपालिका", spots: ["ताराखोला म्याग्नेसाइट खानी"] },
+                { name: "निसीखोला गाउँपालिका", type: "गाउँपालिका", spots: ["निसीखोला"] },
+                { name: "बडिगाड गाउँपालिका", type: "गाउँपालिका", spots: ["ग्वालिचौर"] }
+            ]},
+            "Nawalpur": { name: "नवलपुर (नवलपरासी पूर्व)", province: "गण्डकी प्रदेश", headquarter: "कावासोती", palikas: [
+                { name: "कावासोती नगरपालिका", type: "नगरपालिका", spots: ["अमल्टाडी होमस्टे", "जटायु (गिद्ध) रेस्टुरेन्ट"] },
+                { name: "देवचुली नगरपालिका", type: "नगरपालिका", spots: ["देवचुली डाँडा", "शाश्वत धाम (CG Temple)"] },
+                { name: "गैँडाकोट नगरपालिका", type: "नगरपालिका", spots: ["मौलाकाली मन्दिर (मौलाकाली केबलकार)", "नारायणी पुल"] },
+                { name: "मध्यविन्दु नगरपालिका", type: "नगरपालिका", spots: ["नारायणी किनार"] },
+                { name: "बौदीकाली गाउँपालिका", type: "गाउँपालिका", spots: ["डेढगाउँ"] },
+                { name: "बुलिङटार गाउँपालिका", type: "गाउँपालिका", spots: ["बुलिङटार"] },
+                { name: "हुप्सेकोट गाउँपालिका", type: "गाउँपालिका", spots: ["धौवादी फलाम खानी"] },
+                { name: "विनयी त्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["त्रिवेणी धाम", "वाल्मीकि आश्रम"] }
+            ]},
+
+            // --- लुम्बिनी प्रदेश (Lumbini Province) ---
+            "Rupandehi": { name: "रूपन्देही", province: "लुम्बिनी प्रदेश", headquarter: "भैरहवा", palikas: [
+                { name: "लुम्बिनी सांस्कृतिक नगरपालिका", type: "नगरपालिका", spots: ["मायादेवी मन्दिर (भगवान् बुद्ध जन्मस्थल)", "अन्तर्राष्ट्रिय गुम्बाहरू", "अशोक स्तम्भ"] },
+                { name: "बुट्वल उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["जीतगढी किल्ला", "मणिमुकुन्द सेन फूलबारी", "केबलकार"] },
+                { name: "सिद्धार्थनगर नगरपालिका", type: "नगरपालिका", spots: ["गौतम बुद्ध अन्तर्राष्ट्रिय विमानस्थल", "भैरहवा बजार"] },
+                { name: "तिलोत्तमा नगरपालिका", type: "नगरपालिका", spots: ["शंकरनगर वनविहार र अनुसन्धान केन्द्र"] },
+                { name: "सैनामैना नगरपालिका", type: "नगरपालिका", spots: ["पर्रोहा परमेश्वर जोतिर्लिङ्ग धाम"] },
+                { name: "देवदह नगरपालिका", type: "नगरपालिका", spots: ["देवदह (भगवान् बुद्धको मावली स्थल)"] },
+                { name: "ओमसतिया गाउँपालिका", type: "गाउँपालिका", spots: ["ओमसतिया पोखरी"] },
+                { name: "रोहिणी गाउँपालिका", type: "गाउँपालिका", spots: ["रोहिणी नदी"] },
+                { name: "अन्धाधुन्ध / मर्चवारी गाउँपालिका", type: "गाउँपालिका", spots: ["मर्चवारी देवी मन्दिर"] },
+                { name: "कोटहीमाई गाउँपालिका", type: "गाउँपालिका", spots: ["कोटहीमाई"] },
+                { name: "समरीमाई गाउँपालिका", type: "गाउँपालिका", spots: ["समरीमाई"] },
+                { name: "सियारी गाउँपालिका", type: "गाउँपालिका", spots: ["सियारी माछा पालन क्षेत्र"] },
+                { name: "मायादेवी गाउँपालिका", type: "गाउँपालिका", spots: ["कमलपोखरी"] },
+                { name: "शुद्धोधन गाउँपालिका", type: "गाउँपालिका", spots: ["मानपाकर"] },
+                { name: "कञ्चन गाउँपालिका", type: "गाउँपालिका", spots: ["कञ्चन नदी"] },
+                { name: "गैडहवा गाउँपालिका", type: "गाउँपालिका", spots: ["गैडहवा ताल"] }
+            ]},
+            "Kapilvastu": { name: "कपिलवस्तु", province: "लुम्बिनी प्रदेश", headquarter: "तौलिहवा", palikas: [
+                { name: "कपिलवस्तु नगरपालिका", type: "नगरपालिका", spots: ["तिलौराकोट (प्राचीन शाक्य गणराज्यको राजधानी/सिद्धार्थ गौतमको दरबार)"] },
+                { name: "बाणगङ्गा नगरपालिका", type: "नगरपालिका", spots: ["जीतपुर बजार", "बाणगङ्गा नदी"] },
+                { name: "शिवराज नगरपालिका", type: "नगरपालिका", spots: ["चन्द्रौटा"] },
+                { name: "बुद्धभूमि नगरपालिका", type: "नगरपालिका", spots: ["गोरुसिंगे"] },
+                { name: "कृष्णनगर नगरपालिका", type: "नगरपालिका", spots: ["कृष्णनगर भन्सार नाका"] },
+                { name: "महाराजगञ्ज नगरपालिका", type: "नगरपालिका", spots: ["महाराजगञ्ज"] },
+                { name: "मायादेवी गाउँपालिका", type: "गाउँपालिका", spots: ["पकुडी"] },
+                { name: "शुद्धोधन गाउँपालिका", type: "गाउँपालिका", spots: ["लवनी"] },
+                { name: "यशोधरा गाउँपालिका", type: "गाउँपालिका", spots: ["बैदौली"] },
+                { name: "विजयनगर गाउँपालिका", type: "गाउँपालिका", spots: ["खुरहुरिया"] }
+            ]},
+            "Parasi": { name: "परासी (नवलपरासी पश्चिम)", province: "लुम्बिनी प्रदेश", headquarter: "रामग्राम", palikas: [
+                { name: "रामग्राम नगरपालिका", type: "नगरपालिका", spots: ["रामग्राम स्तूप (अष्टधातु युक्त नफोडिएको बुद्ध अस्तिधातु स्तूप)"] },
+                { name: "सुनवल नगरपालिका", type: "नगरपालिका", spots: ["लक्ष्मीपुर", "सुनवल बजार"] },
+                { name: "बर्दघाट नगरपालिका", type: "नगरपालिका", spots: ["दाउन्ने देवी मन्दिर (दाउन्ने पहाड)"] },
+                { name: "उमरी / पाल्हीनन्दन गाउँपालिका", type: "गाउँपालिका", spots: ["पाल्ही भगवती मन्दिर"] },
+                { name: "सरावल गाउँपालिका", type: "गाउँपालिका", spots: ["सरावल ताल"] },
+                { name: "प्रतापपुर गाउँपालिका", type: "गाउँपालिका", spots: ["गुठीप्रतापपुर"] },
+                { name: "सुस्ता गाउँपालिका", type: "गाउँपालिका", spots: ["सुस्ता क्षेत्र (नारायणी पारि)"] }
+            ]},
+            "Palpa": { name: "पाल्पा", province: "लुम्बिनी प्रदेश", headquarter: "तानसेन", palikas: [
+                { name: "तानसेन नगरपालिका", type: "नगरपालिका", spots: ["तानसेन दरबार (सङ्ग्रहालय)", "श्रीनगर डाँडा", "रानीमहल (नेपालको ताज महल)"] },
+                { name: "रामपुर नगरपालिका", type: "नगरपालिका", spots: ["रामपुर उपत्यका", "कालीगण्डकी किनार"] },
+                { name: "निस्दी गाउँपालिका", type: "गाउँपालिका", spots: ["मित्याल (कौडा नृत्य र मगर संस्कृति)"] },
+                { name: "पूर्वरोला / पूर्वखोला गाउँपालिका", type: "गाउँपालिका", spots: ["रम्भा"] },
+                { name: "रम्भा गाउँपालिका", type: "गाउँपालिका", spots: ["रम्भादेवी मन्दिर"] },
+                { name: "माठगढी / माझगढी गाउँपालिका", type: "गाउँपालिका", spots: ["माझगढी किल्ला"] },
+                { name: "तिनाउ गाउँपालिका", type: "गाउँपालिका", spots: ["सत्यवती ताल", "सिद्धबाबा मन्दिर"] },
+                { name: "रिब्दीकोट गाउँपालिका", type: "गाउँपालिका", spots: ["भैरवस्थान मन्दिर (एसियाकै ठूलो त्रिशूल)"] },
+                { name: "रैनादेवी छहरा गाउँपालिका", type: "गाउँपालिका", spots: ["छहरा झरना"] },
+                { name: "बगनासकाली गाउँपालिका", type: "गाउँपालिका", spots: ["राम्दी घाट"] }
+            ]},
+            "Gulmi": { name: "गुल्मी", province: "लुम्बिनी प्रदेश", headquarter: "तमघास", palikas: [
+                { name: "रेसुङ्गा नगरपालिका", type: "नगरपालिका", spots: ["रेसुङ्गा तपोभूमि", "तमघास बजार"] },
+                { name: "मुसिकोट नगरपालिका", type: "नगरपालिका", spots: ["वामीटक्सार", "मुसिकोट दरबार"] },
+                { name: "इश्मा गाउँपालिका", type: "गाउँपालिका", spots: ["इश्माकोट किल्ला"] },
+                { name: "कालीगण्डकी गाउँपालिका", type: "गाउँपालिका", spots: ["पूर्तिघाट"] },
+                { name: "गुल्मीदरबार गाउँपालिका", type: "गाउँपालिका", spots: ["चारपाला दरबार"] },
+                { name: "सत्यवती गाउँपालिका", type: "गाउँपालिका", spots: ["सत्यवती ताल"] },
+                { name: "चन्द्रकोट गाउँपालिका", type: "गाउँपालिका", spots: ["मझुवा बजार"] },
+                { name: "रुरुक्षेत्र गाउँपालिका", type: "गाउँपालिका", spots: ["रुरुक्षेत्र ऋषिकेश मन्दिर (रिडी)"] },
+                { name: "छत्रकोट गाउँपालिका", type: "गाउँपालिका", spots: ["छत्रकोट मन्दिर"] },
+                { name: "धुर्कोट गाउँपालिका", type: "गाउँपालिका", spots: ["धुर्कोट गढी", "विचित्र गुफा"] },
+                { name: "मदाने गाउँपालिका", type: "गाउँपालिका", spots: ["मदाने लेख"] },
+                { name: "मलिकार्चुन / मालिका गाउँपालिका", type: "गाउँपालिका", spots: ["मालिका थान"] }
+            ]},
+            "Arghakhanchi": { name: "अर्घाखाँची", province: "लुम्बिनी प्रदेश", headquarter: "सन्धीखर्क", palikas: [
+                { name: "सन्धिखर्क नगरपालिका", type: "नगरपालिका", spots: ["सन्धिखर्क बजार", "नरपानी (चिसो हावापानी)"] },
+                { name: "शीतगंगा नगरपालिका", type: "नगरपालिका", spots: ["ठाडा दह", "शीतखोला"] },
+                { name: "भूमिकास्थान नगरपालिका", type: "नगरपालिका", spots: ["धारापानी", "खाँचीकोट मन्दिर"] },
+                { name: "छत्रदेव गाउँपालिका", type: "गाउँपालिका", spots: ["छत्रदेव मन्दिर"] },
+                { name: "पाणिनी गाउँपालिका", type: "गाउँपालिका", spots: ["पाणिनी तपोभूमि (संस्कृत व्याकरणकार पाणिनीको स्थल)"] },
+                { name: "मालारानी गाउँपालिका", type: "गाउँपालिका", spots: ["मालारानी मन्दिर", "खनदह"] }
+            ]},
+            "Dang": { name: "दाङ", province: "लुम्बिनी प्रदेश", headquarter: "घोराही", palikas: [
+                { name: "घोराही उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["पाण्डवेश्वर महादेव धारापानी (विश्वको ठूलो त्रिशूल)", "अम्बिकेश्वरी मन्दिर"] },
+                { name: "तुलसीपुर उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["टारिगाउँ विमानस्थल", "चिल्ड्रेन पार्क"] },
+                { name: "लम्ही नगरपालिका", type: "नगरपालिका", spots: ["लम्ही अजम्बरी पार्क"] },
+                { name: "गढवा गाउँपालिका", type: "गाउँपालिका", spots: ["गढवा बजार", "कोइलाबास नाका"] },
+                { name: "राजपुर गाउँपालिका", type: "गाउँपालिका", spots: ["खाङ्ग्रा नाका"] },
+                { name: "शान्तिनगर गाउँपालिका", type: "गाउँपालिका", spots: ["थारु सांस्कृतिक सङ्ग्रहालय"] },
+                { name: "राप्ती गाउँपालिका", type: "गाउँपालिका", spots: ["भालुवाङ (लुम्बिनी प्रदेशको स्थायी राजधानी)"] },
+                { name: "बङ्गलाचुली गाउँपालिका", type: "गाउँपालिका", spots: ["बङ्गलाचुली भ्यु टावर"] },
+                { name: "दङ्गीशरण गाउँपालिका", type: "गाउँपालिका", spots: ["दङ्गीशरण थारु राजाको दरबार"] },
+                { name: "बबई गाउँपालिका", type: "गाउँपालिका", spots: ["पुरन्धारा झरना"] }
+            ]},
+            "Pyuthan": { name: "प्युठान", province: "लुम्बिनी प्रदेश", headquarter: "खलङ्गा", palikas: [
+                { name: "प्युठान नगरपालिका", type: "नगरपालिका", spots: ["खलङ्गा", "बिजुवार बजार"] },
+                { name: "स्वर्गद्वारी नगरपालिका", type: "नगरपालिका", spots: ["स्वर्गद्वारी आश्रम (पवित्र हिन्दू धाम र अखण्ड होम)"] },
+                { name: "गौमुखी गाउँपालिका", type: "गाउँपालिका", spots: ["गौमुखी (झिमरुक नदी मुहान)"] },
+                { name: "माण्डवी गाउँपालिका", type: "गाउँपालिका", spots: ["देउराली"] },
+                { name: "सरुमारानी गाउँपालिका", type: "गाउँपालिका", spots: ["सरुमारानी डाँडा"] },
+                { name: "मल्लरानी गाउँपालिका", type: "गाउँपालिका", spots: ["मल्लरानी डाँडा (शीतल हावापानी)"] },
+                { name: "नौबहिनी गाउँपालिका", type: "गाउँपालिका", spots: ["नौबहिनी झरना"] },
+                { name: "झिमरुक गाउँपालिका", type: "गाउँपालिका", spots: ["झिमरुक जलविद्युत्"] },
+                { name: "ऐरावती गाउँपालिका", type: "गाउँपालिका", spots: ["ऐरावती त्रिवेणी"] }
+            ]},
+            "Rolpa": { name: "रोल्पा", province: "लुम्बिनी प्रदेश", headquarter: "लिवाङ", palikas: [
+                { name: "रोल्पा नगरपालिका", type: "नगरपालिका", spots: ["लिवाङ", "शिवालय मन्दिर"] },
+                { name: "त्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["जुगार"] },
+                { name: "परिवर्तन गाउँपालिका", type: "गाउँपालिका", spots: ["पाछाबाङ"] },
+                { name: "माडी गाउँपालिका", type: "गाउँपालिका", spots: ["घर्तीगाउँ"] },
+                { name: "रुन्टीगढी गाउँपालिका", type: "गाउँपालिका", spots: ["रुन्टीगढी (स्वर्गद्वारी महाप्रभु जन्मस्थल)"] },
+                { name: "लुङ्गी गाउँपालिका", type: "गाउँपालिका", spots: ["किला"] },
+                { name: "सुनछहरी गाउँपालिका", type: "गाउँपालिका", spots: ["सुनछहरी झरना (सुन्छाहरी)"] },
+                { name: "थवाङ गाउँपालिका", type: "गाउँपालिका", spots: ["थवाङ (ऐतिहासिक जनयुद्ध मुकाम)"] },
+                { name: "सुनिलस्मृति गाउँपालिका", type: "गाउँपालिका", spots: ["सुलिचौर बजार"] },
+                { name: "गंगादेव गाउँपालिका", type: "गाउँपालिका", spots: ["जिनबाङ"] }
+            ]},
+            "EasternRukum": { name: "पूर्वी रुकुम", province: "लुम्बिनी प्रदेश", headquarter: "रुुकुमकोट", palikas: [
+                { name: "सिसेनो / सिस्वा गाउँपालिका / पुथा उत्तरगङ्गा", type: "गाउँपालिका", spots: ["पुथा हिमाल आधार शिविर", "तकसेरा गाउँ"] },
+                { name: "भूमे गाउँपालिका", type: "गाउँपालिका", spots: ["खाबाङ", "गोरिल्ला पदमार्ग"] },
+                { name: "सिस्वा / भूमे / रुकुमगाड / सिस्ने गाउँपालिका", type: "गाउँपालिका", spots: ["रुकुमकोट", "कमलदह (कमल पोखरी)"] }
+            ]},
+            "Banke": { name: "बाँके", province: "लुम्बिनी प्रदेश", headquarter: "नेपालगञ्ज", palikas: [
+                { name: "नेपालगञ्ज उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["बागेश्वरी मन्दिर (जिब्रो भएको मूर्ति)", "वाटरपार्क", "रानीतलाव"] },
+                { name: "कोहलपुर नगरपालिका", type: "नगरपालिका", spots: ["कोहलपुर चौराहा", "क्रिकेट मैदान"] },
+                { name: "राप्ती सोनारी गाउँपालिका", type: "गाउँपालिका", spots: ["बाँके राष्ट्रिय निकुञ्ज", "ढकेरी ढकेरी रिफ्रेस सेन्टर"] },
+                { name: "नरैनापुर गाउँपालिका", type: "गाउँपालिका", spots: ["सन्तनेश्वर महादेव मन्दिर"] },
+                { name: "डुडुवा गाउँपालिका", type: "गाउँपालिका", spots: ["डुडुवा खोला"] },
+                { name: "जानकी गाउँपालिका", type: "गाउँपालिका", spots: ["खजुरा"] },
+                { name: "खजुरा गाउँपालिका", type: "गाउँपालिका", spots: ["कपास विकास समिति"] },
+                { name: "बैजनाथ गाउँपालिका", type: "गाउँपालिका", spots: ["नौबस्ता"] }
+            ]},
+            "Bardiya": { name: "बर्दिया", province: "लुम्बिनी प्रदेश", headquarter: "गुलरिया", palikas: [
+                { name: "गुलरिया नगरपालिका", type: "नगरपालिका", spots: ["कोतही मन्दिर", "गुलरिया बजार"] },
+                { name: "बाँसगढी नगरपालिका", type: "नगरपालिका", spots: ["बाँसगढी केदारेश्वर धाम"] },
+                { name: "बारबर्दिया नगरपालिका", type: "नगरपालिका", spots: ["जयनगर"] },
+                { name: "ठाकुरबाबा नगरपालिका", type: "नगरपालिका", spots: ["बर्दिया राष्ट्रिय निकुञ्ज प्रवेशद्वार (भुरभुरे)", "ठाकुरबाबा मन्दिर"] },
+                { name: "राजापुर नगरपालिका", type: "नगरपालिका", spots: ["कर्णाली नदीको टापु राजापुर", "नेपालको ठूलो चामल मिल"] },
+                { name: "मधुवन नगरपालिका", type: "नगरपालिका", spots: ["खाता जैविक मार्ग (Tiger Corridor)"] },
+                { name: "गेरुवा गाउँपालिका", type: "गाउँपालिका", spots: ["गेरुवा कर्णाली नदी"] },
+                { name: "बढैयाताल गाउँपालिका", type: "गाउँपालिका", spots: ["बढैयाताल (चरा अवलोकन सिमसार)"] }
+            ]},
+
+            // --- कर्णाली प्रदेश (Karnali Province) ---
+            "WesternRukum": { name: "पश्चिमी रुकुम", province: "कर्णाली प्रदेश", headquarter: "मुसीकोट", palikas: [
+                { name: "मुसीकोट नगरपालिका", type: "नगरपालिका", spots: ["मुसीकोट खलङ्गा", "साईकुमारी मन्दिर"] },
+                { name: "चौरजहारी नगरपालिका", type: "नगरपालिका", spots: ["चौरजहारी उपत्यका", "विमानस्थल"] },
+                { name: "आठबिसकोट नगरपालिका", type: "नगरपालिका", spots: ["राडीबजार"] },
+                { name: "बाँफिकोट गाउँपालिका", type: "गाउँपालिका", spots: ["स्यार्पू ताल"] },
+                { name: "त्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["सिम्ली"] },
+                { name: "सानोभेरी गाउँपालिका", type: "गाउँपालिका", spots: ["सानोभेरी नदी किनार"] }
+            ]},
+            "Salyan": { name: "सल्यान", province: "कर्णाली प्रदेश", headquarter: "शारदा (खलङ्गा)", palikas: [
+                { name: "शारदा नगरपालिका", type: "नगरपालिका", spots: ["सल्यान खलङ्गा", "शारदा नदी"] },
+                { name: "बागचौर नगरपालिका", type: "नगरपालिका", spots: ["थारमारे"] },
+                { name: "बनगाड कुपिण्डे नगरपालिका", type: "नगरपालिका", spots: ["कुपिण्डे दह (रङ फेर्ने ताल)", "देवस्थल"] },
+                { name: "कालीमाटी गाउँपालिका", type: "गाउँपालिका", spots: ["कालीमाटी"] },
+                { name: "छत्रेश्वरी गाउँपालिका", type: "गाउँपालिका", spots: ["छत्रेश्वरी छायाक्षेत्र मन्दिर (सतीदेवीको अङ्ग पतन स्थल)"] },
+                { name: "ढोरचौर / सिद्धकुमाख गाउँपालिका", type: "गाउँपालिका", spots: ["सिद्धकुमाख डाँडा"] },
+                { name: "दार्मा गाउँपालिका", type: "गाउँपालिका", spots: ["फारुला"] },
+                { name: "कुमाख गाउँपालिका", type: "गाउँपालिका", spots: ["कुमाख पहाड"] },
+                { name: "कपुरकोट गाउँपालिका", type: "गाउँपालिका", spots: ["कपुरकोट (बेमौसमी तरकारी हब)"] },
+                { name: "त्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["लुहाम"] }
+            ]},
+            "Dolpa": { name: "डोल्पा", province: "कर्णाली प्रदेश", headquarter: "दुनै", palikas: [
+                { name: "ठूलीभेरी नगरपालिका", type: "नगरपालिका", spots: ["दुनै", "जुफाल विमानस्थल"] },
+                { name: "त्रिपुरासुन्दरी नगरपालिका", type: "नगरपालिका", spots: ["बालात्रिपुरासुन्दरी मन्दिर"] },
+                { name: "शे-फोक्सुण्डो गाउँपालिका", type: "गाउँपालिका", spots: ["शे-फोक्सुण्डो ताल (Shey Phoksundo Lake - नीलो कञ्चन ताल)", "शे गुम्बा"] },
+                { name: "जगदुल्ला गाउँपालिका", type: "गाउँपालिका", spots: ["जगदुल्ला पोखरी"] },
+                { name: "मुड्केचुला गाउँपालिका", type: "गाउँपालिका", spots: ["इलमी"] },
+                { name: "काईके गाउँपालिका", type: "गाउँपालिका", spots: ["तराप उपत्यका (मगर काईके भाषा)"] },
+                { name: "छार्का ताङसोङ गाउँपालिका", type: "गाउँपालिका", spots: ["छार्का भोट"] },
+                { name: "डोल्पोबुद्ध गाउँपालिका", type: "गाउँपालिका", spots: ["धो तराप (उच्च मानव बस्ती)"] }
+            ]},
+            "Jumla": { name: "जुम्ला", province: "कर्णाली प्रदेश", headquarter: "चन्दननाथ", palikas: [
+                { name: "चन्दननाथ नगरपालिका", type: "नगरपालिका", spots: ["चन्दननाथ र भैरवनाथ मन्दिर", "मार्सी धानको खेत"] },
+                { name: "कनकसुन्दरी गाउँपालिका", type: "गाउँपालिका", spots: ["कनकसुन्दरी मन्दिर", "खस भाषा उद्गम स्थल"] },
+                { name: "सिञ्जा गाउँपालिका", type: "गाउँपालिका", spots: ["सिञ्जा उपत्यका (नेपाली भाषाको उत्पत्ति थलो)"] },
+                { name: "हिमा गाउँपालिका", type: "गाउँपालिका", spots: ["हिमा नदी"] },
+                { name: "तिला गाउँपालिका", type: "गाउँपालिका", spots: ["तातोपानी"] },
+                { name: "गुठिचौर गाउँपालिका", type: "गाउँपालिका", spots: ["गुठिचौर भेडीफार्म"] },
+                { name: "तातोपानी गाउँपालिका", type: "गाउँपालिका", spots: ["धारापानी तातोपानी"] },
+                { name: "पातरासी गाउँपालिका", type: "गाउँपालिका", spots: ["पातरासी हिमाल"] }
+            ]},
+            "Kalikot": { name: "कालिकोट", province: "कर्णाली प्रदेश", headquarter: "मान्म", palikas: [
+                { name: "खाँडाचक्र नगरपालिका", type: "नगरपालिका", spots: ["मान्म", "कर्णाली राजमार्ग"] },
+                { name: "रास्कोट नगरपालिका", type: "नगरपालिका", spots: ["रास्कोट दरबार भग्नावशेष"] },
+                { name: "तिलागुफा नगरपालिका", type: "नगरपालिका", spots: ["तिलागुफा गुफा"] },
+                { name: "शान्नीत्रिवेणी गाउँपालिका", type: "गाउँपालिका", spots: ["शान्नीघाट"] },
+                { name: "पचालझरना गाउँपालिका", type: "गाउँपालिका", spots: ["पचाल झरना (नेपालकै अग्लो झरना - ३८१ मिटर)"] },
+                { name: "शुभकालिका गाउँपालिका", type: "गाउँपालिका", spots: ["कालिका मन्दिर"] },
+                { name: "महावै गाउँपालिका", type: "गाउँपालिका", spots: ["महावै पाटन"] },
+                { name: "नरहरिनाथ गाउँपालिका", type: "गाउँपालिका", spots: ["कुमालगाउँ"] },
+                { name: "पलाता गाउँपालिका", type: "गाउँपालिका", spots: ["पलाता"] }
+            ]},
+            "Mugu": { name: "मुगु", province: "कर्णाली प्रदेश", headquarter: "गमगढी", palikas: [
+                { name: "छायानाथ रारा नगरपालिका", type: "नगरपालिका", spots: ["रारा ताल (Rara Lake - नेपालको सबैभन्दा ठूलो ताल)", "छायानाथ मन्दिर", "गमगढी"] },
+                { name: "मुगुम कार्मारोङ गाउँपालिका", type: "गाउँपालिका", spots: ["यार्सागुम्बा पाटन", "पुल्पु गुम्बा"] },
+                { name: "सोहरू गाउँपालिका", type: "गाउँपालिका", spots: ["सोहरू खोला"] },
+                { name: "खत्याड गाउँपालिका", type: "गाउँपालिका", spots: ["माझचौर"] }
+            ]},
+            "Humla": { name: "हुम्ला", province: "कर्णाली प्रदेश", headquarter: "सिमकोट", palikas: [
+                { name: "सिमकोट गाउँपालिका", type: "गाउँपालिका", spots: ["सिमकोट विमानस्थल", "रलिङ गुम्बा"] },
+                { name: "नाम्खा गाउँपालिका", type: "गाउँपालिका", spots: ["हिल्सा नाका (मानसरोवर कैलाश जाने बाटो)", "याङ्गार गुम्बा"] },
+                { name: "खार्पुनाथ गाउँपालिका", type: "गाउँपालिका", spots: ["खार्पुनाथ शिव मन्दिर"] },
+                { name: "सर्केगाड गाउँपालिका", type: "गाउँपालिका", spots: ["सर्केगाड"] },
+                { name: "चङ्खेली गाउँपालिका", type: "गाउँपालिका", spots: ["चङ्खेली हिमाल (५०० को नोटमा भएको हिमाल)"] },
+                { name: "अडानचुली गाउँपालिका", type: "गाउँपालिका", spots: ["श्रीनगर"] },
+                { name: "ताजाकोट गाउँपालिका", type: "गाउँपालिका", spots: ["छिप्रे"] }
+            ]},
+            "Jajarkot": { name: "जाजरकोट", province: "कर्णाली प्रदेश", headquarter: "खलङ्गा", palikas: [
+                { name: "भेरी नगरपालिका", type: "नगरपालिका", spots: ["जाजरकोट दरबार", "खलङ्गा"] },
+                { name: "छेडागाड नगरपालिका", type: "नगरपालिका", spots: ["छेडा बजार"] },
+                { name: "नलगाड नगरपालिका", type: "नगरपालिका", spots: ["नलगाड जलविद्युत्"] },
+                { name: "कुसे गाउँपालिका", type: "गाउँपालिका", spots: ["कुसे पाटन (कीमती पत्थर सुलेमानी)"] },
+                { name: "बरेकोट गाउँपालिका", type: "गाउँपालिका", spots: ["नायकवाडा"] },
+                { name: "शिवालय गाउँपालिका", type: "गाउँपालिका", spots: ["शिवालय"] },
+                { name: "जुनचाँदे गाउँपालिका", type: "गाउँपालिका", spots: ["मझकोट"] }
+            ]},
+            "Dailekh": { name: "दैलेख", province: "कर्णाली प्रदेश", headquarter: "नारायण (दैलेख)", palikas: [
+                { name: "नारायण नगरपालिका", type: "नगरपालिका", spots: ["कोतगढी", "दैलेख बजार"] },
+                { name: "दुल्लु नगरपालिका", type: "नगरपालिका", spots: ["दुल्लु (कीर्तिस्तम्भ/खस राजाको शिलालेख)", "पञ्चकोशी तीर्थस्थल"] },
+                { name: "चामुण्डा बिन्द्रासैनी नगरपालिका", type: "नगरपालिका", spots: ["बिन्द्रासैनी मन्दिर"] },
+                { name: "आठबीस नगरपालिका", type: "नगरपालिका", spots: ["राकाथाना"] },
+                { name: "भगवतीमाई गाउँपालिका", type: "गाउँपालिका", spots: ["भगवतीमाई मन्दिर"] },
+                { name: "गुराँस गाउँपालिका", type: "गाउँपालिका", spots: ["काँडाचौर (गुराँस पहाड)"] },
+                { name: "नौमुले गाउँपालिका", type: "गाउँपालिका", spots: ["नौमुले झरना"] },
+                { name: "महाबु गाउँपालिका", type: "गाउँपालिका", spots: ["महाबु धाम (महादेव स्थान)"] },
+                { name: "भैरवी गाउँपालिका", type: "गाउँपालिका", spots: ["श्रीस्थान (बलिरहेको प्राकृतिक ग्यास ज्वाला)"] },
+                { name: "ठाँटीकाँध गाउँपालिका", type: "गाउँपालिका", spots: ["ठाँटीकाँध"] },
+                { name: "डुङ्गेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["नाभीस्थान (ग्यास ज्वाला धाम)"] }
+            ]},
+            "Surkhet": { name: "सुर्खेत", province: "कर्णाली प्रदेश", headquarter: "वीरेन्द्रनगर", palikas: [
+                { name: "वीरेन्द्रनगर नगरपालिका", type: "नगरपालिका", spots: ["काँक्रेविहार (नेपालको पहिलो पुरातात्विक संरक्षित स्मारक)", "बुलबुले ताल", "देउती बज्यै"] },
+                { name: "भेरीगङ्गा नगरपालिका", type: "नगरपालिका", spots: ["छिन्चु बजार", "भेरी बबई डाइभर्सन सुरुङ"] },
+                { name: "गुर्भाकोट नगरपालिका", type: "नगरपालिका", spots: ["शुभघाट"] },
+                { name: "पंचपुरी नगरपालिका", type: "नगरपालिका", spots: ["बावियाचौर"] },
+                { name: "लेकबेँसी नगरपालिका", type: "नगरपालिका", spots: ["कल्याण"] },
+                { name: "चौकुने गाउँपालिका", type: "गाउँपालिका", spots: ["गुटु (सिमेन्ट ढुङ्गा खानी)"] },
+                { name: "बराहताल गाउँपालिका", type: "गाउँपालिका", spots: ["बराहताल"] },
+                { name: "चिङ्गाड गाउँपालिका", type: "गाउँपालिका", spots: ["आवलचिङ"] },
+                { name: "सिम्ता गाउँपालिका", type: "गाउँपालिका", spots: ["रामेडाँडा"] }
+            ]},
+
+            // --- सुदूरपश्चिम प्रदेश (Sudurpashchim Province) ---
+            "Bajura": { name: "बाजुरा", province: "सुदूरपश्चिम प्रदेश", headquarter: "मार्तडी", palikas: [
+                { name: "बडीमालिका नगरपालिका", type: "नगरपालिका", spots: ["बडीमालिका मन्दिर (सुदूरपश्चिमको प्रसिद्ध शक्तिपीठ)", "मार्तडी"] },
+                { name: "त्रिवेणी नगरपालिका", type: "नगरपालिका", spots: ["नाटेश्वरी मन्दिर"] },
+                { name: "बुढीनन्दा नगरपालिका", type: "नगरपालिका", spots: ["बुढीनन्दा ताल"] },
+                { name: "हिमाली गाउँपालिका", type: "गाउँपालिका", spots: ["कवाढी"] },
+                { name: "स्वामीकार्तिक खापर गाउँपालिका", type: "गाउँपालिका", spots: ["स्वामीकार्तिक मन्दिर"] },
+                { name: "जगन्नाथ गाउँपालिका", type: "गाउँपालिका", spots: ["जगन्नाथ मन्दिर"] },
+                { name: "खप्तड छेडेदह गाउँपालिका", type: "गाउँपालिका", spots: ["छेडेदह ताल"] },
+                { name: "गौमुल गाउँपालिका", type: "गाउँपालिका", spots: ["गौमुल घटाल"] },
+                { name: "काँडा / रामारोशन / हिमाली गाउँपालिका", type: "गाउँपालिका", spots: ["हिमाली पाटन"] }
+            ]},
+            "Bajhang": { name: "बझाङ", province: "सुदूरपश्चिम प्रदेश", headquarter: "चैनपुर", palikas: [
+                { name: "जयपृथ्वी नगरपालिका", type: "नगरपालिका", spots: ["जयपृथ्वीबहादुर सिंहको दरबार", "चैनपुर"] },
+                { name: "बुङ्गल नगरपालिका", type: "नगरपालिका", spots: ["झापा झरना"] },
+                { name: "तलकोट गाउँपालिका", type: "गाउँपालिका", spots: ["रूमाल डाँडा"] },
+                { name: "मष्टा गाउँपालिका", type: "गाउँपालिका", spots: ["मष्टा माण्डौ (मष्टा देवता उद्गम)"] },
+                { name: "खप्तडछान्ना गाउँपालिका", type: "गाउँपालिका", spots: ["खप्तड राष्ट्रिय निकुञ्ज प्रवेशद्वार"] },
+                { name: "थलारा गाउँपालिका", type: "गाउँपालिका", spots: ["थलारा दरबार"] },
+                { name: "वित्थडचिर गाउँपालिका", type: "गाउँपालिका", spots: ["स्याँडी झरना"] },
+                { name: "सूरमा गाउँपालिका", type: "गाउँपालिका", spots: ["सूरमा सरोवर (यार्सागुम्बा पाटन)"] },
+                { name: "छब्बीसपाथिभेरा गाउँपालिका", type: "गाउँपालिका", spots: ["पाथीभेरा मन्दिर"] },
+                { name: "दुर्गाथली गाउँपालिका", type: "गाउँपालिका", spots: ["दुर्गाथली"] },
+                { name: "केदारस्यूँ गाउँपालिका", type: "गाउँपालिका", spots: ["केदारनाथ मन्दिर"] },
+                { name: "साईपाल गाउँपालिका", type: "गाउँपालिका", spots: ["साईपाल हिमाल आधार शिविर"] }
+            ]},
+            "Darchula": { name: "दार्चुला", province: "सुदूरपश्चिम प्रदेश", headquarter: "खलङ्गा", palikas: [
+                { name: "महाकाली नगरपालिका", type: "नगरपालिका", spots: ["दार्चुला खलङ्गा", "झोलुङ्गे पुल (नेपाल-भारत नाका)"] },
+                { name: "शैल्यशिखर नगरपालिका", type: "नगरपालिका", spots: ["मालिकार्जुन मन्दिर (राष्ट्रिय धाम)"] },
+                { name: "व्याँस गाउँपालिका", type: "गाउँपालिका", spots: ["कालापानी", "लिम्पियाधुरा", "लिपुलेक", "व्याँस उपत्यका", "अपि हिमाल आधार शिविर"] },
+                { name: "दुहूँ गाउँपालिका", type: "गाउँपालिका", spots: ["हिक्ila"] },
+                { name: "नौगाड गाउँपालिका", type: "गाउँपालिका", spots: ["नौगाड जलविद्युत्"] },
+                { name: "मार्मा गाउँपालिका", type: "गाउँपालिका", spots: ["लडागडा"] },
+                { name: "अपिहिमाल गाउँपालिका", type: "गाउँपालिका", spots: ["अपि हिमाल (७,१३२m)"] },
+                { name: "लेकम गाउँपालिका", type: "गाउँपालिका", spots: ["लेकम मष्टा"] },
+                { name: "मालिकार्जुन गाउँपालिका", type: "गाउँपालिका", spots: ["भगवती मन्दिर"] }
+            ]},
+            "Achham": { name: "अछाम", province: "सुदूरपश्चिम प्रदेश", headquarter: "मंगलसेन", palikas: [
+                { name: "मंगलसेन नगरपालिका", type: "नगरपालिका", spots: ["मंगलसेन दरबार", "सोलबन्दी"] },
+                { name: "कमलबजार नगरपालिका", type: "नगरपालिका", spots: ["कमलबजार विमानस्थल"] },
+                { name: "साँफेबगर नगरपालिका", type: "नगरपालिका", spots: ["वैद्यनाथ धाम (चार धाममध्ये एक)", "साँफेबगर विमानस्थल"] },
+                { name: "पञ्चदेवल विनायक नगरपालिका", type: "नगरपालिका", spots: ["पञ्चदेवल (ऐतिहासिक देवलहरू)"] },
+                { name: "चौरपाटी गाउँपालिका", type: "गाउँपालिका", spots: ["चौरपाटी"] },
+                { name: "मेल्लेख गाउँपालिका", type: "गाउँपालिका", spots: ["ऋषिदह"] },
+                { name: "रामारोशन गाउँपालिका", type: "गाउँपालिका", spots: ["रामारोशन पर्यटन क्षेत्र (१२ बण्ड १८ खण्ड - १२ ताल र १८ घाँसे मैदान)"] },
+                { name: "ढकारी गाउँपालिका", type: "गाउँपालिका", spots: ["ढकारी"] },
+                { name: "तुर्माखाँद गाउँपालिका", type: "गाउँपालिका", spots: ["कर्णाली किनार"] },
+                { name: "बान्निगढी जयगढ गाउँपालिका", type: "गाउँपालिका", spots: ["जयगढ बजार", "बान्निगढी मन्दिर"] }
+            ]},
+            "Doti": { name: "डोटी", province: "सुदूरपश्चिम प्रदेश", headquarter: "सिलगढी", palikas: [
+                { name: "दिपायल सिलगढी नगरपालिका", type: "नगरपालिका", spots: ["दिपायल दरबार", "शैलेश्वर महादेव मन्दिर", "सेती नदी"] },
+                { name: "शिखर नगरपालिका", type: "नगरपालिका", spots: ["शिखर केदार"] },
+                { name: "पूर्वीचौकी गाउँपालिका", type: "गाउँपालिका", spots: ["पूर्वीचौकी किल्ला"] },
+                { name: "खप्तड राष्ट्रिय निकुञ्ज क्षेत्र / आदर्श गाउँपालिका", type: "गाउँपालिका", spots: ["खप्तड बाबाको आश्रम", "खप्तड दह", "त्रिवेणी धाम"] },
+                { name: "सायल गाउँपालिका", type: "गाउँपालिका", spots: ["छत्तीवन"] },
+                { name: "केआईसिंह गाउँपालिका", type: "गाउँपालिका", spots: ["वायल"] },
+                { name: "बोगटान फुड्सिल गाउँपालिका", type: "गाउँपालिका", spots: ["बोगटान राज्य भग्नावशेष"] },
+                { name: "बडीकेदार गाउँपालिका", type: "गाउँपालिका", spots: ["बडीकेदार धाम (पहाडको टाउकोमा रहेको केदारनाथ)"] },
+                { name: "जोरायल गाउँपालिका", type: "गाउँपालिका", spots: ["छतिवन ताल", "झरना"] }
+            ]},
+            "Dadeldhura": { name: "डडेल्धुरा", province: "सुदूरपश्चिम प्रदेश", headquarter: "अमरगढी", palikas: [
+                { name: "अमरगढी नगरपालिका", type: "नगरपालिका", spots: ["ऐतिहासिक अमरगढी किल्ला (वीर अमरसिंह थापाले बनाएको)", "उग्रतारा मन्दिर"] },
+                { name: "परशुराम नगरपालिका", type: "नगरपालिका", spots: ["परशुराम धाम (महाकाली किनार)"] },
+                { name: "आलग्ड / आलिताल गाउँपालिका", type: "गाउँपालिका", spots: ["आलि ताल"] },
+                { name: "भागेश्वर गाउँपालिका", type: "गाउँपालिका", spots: ["भागेश्वर मन्दिर"] },
+                { name: "नवदुर्गा गाउँपालिका", type: "गाउँपालिका", spots: ["नवदुर्गा भगवती"] },
+                { name: "अजयमेरु गाउँपालिका", type: "गाउँपालिका", spots: ["अजयमेरुकोट (प्राचीन डोटेली राजाको दरबार)"] },
+                { name: "गन्यापधुरा गाउँपालिका", type: "गाउँपालिका", spots: ["गन्यापधुरा मन्दिर"] }
+            ]},
+            "Kanchanpur": { name: "कञ्चनपुर", province: "सुदूरपश्चिम प्रदेश", headquarter: "भीमदत्त (महेन्द्रनगर)", palikas: [
+                { name: "भीमदत्त नगरपालिका", type: "नगरपालिका", spots: ["दोधारा-चाँदनी झोलुङ्गे पुल (एसियाकै लामो multi-span bridge)", "लिङ्गा"] },
+                { name: "पुनर्वास नगरपालिका", type: "नगरपालिका", spots: ["पियारी ताल"] },
+                { name: "बेलौरी नगरपालिका", type: "नगरपालिका", spots: ["बन्दा ताल"] },
+                { name: "शुक्लाफाँटा नगरपालिका", type: "नगरपालिका", spots: ["शुक्लाफाँटा राष्ट्रिय निकुञ्ज (नेपालको ठूलो बाह्रसिङ्गे झुण्ड)"] },
+                { name: "कृष्णपुर नगरपालिका", type: "नगरपालिका", spots: ["बण्ड ताल"] },
+                { name: "बेदकोट नगरपालिका", type: "नगरपालिका", spots: ["बेदकोट ताल", "लिंगेश्वर महादेव"] },
+                { name: "महाकाली नगरपालिका (दोधारा चाँदनी)", type: "नगरपालिका", spots: ["दोधारा चाँदनी महाकाली पारिको नेपाल"] },
+                { name: "लालझाडी गाउँपालिका", type: "गाउँपालिका", spots: ["लालझाडी वन संरक्षित क्षेत्र"] },
+                { name: "बेलडाँडी गाउँपालिका", type: "गाउँपालिका", spots: ["चिलहरी ताल"] }
+            ]},
+            "Kailali": { name: "कैलाली", province: "सुदूरपश्चिम प्रदेश", headquarter: "धनगढी", palikas: [
+                { name: "धनगढी उपमहानगरपालिका", type: "उपमहानगरपालिका", spots: ["जाखोर ताल", "शिवपुरी धाम", "एयरक्राफ्ट म्युजियम"] },
+                { name: "टीकापुर नगरपालिका", type: "नगरपालिका", spots: ["टीकापुर पार्क (नेपालको ठूलो प्राकृतिक पार्क)", "कर्णाली पुल (एक खम्बे)"] },
+                { name: "घोडाघोडी नगरपालिका", type: "नगरपालिका", spots: ["विश्व सिमसार सूचीकृत घोडाघोडी ताल"] },
+                { name: "लमकी चुहा नगरपालिका", type: "नगरपालिका", spots: ["लमकी बजार"] },
+                { name: "भजनी नगरपालिका", type: "नगरपालिका", spots: ["भजनी कृष्णसार क्षेत्र"] },
+                { name: "गोदावरी नगरपालिका", type: "नगरपालिका", spots: ["गोदावरी धाम (सुदूरपश्चिमको मुख्य प्रवेशद्वार)", "अत्तरिया चौराहा"] },
+                { name: "गौरीगङ्गा नगरपालिका", type: "नगरपालिका", spots: ["चौमाला"] },
+                { name: "जानकी गाउँपालिका", type: "गाउँपालिका", spots: ["अमरावती"] },
+                { name: "बर्दगोरिया गाउँपालिका", type: "गाउँपालिका", spots: ["बर्दगोरिया मन्दिर"] },
+                { name: "मोहन्याल गाउँपालिका", type: "गाउँपालिका", spots: ["सोलट्टा"] },
+                { name: "कायलारी / कैलारी गाउँपालिका", type: "गाउँपालिका", spots: ["कोइलाही ताल"] },
+                { name: "जोशीपुर गाउँपालिका", type: "गाउँपालिका", spots: ["जोशीपुर थारु बहुल बजार"] },
+                { name: "चुरे गाउँपालिका", type: "गाउँपालिका", spots: ["खानीडाँडा (शीतल हावापानी)"] }
+            ]}
+        };
+
+        // 3. Load Nepal GeoJSON Map Vectors
+        let geojsonLayer;
+
+        fetch('https://raw.githubusercontent.com/m-a-n-i-s-h/Nepal-GeoJSON/master/districts.geojson')
+            .then(res => res.json())
+            .then(data => {
+                geojsonLayer = L.geoJSON(data, {
+                    style: () => ({
+                        fillColor: '#0284c7',
+                        weight: 1.5,
+                        opacity: 1,
+                        color: '#ffffff',
+                        fillOpacity: 0.5
+                    }),
+                    onEachFeature: (feature, layer) => {
+                        const distName = feature.properties.DIST_NAME || feature.properties.name || "District";
+                        layer.bindTooltip(distName, { permanent: false, direction: "center" });
+
+                        layer.on({
+                            mouseover: (e) => {
+                                e.target.setStyle({ weight: 3, color: '#ffc107', fillOpacity: 0.8 });
+                            },
+                            mouseout: (e) => {
+                                geojsonLayer.resetStyle(e.target);
+                            },
+                            click: (e) => {
+                                map.fitBounds(e.target.getBounds());
+                                renderDistrictDetails(distName);
+                            }
+                        });
+                    }
+                }).addTo(map);
+            })
+            .catch(err => console.log("GIS Map Fetching...", err));
+
+        // 4. Render Sidebar Information
+        function renderDistrictDetails(queryKey) {
+            document.getElementById('defaultState').style.display = 'none';
+            const container = document.getElementById('dynamicContent');
+
+            let matchedKey = Object.keys(nepal77Database).find(key => 
+                key.toLowerCase() === queryKey.toLowerCase() || 
+                nepal77Database[key].name.includes(queryKey)
+            );
+
+            if (!matchedKey) {
+                container.innerHTML = `
+                    <div class="detail-card">
+                        <div class="district-header">
+                            <span class="district-title">${queryKey}</span>
+                            <span class="badge">नेपाल</span>
+                        </div>
+                        <p style="color: #cbd5e1;">यस जिल्लाको नक्सा डाटा छनोट भयो। विस्तृत स्थानीय तहहरू सुचीबद्ध हुँदैछन्...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const data = nepal77Database[matchedKey];
+
+            let palikaHTML = '';
+            data.palikas.forEach((p, idx) => {
+                let spotsHTML = p.spots.map(s => `<span class="attraction-tag"><i class="fa-solid fa-location-dot"></i> ${s}</span>`).join('');
+                
+                palikaHTML += `
+                    <div class="palika-item" onclick="togglePalikaDetail(${idx})">
+                        <div>
+                            <strong>${p.name}</strong> 
+                            <small style="color: #94a3b8; display:block;">${p.type}</small>
+                        </div>
+                        <i class="fa-solid fa-chevron-down" id="icon-${idx}"></i>
+                    </div>
+                    <div class="palika-detail" id="palika-detail-${idx}" style="display: none;">
+                        <span style="color: #ffc107; font-size: 0.85rem; font-weight: 600; display:block; margin-bottom: 4px;">मुख्य आकर्षणहरू:</span>
+                        <div>${spotsHTML}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="detail-card">
+                    <div class="district-header">
+                        <span class="district-title">${data.name}</span>
+                        <span class="badge">${data.province}</span>
+                    </div>
+                    <p style="margin-bottom: 6px; font-size: 0.95rem;"><strong>सदरमुकाम:</strong> ${data.headquarter}</p>
+                    <p style="font-size: 0.95rem; margin-bottom: 10px;"><strong>स्थानीय तहको सङ्ख्या:</strong> ${data.palikas.length}</p>
+                    
+                    <strong style="color: #38bdf8; display:block; margin-top: 10px;">स्थानीय तह र पर्यटकीय स्थलहरू:</strong>
+                    <div class="palika-list">
+                        ${palikaHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle Accordion Details for Palikas
+        function togglePalikaDetail(index) {
+            const el = document.getElementById(`palika-detail-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            if (el.style.display === "none") {
+                el.style.display = "block";
+                icon.className = "fa-solid fa-chevron-up";
+            } else {
+                el.style.display = "none";
+                icon.className = "fa-solid fa-chevron-down";
+            }
+        }
+
+        // Live Search Handler
+        function searchLocation() {
+            const q = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (q.length >= 2) {
+                for (let key in nepal77Database) {
+                    const item = nepal77Database[key];
+                    if (key.toLowerCase().includes(q) || item.name.includes(q)) {
+                        renderDistrictDetails(key);
+                        break;
+                    }
+                    // Search in Palikas
+                    const pMatch = item.palikas.find(p => p.name.includes(q));
+                    if(pMatch) {
+                        renderDistrictDetails(key);
+                        break;
+                    }
+                }
+            }
         }
     </script>
 </body>
