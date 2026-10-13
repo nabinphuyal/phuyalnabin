@@ -335,6 +335,44 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
+        /* Video Player for Bhojpur */
+        .video-container {
+            margin-top: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: #000;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .special-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            margin-left: 8px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         @media (max-width: 1024px) {
             .app-container {
                 grid-template-columns: 1fr;
@@ -405,7 +443,8 @@
 
     <!-- Leaflet JS Mapping Engine -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        <script>
+
+    <script>
         // 1. Initialize Leaflet Map Centered on Nepal
         const map = L.map('map', { zoomControl: false }).setView([28.3949, 84.1240], 7);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -1329,24 +1368,63 @@
         // 3. Load Nepal GeoJSON Map Vectors (Using Reliable Source)
         let geojsonLayer;
 
+        // Province Colors Mapping
+        const provinceColors = {
+            "कोशी प्रदेश": "#0ea5e9",      // Blue
+            "मधेश प्रदेश": "#22c55e",      // Green
+            "बागमती प्रदेश": "#eab308",    // Yellow
+            "गण्डकी प्रदेश": "#f97316",    // Orange
+            "लुम्बिनी प्रदेश": "#a855f7",  // Purple
+            "कर्णाली प्रदेश": "#ef4444",   // Red
+            "सुदूरपश्चिम प्रदेश": "#14b8a6" // Teal
+        };
+
         fetch('https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-districts.geojson')
             .then(res => res.json())
             .then(data => {
                 geojsonLayer = L.geoJSON(data, {
-                    style: () => ({
-                        fillColor: '#0ea5e9',
-                        weight: 1.5,
-                        opacity: 1,
-                        color: '#ffffff',
-                        fillOpacity: 0.4
-                    }),
+                    style: (feature) => {
+                        const distName = feature.properties.DIST_NAME || feature.properties.name || "";
+                        // Find province from database
+                        let province = "कोशी प्रदेश";
+                        for(let key in nepal77Database) {
+                            if(nepal77Database[key].name === distName || key.toLowerCase() === distName.toLowerCase()) {
+                                province = nepal77Database[key].province;
+                                break;
+                            }
+                        }
+                        const color = provinceColors[province] || "#0ea5e9";
+                        return {
+                            fillColor: color,
+                            weight: 1.5,
+                            opacity: 1,
+                            color: '#ffffff',
+                            fillOpacity: 0.6
+                        };
+                    },
                     onEachFeature: (feature, layer) => {
                         const distName = feature.properties.DIST_NAME || feature.properties.name || "District";
-                        layer.bindTooltip(distName, { permanent: false, direction: "center", className: 'custom-tooltip' });
+                        // Find Nepali name
+                        let nepaliName = distName;
+                        for(let key in nepal77Database) {
+                            if(nepal77Database[key].name === distName || key.toLowerCase() === distName.toLowerCase()) {
+                                nepaliName = nepal77Database[key].name;
+                                break;
+                            }
+                        }
+                        
+                        // Permanent tooltip for district name
+                        layer.bindTooltip(nepaliName, { 
+                            permanent: true, 
+                            direction: "center", 
+                            className: 'district-label',
+                            opacity: 0.9
+                        });
 
                         layer.on({
                             mouseover: (e) => {
-                                e.target.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.8 });
+                                e.target.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.9 });
+                                e.target.bringToFront();
                             },
                             mouseout: (e) => {
                                 geojsonLayer.resetStyle(e.target);
@@ -1369,8 +1447,16 @@
 
             let matchedKey = Object.keys(nepal77Database).find(key => 
                 key.toLowerCase() === queryKey.toLowerCase() || 
-                nepal77Database[key].name.includes(queryKey)
+                nepal77Database[key].name === queryKey
             );
+
+            // Fuzzy matching if exact not found
+            if(!matchedKey) {
+                matchedKey = Object.keys(nepal77Database).find(key => 
+                    key.toLowerCase().includes(queryKey.toLowerCase()) || 
+                    nepal77Database[key].name.includes(queryKey)
+                );
+            }
 
             if (!matchedKey) {
                 container.innerHTML = `
@@ -1386,6 +1472,7 @@
             }
 
             const data = nepal77Database[matchedKey];
+            const isBhojpur = matchedKey === "Bhojpur";
 
             let palikaHTML = '';
             data.palikas.forEach((p, idx) => {
@@ -1411,10 +1498,31 @@
                 `;
             });
 
+            // Special Video Player for Bhojpur
+            let videoHTML = '';
+            if(isBhojpur) {
+                videoHTML = `
+                    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <i class="fa-brands fa-youtube" style="color: #ff0000; font-size: 1.5rem;"></i>
+                            <span style="color: #ff0000; font-weight: 700;">भोजपुर विशेष भिडियो</span>
+                            <span class="special-badge">गृह जिल्ला</span>
+                        </div>
+                        <div class="video-container">
+                            <!-- यहाँ तपाईंले YouTube भिडियोको ID राख्न सक्नुहुन्छ। जस्तै: 'dQw4w9WgXcQ' -->
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                        </div>
+                        <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 8px; text-align: center;">
+                            <i class="fa-solid fa-circle-info"></i> यो भिडियो परिवर्तन गर्न <code>iframe src</code> भित्रको लिङ्क परिवर्तन गर्नुहोस्।
+                        </p>
+                    </div>
+                `;
+            }
+
             container.innerHTML = `
                 <div class="detail-card">
                     <div class="district-header">
-                        <span class="district-title">${data.name}</span>
+                        <span class="district-title">${data.name} ${isBhojpur ? '<span class="special-badge">🏠 गृह जिल्ला</span>' : ''}</span>
                         <span class="badge">${data.province}</span>
                     </div>
                     <p style="margin-bottom: 6px; font-size: 0.95rem; color: #cbd5e1;"><strong>सदरमुकाम:</strong> ${data.headquarter}</p>
@@ -1426,6 +1534,7 @@
                     <div class="palika-list">
                         ${palikaHTML}
                     </div>
+                    ${videoHTML}
                 </div>
             `;
         }
@@ -1456,7 +1565,7 @@
                                 const dName = layer.feature.properties.DIST_NAME || layer.feature.properties.name;
                                 if(dName && (dName.toLowerCase() === key.toLowerCase() || dName === item.name)){
                                     map.fitBounds(layer.getBounds(), { padding: [50, 50] });
-                                    layer.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.8 });
+                                    layer.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.9 });
                                     setTimeout(() => geojsonLayer.resetStyle(layer), 3000);
                                 }
                             });
