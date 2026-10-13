@@ -21,6 +21,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
 
     <style>
+        /* ==========================================
+           ROOT VARIABLES & THEME SETUP
+           ========================================== */
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
@@ -34,6 +37,8 @@
             --gradient-bg: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
             --glass-border: 1px solid rgba(255, 255, 255, 0.125);
             --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.5);
+            --radius-card: 24px;
+            --radius-sm: 12px;
         }
 
         body.light-mode {
@@ -47,7 +52,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        html { scroll-padding-top: 90px; }
+        html { scroll-padding-top: 100px; }
 
         body {
             font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
@@ -57,12 +62,12 @@
             line-height: 1.7;
             overflow-x: hidden;
             min-height: 100vh;
-            padding-bottom: 70px;
+            padding-bottom: 80px; /* Space for social bar */
             transition: background 0.5s ease, color 0.5s ease;
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 9px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, #6366f1, #ec4899);
@@ -109,7 +114,9 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes pulseText { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* Hamburger Menu */
+        /* ==========================================
+           HAMBURGER MENU & THEME TOGGLE (CLEAN)
+           ========================================== */
         .hamburger-menu-container { position: fixed; top: 18px; left: 18px; z-index: 1001; }
         .hamburger-btn {
             background: rgba(15, 23, 42, 0.85); border-radius: 14px;
@@ -141,7 +148,7 @@
         .menu-options {
             display: none; position: absolute; top: 62px; left: 0;
             background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            width: 280px; border-radius: 20px; box-shadow: 0 25px 55px rgba(0, 0, 0, 0.65);
+            width: 290px; border-radius: 20px; box-shadow: 0 25px 55px rgba(0, 0, 0, 0.65);
             overflow: hidden; z-index: 1002; border: 1px solid rgba(255, 255, 255, 0.15);
             padding: 10px; transform-origin: top left;
         }
@@ -157,8 +164,8 @@
         body.light-mode .menu-header { border-bottom-color: rgba(15,23,42,0.06); }
 
         .menu-options button {
-            width: 100%; padding: 13px 16px; border: none; background: transparent; cursor: pointer;
-            text-align: left; font-size: 14.5px; transition: all 0.3s ease; font-family: inherit;
+            width: 100%; padding: 12px 14px; border: none; background: transparent; cursor: pointer;
+            text-align: left; font-size: 14px; transition: all 0.3s ease; font-family: inherit;
             display: flex; align-items: center; gap: 14px; color: var(--text-light); font-weight: 600; border-radius: 12px;
         }
         .menu-options button .menu-icon {
@@ -171,7 +178,6 @@
         .menu-options button .menu-label { display: flex; flex-direction: column; gap: 1px; }
         .menu-options button .menu-label small { font-size: 11px; color: var(--text-dim); font-weight: 500; }
 
-        /* Theme Toggle */
         .theme-toggle {
             position: fixed; top: 18px; right: 18px; z-index: 1001;
             width: 48px; height: 48px; border-radius: 14px;
@@ -182,10 +188,12 @@
         .theme-toggle:hover { transform: rotate(20deg) scale(1.05); background: rgba(99,102,241,0.4); }
         body.light-mode .theme-toggle { background: rgba(255,255,255,0.9); color: #0f172a; border-color: rgba(15,23,42,0.1); }
 
-        /* Header */
+        /* ==========================================
+           HEADER
+           ========================================== */
         header {
             background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-            color: white; padding: 18px 10px; text-align: center; box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            color: white; padding: 20px 10px; text-align: center; box-shadow: 0 4px 30px rgba(0,0,0,0.3);
             position: sticky; top: 0; z-index: 900; border-bottom: var(--glass-border);
         }
         body.light-mode header { background: rgba(255,255,255,0.75); color: #0f172a; }
@@ -203,18 +211,20 @@
         @keyframes waveFlag { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(5deg); } }
         .national-simbol { width: 70px; height: auto; display: block; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
 
-        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 12px; gap: 6px; flex-wrap: wrap; }
+        nav ul { display: flex; justify-content: center; list-style: none; margin-top: 15px; gap: 6px; flex-wrap: wrap; }
         nav ul li a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; font-weight: 600; transition: 0.3s; padding: 6px 16px; border-radius: 20px; }
         body.light-mode nav ul li a { color: #475569; }
         nav ul li a:hover { color: var(--text-light); background: rgba(99, 102, 241, 0.15); }
         body.light-mode nav ul li a:hover { color: #0f172a; }
 
-        /* Hero */
+        /* ==========================================
+           HERO SECTION
+           ========================================== */
         .hero {
             min-height: 70vh; background: var(--bg-card); backdrop-filter: blur(16px);
-            margin: 25px auto; max-width: 1100px; border-radius: 30px;
+            margin: 30px auto; max-width: 1100px; border-radius: var(--radius-card);
             display: flex; align-items: center; justify-content: space-around;
-            padding: 40px 20px; flex-wrap: wrap; gap: 30px;
+            padding: 40px 25px; flex-wrap: wrap; gap: 40px;
             border: var(--glass-border); box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
         }
 
@@ -250,10 +260,12 @@
             text-transform: uppercase; letter-spacing: 3px;
         }
 
-        /* Quotes Slider */
+        /* ==========================================
+           QUOTES SLIDER
+           ========================================== */
         .quotes-slider-section {
-            max-width: 850px; margin: -10px auto 40px auto; padding: 30px 20px; background: var(--bg-card);
-            backdrop-filter: blur(16px); border-radius: 25px; box-shadow: var(--shadow-lg); border: var(--glass-border);
+            max-width: 850px; margin: 0 auto 40px auto; padding: 30px 25px; background: var(--bg-card);
+            backdrop-filter: blur(16px); border-radius: var(--radius-card); box-shadow: var(--shadow-lg); border: var(--glass-border);
             text-align: center; position: relative; overflow: hidden;
         }
         .quotes-slider-title { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
@@ -272,22 +284,26 @@
         .quote-dots span.active { width: 24px; border-radius: 6px; background: var(--gradient-1); }
 
         .more-quotes-btn {
-            margin-top: 18px; background: var(--gradient-1); background-size: 200% auto; color: #ffffff;
-            padding: 11px 26px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 13px;
+            margin-top: 20px; background: var(--gradient-1); background-size: 200% auto; color: #ffffff;
+            padding: 12px 28px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 13px;
             transition: all 0.4s ease; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); display: inline-flex; align-items: center; gap: 8px;
         }
         .more-quotes-btn:hover { background-position: right center; transform: translateY(-3px); box-shadow: 0 12px 28px rgba(236, 72, 153, 0.5); }
 
-        /* Sections */
+        /* ==========================================
+           SECTIONS (General)
+           ========================================== */
         section {
-            max-width: 950px; margin: 40px auto; padding: 40px 25px; background: var(--bg-card);
-            backdrop-filter: blur(16px); border-radius: 30px; text-align: center; box-shadow: var(--shadow-lg);
+            max-width: 950px; margin: 40px auto; padding: 40px 30px; background: var(--bg-card);
+            backdrop-filter: blur(16px); border-radius: var(--radius-card); text-align: center; box-shadow: var(--shadow-lg);
             border: var(--glass-border); opacity: 0; transform: translateY(35px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         section.reveal { opacity: 1; transform: translateY(0); }
-        section h2 { font-size: 28px; font-weight: 800; margin-bottom: 15px; background: linear-gradient(90deg, #6366f1, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        section h2 { font-size: 28px; font-weight: 800; margin-bottom: 20px; background: linear-gradient(90deg, #6366f1, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-        /* FULL WIDTH NEPAL SECTION */
+        /* ==========================================
+           FULL WIDTH NEPAL SECTION (CLEAN)
+           ========================================== */
         #nepal-section {
             max-width: 100vw;
             width: 100vw;
@@ -302,12 +318,14 @@
             right: 50%;
             margin-left: -50vw;
             margin-right: -50vw;
+            opacity: 1; /* Override general section reveal */
+            transform: none;
         }
         .nepal-full-title {
             text-align: center;
             font-size: 32px;
             font-weight: 800;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             background: linear-gradient(90deg, #ef4444, #f59e0b, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -330,7 +348,9 @@
             display: block;
         }
 
-        /* Social Bar */
+        /* ==========================================
+           SOCIAL BAR (FIXED BOTTOM)
+           ========================================== */
         .fixed-social-bar {
             position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center;
@@ -344,10 +364,12 @@
         body.light-mode .fixed-social-bar a { color: #0f172a; background: rgba(15,23,42,0.05); }
         .fixed-social-bar a:hover { background: var(--primary); color: #ffffff; transform: translateY(-5px) scale(1.1); box-shadow: 0 10px 22px rgba(99,102,241,0.5); }
 
-        /* Contact Info & Interactive Links */
+        /* ==========================================
+           CONTACT INFO & INTERACTIVE
+           ========================================== */
         .contact-info { text-align: left; display: inline-block; margin-top: 15px; width: 100%; max-width: 480px; background: rgba(15, 23, 42, 0.5); padding: 25px; border-radius: 20px; border: var(--glass-border); }
         body.light-mode .contact-info { background: rgba(255,255,255,0.7); }
-        .contact-info p { margin-bottom: 16px; font-size: 15px; position: relative; }
+        .contact-info p { margin-bottom: 18px; font-size: 15px; position: relative; }
         .contact-info p i { color: var(--primary); margin-right: 8px; font-size: 16px; }
 
         .interactive-link {
@@ -360,7 +382,7 @@
         }
         .interactive-link:hover { color: var(--accent); }
 
-        /* Phone Options Modal/Dropdown */
+        /* Phone Options Modal */
         .phone-options-modal {
             display: none;
             gap: 10px;
@@ -404,17 +426,19 @@
         .loc-modal a:hover { background: var(--primary); color: white; transform: translateX(4px); }
         .credit-text { font-size: 12px; color: var(--text-dim); font-style: italic; margin-top: 8px; }
 
-        footer { background: rgba(15, 23, 42, 0.9); color: var(--text-dim); padding: 20px 0 25px 0; margin-top: 40px; text-align: center; border-top: var(--glass-border); font-size: 14px; }
+        footer { background: rgba(15, 23, 42, 0.9); color: var(--text-dim); padding: 25px 0; margin-top: 40px; text-align: center; border-top: var(--glass-border); font-size: 14px; }
         body.light-mode footer { background: rgba(255,255,255,0.85); }
 
-        /* Chatbot */
-        #nbn-chat-wrapper { position: fixed; bottom: 75px; right: 25px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.4s ease; }
+        /* ==========================================
+           CHATBOT & BACK TO TOP (CLEAN ALIGNMENT)
+           ========================================== */
+        #nbn-chat-wrapper { position: fixed; bottom: 85px; right: 25px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.4s ease; }
         #nbn-chat-wrapper.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        #nbn-chat-btn { background: var(--gradient-1); color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.35s ease; }
+        #nbn-chat-btn { background: var(--gradient-1); color: white; padding: 12px 22px; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.35s ease; }
         #nbn-chat-btn:hover { transform: translateY(-3px) scale(1.03); }
 
-        #nbn-chat-window { position: fixed; bottom: 135px; right: 25px; width: 320px; height: 450px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: var(--glass-border); }
+        #nbn-chat-window { position: fixed; bottom: 140px; right: 25px; width: 330px; height: 450px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: var(--glass-border); }
         body.light-mode #nbn-chat-window { background: rgba(255,255,255,0.98); }
 
         #nbn-chat-header { background: rgba(30, 41, 59, 0.8); color: white; padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: var(--glass-border); }
@@ -431,11 +455,11 @@
         body.light-mode .ai-msg { background: rgba(99,102,241,0.1); }
 
         #trans-control { padding: 8px; background: rgba(30, 41, 59, 0.6); text-align: center; border-top: var(--glass-border); }
-        #trans-btn { background: rgba(255,255,255,0.05); color: var(--text-light); padding: 5px 14px; font-size: 11px; border: var(--glass-border); border-radius: 20px; cursor: pointer; transition: all 0.3s ease; }
+        #trans-btn { background: rgba(255,255,255,0.05); color: var(--text-light); padding: 6px 16px; font-size: 11px; border: var(--glass-border); border-radius: 20px; cursor: pointer; transition: all 0.3s ease; }
         #trans-btn:hover { background: var(--primary); color: #fff; }
 
         #nbn-chat-footer { padding: 12px; display: flex; gap: 8px; background: rgba(30, 41, 59, 0.8); border-top: var(--glass-border); }
-        #nbn-input { flex: 1; background: rgba(15, 23, 42, 0.8); border: var(--glass-border); color: white; padding: 8px 14px; border-radius: 20px; outline: none; font-size: 13px; }
+        #nbn-input { flex: 1; background: rgba(15, 23, 42, 0.8); border: var(--glass-border); color: white; padding: 10px 14px; border-radius: 20px; outline: none; font-size: 13px; }
         body.light-mode #nbn-input { background: rgba(255,255,255,0.9); color: #0f172a; }
 
         #nbn-chat-footer button { background: var(--primary); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; transition: all 0.3s ease; }
@@ -445,7 +469,7 @@
 
         /* Back to top */
         #back-top {
-            position: fixed; bottom: 75px; left: 25px; width: 46px; height: 46px; border-radius: 50%;
+            position: fixed; bottom: 85px; left: 25px; width: 46px; height: 46px; border-radius: 50%;
             background: var(--gradient-1); color: white; border: none; cursor: pointer; display: grid; place-items: center;
             font-size: 16px; z-index: 998; box-shadow: 0 8px 25px rgba(99,102,241,0.5); opacity: 0; visibility: hidden;
             transform: translateY(15px); transition: all 0.4s ease;
@@ -453,11 +477,13 @@
         #back-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
         #back-top:hover { transform: translateY(-4px) scale(1.08); }
 
-        /* Responsive */
+        /* ==========================================
+           RESPONSIVE (Mobile/Tablet Cleanup)
+           ========================================== */
         @media (max-width: 768px) {
             .profile-wrapper { max-width: 220px; }
             .hero-author-name { font-size: 20px; }
-            .hero { padding: 25px 15px; margin: 15px 10px; }
+            .hero { padding: 25px 15px; margin: 15px 10px; gap: 20px; }
             .quote-text { font-size: 16px; }
             section { margin: 20px 10px; padding: 25px 15px; }
             .nepal-flag { width: 140px; }
@@ -467,8 +493,10 @@
             #back-top { left: 15px; }
             .fixed-social-bar { gap: 12px; }
             .fixed-social-bar a { width: 38px; height: 38px; font-size: 16px; }
-            .nepal-iframe-container { height: 75vh; }
+            .nepal-iframe-container { height: 75vh; min-height: 500px; }
             .nepal-full-title { font-size: 24px; }
+            .menu-options { width: 260px; left: 5px; }
+            .contact-action-btn { flex: 1 1 100%; } /* Stack buttons on mobile */
         }
     </style>
 </head>
