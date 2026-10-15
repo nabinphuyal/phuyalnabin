@@ -386,7 +386,6 @@
         }).addTo(map);
 
         // 2. FULL DATABASE (All 77 Districts with Local Levels)
-        // Note: This is the complete database. It is large but necessary for full functionality.
         const nepal77Database = {
             "Taplejung": { name: "ताप्लेजुङ", province: "कोशी प्रदेश", headquarter: "फुङलिङ", palikas: [
                 { name: "फुङलिङ नगरपालिका", type: "नगरपालिका", spots: ["पाथीभरा देवी मन्दिर", "फुङफुङ्गे झरना"] },
@@ -1296,7 +1295,7 @@
             ]}
         };
 
-        // 3. Load Map & Fix Name Issue
+        // 3. Load Map & Fix Name Issue (Using a GeoJSON with Nepali Names)
         let geojsonLayer;
 
         const provinceColors = {
@@ -1309,34 +1308,16 @@
             "सुदूरपश्चिम प्रदेश": "#14b8a6"
         };
 
-        // Helper to find Nepali Name from English GeoJSON Name
-        function getNepaliName(engName) {
-            if (!engName) return "Unknown";
-            for (let key in nepal77Database) {
-                if (key.toLowerCase() === engName.toLowerCase() || 
-                    nepal77Database[key].name === engName) {
-                    return nepal77Database[key].name;
-                }
-            }
-            for (let key in nepal77Database) {
-                if (engName.toLowerCase().includes(key.toLowerCase()) || 
-                    key.toLowerCase().includes(engName.toLowerCase())) {
-                    return nepal77Database[key].name;
-                }
-            }
-            return engName;
-        }
-
+        // Use a GeoJSON that has Nepali names directly
         fetch('https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-districts.geojson')
             .then(res => res.json())
             .then(data => {
                 geojsonLayer = L.geoJSON(data, {
                     style: (feature) => {
-                        const engName = feature.properties.DIST_NAME || feature.properties.name || "";
-                        const nepName = getNepaliName(engName);
+                        const distName = feature.properties.DIST_NAME || feature.properties.name || "";
                         let province = "कोशी प्रदेश";
                         for(let key in nepal77Database) {
-                            if(nepal77Database[key].name === nepName) {
+                            if(nepal77Database[key].name === distName || key.toLowerCase() === distName.toLowerCase()) {
                                 province = nepal77Database[key].province;
                                 break;
                             }
@@ -1351,10 +1332,16 @@
                         };
                     },
                     onEachFeature: (feature, layer) => {
-                        const engName = feature.properties.DIST_NAME || feature.properties.name || "District";
-                        const nepName = getNepaliName(engName);
-                        
-                        layer.bindTooltip(nepName, { 
+                        const distName = feature.properties.DIST_NAME || feature.properties.name || "District";
+                        let nepaliName = distName;
+                        for(let key in nepal77Database) {
+                            if(nepal77Database[key].name === distName || key.toLowerCase() === distName.toLowerCase()) {
+                                nepaliName = nepal77Database[key].name;
+                                break;
+                            }
+                        }
+                        // Permanent label with Nepali Name
+                        layer.bindTooltip(nepaliName, { 
                             permanent: true, 
                             direction: "center", 
                             className: 'district-label',
@@ -1371,15 +1358,15 @@
                             },
                             click: (e) => {
                                 map.fitBounds(e.target.getBounds(), { padding: [50, 50] });
-                                renderDistrictDetails(nepName);
+                                renderDistrictDetails(nepaliName);
                             }
                         });
                     }
                 }).addTo(map);
             })
-            .catch(err => console.log("Error loading map:", err));
+            .catch(err => console.log("GIS Map Fetching Error:", err));
 
-        // 4. Render Details
+        // 4. Render Sidebar Information
         function renderDistrictDetails(queryKey) {
             document.getElementById('defaultState').style.display = 'none';
             const container = document.getElementById('dynamicContent');
@@ -1398,7 +1385,15 @@
             }
 
             if (!matchedKey) {
-                container.innerHTML = `<div class="detail-card"><div class="district-header"><span class="district-title">${queryKey}</span></div><p>डाटा भेटिएन।</p></div>`;
+                container.innerHTML = `
+                    <div class="detail-card">
+                        <div class="district-header">
+                            <span class="district-title">${queryKey}</span>
+                            <span class="badge">नेपाल</span>
+                        </div>
+                        <p style="color: #cbd5e1;">यस जिल्लाको नक्सा डाटा छनोट भयो। विस्तृत स्थानीय तहहरू सुचीबद्ध हुँदैछन्...</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -1418,7 +1413,7 @@
                         <i class="fa-solid fa-chevron-down" id="icon-${idx}" style="transition: 0.3s;"></i>
                     </div>
                     <div class="palika-detail" id="palika-detail-${idx}" style="display: none;">
-                        <span style="color: #fbbf24; font-size: 0.85rem; font-weight: 600; display:block; margin-bottom: 8px;"><i class="fa-solid fa-camera"></i> मुख्य आकर्षणहरू:</span>
+                        <span style="color: #fbbf24; font-size: 0.85rem; font-weight: 600; display:block; margin-bottom: 8px;"><i class="fa-solid fa-camera"></i> मुख्य आकर्षणहरू (क्लिक गर्नुहोस् - गुगल म्याप):</span>
                         <div>${spotsHTML}</div>
                     </div>
                 `;
@@ -1434,6 +1429,7 @@
                             <span class="special-badge">गृह जिल्ला</span>
                         </div>
                         <div class="video-container">
+                            <!-- यहाँ तपाईंले YouTube भिडियोको ID राख्न सक्नुहुन्छ। जस्तै: 'dQw4w9WgXcQ' -->
                             <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
                         </div>
                     </div>
@@ -1446,15 +1442,21 @@
                         <span class="district-title">${data.name} ${isBhojpur ? '<span class="special-badge">🏠 गृह जिल्ला</span>' : ''}</span>
                         <span class="badge">${data.province}</span>
                     </div>
-                    <p style="margin-bottom: 6px; color: #cbd5e1;"><strong>सदरमुकाम:</strong> ${data.headquarter}</p>
-                    <p style="color: #cbd5e1;"><strong>स्थानीय तह:</strong> ${data.palikas.length}</p>
-                    <strong style="color: #38bdf8; display:block; margin-top: 15px; font-size: 1.1rem;"><i class="fa-solid fa-building"></i> स्थानीय तह र पर्यटकीय स्थलहरू:</strong>
-                    <div class="palika-list">${palikaHTML}</div>
+                    <p style="margin-bottom: 6px; font-size: 0.95rem; color: #cbd5e1;"><strong>सदरमुकाम:</strong> ${data.headquarter}</p>
+                    <p style="font-size: 0.95rem; margin-bottom: 10px; color: #cbd5e1;"><strong>स्थानीय तहको सङ्ख्या:</strong> ${data.palikas.length}</p>
+                    
+                    <strong style="color: #38bdf8; display:block; margin-top: 15px; font-size: 1.1rem;">
+                        <i class="fa-solid fa-building"></i> स्थानीय तह र पर्यटकीय स्थलहरू:
+                    </strong>
+                    <div class="palika-list">
+                        ${palikaHTML}
+                    </div>
                     ${videoHTML}
                 </div>
             `;
         }
 
+        // Toggle Accordion Details for Palikas
         function togglePalikaDetail(index) {
             const el = document.getElementById(`palika-detail-${index}`);
             const icon = document.getElementById(`icon-${index}`);
@@ -1467,6 +1469,7 @@
             }
         }
 
+        // Live Search Handler
         function searchLocation() {
             const q = document.getElementById('searchInput').value.trim().toLowerCase();
             if (q.length >= 2) {
@@ -1476,13 +1479,27 @@
                         renderDistrictDetails(key);
                         if(geojsonLayer){
                             geojsonLayer.eachLayer(layer => {
-                                const engName = layer.feature.properties.DIST_NAME || layer.feature.properties.name;
-                                const nepName = getNepaliName(engName);
+                                const distName = layer.feature.properties.DIST_NAME || layer.feature.properties.name;
+                                let nepName = distName;
+                                for(let k in nepal77Database) {
+                                    if(nepal77Database[k].name === distName || k.toLowerCase() === distName.toLowerCase()) {
+                                        nepName = nepal77Database[k].name;
+                                        break;
+                                    }
+                                }
                                 if(nepName === item.name){
                                     map.fitBounds(layer.getBounds(), { padding: [50, 50] });
+                                    layer.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.9 });
+                                    setTimeout(() => geojsonLayer.resetStyle(layer), 3000);
                                 }
                             });
                         }
+                        break;
+                    }
+                    // Search in Palikas
+                    const pMatch = item.palikas.find(p => p.name.includes(q));
+                    if(pMatch) {
+                        renderDistrictDetails(key);
                         break;
                     }
                 }
