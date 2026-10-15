@@ -6,24 +6,17 @@
     <meta name="author" content="Nabin Phuyal" />
     <meta name="description" content="Nabin Phuyal - Nepali poet, writer and web designer from Bhojpur, Nepal. Explore poetry, famous quotes and connect." />
     <meta name="keywords" content="Nabin Phuyal, Nabin Kanxo, Nepali poet, Bhojpur, Sahitya, Quotes, Web Designer" />
-    
-    <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Nabin Phuyal - Official Website" />
     <meta property="og:description" content="Welcome to the official website of Nabin Phuyal." />
     <meta property="og:type" content="website" />
-    
     <title>Nabin Phuyal - Official Website</title>
 
-    <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
 
     <style>
-        /* ==========================================
-           ADVANCED CLEAN ROOT VARIABLES & THEME SETUP
-           ========================================== */
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
@@ -68,7 +61,6 @@
             transition: background 0.4s ease, color 0.4s ease;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
@@ -77,7 +69,6 @@
         }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #4f46e5, #db2777); }
 
-        /* Cinematic Aurora Background */
         .aurora { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
         .aurora span {
             position: absolute; border-radius: 50%;
@@ -95,7 +86,6 @@
             66% { transform: translate(-50px, 70px) scale(0.9); }
         }
 
-        /* Preloader */
         #preloader {
             position: fixed; inset: 0; z-index: 10000;
             background: #090d16; display: grid; place-items: center;
@@ -115,9 +105,166 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ==========================================
-           CLEAN TOP HEADER & 3-LINE DRAWER MENU
-           ========================================== */
+        /* ============ WELCOME SLIDING BANNER ============ */
+        .welcome-banner-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .welcome-banner-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(99,102,241,0.97), rgba(168,85,247,0.97), rgba(236,72,153,0.97));
+            color: #fff;
+            padding: 28px 40px;
+            border-radius: 0 60px 60px 0;
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: 0 20px 60px rgba(99,102,241,0.6);
+            transform: translateX(-120%);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .welcome-banner-overlay.show .welcome-banner {
+            transform: translateX(0);
+        }
+        .welcome-banner i {
+            font-size: 1.3em;
+            animation: waveHand 1.5s ease-in-out infinite;
+        }
+        @keyframes waveHand {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        @media (max-width: 600px) {
+            .welcome-banner {
+                padding: 20px 22px;
+                font-size: 0.95rem;
+                border-radius: 0 40px 40px 0;
+                white-space: normal;
+            }
+        }
+
+        /* ============ THANKS VISIT POPUP ============ */
+        .thanks-popup {
+            position: fixed;
+            inset: 0;
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .thanks-popup.show {
+            display: flex;
+            opacity: 1;
+        }
+        .thanks-card {
+            background: linear-gradient(145deg, rgba(18,24,38,0.98), rgba(9,13,22,0.98));
+            border: 1px solid rgba(99,102,241,0.4);
+            padding: 45px 35px;
+            border-radius: 28px;
+            text-align: center;
+            max-width: 440px;
+            margin: 0 20px;
+            box-shadow: 0 30px 80px rgba(99,102,241,0.5), 0 0 0 1px rgba(255,255,255,0.08) inset;
+            transform: scale(0.7);
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        body.light-mode .thanks-card {
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            box-shadow: 0 30px 80px rgba(99,102,241,0.35);
+        }
+        .thanks-popup.show .thanks-card {
+            transform: scale(1);
+        }
+        .thanks-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 30px;
+            padding: 2px;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #6366f1);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderFlow 4s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+        .thanks-emoji {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounceEmoji 1.5s ease-in-out infinite;
+        }
+        @keyframes bounceEmoji {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .thanks-card h3 {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .thanks-card p {
+            font-size: 15px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+        .thanks-card .visit-again {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 14px;
+            letter-spacing: 0.5px;
+        }
+        .thanks-close-btn {
+            margin-top: 22px;
+            background: var(--gradient-1);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(99,102,241,0.45);
+            transition: 0.3s;
+        }
+        .thanks-close-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(236,72,153,0.55);
+        }
+
+        /* ============ HEADER ============ */
         header {
             background: rgba(9, 13, 22, 0.8); backdrop-filter: blur(20px);
             color: white; padding: 16px 22px; text-align: center;
@@ -141,7 +288,6 @@
         .hamburger-line { width: 20px; height: 2px; background: var(--text-light); border-radius: 4px; transition: 0.3s; }
         body.light-mode .hamburger-line { background: #0f172a; }
 
-        /* Left Side Dark Navigation Drawer Overlay */
         .drawer-overlay {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(6px); z-index: 2000;
@@ -188,7 +334,6 @@
         }
         .drawer-theme-btn:hover { background: var(--primary); }
 
-        /* Center Flag & Title in Header */
         .header-center-info { display: flex; align-items: center; gap: 12px; }
         .interesting-text {
             font-size: clamp(0.95rem, 2vw, 1.4rem); font-weight: 800;
@@ -204,9 +349,7 @@
             .national-simbol, .animated-flag { display: none; }
         }
 
-        /* ==========================================
-           HERO SECTION (PASSPORT PHOTO CARD)
-           ========================================== */
+        /* ============ HERO ============ */
         .hero {
             min-height: 70vh; background: var(--bg-card); backdrop-filter: blur(25px);
             margin: 30px auto; max-width: 1050px; border-radius: var(--radius-card);
@@ -215,35 +358,94 @@
             position: relative; overflow: hidden;
         }
 
-        .hero-image-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; max-width: 320px; z-index: 1; }
+        .hero-image-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; max-width: 380px; z-index: 1; }
         
+        /* --- ADVANCED HOME PHOTO (slightly blur + bigger on large screens) --- */
         .profile-wrapper {
-            position: relative; width: 190px; height: 250px; border-radius: 18px; padding: 5px;
-            background: linear-gradient(135deg, rgba(99,102,241,0.85), rgba(236,72,153,0.85));
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(99,102,241,0.35); 
-            transition: transform 0.3s ease, box-shadow 0.4s ease; cursor: pointer;
+            position: relative;
+            width: 220px;
+            height: 290px;
+            border-radius: 20px;
+            padding: 5px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.9), rgba(236,72,153,0.9));
+            box-shadow: 0 25px 50px rgba(0,0,0,0.65), 0 0 45px rgba(99,102,241,0.4);
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+            cursor: pointer;
         }
-        .profile-wrapper:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 25px 50px rgba(99,102,241,0.5); }
+        .profile-wrapper:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 35px 70px rgba(99,102,241,0.6), 0 0 60px rgba(236,72,153,0.45);
+        }
+        .profile-inner-frame {
+            width: 100%; height: 100%; border-radius: 15px; overflow: hidden;
+            position: relative; background: #0f172a;
+        }
+        .profile-pic {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center top;
+            transition: transform 0.6s ease, filter 0.5s ease;
+            filter: blur(0.9px) brightness(1.03);
+        }
+        .profile-wrapper:hover .profile-pic {
+            transform: scale(1.08);
+            filter: blur(0px) brightness(1.08);
+        }
+        /* Large screen size boost */
+        @media (min-width: 900px) {
+            .profile-wrapper { width: 260px; height: 340px; }
+            .hero-image-container { max-width: 440px; }
+        }
+        @media (max-width: 500px) {
+            .profile-wrapper { width: 185px; height: 245px; }
+        }
 
-        .profile-inner-frame { width: 100%; height: 100%; border-radius: 14px; overflow: hidden; position: relative; background: #0f172a; }
-        .profile-pic { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.5s ease; }
-        .profile-wrapper:hover .profile-pic { transform: scale(1.06); }
+        /* Click hint badge */
+        .photo-click-hint {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(18,24,38,0.96);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #a5b4fc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.55);
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        body.light-mode .photo-click-hint { background: rgba(255,255,255,0.96); color: #4f46e5; }
 
         .status-badge {
-            position: absolute; bottom: -10px; background: rgba(18, 24, 38, 0.95);
-            border: 1px solid rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 30px;
-            font-size: 10.5px; font-weight: 700; color: #4ade80; display: flex; align-items: center; gap: 6px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            position: absolute; top: -12px; right: -12px;
+            background: rgba(18, 24, 38, 0.95);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 5px 13px; border-radius: 30px;
+            font-size: 10.5px; font-weight: 700; color: #4ade80;
+            display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
         }
-        .status-dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
+        .status-dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: pulseDot 2s infinite; }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.3); }
+        }
 
         .hero-author-name {
-            margin-top: 22px; font-size: 24px; font-weight: 800; background: linear-gradient(90deg, #6366f1, #ec4899);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 3px;
+            margin-top: 25px; font-size: 26px; font-weight: 800;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 3px;
         }
         .author-subtitle { font-size: 12.5px; font-weight: 600; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; margin-top: -12px; }
 
-        /* Overtake Banner */
         .overtake-wrapper {
             display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
             background: rgba(18, 24, 38, 0.7); padding: 12px 24px; border-radius: 50px; border: var(--glass-border);
@@ -256,9 +458,7 @@
         .s { font-size: 14.5px; font-weight: 800; color: #facc15; }
         .d { font-size: 14.5px; font-weight: 800; color: #f87171; }
 
-        /* ==========================================
-           QUOTES SLIDER SECTION
-           ========================================== */
+        /* ============ QUOTES ============ */
         .quotes-slider-section {
             max-width: 850px; margin: 0 auto 40px auto; padding: 32px 25px; background: var(--bg-card);
             backdrop-filter: blur(25px); border-radius: var(--radius-card); box-shadow: var(--shadow-lg); border: var(--glass-border);
@@ -283,9 +483,6 @@
         }
         .more-quotes-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(236, 72, 153, 0.5); }
 
-        /* ==========================================
-           SECTIONS (Contact)
-           ========================================== */
         section {
             max-width: 900px; margin: 40px auto; padding: 40px 30px; background: var(--bg-card);
             backdrop-filter: blur(25px); border-radius: var(--radius-card); text-align: center; box-shadow: var(--shadow-lg);
@@ -318,9 +515,6 @@
         .loc-modal a:hover { background: var(--primary); color: white; }
         .credit-text { font-size: 12px; color: var(--text-dim); font-style: italic; margin-top: 8px; }
 
-        /* ==========================================
-           FULL WIDTH NEPAL SECTION
-           ========================================== */
         #nepal-section {
             max-width: 100vw; width: 100vw; margin: 60px 0 0 0; padding: 40px 0 0 0;
             background: transparent; box-shadow: none; border: none; border-radius: 0;
@@ -330,9 +524,6 @@
         .nepal-iframe-container { width: 100vw; height: 85vh; min-height: 550px; border: none; margin: 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); background: rgba(9, 13, 22, 0.85); overflow: hidden; }
         .nepal-iframe-container iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* ==========================================
-           FIXED SOCIAL BAR
-           ========================================== */
         .fixed-social-bar {
             position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(9, 13, 22, 0.94);
             backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center;
@@ -346,9 +537,6 @@
         body.light-mode .fixed-social-bar a { color: #0f172a; background: rgba(15,23,42,0.04); }
         .fixed-social-bar a:hover { background: var(--primary); color: #ffffff; transform: translateY(-4px); }
 
-        /* ==========================================
-           CHATBOT & BACK TO TOP
-           ========================================== */
         #nbn-chat-wrapper { position: fixed; bottom: 85px; right: 20px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(15px); transition: 0.35s; }
         #nbn-chat-wrapper.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
@@ -387,9 +575,25 @@
 
         footer { background: rgba(9, 13, 22, 0.9); color: var(--text-dim); padding: 25px 0; margin-top: 40px; text-align: center; border-top: var(--glass-border); font-size: 13.5px; }
         body.light-mode footer { background: rgba(255,255,255,0.85); }
+
+        /* Scroll progress bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+            z-index: 10002;
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(99,102,241,0.8);
+        }
     </style>
 </head>
 <body>
+
+<!-- Scroll Progress Bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- Aurora BG -->
 <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -400,10 +604,31 @@
     <div class="loader-text">NABIN PHUYAL</div>
 </div>
 
-<!-- TOP HEADER & 3-LINE DRAWER MENU -->
+<!-- Welcome Sliding Banner -->
+<div class="welcome-banner-overlay" id="welcomeBanner">
+    <div class="welcome-banner">
+        <i class="fa-solid fa-hand-sparkles"></i>
+        <span>Welcome to Nabin Phuyal Website!</span>
+    </div>
+</div>
+
+<!-- Thanks Visit Popup -->
+<div class="thanks-popup" id="thanksPopup">
+    <div class="thanks-card">
+        <span class="thanks-emoji">🙏</span>
+        <h3>Thank You for Visiting!</h3>
+        <p>तपाईंको भ्रमणको लागि धन्यवाद!</p>
+        <p class="visit-again">✨ Visit Again ✨</p>
+        <p style="font-size:13px; margin-top:6px; color:#94a3b8;">— Nabin Phuyal</p>
+        <button class="thanks-close-btn" onclick="closeThanks()">
+            <i class="fa-solid fa-check"></i> Close
+        </button>
+    </div>
+</div>
+
+<!-- HEADER -->
 <header>
     <div class="header-left-group">
-        <!-- 3 Line Hamburger Button -->
         <div class="hamburger-btn" onclick="toggleDrawer()" role="button" aria-label="Open menu">
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
@@ -418,7 +643,7 @@
     </div>
 </header>
 
-<!-- Left Side Dark Drawer Navigation Menu (As requested from your screenshot style) -->
+<!-- DRAWER -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 <div class="drawer-menu" id="drawerMenu">
     <div class="drawer-header">
@@ -457,22 +682,25 @@
     </div>
 </div>
 
-<!-- HERO SECTION (PASSPORT PHOTO CARD) -->
+<!-- HERO -->
 <div class="hero" id="home">
     <div class="hero-image-container">
-        <div class="profile-wrapper" id="tiltCard">
+        <!-- Photo click opens about.html -->
+        <div class="profile-wrapper" id="tiltCard" onclick="window.location.href='about.html'" title="Click to view About Me">
             <div class="profile-inner-frame">
                 <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
             </div>
             <div class="status-badge">
                 <span class="status-dot"></span> Active Now
             </div>
+            <div class="photo-click-hint">
+                <i class="fa-solid fa-hand-pointer"></i> Tap for About Me
+            </div>
         </div>
         <div class="hero-author-name">NABIN PHUYAL</div>
         <div class="author-subtitle">Web Designer & Poet</div>
     </div>
 
-    <!-- Overtake Banner -->
     <div class="overtake-wrapper">
         <span class="speech">Overtake is interesting</span>
         <span class="s">BUT</span>
@@ -480,7 +708,7 @@
     </div>
 </div>
 
-<!-- Quotes Carousel -->
+<!-- QUOTES -->
 <div class="quotes-slider-section">
     <div class="quotes-slider-title">
         <i class="fa-solid fa-star"></i>
@@ -509,7 +737,7 @@
     </button>
 </div>
 
-<!-- Contact Section -->
+<!-- CONTACT -->
 <section id="contact">
     <h2>Contact Me</h2>
     <div class="contact-info">
@@ -550,7 +778,7 @@
     </div>
 </section>
 
-<!-- FULL-PAGE NEPAL SPECIAL SECTION -->
+<!-- NEPAL SPECIAL -->
 <section id="nepal-section">
     <h2 class="nepal-full-title">Nepal Special</h2>
     <div class="nepal-iframe-container">
@@ -563,7 +791,7 @@
     <i class="fa-solid fa-arrow-up"></i>
 </button>
 
-<!-- Chatbot Wrapper -->
+<!-- CHATBOT -->
 <div id="nbn-chat-wrapper">
     <div id="nbn-chat-btn" onclick="toggleNbnChat()">
         <i class="fa-solid fa-comment-dots"></i> <span>Question / Suggestion</span>
@@ -608,15 +836,35 @@
 </div>
 
 <script>
-/* ---------- Preloader ---------- */
+/* ============ PRELOADER + WELCOME BANNER ============ */
 window.addEventListener('load', () => {
     setTimeout(() => {
         const preloader = document.getElementById('preloader');
         if (preloader) preloader.classList.add('hide');
+
+        // Show welcome banner sliding from left
+        setTimeout(() => {
+            const banner = document.getElementById('welcomeBanner');
+            if (banner) {
+                banner.classList.add('show');
+                setTimeout(() => {
+                    banner.classList.remove('show');
+                }, 3200);
+            }
+        }, 300);
     }, 400);
 });
 
-/* ---------- 3-Line Drawer Menu Control ---------- */
+/* ============ SCROLL PROGRESS BAR ============ */
+window.addEventListener('scroll', () => {
+    const scrollProgress = document.getElementById('scrollProgress');
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    if (scrollProgress) scrollProgress.style.width = progress + '%';
+});
+
+/* ============ DRAWER ============ */
 function toggleDrawer() {
     document.getElementById('drawerMenu').classList.toggle('show');
     document.getElementById('drawerOverlay').classList.toggle('show');
@@ -627,7 +875,7 @@ function closeDrawer() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
-/* ---------- Theme Toggle ---------- */
+/* ============ THEME ============ */
 function toggleTheme() {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
@@ -644,7 +892,7 @@ function toggleTheme() {
     }
 })();
 
-/* ---------- Quote Carousel ---------- */
+/* ============ QUOTES ============ */
 let slideIndex = 0;
 const slides = document.getElementsByClassName('quote-slide');
 const dotsContainer = document.getElementById('quoteDots');
@@ -676,7 +924,7 @@ function autoSlideQuotes() {
 }
 setTimeout(autoSlideQuotes, 4500);
 
-/* ---------- Scroll Events (Chatbot & Back to Top) ---------- */
+/* ============ SCROLL EVENTS ============ */
 window.addEventListener('scroll', () => {
     const chatWrapper = document.getElementById('nbn-chat-wrapper');
     const backTop = document.getElementById('back-top');
@@ -693,7 +941,38 @@ window.addEventListener('scroll', () => {
     }
 });
 
-/* ---------- Contact Modals ---------- */
+/* ============ THANKS POPUP ON BOTTOM ============ */
+let thanksShown = false;
+function showThanksPopup() {
+    if (!thanksShown) {
+        const popup = document.getElementById('thanksPopup');
+        if (popup) {
+            popup.classList.add('show');
+            thanksShown = true;
+        }
+    }
+}
+function closeThanks() {
+    const popup = document.getElementById('thanksPopup');
+    if (popup) popup.classList.remove('show');
+}
+
+// Detect when user reaches near bottom
+window.addEventListener('scroll', () => {
+    if (thanksShown) return;
+    const scrollPosition = window.scrollY + window.innerHeight;
+    const pageHeight = document.documentElement.scrollHeight;
+    if (pageHeight - scrollPosition < 80) {
+        showThanksPopup();
+    }
+});
+
+// Also show if user stays for a long time (optional)
+setTimeout(() => {
+    if (!thanksShown) showThanksPopup();
+}, 60000); // 60 seconds
+
+/* ============ CONTACT MODALS ============ */
 function togglePhoneModal() {
     const pModal = document.getElementById('phoneModal');
     if (pModal) pModal.classList.toggle('show');
@@ -703,7 +982,7 @@ function toggleLoc() {
     if (modal) modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
 }
 
-/* ---------- Chatbot Logic ---------- */
+/* ============ CHATBOT ============ */
 let isNepali = true;
 const languages = {
     np: { welcome: "वेबसाईट प्रति केहि सल्लाह वा सुझाव छ भने यहाँ लेख्नुहोस्।", placeholder: "यहाँ लेख्नुहोस्...", btn: "English मा हेर्नुहोस्" },
