@@ -385,7 +385,7 @@
             attribution: '&copy; OpenStreetMap &copy; CARTO'
         }).addTo(map);
 
-        // 2. FULL DATABASE (All 77 Districts with Local Levels)
+        // 2. FULL DATABASE (All 77 Districts)
         const nepal77Database = {
             "Taplejung": { name: "ताप्लेजुङ", province: "कोशी प्रदेश", headquarter: "फुङलिङ", palikas: [
                 { name: "फुङलिङ नगरपालिका", type: "नगरपालिका", spots: ["पाथीभरा देवी मन्दिर", "फुङफुङ्गे झरना"] },
@@ -1295,7 +1295,7 @@
             ]}
         };
 
-        // 3. Load Map & Fix Name Issue (Using a GeoJSON with Nepali Names)
+        // 3. Load Map & Fix Name Issue
         let geojsonLayer;
 
         const provinceColors = {
@@ -1308,16 +1308,34 @@
             "सुदूरपश्चिम प्रदेश": "#14b8a6"
         };
 
-        // Use a GeoJSON that has Nepali names directly
+        // Helper to find Nepali Name from English GeoJSON Name
+        function getNepaliName(engName) {
+            if (!engName) return "Unknown";
+            for (let key in nepal77Database) {
+                if (key.toLowerCase() === engName.toLowerCase() || 
+                    nepal77Database[key].name === engName) {
+                    return nepal77Database[key].name;
+                }
+            }
+            for (let key in nepal77Database) {
+                if (engName.toLowerCase().includes(key.toLowerCase()) || 
+                    key.toLowerCase().includes(engName.toLowerCase())) {
+                    return nepal77Database[key].name;
+                }
+            }
+            return engName;
+        }
+
         fetch('https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-districts.geojson')
             .then(res => res.json())
             .then(data => {
                 geojsonLayer = L.geoJSON(data, {
                     style: (feature) => {
-                        const distName = feature.properties.DIST_NAME || feature.properties.name || "";
+                        const engName = feature.properties.DIST_NAME || feature.properties.name || "";
+                        const nepName = getNepaliName(engName);
                         let province = "कोशी प्रदेश";
                         for(let key in nepal77Database) {
-                            if(nepal77Database[key].name === distName || key.toLowerCase() === distName.toLowerCase()) {
+                            if(nepal77Database[key].name === nepName) {
                                 province = nepal77Database[key].province;
                                 break;
                             }
@@ -1332,16 +1350,11 @@
                         };
                     },
                     onEachFeature: (feature, layer) => {
-                        const distName = feature.properties.DIST_NAME || feature.properties.name || "District";
-                        let nepaliName = distName;
-                        for(let key in nepal77Database) {
-                            if(nepal77Database[key].name === distName || key.toLowerCase() === distName.toLowerCase()) {
-                                nepaliName = nepal77Database[key].name;
-                                break;
-                            }
-                        }
+                        const engName = feature.properties.DIST_NAME || feature.properties.name || "District";
+                        const nepName = getNepaliName(engName);
+                        
                         // Permanent label with Nepali Name
-                        layer.bindTooltip(nepaliName, { 
+                        layer.bindTooltip(nepName, { 
                             permanent: true, 
                             direction: "center", 
                             className: 'district-label',
@@ -1358,7 +1371,7 @@
                             },
                             click: (e) => {
                                 map.fitBounds(e.target.getBounds(), { padding: [50, 50] });
-                                renderDistrictDetails(nepaliName);
+                                renderDistrictDetails(nepName);
                             }
                         });
                     }
@@ -1391,7 +1404,7 @@
                             <span class="district-title">${queryKey}</span>
                             <span class="badge">नेपाल</span>
                         </div>
-                        <p style="color: #cbd5e1;">यस जिल्लाको नक्सा डाटा छनोट भयो। विस्तृत स्थानीय तहहरू सुचीबद्ध हुँदैछन्...</p>
+                        <p style="color: #cbd5e1;">यस जिल्लाको विवरण भेटिएन। कृपया अर्को जिल्ला छान्नुहोस्।</p>
                     </div>
                 `;
                 return;
@@ -1429,7 +1442,6 @@
                             <span class="special-badge">गृह जिल्ला</span>
                         </div>
                         <div class="video-container">
-                            <!-- यहाँ तपाईंले YouTube भिडियोको ID राख्न सक्नुहुन्छ। जस्तै: 'dQw4w9WgXcQ' -->
                             <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
                         </div>
                     </div>
@@ -1479,14 +1491,8 @@
                         renderDistrictDetails(key);
                         if(geojsonLayer){
                             geojsonLayer.eachLayer(layer => {
-                                const distName = layer.feature.properties.DIST_NAME || layer.feature.properties.name;
-                                let nepName = distName;
-                                for(let k in nepal77Database) {
-                                    if(nepal77Database[k].name === distName || k.toLowerCase() === distName.toLowerCase()) {
-                                        nepName = nepal77Database[k].name;
-                                        break;
-                                    }
-                                }
+                                const engName = layer.feature.properties.DIST_NAME || layer.feature.properties.name;
+                                const nepName = getNepaliName(engName);
                                 if(nepName === item.name){
                                     map.fitBounds(layer.getBounds(), { padding: [50, 50] });
                                     layer.setStyle({ weight: 3, color: '#fbbf24', fillOpacity: 0.9 });
@@ -1494,12 +1500,6 @@
                                 }
                             });
                         }
-                        break;
-                    }
-                    // Search in Palikas
-                    const pMatch = item.palikas.find(p => p.name.includes(q));
-                    if(pMatch) {
-                        renderDistrictDetails(key);
                         break;
                     }
                 }
