@@ -218,28 +218,15 @@
         body.light-mode nav ul li a:hover { color: #0f172a; }
 
         /* ==========================================
-           HERO SECTION
+           HERO SECTION (CLEAN - NO MAP)
            ========================================== */
         .hero {
             min-height: 70vh; background: var(--bg-card); backdrop-filter: blur(16px);
             margin: 30px auto; max-width: 1100px; border-radius: var(--radius-card);
-            display: flex; align-items: center; justify-content: space-around;
-            padding: 40px 25px; flex-wrap: wrap; gap: 40px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 50px 25px; gap: 20px;
             border: var(--glass-border); box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
         }
-
-        .overtake-wrapper {
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 15px;
-            background: rgba(15, 23, 42, 0.6); padding: 10px 20px; border-radius: 50px; border: var(--glass-border); backdrop-filter: blur(10px);
-        }
-        body.light-mode .overtake-wrapper { background: rgba(255,255,255,0.7); }
-        .speech { font-size: 16px; font-weight: 600; color: #4ade80; }
-        .s { font-size: 16px; font-weight: 800; color: #facc15; }
-        .d { font-size: 16px; font-weight: 800; color: #f87171; }
-
-        .flag-container { display: flex; flex-direction: column; align-items: center; z-index: 1; }
-        .nepal-flag { width: 180px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); animation: floatMap 5s ease-in-out infinite; }
-        @keyframes floatMap { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
         .hero-image-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; max-width: 320px; z-index: 1; }
         .profile-wrapper {
@@ -259,6 +246,20 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             text-transform: uppercase; letter-spacing: 3px;
         }
+
+        /* Overtake Banner - Delayed Fade In */
+        .overtake-wrapper {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
+            background: rgba(15, 23, 42, 0.6); padding: 12px 25px; border-radius: 50px; border: var(--glass-border); backdrop-filter: blur(10px);
+            opacity: 0; transform: translateY(15px); animation: fadeInOvertake 1s ease forwards; animation-delay: 3s;
+            margin-top: 10px;
+        }
+        body.light-mode .overtake-wrapper { background: rgba(255,255,255,0.7); }
+        @keyframes fadeInOvertake { to { opacity: 1; transform: translateY(0); } }
+
+        .speech { font-size: 16px; font-weight: 600; color: #4ade80; }
+        .s { font-size: 16px; font-weight: 800; color: #facc15; }
+        .d { font-size: 16px; font-weight: 800; color: #f87171; }
 
         /* ==========================================
            QUOTES SLIDER
@@ -483,10 +484,9 @@
         @media (max-width: 768px) {
             .profile-wrapper { max-width: 220px; }
             .hero-author-name { font-size: 20px; }
-            .hero { padding: 25px 15px; margin: 15px 10px; gap: 20px; }
+            .hero { padding: 30px 15px; margin: 15px 10px; gap: 15px; }
             .quote-text { font-size: 16px; }
             section { margin: 20px 10px; padding: 25px 15px; }
-            .nepal-flag { width: 140px; }
             #nbn-chat-window { width: calc(100vw - 30px); right: 15px; bottom: 130px; }
             #nbn-chat-btn { font-size: 12px; padding: 10px 16px; }
             #nbn-chat-wrapper { right: 15px; }
@@ -583,16 +583,8 @@
     </nav>
 </header>
 
+<!-- HERO SECTION (CLEAN - NO MAP) -->
 <div class="hero" id="home">
-    <div class="flag-container">
-        <img src="nepal.png" alt="Nepal Map" class="nepal-flag" onerror="this.style.display='none'">
-        <div class="overtake-wrapper">
-            <span class="speech">Overtake is interesting</span>
-            <span class="s">BUT</span>
-            <span class="d">DANGEROUS</span>
-        </div>
-    </div>
-
     <div class="hero-image-container">
         <div class="profile-wrapper" id="tiltCard">
             <div class="bg-blur"></div>
@@ -600,6 +592,13 @@
             <div class="overlay"></div>
         </div>
         <div class="hero-author-name">NABIN PHUYAL</div>
+    </div>
+
+    <!-- Overtake Banner - Appears after 3 seconds -->
+    <div class="overtake-wrapper">
+        <span class="speech">Overtake is interesting</span>
+        <span class="s">BUT</span>
+        <span class="d">DANGEROUS</span>
     </div>
 </div>
 
