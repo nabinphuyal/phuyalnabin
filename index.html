@@ -23,7 +23,7 @@
             --secondary: #0ea5e9;
             --accent: #f59e0b;
             --bg-dark: #090d16;
-            --bg-card: rgba(18, 24, 38, 0.8);
+            --bg-card: rgba(18, 24, 38, 0.85);
             --text-light: #f8fafc;
             --text-dim: #94a3b8;
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
@@ -107,133 +107,64 @@
 
         /* ============ WELCOME SLIDING BANNER ============ */
         .welcome-banner-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+            display: flex; align-items: center; justify-content: flex-start;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        .welcome-banner-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
+        .welcome-banner-overlay.show { opacity: 1; visibility: visible; }
         .welcome-banner {
             background: linear-gradient(135deg, rgba(99,102,241,0.97), rgba(168,85,247,0.97), rgba(236,72,153,0.97));
-            color: #fff;
-            padding: 28px 40px;
-            border-radius: 0 60px 60px 0;
-            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
-            font-weight: 800;
-            letter-spacing: 1px;
-            box-shadow: 0 20px 60px rgba(99,102,241,0.6);
-            transform: translateX(-120%);
+            color: #fff; padding: 28px 40px; border-radius: 0 60px 60px 0;
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem); font-weight: 800; letter-spacing: 1px;
+            box-shadow: 0 20px 60px rgba(99,102,241,0.6); transform: translateX(-120%);
             transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            white-space: nowrap;
+            display: flex; align-items: center; gap: 15px; white-space: nowrap;
             border: 1px solid rgba(255,255,255,0.25);
         }
-        .welcome-banner-overlay.show .welcome-banner {
-            transform: translateX(0);
-        }
-        .welcome-banner i {
-            font-size: 1.3em;
-            animation: waveHand 1.5s ease-in-out infinite;
-        }
+        .welcome-banner-overlay.show .welcome-banner { transform: translateX(0); }
+        .welcome-banner i { font-size: 1.3em; animation: waveHand 1.5s ease-in-out infinite; }
         @keyframes waveHand {
             0%, 100% { transform: rotate(0deg); }
             25% { transform: rotate(20deg); }
             75% { transform: rotate(-10deg); }
         }
 
-        /* ============ THANKS VISIT POPUP (NON-INTRUSIVE CARD) ============ */
+        /* ============ THANKS VISIT POPUP ============ */
         .thanks-popup {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 10001;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(30px) scale(0.9);
+            position: fixed; bottom: 30px; right: 30px; z-index: 10001;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none; opacity: 0; transform: translateY(30px) scale(0.9);
             transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .thanks-popup.show {
-            pointer-events: auto;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+        .thanks-popup.show { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
         .thanks-card {
             background: linear-gradient(145deg, rgba(18,24,38,0.98), rgba(9,13,22,0.98));
-            border: 1px solid rgba(99,102,241,0.4);
-            padding: 25px 30px;
-            border-radius: 22px;
-            text-align: center;
-            max-width: 360px;
+            border: 1px solid rgba(99,102,241,0.4); padding: 25px 30px; border-radius: 22px;
+            text-align: center; max-width: 360px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08) inset;
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         body.light-mode .thanks-card {
             background: linear-gradient(145deg, #ffffff, #f1f5f9);
             box-shadow: 0 20px 50px rgba(99,102,241,0.3);
         }
-        .thanks-emoji {
-            font-size: 40px;
-            margin-bottom: 8px;
-            display: block;
-            animation: bounceEmoji 1.5s ease-in-out infinite;
-        }
-        @keyframes bounceEmoji {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
+        .thanks-emoji { font-size: 40px; margin-bottom: 8px; display: block; animation: bounceEmoji 1.5s ease-in-out infinite; }
+        @keyframes bounceEmoji { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .thanks-card h3 {
-            font-size: 20px;
-            font-weight: 800;
+            font-size: 20px; font-weight: 800;
             background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;
         }
-        .thanks-card p {
-            font-size: 13.5px;
-            color: var(--text-dim);
-            margin-bottom: 4px;
-        }
-        .thanks-card .visit-again {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-top: 8px;
-        }
+        .thanks-card p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 4px; }
+        .thanks-card .visit-again { font-size: 15px; font-weight: 700; color: var(--accent); margin-top: 8px; }
         .thanks-close-btn {
-            margin-top: 14px;
-            background: var(--gradient-1);
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            box-shadow: 0 6px 18px rgba(99,102,241,0.4);
-            transition: 0.3s;
+            margin-top: 14px; background: var(--gradient-1); color: #fff; border: none;
+            padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer;
+            box-shadow: 0 6px 18px rgba(99,102,241,0.4); transition: 0.3s;
         }
-        .thanks-close-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(236,72,153,0.5);
-        }
+        .thanks-close-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(236,72,153,0.5); }
 
-        /* ============ HEADER & ADVANCED ANIMATIONS ============ */
+        /* ============ HEADER ============ */
         header {
             background: rgba(9, 13, 22, 0.8); backdrop-filter: blur(20px);
             color: white; padding: 16px 22px; text-align: center;
@@ -302,7 +233,6 @@
 
         .header-center-info { display: flex; align-items: center; gap: 12px; }
         
-        /* Advanced Header Entrance Animations */
         .interesting-text {
             font-size: clamp(0.95rem, 2vw, 1.4rem); font-weight: 800;
             background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
@@ -334,13 +264,27 @@
             .national-simbol, .animated-flag { display: none; }
         }
 
-        /* ============ HERO & Home.jpg BLURRED BACKGROUND ============ */
+        /* ============ HERO SECTION WITH FULL-SCREEN Home.jpg BACKGROUND ============ */
         .hero {
-            min-height: 70vh; background: var(--bg-card); backdrop-filter: blur(25px);
-            margin: 30px auto; max-width: 1050px; border-radius: var(--radius-card);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 50px 25px; gap: 20px; border: var(--glass-border); box-shadow: var(--shadow-lg);
-            position: relative; overflow: hidden;
+            min-height: 85vh;
+            margin: 0 auto;
+            max-width: 100%;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 25px;
+            gap: 20px;
+            border: none;
+            box-shadow: none;
+            position: relative;
+            overflow: hidden;
+            /* Home.jpg full screen background with blur & dark overlay */
+            background: linear-gradient(rgba(9, 13, 22, 0.75), rgba(9, 13, 22, 0.85)), url('Home.jpg') no-repeat center center/cover;
+        }
+        body.light-mode .hero {
+            background: linear-gradient(rgba(248, 250, 252, 0.75), rgba(248, 250, 252, 0.85)), url('Home.jpg') no-repeat center center/cover;
         }
 
         .hero-image-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; max-width: 380px; z-index: 1; }
@@ -368,12 +312,9 @@
             width: 100%; height: 100%;
             object-fit: cover; object-position: center top;
             transition: transform 0.6s ease, filter 0.5s ease;
-            /* BLURRED BACKGROUND EFFECT AS REQUESTED */
-            filter: blur(1.8px) brightness(1.05);
         }
         .profile-wrapper:hover .profile-pic {
             transform: scale(1.08);
-            filter: blur(0px) brightness(1.1);
         }
         @media (min-width: 900px) {
             .profile-wrapper { width: 260px; height: 340px; }
@@ -384,34 +325,19 @@
         }
 
         .photo-click-hint {
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(18,24,38,0.96);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 5px 14px;
-            border-radius: 30px;
-            font-size: 10.5px;
-            font-weight: 700;
-            color: #a5b4fc;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            box-shadow: 0 10px 22px rgba(0,0,0,0.55);
-            backdrop-filter: blur(10px);
+            position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+            background: rgba(18,24,38,0.96); border: 1px solid rgba(255,255,255,0.2);
+            padding: 5px 14px; border-radius: 30px; font-size: 10.5px; font-weight: 700;
+            color: #a5b4fc; display: flex; align-items: center; gap: 6px; white-space: nowrap;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.55); backdrop-filter: blur(10px);
         }
         body.light-mode .photo-click-hint { background: rgba(255,255,255,0.96); color: #4f46e5; }
 
         .status-badge {
             position: absolute; top: -12px; right: -12px;
-            background: rgba(18, 24, 38, 0.95);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 5px 13px; border-radius: 30px;
-            font-size: 10.5px; font-weight: 700; color: #4ade80;
-            display: flex; align-items: center; gap: 6px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            background: rgba(18, 24, 38, 0.95); border: 1px solid rgba(255,255,255,0.2);
+            padding: 5px 13px; border-radius: 30px; font-size: 10.5px; font-weight: 700; color: #4ade80;
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 8px 16px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
         }
         .status-dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: pulseDot 2s infinite; }
@@ -430,11 +356,11 @@
 
         .overtake-wrapper {
             display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
-            background: rgba(18, 24, 38, 0.7); padding: 12px 24px; border-radius: 50px; border: var(--glass-border);
+            background: rgba(18, 24, 38, 0.8); padding: 12px 24px; border-radius: 50px; border: var(--glass-border);
             opacity: 0; transform: translateY(15px); animation: fadeInOvertake 1s ease forwards; animation-delay: 2.5s;
-            margin-top: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            margin-top: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); z-index: 1;
         }
-        body.light-mode .overtake-wrapper { background: rgba(255,255,255,0.75); }
+        body.light-mode .overtake-wrapper { background: rgba(255,255,255,0.85); }
         @keyframes fadeInOvertake { to { opacity: 1; transform: translateY(0); } }
         .speech { font-size: 14.5px; font-weight: 600; color: #4ade80; }
         .s { font-size: 14.5px; font-weight: 800; color: #facc15; }
@@ -442,7 +368,7 @@
 
         /* ============ QUOTES ============ */
         .quotes-slider-section {
-            max-width: 850px; margin: 0 auto 40px auto; padding: 32px 25px; background: var(--bg-card);
+            max-width: 850px; margin: 40px auto; padding: 32px 25px; background: var(--bg-card);
             backdrop-filter: blur(25px); border-radius: var(--radius-card); box-shadow: var(--shadow-lg); border: var(--glass-border);
             text-align: center; position: relative; overflow: hidden;
         }
@@ -560,14 +486,9 @@
 
         /* Scroll progress bar */
         .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
+            position: fixed; top: 0; left: 0; height: 3px;
             background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
-            z-index: 10002;
-            width: 0%;
-            transition: width 0.1s ease;
+            z-index: 10002; width: 0%; transition: width 0.1s ease;
             box-shadow: 0 0 10px rgba(99,102,241,0.8);
         }
     </style>
@@ -594,7 +515,7 @@
     </div>
 </div>
 
-<!-- Thanks Visit Popup (Bottom Right Card - Displays for 3-4 seconds when reaching bottom) -->
+<!-- Thanks Visit Popup -->
 <div class="thanks-popup" id="thanksPopup">
     <div class="thanks-card">
         <span class="thanks-emoji">🙏</span>
@@ -663,13 +584,12 @@
     </div>
 </div>
 
-<!-- HERO -->
+<!-- HERO (Home.jpg full screen background, Nabin.png in the center) -->
 <div class="hero" id="home">
     <div class="hero-image-container">
-        <!-- Photo click opens about.html. Uses Home.jpg with blurred background effect -->
         <div class="profile-wrapper" id="tiltCard" onclick="window.location.href='about.html'" title="Click to view About Me">
             <div class="profile-inner-frame">
-                <img src="Home.jpg" alt="Nabin Phuyal" class="profile-pic" onerror="this.src='Nabin.png'">
+                <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
             </div>
             <div class="status-badge">
                 <span class="status-dot"></span> Active Now
@@ -781,7 +701,7 @@
     <div id="nbn-chat-window">
         <div id="nbn-chat-header">
             <div style="display:flex; align-items:center; gap:8px;">
-                <img src="Home.jpg" alt="Nabin Avatar" style="width:28px; height:28px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='Nabin.png'">
+                <img src="Nabin.png" alt="Nabin Avatar" style="width:28px; height:28px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                 <strong>Suggestion Box (नबिन)</strong>
             </div>
             <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:20px;">×</span>
@@ -823,7 +743,6 @@ window.addEventListener('load', () => {
         const preloader = document.getElementById('preloader');
         if (preloader) preloader.classList.add('hide');
 
-        // Show welcome banner sliding from left
         setTimeout(() => {
             const banner = document.getElementById('welcomeBanner');
             if (banner) {
@@ -922,7 +841,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-/* ============ THANKS POPUP (NON-INTRUSIVE 3-4 SECONDS AT BOTTOM) ============ */
+/* ============ THANKS POPUP ============ */
 let thanksShown = false;
 let thanksTimeout = null;
 
@@ -932,8 +851,6 @@ function showThanksPopup() {
         if (popup) {
             popup.classList.add('show');
             thanksShown = true;
-
-            // Auto-hide after 4 seconds so it doesn't block screen or freeze anything
             thanksTimeout = setTimeout(() => {
                 closeThanks();
             }, 4000);
@@ -946,7 +863,6 @@ function closeThanks() {
     if (thanksTimeout) clearTimeout(thanksTimeout);
 }
 
-// Trigger popup when user reaches near the bottom of the page
 window.addEventListener('scroll', () => {
     if (thanksShown) return;
     const scrollPosition = window.scrollY + window.innerHeight;
