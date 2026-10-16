@@ -151,120 +151,89 @@
             25% { transform: rotate(20deg); }
             75% { transform: rotate(-10deg); }
         }
-        @media (max-width: 600px) {
-            .welcome-banner {
-                padding: 20px 22px;
-                font-size: 0.95rem;
-                border-radius: 0 40px 40px 0;
-                white-space: normal;
-            }
-        }
 
-        /* ============ THANKS VISIT POPUP ============ */
+        /* ============ THANKS VISIT POPUP (NON-INTRUSIVE CARD) ============ */
         .thanks-popup {
             position: fixed;
-            inset: 0;
+            bottom: 30px;
+            right: 30px;
             z-index: 10001;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(10px);
+            pointer-events: none;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transform: translateY(30px) scale(0.9);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .thanks-popup.show {
-            display: flex;
+            pointer-events: auto;
             opacity: 1;
+            transform: translateY(0) scale(1);
         }
         .thanks-card {
             background: linear-gradient(145deg, rgba(18,24,38,0.98), rgba(9,13,22,0.98));
             border: 1px solid rgba(99,102,241,0.4);
-            padding: 45px 35px;
-            border-radius: 28px;
+            padding: 25px 30px;
+            border-radius: 22px;
             text-align: center;
-            max-width: 440px;
-            margin: 0 20px;
-            box-shadow: 0 30px 80px rgba(99,102,241,0.5), 0 0 0 1px rgba(255,255,255,0.08) inset;
-            transform: scale(0.7);
-            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 360px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08) inset;
             position: relative;
             overflow: hidden;
         }
         body.light-mode .thanks-card {
             background: linear-gradient(145deg, #ffffff, #f1f5f9);
-            box-shadow: 0 30px 80px rgba(99,102,241,0.35);
-        }
-        .thanks-popup.show .thanks-card {
-            transform: scale(1);
-        }
-        .thanks-card::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 30px;
-            padding: 2px;
-            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #6366f1);
-            background-size: 300% 300%;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: borderFlow 4s linear infinite;
-            pointer-events: none;
-        }
-        @keyframes borderFlow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 300% 50%; }
+            box-shadow: 0 20px 50px rgba(99,102,241,0.3);
         }
         .thanks-emoji {
-            font-size: 60px;
-            margin-bottom: 15px;
+            font-size: 40px;
+            margin-bottom: 8px;
             display: block;
             animation: bounceEmoji 1.5s ease-in-out infinite;
         }
         @keyframes bounceEmoji {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-8px); }
         }
         .thanks-card h3 {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 800;
             background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         .thanks-card p {
-            font-size: 15px;
+            font-size: 13.5px;
             color: var(--text-dim);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         .thanks-card .visit-again {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--accent);
-            margin-top: 14px;
-            letter-spacing: 0.5px;
+            margin-top: 8px;
         }
         .thanks-close-btn {
-            margin-top: 22px;
+            margin-top: 14px;
             background: var(--gradient-1);
             color: #fff;
             border: none;
-            padding: 12px 30px;
+            padding: 8px 20px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(99,102,241,0.45);
+            box-shadow: 0 6px 18px rgba(99,102,241,0.4);
             transition: 0.3s;
         }
         .thanks-close-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 14px 32px rgba(236,72,153,0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(236,72,153,0.5);
         }
 
-        /* ============ HEADER ============ */
+        /* ============ HEADER & ADVANCED ANIMATIONS ============ */
         header {
             background: rgba(9, 13, 22, 0.8); backdrop-filter: blur(20px);
             color: white; padding: 16px 22px; text-align: center;
@@ -284,7 +253,6 @@
         body.light-mode .hamburger-btn { background: rgba(15, 23, 42, 0.05); }
         .hamburger-btn:hover { background: var(--primary); border-color: transparent; }
         .hamburger-btn:hover .hamburger-line { background: #fff; }
-
         .hamburger-line { width: 20px; height: 2px; background: var(--text-light); border-radius: 4px; transition: 0.3s; }
         body.light-mode .hamburger-line { background: #0f172a; }
 
@@ -324,9 +292,7 @@
         }
         .drawer-links button:hover { background: var(--primary); color: #fff; transform: translateX(4px); }
 
-        .drawer-footer {
-            margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);
-        }
+        .drawer-footer { margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
         .drawer-theme-btn {
             width: 100%; padding: 12px; border-radius: 12px; border: var(--glass-border);
             background: rgba(255,255,255,0.06); color: #fff; font-weight: 600; cursor: pointer;
@@ -335,21 +301,40 @@
         .drawer-theme-btn:hover { background: var(--primary); }
 
         .header-center-info { display: flex; align-items: center; gap: 12px; }
+        
+        /* Advanced Header Entrance Animations */
         .interesting-text {
             font-size: clamp(0.95rem, 2vw, 1.4rem); font-weight: 800;
             background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: 0.8px;
+            animation: slideInHeaderTitle 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        .animated-flag { width: 34px; height: auto; animation: waveFlag 3s infinite ease-in-out; transform-origin: left center; }
+        @keyframes slideInHeaderTitle {
+            0% { opacity: 0; transform: translateY(-20px); filter: blur(4px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .animated-flag {
+            width: 34px; height: auto;
+            animation: waveFlag 3s infinite ease-in-out, fadeInBadge 1.2s ease forwards;
+            transform-origin: left center;
+        }
+        .national-simbol {
+            width: 55px; height: auto;
+            animation: fadeInBadge 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInBadge {
+            0% { opacity: 0; transform: scale(0.6) rotate(-10deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
         @keyframes waveFlag { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(5deg); } }
-        .national-simbol { width: 55px; height: auto; }
 
         @media (max-width: 768px) {
             .national-simbol, .animated-flag { display: none; }
         }
 
-        /* ============ HERO ============ */
+        /* ============ HERO & Home.jpg BLURRED BACKGROUND ============ */
         .hero {
             min-height: 70vh; background: var(--bg-card); backdrop-filter: blur(25px);
             margin: 30px auto; max-width: 1050px; border-radius: var(--radius-card);
@@ -360,7 +345,6 @@
 
         .hero-image-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; max-width: 380px; z-index: 1; }
         
-        /* --- ADVANCED HOME PHOTO (slightly blur + bigger on large screens) --- */
         .profile-wrapper {
             position: relative;
             width: 220px;
@@ -384,13 +368,13 @@
             width: 100%; height: 100%;
             object-fit: cover; object-position: center top;
             transition: transform 0.6s ease, filter 0.5s ease;
-            filter: blur(0.9px) brightness(1.03);
+            /* BLURRED BACKGROUND EFFECT AS REQUESTED */
+            filter: blur(1.8px) brightness(1.05);
         }
         .profile-wrapper:hover .profile-pic {
             transform: scale(1.08);
-            filter: blur(0px) brightness(1.08);
+            filter: blur(0px) brightness(1.1);
         }
-        /* Large screen size boost */
         @media (min-width: 900px) {
             .profile-wrapper { width: 260px; height: 340px; }
             .hero-image-container { max-width: 440px; }
@@ -399,7 +383,6 @@
             .profile-wrapper { width: 185px; height: 245px; }
         }
 
-        /* Click hint badge */
         .photo-click-hint {
             position: absolute;
             bottom: -12px;
@@ -418,7 +401,6 @@
             white-space: nowrap;
             box-shadow: 0 10px 22px rgba(0,0,0,0.55);
             backdrop-filter: blur(10px);
-            transition: 0.3s;
         }
         body.light-mode .photo-click-hint { background: rgba(255,255,255,0.96); color: #4f46e5; }
 
@@ -612,14 +594,13 @@
     </div>
 </div>
 
-<!-- Thanks Visit Popup -->
+<!-- Thanks Visit Popup (Bottom Right Card - Displays for 3-4 seconds when reaching bottom) -->
 <div class="thanks-popup" id="thanksPopup">
     <div class="thanks-card">
         <span class="thanks-emoji">🙏</span>
         <h3>Thank You for Visiting!</h3>
         <p>तपाईंको भ्रमणको लागि धन्यवाद!</p>
         <p class="visit-again">✨ Visit Again ✨</p>
-        <p style="font-size:13px; margin-top:6px; color:#94a3b8;">— Nabin Phuyal</p>
         <button class="thanks-close-btn" onclick="closeThanks()">
             <i class="fa-solid fa-check"></i> Close
         </button>
@@ -685,10 +666,10 @@
 <!-- HERO -->
 <div class="hero" id="home">
     <div class="hero-image-container">
-        <!-- Photo click opens about.html -->
+        <!-- Photo click opens about.html. Uses Home.jpg with blurred background effect -->
         <div class="profile-wrapper" id="tiltCard" onclick="window.location.href='about.html'" title="Click to view About Me">
             <div class="profile-inner-frame">
-                <img src="Nabin.png" alt="Nabin Phuyal" class="profile-pic" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                <img src="Home.jpg" alt="Nabin Phuyal" class="profile-pic" onerror="this.src='Nabin.png'">
             </div>
             <div class="status-badge">
                 <span class="status-dot"></span> Active Now
@@ -800,7 +781,7 @@
     <div id="nbn-chat-window">
         <div id="nbn-chat-header">
             <div style="display:flex; align-items:center; gap:8px;">
-                <img src="Nabin.png" alt="Nabin Avatar" style="width:28px; height:28px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                <img src="Home.jpg" alt="Nabin Avatar" style="width:28px; height:28px; border-radius:50%; border:2px solid white; object-fit: cover;" onerror="this.src='Nabin.png'">
                 <strong>Suggestion Box (नबिन)</strong>
             </div>
             <span onclick="toggleNbnChat()" style="cursor:pointer; font-size:20px;">×</span>
@@ -941,23 +922,31 @@ window.addEventListener('scroll', () => {
     }
 });
 
-/* ============ THANKS POPUP ON BOTTOM ============ */
+/* ============ THANKS POPUP (NON-INTRUSIVE 3-4 SECONDS AT BOTTOM) ============ */
 let thanksShown = false;
+let thanksTimeout = null;
+
 function showThanksPopup() {
     if (!thanksShown) {
         const popup = document.getElementById('thanksPopup');
         if (popup) {
             popup.classList.add('show');
             thanksShown = true;
+
+            // Auto-hide after 4 seconds so it doesn't block screen or freeze anything
+            thanksTimeout = setTimeout(() => {
+                closeThanks();
+            }, 4000);
         }
     }
 }
 function closeThanks() {
     const popup = document.getElementById('thanksPopup');
     if (popup) popup.classList.remove('show');
+    if (thanksTimeout) clearTimeout(thanksTimeout);
 }
 
-// Detect when user reaches near bottom
+// Trigger popup when user reaches near the bottom of the page
 window.addEventListener('scroll', () => {
     if (thanksShown) return;
     const scrollPosition = window.scrollY + window.innerHeight;
@@ -966,11 +955,6 @@ window.addEventListener('scroll', () => {
         showThanksPopup();
     }
 });
-
-// Also show if user stays for a long time (optional)
-setTimeout(() => {
-    if (!thanksShown) showThanksPopup();
-}, 60000); // 60 seconds
 
 /* ============ CONTACT MODALS ============ */
 function togglePhoneModal() {
